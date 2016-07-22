@@ -6,19 +6,19 @@ package dlp.bluelupin.dlp.Models;
 
 public class Data
 {
-    private String id;
+    private int id;
 
     private String updated_at;
 
-    private String sequence;
+    private int sequence;
 
     private String deleted_at;
 
-    private String media_id;
+    private int media_id;
 
     private String created_at;
 
-    private String thumbnail_media_id;
+    private int thumbnail_media_id;
 
     private String lang_resource_description;
 
@@ -28,14 +28,14 @@ public class Data
 
     private String url;
 
-    private String parent_id;
+    private int parent_id;
 
-    public String getId ()
+    public int getId ()
     {
         return id;
     }
 
-    public void setId (String id)
+    public void setId (int id)
     {
         this.id = id;
     }
@@ -50,12 +50,12 @@ public class Data
         this.updated_at = updated_at;
     }
 
-    public String getSequence ()
+    public int getSequence ()
     {
         return sequence;
     }
 
-    public void setSequence (String sequence)
+    public void setSequence (int sequence)
     {
         this.sequence = sequence;
     }
@@ -70,12 +70,12 @@ public class Data
         this.deleted_at = deleted_at;
     }
 
-    public String getMedia_id ()
+    public int getMedia_id ()
 {
     return media_id;
 }
 
-    public void setMedia_id (String media_id)
+    public void setMedia_id (int media_id)
     {
         this.media_id = media_id;
     }
@@ -90,12 +90,12 @@ public class Data
         this.created_at = created_at;
     }
 
-    public String getThumbnail_media_id ()
+    public int getThumbnail_media_id ()
 {
     return thumbnail_media_id;
 }
 
-    public void setThumbnail_media_id (String thumbnail_media_id)
+    public void setThumbnail_media_id (int thumbnail_media_id)
     {
         this.thumbnail_media_id = thumbnail_media_id;
     }
@@ -140,12 +140,12 @@ public class Data
         this.url = url;
     }
 
-    public String getParent_id ()
+    public int getParent_id ()
 {
     return parent_id;
 }
 
-    public void setParent_id (String parent_id)
+    public void setParent_id (int parent_id)
     {
         this.parent_id = parent_id;
     }

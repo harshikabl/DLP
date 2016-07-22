@@ -5,6 +5,7 @@ package dlp.bluelupin.dlp;
 public class Consts {
     public static final String LOG_TAG = "dlp";
     public final static boolean PROD =  false; //false;
+    public final static String API_KEY = "XsMwq2updd3L5MZAtgwx7PAA0wKaylFnCejD0ei9WjSuwQVmXMQxGg3ZiH5X";
 
     public static  String BASE_URL= "http://180.151.10.60:8080/classkonnect/api/";
     public static String getBaseUrl() {

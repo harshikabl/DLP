@@ -15,7 +15,7 @@ import dlp.bluelupin.dlp.Models.CacheServiceCallData;
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 11;
+    public static final int DATABASE_VERSION = 0;
     public static final String DATABASE_NAME = "Konnect.db";
 
     public DbHelper(Context context) {
@@ -36,6 +36,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
         // Create CacheServiceCall
         String CREATE_CacheServiceCalls_TABLE = "CREATE TABLE CacheServiceCall(id INTEGER PRIMARY KEY, url TEXT, dataIdentifier Text,  payload TEXT, lastCalled TEXT )";
+        db.execSQL(CREATE_CacheServiceCalls_TABLE);
+        String CREATE_DataEntity_TABLE = "CREATE TABLE DataEntity(id INTEGER PRIMARY KEY, server_id INTEGER, parent_id INTEGER,  sequence INTEGER, media_id INTEGER, thumbnail_media_id INTEGER, lang_resource_name TEXT, lang_resource_description TEXT, type TEXT, String url,created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
         db.execSQL(CREATE_CacheServiceCalls_TABLE);
     }
 

@@ -20,6 +20,7 @@ import java.io.IOException;
 import dlp.bluelupin.dlp.Managers.IServiceManager;
 import dlp.bluelupin.dlp.Models.ContentData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
+import dlp.bluelupin.dlp.Models.Data;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,13 +52,16 @@ public class MainActivity extends AppCompatActivity
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
                 ContentServiceRequest request = new ContentServiceRequest();
-                request.setApi_token("XsMwq2updd3L5MZAtgwx7PAA0wKaylFnCejD0ei9WjSuwQVmXMQxGg3ZiH5X");
+                request.setApi_token(Consts.API_KEY);
                 Call<ContentData> cd = service.latestContent(request);
 
                 cd.enqueue(new Callback<ContentData>() {
                     @Override
                     public void onResponse(Call<ContentData> call, Response<ContentData> response) {
                         Log.d("Response", response.body().toString());
+                        for (Data d:response.body().getData()) {
+                            Log.d("Data: ", d.toString());
+                        }
                     }
 
                     @Override
