@@ -3,6 +3,32 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
+
+    <!-- Account settings screen text-->
+    <string name="account_settings">Account Settings</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="app_language">App Language</string>
+    <string name="autoplay_videos">Autoplay Videos</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="cancel">CANCEL</string>
+    <string name="save">SAVE</string>
+    <string name="enter_name">Enter name</string>
+    <string name="enter_email">Enter email</string>
+    <string name="enter_phone">Enter phone</string>
+
+    <!-- verification screen text-->
+    <string name="description">OTP has been sent to your provided mobile number. We will detect it automatically within 10 seconds or you can enter OTP manually here.</string>
+    <string name="daksh">DAKSH</string>
+    <string name="otp_text">Enter 6 digit OTP code you recevied</string>
+    <string name="otp_msg">OTP is active only active for 5 minutes</string>
+    <string name="verify">VERIFY</string>
+    <string name="try_otp">Didnt receive OTP ? TRY</string>
+    <string name="resend_otp">RESEND OTP</string>
+    <string name="verification_title">Verification</string>
+
 </resources>
