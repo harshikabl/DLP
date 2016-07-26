@@ -3,7 +3,7 @@ package dlp.bluelupin.dlp;
  * Created by subod on 21-Jul-16.
  */
 public class Consts {
-    public static final String LOG_TAG = "dlp";
+    public static final String LOG_TAG = "dlp_log";
     public final static boolean PROD =  false; //false;
     public final static String API_KEY = "XsMwq2updd3L5MZAtgwx7PAA0wKaylFnCejD0ei9WjSuwQVmXMQxGg3ZiH5X";
 
@@ -16,5 +16,5 @@ public class Consts {
         return BASE_URL;
     }
 
-
+    public static final String URL_CONTENT_LATEST= "v1/content/latest";
 }

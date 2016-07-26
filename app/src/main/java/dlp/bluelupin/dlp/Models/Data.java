@@ -6,7 +6,7 @@ package dlp.bluelupin.dlp.Models;
 
 public class Data
 {
-    private int id;
+    private int id; // this represents server id
 
     private String updated_at;
 
@@ -29,6 +29,18 @@ public class Data
     private String url;
 
     private int parent_id;
+
+    private int clientId;
+
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int client_id) {
+        this.clientId = client_id;
+    }
+
+
 
     public int getId ()
     {

@@ -7,16 +7,21 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
+import dlp.bluelupin.dlp.Models.Data;
 
 /**
  * Created by subod on 21-Jul-16.
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 0;
-    public static final String DATABASE_NAME = "Konnect.db";
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "dlp_db.db";
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -25,6 +30,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS CacheServiceCall");
+        db.execSQL("DROP TABLE IF EXISTS DataEntity");
         onCreate(db);
     }
 
@@ -37,8 +43,9 @@ public class DbHelper extends SQLiteOpenHelper {
         // Create CacheServiceCall
         String CREATE_CacheServiceCalls_TABLE = "CREATE TABLE CacheServiceCall(id INTEGER PRIMARY KEY, url TEXT, dataIdentifier Text,  payload TEXT, lastCalled TEXT )";
         db.execSQL(CREATE_CacheServiceCalls_TABLE);
-        String CREATE_DataEntity_TABLE = "CREATE TABLE DataEntity(id INTEGER PRIMARY KEY, server_id INTEGER, parent_id INTEGER,  sequence INTEGER, media_id INTEGER, thumbnail_media_id INTEGER, lang_resource_name TEXT, lang_resource_description TEXT, type TEXT, String url,created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
-        db.execSQL(CREATE_CacheServiceCalls_TABLE);
+        String CREATE_DataEntity_TABLE = "CREATE TABLE DataEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, parent_id INTEGER,  sequence INTEGER, media_id INTEGER, thumbnail_media_id INTEGER, lang_resource_name TEXT, lang_resource_description TEXT, type TEXT,  url TEXT,created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
+        //clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at
+        db.execSQL(CREATE_DataEntity_TABLE);
     }
 
 
@@ -177,4 +184,141 @@ public class DbHelper extends SQLiteOpenHelper {
         return result;
     }
     // endregion cacheResource
+
+    //region DataEntity
+    public boolean upsertDataEntity(Data ob) {
+        boolean done = false;
+        Data data = null;
+        if (ob.getId()!=0) {
+            data = getDataEntityByClientId(ob.getId());
+            if (data == null) {
+                done = insertDataEntity(ob);
+            } else {
+                done = updateDataEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    public Data getDataEntityByClientId(int clientId) {
+        String query = "Select clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at FROM DataEntity WHERE clientId = " + clientId + " ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            ob.setClientId(Integer.parseInt(cursor.getString(0)));
+            ob.setId(Integer.parseInt(cursor.getString(1))); // this represets server Id
+            ob.setParent_id(Integer.parseInt(cursor.getString(2)));
+            ob.setSequence(cursor.getInt(3));
+            ob.setMedia_id(Integer.parseInt(cursor.getString(4)));
+            ob.setThumbnail_media_id(Integer.parseInt(cursor.getString(5)));
+            ob.setLang_resource_name(cursor.getString(6));
+            ob.setLang_resource_description(cursor.getString(7));
+            ob.setType(cursor.getString(8));
+            ob.setUrl(cursor.getString(9));
+            ob.setCreated_at(cursor.getString(10));
+            ob.setUpdated_at(cursor.getString(11));
+            ob.setDeleted_at(cursor.getString(12));
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    public boolean insertDataEntity(Data ob) {
+//        clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at
+
+        ContentValues values = new ContentValues();
+        values.put("server_id", ob.getId());
+        values.put("parent_id", ob.getParent_id());
+        values.put("sequence", ob.getSequence());
+        values.put("media_id", ob.getMedia_id());
+        values.put("thumbnail_media_id", ob.getThumbnail_media_id());
+        values.put("lang_resource_name", ob.getLang_resource_name());
+        values.put("lang_resource_description", ob.getLang_resource_description());
+        values.put("type", ob.getType());
+        values.put("url", ob.getUrl());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getDeleted_at());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("DataEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    public boolean updateDataEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+       // values.put("server_id", ob.getUrl());
+        values.put("parent_id", ob.getParent_id());
+        values.put("sequence", ob.getSequence());
+        values.put("media_id", ob.getMedia_id());
+        values.put("thumbnail_media_id", ob.getThumbnail_media_id());
+        values.put("lang_resource_name", ob.getLang_resource_name());
+        values.put("lang_resource_description", ob.getLang_resource_description());
+        values.put("type", ob.getType());
+        values.put("url", ob.getUrl());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getDeleted_at());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() !=0) {
+            i = db.update("DataEntity", values, " server_id = " + ob.getId() + " ", null);
+        }
+        //Log.d(Consts.LOG_TAG, "updateDataEntity called with" + " server_id = '" + ob.getId());
+
+        db.close();
+        return i > 0;
+    }
+
+    public List<Data> getDataEntityByParentId(Integer parentId) {
+        String query = "Select clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at FROM DataEntity";// WHERE parent_id is null ";
+
+        if(parentId != null) {
+             query = "Select clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at FROM DataEntity WHERE parent_id = " + (int) parentId + " ";
+        }
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<Data> list = new ArrayList<Data>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                Data ob = new Data();
+                ob.setClientId(Integer.parseInt(cursor.getString(0)));
+                ob.setId(Integer.parseInt(cursor.getString(1))); // this represets server Id
+                ob.setParent_id(Integer.parseInt(cursor.getString(2)));
+                ob.setSequence(cursor.getInt(3));
+                ob.setMedia_id(Integer.parseInt(cursor.getString(4)));
+                ob.setThumbnail_media_id(Integer.parseInt(cursor.getString(5)));
+                ob.setLang_resource_name(cursor.getString(6));
+                ob.setLang_resource_description(cursor.getString(7));
+                ob.setType(cursor.getString(8));
+                ob.setUrl(cursor.getString(9));
+                ob.setCreated_at(cursor.getString(10));
+                ob.setUpdated_at(cursor.getString(11));
+                ob.setDeleted_at(cursor.getString(12));
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+    // endregion DataEntity
 }
