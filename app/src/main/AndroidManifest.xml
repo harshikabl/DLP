@@ -24,6 +24,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.LanguageActivity"/>
+        <activity android:name=".Activities.AccountSettings"/>
+        <activity android:name=".Activities.VerificationActivity"/>
+        <activity android:name=".MainActivity"/>
     </application>
 
 </manifest>

@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">DLP</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- Account settings text-->
+    <string name="account_settings" translatable="false">अकाउंट सेटिंग</string>
+    <string name="name" translatable="false">नाम</string>
+    <string name="email" translatable="false">ईमेल</string>
+    <string name="phone" translatable="false">फ़ोन</string>
+    <string name="app_language" translatable="false">अनुप्रयोग भाषा</string>
+    <string name="autoplay_videos" translatable="false">ऑटोप्ले वीडियो</string>
+    <string name="gender" translatable="false">लिंग</string>
+    <string name="male" translatable="false">नर</string>
+    <string name="female" translatable="false">महिला</string>
+    <string name="cancel" translatable="false">रद्द करना</string>
+    <string name="save" translatable="false">बचाना</string>
+    <string name="enter_name" translatable="false">नाम दर्ज</string>
+    <string name="enter_email" translatable="false">ईमेल दर्ज करें</string>
+    <string name="enter_phone" translatable="false">फोन दर्ज</string>
+
+    <!-- verification screen text-->
+    <string name="description">ओटीपी अपने प्रदान की मोबाइल नंबर के लिए भेज दिया गया है। हम 10 सेकंड के भीतर स्वचालित रूप से यह पता लगाने जाएगा या आप मैन्युअल यहाँ ओटीपी प्रवेश कर सकते हैं।</string>
+    <string name="daksh">दक्ष</string>
+    <string name="otp_text">6 अंकों ओटीपी कोड आप प्राप्त दर्ज करें</string>
+    <string name="otp_msg">ओटीपी केवल 5 मिनट के लिए सक्रिय रूप से सक्रिय है</string>
+    <string name="verify">सत्यापित करना</string>
+    <string name="try_otp">ओटीपी प्राप्त नहीं हुआ? कोशिश करो</string>
+    <string name="resend_otp">पुन: भेजने ओटीपी</string>
+    <string name="verification_title">सत्यापन</string>
+
+</resources>

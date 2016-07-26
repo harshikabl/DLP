@@ -1,26 +1,26 @@
 package dlp.bluelupin.dlp.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
+import android.widget.CheckBox;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -32,24 +32,26 @@ import dlp.bluelupin.dlp.Adapters.LanguageAdapter;
 import dlp.bluelupin.dlp.R;
 
 /**
- * Created by Neeraj on 7/22/2016.
+ * Created by Neeraj on 7/25/2016.
  */
-public class LanguageActivity extends AppCompatActivity implements View.OnClickListener {
+public class AccountSettings extends AppCompatActivity implements View.OnClickListener {
+    private TextView chooseLanguage;
+    private Spinner spinner;
+    private TextView title, leftArrow;
+    private TextView emailLable, nameLable, phoneLable, lanLable, genderLable, cancel, save;
 
-    private TextView languageIcon,chooseLanguage,description;
-    private  Spinner spinner;
-    private TextView tickIcon,done,title;
-    private LinearLayout doneLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
-        setContentView(R.layout.activity_language);
+        setContentView(R.layout.activity_account_settings);
         init();
     }
+
     //get all id's
-    private void init(){
+    private void init() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Typeface custom_fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome-webfont.ttf");
@@ -57,22 +59,36 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
 
-        languageIcon= (TextView) findViewById(R.id.languageIcon);
-        chooseLanguage= (TextView) findViewById(R.id.chooseLanguage);
-        description= (TextView) findViewById(R.id.description);
-        done= (TextView) findViewById(R.id.done);
-        doneLayout= (LinearLayout) findViewById(R.id.doneLayout);
-        doneLayout.setOnClickListener(this);
-        title= (TextView) findViewById(R.id.title);
-        tickIcon= (TextView) findViewById(R.id.tickIcon);
-        tickIcon.setTypeface(custom_fontawesome);
+
+        leftArrow = (TextView) findViewById(R.id.leftArrow);
+        leftArrow.setTypeface(materialdesignicons_font);
+        leftArrow.setOnClickListener(this);
+        RadioGroup radioGrp = (RadioGroup) findViewById(R.id.radioGrp);
+        RadioButton male = (RadioButton) findViewById(R.id.radioM);
+        RadioButton female = (RadioButton) findViewById(R.id.radioF);
+        int textColor = Color.parseColor("#e60000");
+        emailLable = (TextView) findViewById(R.id.emailLable);
+        nameLable = (TextView) findViewById(R.id.nameLable);
+        phoneLable = (TextView) findViewById(R.id.phoneLable);
+        lanLable = (TextView) findViewById(R.id.lanLable);
+        genderLable = (TextView) findViewById(R.id.genderLable);
+        cancel = (TextView) findViewById(R.id.cancel);
+        save = (TextView) findViewById(R.id.save);
+        save.setOnClickListener(this);
+        CheckBox autoPlay = (CheckBox) findViewById(R.id.autoPlay);
+        title = (TextView) findViewById(R.id.title);
         title.setTypeface(VodafoneExB);
-        done.setTypeface(VodafoneRg);
-        languageIcon.setTypeface(custom_fontawesome);
-        chooseLanguage.setTypeface(VodafoneExB);
-        description.setTypeface(VodafoneRg);
-        languageIcon.setText(Html.fromHtml("&#xf1ab;"));
-        tickIcon.setText(Html.fromHtml("&#xf00c;"));
+        nameLable.setTypeface(VodafoneRg);
+        emailLable.setTypeface(VodafoneRg);
+        phoneLable.setTypeface(VodafoneRg);
+        lanLable.setTypeface(VodafoneRg);
+        autoPlay.setTypeface(VodafoneRg);
+        genderLable.setTypeface(VodafoneRg);
+        cancel.setTypeface(VodafoneRg);
+        save.setTypeface(VodafoneRg);
+        male.setTypeface(VodafoneRg);
+        female.setTypeface(VodafoneRg);
+        leftArrow.setText(Html.fromHtml("&#xf04d;"));
 
         spinner = (Spinner) findViewById(R.id.spinner);
         spinner.getBackground().setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.SRC_ATOP);
@@ -81,7 +97,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         list.add("Hindi");
         list.add("Tamil");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.language_item, list);
-        LanguageAdapter languageAdapter=new LanguageAdapter(this,list);
+        LanguageAdapter languageAdapter = new LanguageAdapter(this, list);
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(languageAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -95,6 +111,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
 
             }
         });
+
     }
     private void setLanguage(int langpos){
         switch(langpos) {
@@ -120,21 +137,24 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
+    }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.doneLayout:
-                Intent intent=new Intent(this,AccountSettings.class);
+        switch(v.getId()){
+            case R.id.leftArrow:
+                Intent intent=new Intent(this,LanguageActivity.class);
                 startActivity(intent);
+            break;
+            case R.id.save:
+                Intent intentOtp=new Intent(this,VerificationActivity.class);
+                startActivity(intentOtp);
                 v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_animation));//onclick animation
                 break;
         }
     }
-
-   @Override
-   public void onBackPressed() {
-       super.onBackPressed();
-       overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
-   }
 }

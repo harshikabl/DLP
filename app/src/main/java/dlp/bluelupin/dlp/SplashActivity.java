@@ -2,10 +2,15 @@ package dlp.bluelupin.dlp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.Window;
 import android.view.WindowManager;
+
+import java.util.Locale;
 
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
 
@@ -21,6 +26,8 @@ public class SplashActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
+        setLanguage();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -30,5 +37,18 @@ public class SplashActivity extends Activity {
                 finish();
             }
         }, 800);
+    }
+    private void setLanguage(){
+        //geting language from SharedPreferences
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        Configuration config = getBaseContext().getResources().getConfiguration();
+
+        String lang = settings.getString("LANG", "");
+        if (!lang.equals("") && !config.locale.getLanguage().equals(lang)) {
+            Locale locale = new Locale(lang);
+            Locale.setDefault(locale);
+            config.locale = locale;
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
     }
 }
