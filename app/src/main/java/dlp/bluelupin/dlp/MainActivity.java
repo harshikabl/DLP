@@ -61,36 +61,8 @@ public class MainActivity extends AppCompatActivity
                 callContentAsync();
             };
 
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-
-//                ContentServiceRequest request = new ContentServiceRequest();
-//                request.setApi_token(Consts.API_KEY);
-//                Call<ContentData> cd = service.latestContent(request);
-//
-//                cd.enqueue(new Callback<ContentData>() {
-//                    @Override
-//                    public void onResponse(Call<ContentData> call, Response<ContentData> response) {
-//                        Log.d("Response", response.body().toString());
-//                        for (Data d:response.body().getData()) {
-//                            if(dbhelper.upsertDataEntity(d)) {
-//                                Log.d(Consts.LOG_TAG,"successfully adding Data: "+ d.toString());
-//                            }
-//                            else
-//                            {
-//                                Log.d(Consts.LOG_TAG,"failure adding Data: "+ d.toString());
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<ContentData> call, Throwable t) {
-//                        Log.d(Consts.LOG_TAG, "Failure in service latestContent" +  t.toString());
-//                    }
-//
-//                });
-
-
 
         });
 
@@ -124,43 +96,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d(Consts.LOG_TAG, "MainActivity: data count: " + data.size());
             }
         });
-//        new AsyncTask<ContentServiceRequest, Integer, Boolean>() {
-//
-//            @Override
-//            protected Boolean doInBackground(ContentServiceRequest... params) {
-//                final ContentServiceRequest request = params[0];
-//                ServiceCaller sc = new ServiceCaller(MainActivity.this);
-//                sc.getAllContent(request, new IAsyncWorkCompletedCallback() {
-//                    @Override
-//                    public void onDone(String workName, boolean isComplete) {
-//                        Log.d(Consts.LOG_TAG, "MainActivity: callContentAsync success result: " + isComplete);
-//
-//                    }
-//
-//                });
-//                return true;
-//            }
-//
-//
-//            @Override
-//            protected void onPreExecute() {
-//                super.onPreExecute();
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Boolean s) {
-//                DbHelper db = new DbHelper(MainActivity.this);
-//                List<Data> data =  db.getDataEntityByParentId(null);
-//                Log.d(Consts.LOG_TAG, "MainActivity: data count: " + data.size());
-//                super.onPostExecute(s);
-//            }
-//
-//            @Override
-//            protected void onProgressUpdate(Integer... values) {
-//                super.onProgressUpdate(values);
-//            }
-//
-//        }.execute(request);
+
     }
 
     @Override
