@@ -17,4 +17,5 @@ public class Consts {
     }
 
     public static final String URL_CONTENT_LATEST= "v1/content/latest";
+    public static final String DownloadBroadcast="DownloadBroadcast";
 }

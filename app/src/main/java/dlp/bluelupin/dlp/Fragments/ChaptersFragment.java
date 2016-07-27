@@ -1,23 +1,34 @@
 package dlp.bluelupin.dlp.Fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import dlp.bluelupin.dlp.Activities.DownloadingBroadcastReceiver;
 import dlp.bluelupin.dlp.Adapters.ChaptersAdapter;
 import dlp.bluelupin.dlp.Adapters.CourseAdapter;
+import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 
@@ -62,9 +73,11 @@ public class ChaptersFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-    private ImageView courseImage;
-    private TextView chapterTitle,sub_title,description,programTitle;
+
+    private TextView chapterTitle;
     private Context context;
+    private DownloadingBroadcastReceiver downloadingBroadcastReceiver;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,20 +91,26 @@ public class ChaptersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         View view=inflater.inflate(R.layout.fragment_chapters, container, false);
-        context=getActivity();
+        View view = inflater.inflate(R.layout.fragment_chapters, container, false);
+        downloadingBroadcastReceiver = new DownloadingBroadcastReceiver();
+
+        // register receiver
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(downloadingBroadcastReceiver,
+                new IntentFilter(Consts.DownloadBroadcast));
+        context = getActivity();
         init(view);
         return view;
     }
-    private void init(View view){
+
+    private void init(View view) {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle("Hand in Hand");
+        rootActivity.setScreenTitle("Chapters");
 
         Typeface custom_fontawesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
-        chapterTitle= (TextView) view.findViewById(R.id.chapterTitle);
+        chapterTitle = (TextView) view.findViewById(R.id.chapterTitle);
         chapterTitle.setTypeface(VodafoneExB);
 
         List<String> list = new ArrayList<String>();
@@ -101,18 +120,26 @@ public class ChaptersFragment extends Fragment {
         list.add("English");
         list.add("Hindi");
         list.add("Tamil");
-        ChaptersAdapter chaptersAdapter=new ChaptersAdapter(context,list);
-        RecyclerView chaptersRecyclerView= (RecyclerView) view.findViewById(R.id.chaptersRecyclerView);
+        ChaptersAdapter chaptersAdapter = new ChaptersAdapter(context, list);
+        RecyclerView chaptersRecyclerView = (RecyclerView) view.findViewById(R.id.chaptersRecyclerView);
         chaptersRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         chaptersRecyclerView.setHasFixedSize(true);
         //chaptersRecyclerView.setNestedScrollingEnabled(false);
         chaptersRecyclerView.setAdapter(chaptersAdapter);
 
+
+
     }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(downloadingBroadcastReceiver);
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-           // mListener.onFragmentInteraction(uri);
+            // mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -147,4 +174,9 @@ public class ChaptersFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+
+
+
 }

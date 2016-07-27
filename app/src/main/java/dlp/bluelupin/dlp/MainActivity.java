@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -43,11 +44,13 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar toolbar;
     private TextView title;
-
+    public FrameLayout downloadContainer;
     private static MainActivity mainActivity;
+
     public static MainActivity getInstace() {
         return mainActivity;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
         setSupportActionBar(toolbar);
-
+         downloadContainer = (FrameLayout) findViewById(R.id.downloadContainer);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Consts.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -70,12 +73,10 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ;
                 ContentServiceRequest request = new ContentServiceRequest();
                 callContentAsync();
             }
 
-            ;
 
 //         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity
         CourseFragment fragment = CourseFragment.newInstance("", "");
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
-                        .addToBackStack(null)
+                .addToBackStack(null)
                 .commit();
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
@@ -181,9 +182,16 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     public void setScreenTitle(String heading) {
         this.setTitle(heading);
         title.setText(heading);
     }
-
+    public void setdownloadContainer(boolean on) {
+        if (on) {
+            downloadContainer.setVisibility(View.VISIBLE);
+        } else {
+            downloadContainer.setVisibility(View.GONE);
+        }
+    }
 }

@@ -52,6 +52,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
     private void init(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        title= (TextView) toolbar.findViewById(R.id.title);
         Typeface custom_fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(this.getAssets(), "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
@@ -63,7 +64,6 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         done= (TextView) findViewById(R.id.done);
         doneLayout= (LinearLayout) findViewById(R.id.doneLayout);
         doneLayout.setOnClickListener(this);
-        title= (TextView) findViewById(R.id.title);
         tickIcon= (TextView) findViewById(R.id.tickIcon);
         tickIcon.setTypeface(custom_fontawesome);
         title.setTypeface(VodafoneExB);

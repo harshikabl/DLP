@@ -54,13 +54,15 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
     private void init() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        leftArrow = (TextView) toolbar.findViewById(R.id.leftArrow);
+        title = (TextView) toolbar.findViewById(R.id.title);
         Typeface custom_fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(this.getAssets(), "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
 
 
-        leftArrow = (TextView) findViewById(R.id.leftArrow);
+
         leftArrow.setTypeface(materialdesignicons_font);
         leftArrow.setOnClickListener(this);
         RadioGroup radioGrp = (RadioGroup) findViewById(R.id.radioGrp);
@@ -76,7 +78,6 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
         save = (TextView) findViewById(R.id.save);
         save.setOnClickListener(this);
         CheckBox autoPlay = (CheckBox) findViewById(R.id.autoPlay);
-        title = (TextView) findViewById(R.id.title);
         title.setTypeface(VodafoneExB);
         nameLable.setTypeface(VodafoneRg);
         emailLable.setTypeface(VodafoneRg);

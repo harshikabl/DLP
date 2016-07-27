@@ -2,21 +2,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/dimValue_10"
     android:orientation="vertical"
     tools:context="dlp.bluelupin.dlp.Fragments.ChaptersFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:id="@+id/chapterTitle"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/dimTextSize_22"
-        android:textColor="#4a4d4e"
-        android:text="Chapters" />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/chaptersRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dimValue_10"
-        android:scrollbars="vertical" />
+        android:layout_margin="@dimen/dimValue_10"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/chapterTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chapters"
+            android:textColor="#4a4d4e"
+            android:textSize="@dimen/dimTextSize_22" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/chaptersRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dimValue_10"
+            android:scrollbars="vertical" />
+    </LinearLayout>
 </LinearLayout>
