@@ -31,6 +31,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS CacheServiceCall");
         db.execSQL("DROP TABLE IF EXISTS DataEntity");
+        db.execSQL("DROP TABLE IF EXISTS ResourceEntity");
         onCreate(db);
     }
 
@@ -46,6 +47,10 @@ public class DbHelper extends SQLiteOpenHelper {
         String CREATE_DataEntity_TABLE = "CREATE TABLE DataEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, parent_id INTEGER,  sequence INTEGER, media_id INTEGER, thumbnail_media_id INTEGER, lang_resource_name TEXT, lang_resource_description TEXT, type TEXT,  url TEXT,created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
         //clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at
         db.execSQL(CREATE_DataEntity_TABLE);
+
+        String CREATE_ResourceEntity_TABLE = "CREATE TABLE ResourceEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, content TEXT, language_id INTEGER, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
+        //clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at
+        db.execSQL(CREATE_ResourceEntity_TABLE);
     }
 
 
@@ -321,4 +326,176 @@ public class DbHelper extends SQLiteOpenHelper {
         return list;
     }
     // endregion DataEntity
+
+    //region ResourceEntity
+    public boolean upsertResourceEntity(Data ob) {
+        boolean done = false;
+        Data data = null;
+        if (ob.getId()!=0) {
+            data = getResourceEntityById(ob.getId());
+            if (data == null) {
+                done = insertResourceEntity(ob);
+            } else {
+                done = updateResourceEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    public Data getResourceEntityById(int id) {
+        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity WHERE server_id = " + id + " " ;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            ob.setClientId(Integer.parseInt(cursor.getString(0)));
+            ob.setId(Integer.parseInt(cursor.getString(1))); // this represets server Id
+            ob.setName(cursor.getString(2));
+            ob.setContent(cursor.getString(3));
+            ob.setLanguage_id(Integer.parseInt(cursor.getString(4)));
+            ob.setCreated_at(cursor.getString(5));
+            ob.setUpdated_at(cursor.getString(6));
+            ob.setDeleted_at(cursor.getString(7));
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+
+
+    public boolean insertResourceEntity(Data ob) {
+//clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at
+
+        ContentValues values = new ContentValues();
+        values.put("server_id", ob.getId());
+        values.put("name", ob.getName());
+        values.put("content", ob.getContent());
+        values.put("language_id", ob.getLanguage_id());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getDeleted_at());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("ResourceEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    public boolean updateResourceEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        //values.put("server_id", ob.getId());
+        values.put("name", ob.getName());
+        values.put("content", ob.getContent());
+        values.put("language_id", ob.getLanguage_id());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getDeleted_at());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() !=0) {
+            i = db.update("ResourceEntity", values, " server_id = " + ob.getId() + " ", null);
+        }
+        //Log.d(Consts.LOG_TAG, "updateDataEntity called with" + " server_id = '" + ob.getId());
+
+        db.close();
+        return i > 0;
+    }
+
+    public Data getResourceEntityByName(String name, int language_id) {
+        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity WHERE name = '" + name + "' and language_id =" + language_id + "" ;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            ob.setClientId(Integer.parseInt(cursor.getString(0)));
+            ob.setId(Integer.parseInt(cursor.getString(1))); // this represets server Id
+            ob.setName(cursor.getString(2));
+            ob.setContent(cursor.getString(3));
+            ob.setLanguage_id(Integer.parseInt(cursor.getString(4)));
+            ob.setCreated_at(cursor.getString(5));
+            ob.setUpdated_at(cursor.getString(6));
+            ob.setDeleted_at(cursor.getString(7));
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    public String getResourceContent(String name, int language_id) {
+        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity WHERE name = '" + name + "' and language_id =" + language_id + "" ;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            ob.setClientId(Integer.parseInt(cursor.getString(0)));
+            ob.setId(Integer.parseInt(cursor.getString(1))); // this represets server Id
+            ob.setName(cursor.getString(2));
+            ob.setContent(cursor.getString(3));
+            ob.setLanguage_id(Integer.parseInt(cursor.getString(4)));
+            ob.setCreated_at(cursor.getString(5));
+            ob.setUpdated_at(cursor.getString(6));
+            ob.setDeleted_at(cursor.getString(7));
+
+            cursor.close();
+            return ob.getContent();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return null;
+    }
+
+    public List<Data> getResources() {
+        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity" ;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<Data> list = new ArrayList<Data>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                Data ob = new Data();
+                ob.setClientId(Integer.parseInt(cursor.getString(0)));
+                ob.setId(Integer.parseInt(cursor.getString(1))); // this represets server Id
+                ob.setName(cursor.getString(2));
+                ob.setContent(cursor.getString(3));
+                ob.setLanguage_id(Integer.parseInt(cursor.getString(4)));
+                ob.setCreated_at(cursor.getString(5));
+                ob.setUpdated_at(cursor.getString(6));
+                ob.setDeleted_at(cursor.getString(7));
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+    // endregion ResourceEntity
 }

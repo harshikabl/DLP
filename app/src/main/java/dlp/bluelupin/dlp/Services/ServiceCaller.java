@@ -37,19 +37,57 @@ public class ServiceCaller {
                                 if (nextRequest.getPage() > result.getLast_page()) {
                                     Log.d(Consts.LOG_TAG, "Content Parsed successfully till page: " + result.getCurrent_page());
                                     workCompletedCallback.onDone("getAllContent", true);
+
+                                } else {
+                                    // all parsed successfully; recursion complete
+                                    workCompletedCallback.onDone("getAllContent", true);
                                 }
-//                                } else {
-//                                    // all parsed successfully; recursion complete
-//
-//
-//                                    workCompletedCallback.onDone("getAllContent", true);
-//                                }
                             }
                         });
 
                     } else {
                         // all parsed successfully; recursion complete
-                       // Log.d(Consts.LOG_TAG, "Content Parsed successfully till page: " + result.getCurrent_page());
+                        // Log.d(Consts.LOG_TAG, "Content Parsed successfully till page: " + result.getCurrent_page());
+                        success = true;
+                        workCompletedCallback.onDone("getAllContent", success);
+                    }
+
+                } else {
+                    success = false;
+                }
+            }
+        });
+    }
+
+    public void getAllResource(final ContentServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final ServiceHelper sh = new ServiceHelper(context);
+        sh.callResourceService(request, new IServiceSuccessCallback<ContentData>() {
+            @Override
+            public void onDone(final String callerUrl, final ContentData result, String error) {
+                Boolean success = false;
+                if (result != null) {
+                    if (request.getPage() <= result.getLast_page()) {
+                        Log.d(Consts.LOG_TAG, "Recursively calling next resource page: " + result.getCurrent_page());
+                        final ContentServiceRequest nextRequest = new ContentServiceRequest();
+                        nextRequest.setPage(result.getCurrent_page() + 1);
+                        getAllResource(nextRequest, new IAsyncWorkCompletedCallback() {
+                            @Override
+                            public void onDone(String workName, boolean isComplete) {
+
+                                if (nextRequest.getPage() > result.getLast_page()) {
+                                    Log.d(Consts.LOG_TAG, "resource Parsed successfully till page: " + result.getCurrent_page());
+                                    workCompletedCallback.onDone("getAllResource", true);
+
+                                } else {
+                                    // all parsed successfully; recursion complete
+                                    workCompletedCallback.onDone("getAllResource", true);
+                                }
+                            }
+                        });
+
+                    } else {
+                        // all parsed successfully; recursion complete
+                        // Log.d(Consts.LOG_TAG, "Content Parsed successfully till page: " + result.getCurrent_page());
                         success = true;
                         workCompletedCallback.onDone("getAllContent", success);
                     }
