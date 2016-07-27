@@ -10,6 +10,7 @@ import android.text.Html;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -76,7 +77,14 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             case R.id.verify:
                 Intent intentMain = new Intent(this, MainActivity.class);
                 startActivity(intentMain);
+                v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_animation));//onclick animation
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
 }

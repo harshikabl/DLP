@@ -31,4 +31,7 @@
     <string name="resend_otp">RESEND OTP</string>
     <string name="verification_title">Verification</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
