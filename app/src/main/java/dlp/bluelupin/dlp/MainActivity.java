@@ -1,8 +1,11 @@
 package dlp.bluelupin.dlp;
 
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -13,10 +16,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.util.List;
 
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Services.CallContentServiceTask;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
@@ -36,12 +41,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private Toolbar toolbar;
+    private TextView title;
 
+    private static MainActivity mainActivity;
+    public static MainActivity getInstace() {
+        return mainActivity;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        title = (TextView) toolbar.findViewById(R.id.title);
         setSupportActionBar(toolbar);
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -56,7 +69,8 @@ public class MainActivity extends AppCompatActivity
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {;
+            public void onClick(View view) {
+                ;
                 ContentServiceRequest request = new ContentServiceRequest();
                 callContentAsync();
                 callResourceAsync();
@@ -75,15 +89,15 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        setUpCourseFragment();
     }
 
-    private void callContentAsync()
-    {
+    private void callContentAsync() {
         ContentServiceRequest request = new ContentServiceRequest();
         request.setPage(1);
         DbHelper db = new DbHelper(MainActivity.this);
         CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_CONTENT_LATEST);
-        if(cacheSeviceCallData != null) {
+        if (cacheSeviceCallData != null) {
             request.setStart_date(cacheSeviceCallData.getLastCalled());
             Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
         }
@@ -93,7 +107,7 @@ public class MainActivity extends AppCompatActivity
             public void onDone(String workName, boolean isComplete) {
                 Log.d(Consts.LOG_TAG, "MainActivity: callContentAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(MainActivity.this);
-                List<Data> data =  db.getDataEntityByParentId(null);
+                List<Data> data = db.getDataEntityByParentId(null);
                 Log.d(Consts.LOG_TAG, "MainActivity: data count: " + data.size());
             }
         });
@@ -119,6 +133,16 @@ public class MainActivity extends AppCompatActivity
                 Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data count: " + data.size());
             }
         });
+    }
+
+    private void setUpCourseFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        CourseFragment fragment = CourseFragment.newInstance("", "");
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                        .addToBackStack(null)
+                .commit();
+        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
 
     @Override
@@ -177,4 +201,9 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    public void setScreenTitle(String heading) {
+        this.setTitle(heading);
+        title.setText(heading);
+    }
+
 }
