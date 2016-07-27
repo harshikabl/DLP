@@ -17,4 +17,8 @@ public class Consts {
     }
 
     public static final String URL_CONTENT_LATEST= "v1/content/latest";
+
+    public static final String URL_LANGUAGE_RESOURCE_LATEST= "v1/langresource/latest";
+
+    public static final String URL_MEDIA_LATEST= "v1/media/latest";
 }

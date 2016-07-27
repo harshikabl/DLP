@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {;
                 ContentServiceRequest request = new ContentServiceRequest();
                 callContentAsync();
+                callResourceAsync();
             };
 
 //         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -96,7 +97,28 @@ public class MainActivity extends AppCompatActivity
                 Log.d(Consts.LOG_TAG, "MainActivity: data count: " + data.size());
             }
         });
+    }
 
+    private void callResourceAsync()
+    {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(MainActivity.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_LANGUAGE_RESOURCE_LATEST);
+        if(cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData for URL_LANGUAGE_RESOURCE_LATEST: " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(MainActivity.this);
+        sc.getAllResource(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync success result: " + isComplete);
+                DbHelper db = new DbHelper(MainActivity.this);
+                List<Data> data =  db.getResources();
+                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data count: " + data.size());
+            }
+        });
     }
 
     @Override

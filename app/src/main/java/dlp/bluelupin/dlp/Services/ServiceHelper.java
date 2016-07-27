@@ -78,4 +78,48 @@ public class ServiceHelper {
 
         });
     }
+
+    public void callResourceService(ContentServiceRequest request, final IServiceSuccessCallback<ContentData> callback)
+    {
+        request.setApi_token(Consts.API_KEY);
+
+        Call<ContentData> cd = service.latestResource(request);
+        final DbHelper dbhelper = new DbHelper(context);
+        cd.enqueue(new Callback<ContentData>() {
+            @Override
+            public void onResponse(Call<ContentData> call, Response<ContentData> response) {
+                ContentData cd = response.body();
+                //Log.d(Consts.LOG_TAG, cd.toString());
+
+                for (Data d:response.body().getData()) {
+                    if(dbhelper.upsertResourceEntity(d)) {
+                        // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
+                        // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
+                    }
+                    else
+                    {
+                        Log.d(Consts.LOG_TAG,"failure adding resource Data for page: "+ cd.getCurrent_page());
+                    }
+                }
+                String lastCalled = response.headers().get("last_request_date");
+                Log.d(Consts.LOG_TAG, "response last_request_date: " + lastCalled);
+                if(lastCalled != null) {
+                    DbHelper dbhelper = new DbHelper(context);
+                    CacheServiceCallData ob = new CacheServiceCallData();
+                    ob.setUrl(Consts.URL_LANGUAGE_RESOURCE_LATEST);
+                    ob.setLastCalled(lastCalled);
+
+                    dbhelper.upsertCacheServiceCall(ob);
+                }
+                callback.onDone(Consts.URL_LANGUAGE_RESOURCE_LATEST, cd, null);
+            }
+
+            @Override
+            public void onFailure(Call<ContentData> call, Throwable t) {
+                Log.d(Consts.LOG_TAG, "Failure in service latestResource" +  t.toString());
+                callback.onDone(Consts.URL_LANGUAGE_RESOURCE_LATEST, null, t.toString());
+            }
+
+        });
+    }
 }

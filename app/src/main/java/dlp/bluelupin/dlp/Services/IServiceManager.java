@@ -15,4 +15,10 @@ import retrofit2.http.Path;
 public interface IServiceManager {
     @POST(Consts.URL_CONTENT_LATEST)
     Call<ContentData> latestContent(@Body ContentServiceRequest request);
+
+    @POST(Consts.URL_LANGUAGE_RESOURCE_LATEST)
+    Call<ContentData> latestResource(@Body ContentServiceRequest request);
+
+    @POST(Consts.URL_MEDIA_LATEST)
+    Call<ContentData> latestMedia(@Body ContentServiceRequest request);
 }
