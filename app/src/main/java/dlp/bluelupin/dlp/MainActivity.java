@@ -70,10 +70,10 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ;
                 ContentServiceRequest request = new ContentServiceRequest();
                 callContentAsync();
                 callResourceAsync();
+                callMediaAsync();
             };
 
 //         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -134,6 +134,29 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
+
+    private void callMediaAsync()
+    {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(MainActivity.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_MEDIA_LATEST);
+        if(cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData for URL_MEDIA_LATEST: " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(MainActivity.this);
+        sc.getAllMedia(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync success result: " + isComplete);
+                DbHelper db = new DbHelper(MainActivity.this);
+                List<Data> data =  db.getAllMedia();
+                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data count: " + data.size());
+            }
+        });
+    }
+
 
     private void setUpCourseFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();

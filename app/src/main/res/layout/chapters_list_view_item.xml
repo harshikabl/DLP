@@ -80,7 +80,6 @@
                         android:layout_centerVertical="true"
                         android:gravity="center"
                         android:text=""
-                        android:textColor=""
                         android:textSize="@dimen/dimTextSize_10" />
                 </RelativeLayout>
 

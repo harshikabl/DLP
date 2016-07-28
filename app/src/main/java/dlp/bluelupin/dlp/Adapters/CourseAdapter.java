@@ -15,6 +15,7 @@ import java.util.List;
 
 import dlp.bluelupin.dlp.Fragments.ChaptersFragment;
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
+import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 
 /**
@@ -22,10 +23,10 @@ import dlp.bluelupin.dlp.R;
  */
 public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
 
-    private List<String> itemList;
+    private List<Data> itemList;
     private Context context;
 
-    public CourseAdapter(Context context, List<String> itemList) {
+    public CourseAdapter(Context context, List<Data> itemList) {
         this.itemList = itemList;
         this.context = context;
     }

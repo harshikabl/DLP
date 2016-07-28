@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Adapters.CourseAdapter;
+import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
+import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 
 /**
@@ -82,6 +86,9 @@ public class CourseFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_course, container, false);
         context = getActivity();
         init(view);
+
+
+
         return view;
 
     }
@@ -104,14 +111,19 @@ public class CourseFragment extends Fragment {
         sub_title.setTypeface(VodafoneRg);
         description.setTypeface(VodafoneRg);
 
-        List<String> list = new ArrayList<String>();
-        list.add("English");
-        list.add("Hindi");
-        list.add("Tamil");
-        list.add("English");
-        list.add("Hindi");
-        list.add("Tamil");
-        CourseAdapter courseAdapter = new CourseAdapter(context, list);
+//        List<String> list = new ArrayList<String>();
+//        list.add("English");
+//        list.add("Hindi");
+//        list.add("Tamil");
+//        list.add("English");
+//        list.add("Hindi");
+//        list.add("Tamil");
+
+        DbHelper db = new DbHelper(context);
+        List<Data> dataList = db.getDataEntityByParentIdAndType(null, "Course");
+        Log.d(Consts.LOG_TAG, "CourseFragment: data count: " + dataList.size());
+
+        CourseAdapter courseAdapter = new CourseAdapter(context, dataList);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setHasFixedSize(true);

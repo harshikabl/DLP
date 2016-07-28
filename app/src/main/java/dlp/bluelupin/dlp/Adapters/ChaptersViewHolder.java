@@ -26,5 +26,4 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder {
         download = (TextView) itemView.findViewById(R.id.download);
         downloadIcon = (TextView) itemView.findViewById(R.id.downloadIcon);
     }
-
 }
