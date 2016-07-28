@@ -26,7 +26,6 @@ public class SplashActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
-        setLanguage();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -38,17 +37,5 @@ public class SplashActivity extends Activity {
             }
         }, 800);
     }
-    private void setLanguage(){
-        //geting language from SharedPreferences
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        Configuration config = getBaseContext().getResources().getConfiguration();
 
-        String lang = settings.getString("LANG", "");
-        if (!lang.equals("") && !config.locale.getLanguage().equals(lang)) {
-            Locale locale = new Locale(lang);
-            Locale.setDefault(locale);
-            config.locale = locale;
-            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-        }
-    }
 }

@@ -30,6 +30,7 @@ import java.util.Locale;
 
 import dlp.bluelupin.dlp.Adapters.LanguageAdapter;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
  * Created by Neeraj on 7/22/2016.
@@ -99,27 +100,17 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
     private void setLanguage(int langpos){
         switch(langpos) {
             case 0: //English
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("LANG", "en").commit();
-                setLangRecreate("en");
+                Utility.setLanguageIntoSharedPreferences(this, "en");
                 return;
             case 1: //Hindi
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("LANG", "hi").commit();
-                setLangRecreate("hi");
+                Utility.setLanguageIntoSharedPreferences(this,"hi");
                 return;
             default: //By default set to english
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("LANG", "en").commit();
-                setLangRecreate("en");
+                Utility.setLanguageIntoSharedPreferences(this,"en");
                 return;
         }
     }
-    //set language into locale
-    public void setLangRecreate(String langval) {
-        Configuration config = new Configuration();
-        Locale locale = new Locale(langval);
-        Locale.setDefault(locale);
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-    }
+
 
     @Override
     public void onClick(View v) {

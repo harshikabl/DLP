@@ -19,6 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -30,6 +31,7 @@ import java.util.Locale;
 
 import dlp.bluelupin.dlp.Adapters.LanguageAdapter;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
  * Created by Neeraj on 7/25/2016.
@@ -40,6 +42,8 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
     private TextView title, leftArrow;
     private TextView emailLable, nameLable, phoneLable, lanLable, genderLable, cancel, save;
 
+    private EditText enterName,enterEmail,enterPhone;
+    String name_string,pnone_no_string,email_string;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +94,9 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
         male.setTypeface(VodafoneRg);
         female.setTypeface(VodafoneRg);
         leftArrow.setText(Html.fromHtml("&#xf04d;"));
+        enterName= (EditText) findViewById(R.id.enterName);
+        enterEmail= (EditText) findViewById(R.id.enterEmail);
+        enterPhone= (EditText) findViewById(R.id.enterPhone);
 
         spinner = (Spinner) findViewById(R.id.spinner);
         spinner.getBackground().setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.SRC_ATOP);
@@ -117,32 +124,57 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
     private void setLanguage(int langpos){
         switch(langpos) {
             case 0: //English
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("LANG", "en").commit();
-                setLangRecreate("en");
+                Utility.setLanguageIntoSharedPreferences(this, "en");
                 return;
             case 1: //Hindi
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("LANG", "hi").commit();
-                setLangRecreate("hi");
+                Utility.setLanguageIntoSharedPreferences(this, "hi");
                 return;
             default: //By default set to english
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("LANG", "en").commit();
-                setLangRecreate("en");
+                Utility.setLanguageIntoSharedPreferences(this, "en");
                 return;
         }
     }
-    //set language into locale
-    public void setLangRecreate(String langval) {
-        Configuration config = new Configuration();
-        Locale locale = new Locale(langval);
-        Locale.setDefault(locale);
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
+
+    // ----validation -----
+    private boolean isValidate() {
+        String numberRegex = "[0-9]+";
+        String emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+        // String emailReg = "^[A-Za-z0-9_.]+(\\.[_A-Za-z0-9]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+        name_string = enterName.getText().toString().trim();
+        email_string = enterEmail.getText().toString().trim();
+        pnone_no_string = enterPhone.getText().toString().trim();
+        if (pnone_no_string.length() == 0) {
+            Utility.alertForErrorMessage("Enter phone number",this);
+            return false;
+        } else if (pnone_no_string.length() != 10) {
+            Utility.alertForErrorMessage("Enter a valid phone number", this);
+            return false;
+        }else if (!pnone_no_string.matches(numberRegex)) {
+            Utility.alertForErrorMessage("Enter a valid phone number",this);
+            return false;
+        }
+        else if (email_string.length() == 0) {
+            Utility.alertForErrorMessage("Enter E-mail address", this);
+            return false;
+        } else if (!email_string.matches(emailRegex)) {
+            Utility.alertForErrorMessage("Enter valid E-mail address", this);
+            return false;
+        }
+        return true;
+
+    }
+
+
+
+
+
 
     @Override
     public void onClick(View v) {
@@ -158,4 +190,5 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
+
 }

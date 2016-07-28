@@ -151,6 +151,7 @@
                         android:layout_marginTop="@dimen/dimValue_10"
                         android:background="@android:color/transparent"
                         android:hint="@string/enter_phone"
+                        android:inputType="number"
                         android:textColor="#4a4d4e"
                         android:textSize="@dimen/dimTextSize_18" />
 

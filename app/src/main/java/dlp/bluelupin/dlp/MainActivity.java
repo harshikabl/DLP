@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity
             public void onDone(String workName, boolean isComplete) {
                 Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(MainActivity.this);
-                List<Data> data =  db.getAllMedia();
+                List<Data> data = db.getAllMedia();
                 Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data count: " + data.size());
             }
         });
@@ -182,6 +182,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
 
     @Override

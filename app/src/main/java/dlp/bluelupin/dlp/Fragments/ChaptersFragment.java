@@ -176,7 +176,4 @@ public class ChaptersFragment extends Fragment {
     }
 
 
-
-
-
 }
