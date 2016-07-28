@@ -22,6 +22,8 @@ public class Consts {
 
     public static final String URL_MEDIA_LATEST= "media/latest";
     public static final String CREATE_NEW_USER= "user/create";
+    public static final String VERIFY_OTP= "user/verifyotp";
 
     public static final String DownloadBroadcast="DownloadBroadcast";
+    public static  final String OFFLINE_MESSAGE = "You are not online!!!!";
 }

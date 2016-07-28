@@ -5,9 +5,12 @@ import android.util.Log;
 
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.Models.AccountData;
+import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.ContentData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
+import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
 
 /**
  * Created by subod on 25-Jul-16.
@@ -134,6 +137,44 @@ public class ServiceCaller {
 
                 } else {
                     success = false;
+                }
+            }
+        });
+    }
+
+    //call create account service
+    public void CreateAccount(final AccountServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final ServiceHelper sh = new ServiceHelper(context);
+        sh.callCreateAccountService(request, new IServiceSuccessCallback<AccountData>() {
+            @Override
+            public void onDone(final String callerUrl, final AccountData result, String error) {
+                Boolean success = false;
+                if (result != null) {
+                    success = true;
+                    workCompletedCallback.onDone("AccountCreated", success);
+
+                } else {
+                    success = false;
+                    workCompletedCallback.onDone("Account not created", success);
+                }
+            }
+        });
+    }
+
+    //call OTP verification service
+    public void OtpVerification(final OtpVerificationServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final ServiceHelper sh = new ServiceHelper(context);
+        sh.callOtpVerificationService(request, new IServiceSuccessCallback<AccountData>() {
+            @Override
+            public void onDone(final String callerUrl, final AccountData result, String error) {
+                Boolean success = false;
+                if (result != null) {
+                    success = true;
+                    workCompletedCallback.onDone("OTP virify", success);
+
+                } else {
+                    success = false;
+                    workCompletedCallback.onDone("OTP not virify", success);
                 }
             }
         });

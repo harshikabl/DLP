@@ -17,9 +17,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
+import dlp.bluelupin.dlp.Activities.LanguageActivity;
 import dlp.bluelupin.dlp.Activities.NotificationsActivity;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
@@ -80,7 +82,9 @@ public class MainActivity extends AppCompatActivity
                 callContentAsync();
                 callResourceAsync();
                 callMediaAsync();
-            };
+            }
+
+            ;
 
 
 //         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -141,13 +145,12 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void callMediaAsync()
-    {
+    private void callMediaAsync() {
         ContentServiceRequest request = new ContentServiceRequest();
         request.setPage(1);
         DbHelper db = new DbHelper(MainActivity.this);
         CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_MEDIA_LATEST);
-        if(cacheSeviceCallData != null) {
+        if (cacheSeviceCallData != null) {
             request.setStart_date(cacheSeviceCallData.getLastCalled());
             Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData for URL_MEDIA_LATEST: " + cacheSeviceCallData.getLastCalled());
         }
@@ -221,12 +224,17 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_manage) {
-
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.logout) {
+            DbHelper dbhelper = new DbHelper(MainActivity.this);
+            dbhelper.deleteAccountData();
+            Toast.makeText(MainActivity.this, "Account deleted successfully", Toast.LENGTH_LONG).show();
+            Intent mainIntent = new Intent(MainActivity.this, LanguageActivity.class);
+            startActivity(mainIntent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

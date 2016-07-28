@@ -13,6 +13,8 @@ import android.view.WindowManager;
 import java.util.Locale;
 
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
+import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.Models.AccountData;
 
 /**
  * Created by Neeraj on 7/22/2016.
@@ -31,11 +33,23 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(SplashActivity.this, LanguageActivity.class);
-                startActivity(mainIntent);
-                finish();
+                checkRegistered();
             }
         }, 800);
     }
 
+    //check user registered or not
+    private void checkRegistered() {
+        DbHelper dbhelper = new DbHelper(SplashActivity.this);
+        AccountData accountData = dbhelper.getAccountData();
+        if (accountData != null && !accountData.equals("")) {
+            Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+        } else {
+            Intent mainIntent = new Intent(SplashActivity.this, LanguageActivity.class);
+            startActivity(mainIntent);
+            finish();
+        }
+    }
 }
