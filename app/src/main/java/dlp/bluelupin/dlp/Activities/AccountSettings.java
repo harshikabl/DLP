@@ -31,6 +31,7 @@ import java.util.Locale;
 
 import dlp.bluelupin.dlp.Adapters.LanguageAdapter;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.EnumLanguage;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -124,13 +125,22 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
     private void setLanguage(int langpos){
         switch(langpos) {
             case 0: //English
-                Utility.setLanguageIntoSharedPreferences(this, "en");
+                Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.en);
                 return;
             case 1: //Hindi
-                Utility.setLanguageIntoSharedPreferences(this, "hi");
+                Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.hi);
+                return;
+            case 2: //telugu
+                Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.te);
+                return;
+            case 3: //tamil
+                Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.ta);
+                return;
+            case 4: //Hindi
+                Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.kn);
                 return;
             default: //By default set to english
-                Utility.setLanguageIntoSharedPreferences(this, "en");
+                Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.en);
                 return;
         }
     }

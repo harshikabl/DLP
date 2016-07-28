@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.R;
 
 
@@ -29,32 +30,44 @@ import dlp.bluelupin.dlp.R;
 public class Utility {
 
     //set languagae
-    public static void setLanguageIntoSharedPreferences(Context context, String language) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("LANG", language).commit();
+    public static void setLanguageIntoSharedPreferences(Context context, EnumLanguage language) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("EnumLanguage", language.name()).commit();
         setLangRecreate(context, language);
     }
 
     //set language into locale
-    public static void setLangRecreate(Context context, String langval) {
+    public static void setLangRecreate(Context context, EnumLanguage language) {
         Configuration config = new Configuration();
-        Locale locale = new Locale(langval);
+        Locale locale = new Locale(language.name());
         Locale.setDefault(locale);
         config.locale = locale;
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 
-    private void gatLanguageFromSharedPreferences(Context context) {
-        //geting language from SharedPreferences
+    private void setLanguageFromSharedPreferencesOnContext(Context context) {
+        //getting language from SharedPreferences
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         Configuration config = context.getResources().getConfiguration();
 
-        String lang = settings.getString("LANG", "");
+        String lang = settings.getString("EnumLanguage",  EnumLanguage.en.name());
         if (!lang.equals("") && !config.locale.getLanguage().equals(lang)) {
             Locale locale = new Locale(lang);
             Locale.setDefault(locale);
             config.locale = locale;
             context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
         }
+    }
+
+    public static EnumLanguage getLanguageIdFromSharedPreferences(Context context) {
+        //getting language from SharedPreferences
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        Configuration config = context.getResources().getConfiguration();
+
+        String lang = settings.getString("EnumLanguage", EnumLanguage.en.name());
+        if (!lang.equals("")) {
+           return Enum.valueOf(EnumLanguage.class,lang);
+        }
+        return EnumLanguage.en;
     }
 
     /**

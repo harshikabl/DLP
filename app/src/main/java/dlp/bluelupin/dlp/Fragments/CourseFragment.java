@@ -120,7 +120,7 @@ public class CourseFragment extends Fragment {
 //        list.add("Tamil");
 
         DbHelper db = new DbHelper(context);
-        List<Data> dataList = db.getDataEntityByParentIdAndType(null, "Course");
+        List<Data> dataList = db.getDataEntityByParentIdAndType(null, "Course"); // first level is course
         Log.d(Consts.LOG_TAG, "CourseFragment: data count: " + dataList.size());
 
         CourseAdapter courseAdapter = new CourseAdapter(context, dataList);

@@ -17,7 +17,6 @@
             android:id="@+id/chapterTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Chapters"
             android:textColor="#4a4d4e"
             android:textSize="@dimen/dimTextSize_22" />
 

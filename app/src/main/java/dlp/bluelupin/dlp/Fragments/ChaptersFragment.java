@@ -15,6 +15,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,9 @@ import dlp.bluelupin.dlp.Activities.DownloadingBroadcastReceiver;
 import dlp.bluelupin.dlp.Adapters.ChaptersAdapter;
 import dlp.bluelupin.dlp.Adapters.CourseAdapter;
 import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
+import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 
 /**
@@ -47,8 +50,8 @@ public class ChaptersFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int parentId;
+    private String type;
 
     private OnFragmentInteractionListener mListener;
 
@@ -56,20 +59,13 @@ public class ChaptersFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ChaptersFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
-    public static ChaptersFragment newInstance(String param1, String param2) {
+    public static ChaptersFragment newInstance(Integer parentId, String type) {
         ChaptersFragment fragment = new ChaptersFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_PARAM1, parentId);
+        args.putString(ARG_PARAM2, type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,8 +78,8 @@ public class ChaptersFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            parentId = getArguments().getInt(ARG_PARAM1);
+            type = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -104,7 +100,7 @@ public class ChaptersFragment extends Fragment {
 
     private void init(View view) {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle("Chapters");
+        rootActivity.setScreenTitle(type);
 
         Typeface custom_fontawesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
@@ -113,14 +109,15 @@ public class ChaptersFragment extends Fragment {
         chapterTitle = (TextView) view.findViewById(R.id.chapterTitle);
         chapterTitle.setTypeface(VodafoneExB);
 
-        List<String> list = new ArrayList<String>();
-        list.add("English");
-        list.add("Hindi");
-        list.add("Tamil");
-        list.add("English");
-        list.add("Hindi");
-        list.add("Tamil");
-        ChaptersAdapter chaptersAdapter = new ChaptersAdapter(context, list);
+        chapterTitle.setText(type);
+
+        DbHelper db = new DbHelper(context);
+        List<Data> dataList = db.getDataEntityByParentIdAndType(parentId, type);
+        if(Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "Chapter Fragment: data count: " + dataList.size());
+        }
+
+        ChaptersAdapter chaptersAdapter = new ChaptersAdapter(context, dataList);
         RecyclerView chaptersRecyclerView = (RecyclerView) view.findViewById(R.id.chaptersRecyclerView);
         chaptersRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         chaptersRecyclerView.setHasFixedSize(true);

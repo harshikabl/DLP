@@ -4,6 +4,7 @@ package dlp.bluelupin.dlp;
  */
 public class Consts {
     public static final String LOG_TAG = "dlp_log";
+    public static final Boolean IS_DEBUG_LOG = true;
     public final static boolean PROD =  false; //false;
     public final static String API_KEY = "XsMwq2updd3L5MZAtgwx7PAA0wKaylFnCejD0ei9WjSuwQVmXMQxGg3ZiH5X";
 
@@ -24,4 +25,13 @@ public class Consts {
     public static final String CREATE_NEW_USER= "user/create";
 
     public static final String DownloadBroadcast="DownloadBroadcast";
+
+    public static final String COURSE =  "Course";
+
+    public static final String SUBJECT =  "Subject";
+    public static final String CHAPTER =  "Chapter";
+    public static final String TOPIC =  "Topic";
+
+
+ // 'Course','Subject','Chapter','Topic','Text','Image','Video','Url','Audio','Comment','Home','Other','File','Folder'
 }
