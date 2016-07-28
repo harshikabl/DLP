@@ -1,8 +1,7 @@
 package dlp.bluelupin.dlp;
 
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
+import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +20,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import dlp.bluelupin.dlp.Activities.NotificationsActivity;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     private TextView title;
     public FrameLayout downloadContainer;
     private static MainActivity mainActivity;
+
     public static MainActivity getInstace() {
         return mainActivity;
     }
@@ -55,10 +56,13 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
+        setSupportActionBar(toolbar);
+        Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
-        setSupportActionBar(toolbar);
-         downloadContainer = (FrameLayout) findViewById(R.id.downloadContainer);
+        title.setTypeface(VodafoneExB);
+
+        downloadContainer = (FrameLayout) findViewById(R.id.downloadContainer);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Consts.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -116,13 +120,12 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void callResourceAsync()
-    {
+    private void callResourceAsync() {
         ContentServiceRequest request = new ContentServiceRequest();
         request.setPage(1);
         DbHelper db = new DbHelper(MainActivity.this);
         CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_LANGUAGE_RESOURCE_LATEST);
-        if(cacheSeviceCallData != null) {
+        if (cacheSeviceCallData != null) {
             request.setStart_date(cacheSeviceCallData.getLastCalled());
             Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData for URL_LANGUAGE_RESOURCE_LATEST: " + cacheSeviceCallData.getLastCalled());
         }
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity
             public void onDone(String workName, boolean isComplete) {
                 Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(MainActivity.this);
-                List<Data> data =  db.getResources();
+                List<Data> data = db.getResources();
                 Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data count: " + data.size());
             }
         });
@@ -209,8 +212,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.notification) {
+            Intent intent = new Intent(this, NotificationsActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -232,6 +237,7 @@ public class MainActivity extends AppCompatActivity
         this.setTitle(heading);
         title.setText(heading);
     }
+
     public void setdownloadContainer(boolean on) {
         if (on) {
             downloadContainer.setVisibility(View.VISIBLE);

@@ -32,4 +32,6 @@
     <string name="resend_otp">पुन: भेजने ओटीपी</string>
     <string name="verification_title">सत्यापन</string>
 
+    <!-- notification screen text-->
+    <string name="notification">अधिसूचना</string>
 </resources>

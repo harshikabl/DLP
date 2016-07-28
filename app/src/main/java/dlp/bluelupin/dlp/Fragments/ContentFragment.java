@@ -86,7 +86,7 @@ public class ContentFragment extends Fragment {
 
     private void init(View view) {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle("Chapters");
+        rootActivity.setScreenTitle("Contents");
 
         Typeface custom_fontawesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
@@ -102,12 +102,11 @@ public class ContentFragment extends Fragment {
         list.add("English");
         list.add("Hindi");
         list.add("Tamil");
-        ContentAdapter chaptersAdapter = new ContentAdapter(context, list);
-        RecyclerView chaptersRecyclerView = (RecyclerView) view.findViewById(R.id.contentRecyclerView);
-        chaptersRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        chaptersRecyclerView.setHasFixedSize(true);
-        //chaptersRecyclerView.setNestedScrollingEnabled(false);
-        chaptersRecyclerView.setAdapter(chaptersAdapter);
+        ContentAdapter contentAdapter = new ContentAdapter(context, list);
+        RecyclerView contentRecyclerView = (RecyclerView) view.findViewById(R.id.contentRecyclerView);
+        contentRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        contentRecyclerView.setHasFixedSize(true);
+        contentRecyclerView.setAdapter(contentAdapter);
 
 
     }

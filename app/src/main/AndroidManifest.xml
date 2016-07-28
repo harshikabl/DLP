@@ -33,9 +33,14 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="DownloadBroadcast"></action>
+                <action android:name="DownloadBroadcast" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".Activities.NotificationsActivity"
+            android:label="@string/title_activity_notifications"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

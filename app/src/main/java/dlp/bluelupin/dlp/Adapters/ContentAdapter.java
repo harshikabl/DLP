@@ -22,7 +22,7 @@ import dlp.bluelupin.dlp.R;
 /**
  * Created by Neeraj on 7/27/2016.
  */
-public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder>{
+public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
     private List<String> itemList;
     private Context context;
     private Boolean favFlage = false;
@@ -39,12 +39,12 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder>{
     }
 
 
-
     @Override
     public void onBindViewHolder(ContentViewHolder holder, int position) {
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
-
+        holder.contentTitle.setTypeface(VodafoneExB);
+        holder.contentDescription.setTypeface(VodafoneRg);
 
     }
 
