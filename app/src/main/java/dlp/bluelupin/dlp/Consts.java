@@ -21,4 +21,6 @@ public class Consts {
     public static final String URL_LANGUAGE_RESOURCE_LATEST= "langresource/latest";
 
     public static final String URL_MEDIA_LATEST= "media/latest";
+
+    public static final String DownloadBroadcast="DownloadBroadcast";
 }

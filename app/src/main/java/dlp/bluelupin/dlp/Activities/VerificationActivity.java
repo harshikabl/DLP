@@ -37,16 +37,17 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     private void init() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        title = (TextView) toolbar.findViewById(R.id.title);
+        leftArrow = (TextView) toolbar.findViewById(R.id.leftArrow);
         Typeface custom_fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(this.getAssets(), "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
 
-        leftArrow = (TextView) findViewById(R.id.leftArrow);
+
         leftArrow.setTypeface(materialdesignicons_font);
         leftArrow.setText(Html.fromHtml("&#xf04d;"));
         leftArrow.setOnClickListener(this);
-        title = (TextView) findViewById(R.id.title);
         title.setTypeface(VodafoneExB);
         resend_otp = (TextView) findViewById(R.id.resend_otp);
         resend_otp.setPaintFlags(resend_otp.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);

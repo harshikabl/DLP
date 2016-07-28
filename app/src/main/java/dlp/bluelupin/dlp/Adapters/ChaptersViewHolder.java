@@ -1,15 +1,18 @@
 package dlp.bluelupin.dlp.Adapters;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
+import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.R;
 
 /**
  * Created by Neeraj on 7/26/2016.
  */
-public class ChaptersViewHolder extends RecyclerView.ViewHolder {
+public class ChaptersViewHolder extends RecyclerView.ViewHolder  {
     public TextView courseType, courseDetails,favorite,starIcon,download,downloadIcon;
     public android.support.v7.widget.CardView cardView;
 
@@ -26,4 +29,6 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder {
         download = (TextView) itemView.findViewById(R.id.download);
         downloadIcon = (TextView) itemView.findViewById(R.id.downloadIcon);
     }
+
+
 }

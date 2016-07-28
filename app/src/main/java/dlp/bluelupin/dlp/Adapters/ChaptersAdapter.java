@@ -1,6 +1,7 @@
 package dlp.bluelupin.dlp.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,8 @@ import android.view.animation.AnimationUtils;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Fragments.ChaptersFragment;
+import dlp.bluelupin.dlp.Fragments.ContentFragment;
+import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.R;
 
 /**
@@ -24,7 +27,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
     private List<String> itemList;
     private Context context;
-    private Boolean favFlage=false;
+    private Boolean favFlage = false;
 
     public ChaptersAdapter(Context context, List<String> itemList) {
         this.itemList = itemList;
@@ -46,16 +49,28 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         holder.courseDetails.setText(itemList.get(position).toString());
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
         holder.starIcon.setTypeface(materialdesignicons_font);
-        holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
-        holder.favorite.setTypeface(VodafoneRg);
-        holder.download.setTypeface(VodafoneRg);
+        holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
+        holder.favorite.setTypeface(VodafoneExB);
+        holder.download.setTypeface(VodafoneExB);
         holder.downloadIcon.setTypeface(materialdesignicons_font);
         holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
+        holder.downloadIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                DownloadingFragment fragment = DownloadingFragment.newInstance("", "");
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top);
+                transaction.replace(R.id.downloadContainer, fragment)
+                        //.addToBackStack(null)
+                        .commit();
+            }
+        });
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
-                ChaptersFragment fragment = ChaptersFragment.newInstance("", "");
+                ContentFragment fragment = ContentFragment.newInstance("", "");
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
                 transaction.replace(R.id.container, fragment)
@@ -63,15 +78,22 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                         .commit();
             }
         });
-
-        if(favFlage){
-            holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
-        }else{
+        if (favFlage) {
             holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
+            holder.starIcon.setTextColor(Color.parseColor("#e60000"));
+        } else {
+            holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
+            holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
         }
         holder.starIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (favFlage) {
+                    favFlage = false;
+
+                } else {
+                    favFlage = true;
+                }
                 v.startAnimation(AnimationUtils.loadAnimation(context, R.anim.click_animation));//onclick animation
             }
         });

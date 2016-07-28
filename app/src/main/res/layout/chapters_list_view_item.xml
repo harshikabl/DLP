@@ -18,18 +18,17 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:scaleType="fitXY"
                 android:src="@drawable/img" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0.7"
-            android:background="#EEEEEE"
             android:orientation="vertical"
-            android:padding="@dimen/dimValue_20">
+            android:padding="@dimen/dimValue_10">
 
             <TextView
                 android:id="@+id/courseType"
@@ -62,12 +61,12 @@
                     android:gravity="left|center"
                     android:text="Mark as Favorite"
                     android:textColor="#e60000"
-                    android:textSize="@dimen/dimTextSize_10" />
+                    android:textSize="@dimen/dimTextSize_13" />
 
                 <RelativeLayout
                     android:id="@+id/starIconlayout"
-                    android:layout_width="@dimen/size_20px"
-                    android:layout_height="@dimen/size_20px"
+                    android:layout_width="@dimen/size_27px"
+                    android:layout_height="@dimen/size_27px"
                     android:layout_centerInParent="true"
                     android:layout_centerVertical="true"
                     android:background="@drawable/circle"
@@ -75,33 +74,36 @@
 
                     <TextView
                         android:id="@+id/starIcon"
-                        android:layout_width="@dimen/size_20px"
-                        android:layout_height="@dimen/size_20px"
+                        android:layout_width="@dimen/size_27px"
+                        android:layout_height="@dimen/size_27px"
                         android:layout_centerVertical="true"
                         android:gravity="center"
                         android:text=""
-                        android:textSize="@dimen/dimTextSize_10" />
+                        android:textColor="#fff"
+                        android:textSize="@dimen/dimTextSize_15" />
                 </RelativeLayout>
 
                 <View
                     android:layout_width="1dp"
                     android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/dimValue_10"
+                    android:layout_marginRight="@dimen/dimValue_10"
                     android:background="#e60000" />
 
                 <TextView
                     android:id="@+id/download"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dimValue_5"
                     android:layout_weight="0.3"
                     android:gravity="left|center"
                     android:text="Download Update"
                     android:textColor="#e60000"
-                    android:textSize="@dimen/dimTextSize_10" />
+                    android:textSize="@dimen/dimTextSize_13" />
                 <RelativeLayout
                     android:id="@+id/downloadIconlayout"
-                    android:layout_width="@dimen/size_20px"
-                    android:layout_height="@dimen/size_20px"
+                    android:layout_width="@dimen/size_27px"
+                    android:layout_height="@dimen/size_27px"
                     android:layout_centerInParent="true"
                     android:layout_centerVertical="true"
                     android:background="@drawable/circle"
@@ -109,13 +111,13 @@
 
                     <TextView
                         android:id="@+id/downloadIcon"
-                        android:layout_width="@dimen/size_20px"
-                        android:layout_height="@dimen/size_20px"
+                        android:layout_width="@dimen/size_27px"
+                        android:layout_height="@dimen/size_27px"
                         android:layout_centerVertical="true"
                         android:gravity="center"
                         android:text=""
                         android:textColor="#fff"
-                        android:textSize="@dimen/dimTextSize_10" />
+                        android:textSize="@dimen/dimTextSize_15" />
                 </RelativeLayout>
 
             </LinearLayout>
