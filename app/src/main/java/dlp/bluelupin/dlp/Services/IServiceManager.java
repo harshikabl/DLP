@@ -1,8 +1,11 @@
 package dlp.bluelupin.dlp.Services;
 
 import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.Models.AccountData;
+import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.ContentData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
+import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -21,4 +24,11 @@ public interface IServiceManager {
 
     @POST(Consts.URL_MEDIA_LATEST)
     Call<ContentData> latestMedia(@Body ContentServiceRequest request);
+
+    @POST(Consts.CREATE_NEW_USER)
+    Call<AccountData> accountCreate(@Body AccountServiceRequest request);
+
+    @POST(Consts.VERIFY_OTP)
+    Call<AccountData> otpVerify(@Body OtpVerificationServiceRequest request);
+
 }

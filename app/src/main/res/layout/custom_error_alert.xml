@@ -14,11 +14,11 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginBottom="@dimen/dimValue_16"
             android:layout_marginTop="@dimen/dimValue_16"
+            android:gravity="center"
             android:text="Do you realy want to exit ?"
-            android:textColor="@android:color/white"
+            android:textColor="#4a4d4e"
             android:textSize="@dimen/dimTextSize_20"
             android:textStyle="bold" />
 
@@ -31,8 +31,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginTop="@dimen/dimValue_16"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -41,15 +41,15 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/done_corner_round"
                 android:gravity="center"
-                android:text="OK"
-                android:textColor="#fff"
                 android:paddingBottom="@dimen/dimValue_10"
                 android:paddingTop="@dimen/dimValue_10"
-                android:textSize="@dimen/dimTextSize_20"
-                android:textStyle="bold" />
+                android:text="OK"
+                android:textColor="#fff"
+                android:textSize="@dimen/dimTextSize_20" />
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
-            android:layout_height="20dp"/>
+            android:layout_height="20dp" />
     </LinearLayout>
 </LinearLayout>

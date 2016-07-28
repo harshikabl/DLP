@@ -7,7 +7,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -163,19 +166,20 @@ public class Utility {
 
     //alert for error message
     public static void alertForErrorMessage(String errorMessage, Context mContext) {
-        // Log.d(Contants.LOG_TAG, "getAppPackageName****" + Utility.getAppPackageName(mContext));
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-
+        Typeface VodafoneExB = Typeface.createFromAsset(mContext.getAssets(), "fonts/VodafoneExB.TTF");
         final AlertDialog alert = builder.create();
         alert.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
         View view = alert.getLayoutInflater().inflate(R.layout.custom_error_alert, null);
         TextView title = (TextView) view.findViewById(R.id.title);
+        title.setTypeface(VodafoneExB);
         TextView ok = (TextView) view.findViewById(R.id.Ok);
+        ok.setTypeface(VodafoneExB);
         LinearLayout layout_titleBar = (LinearLayout) view.findViewById(R.id.alert_layout_titleBar);
         View divider = (View) view.findViewById(R.id.divider);
         GradientDrawable drawable = (GradientDrawable) ok.getBackground();
-        drawable.setStroke(5, Color.parseColor("#000000"));// set stroke width and stroke color
-        drawable.setColor(Color.parseColor("#000000")); //
+        drawable.setStroke(5, Color.parseColor("#e60000"));// set stroke width and stroke color
+        drawable.setColor(Color.parseColor("#e60000")); //
         title.setText(errorMessage);
         alert.setCustomTitle(view);
         ok.setOnClickListener(new View.OnClickListener() {
@@ -199,5 +203,26 @@ public class Utility {
             e.printStackTrace();
         }
         return (int) ((date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
+    //check online
+    public static boolean isOnline(Context context) {
+        ConnectivityManager connectivityManager;
+        boolean connected = false;
+        try {
+            connectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            connected = networkInfo != null && networkInfo.isAvailable() &&
+                    networkInfo.isConnected();
+            return connected;
+
+
+        } catch (Exception e) {
+            //System.out.println("CheckConnectivity Exception: " + e.getMessage());
+            //Log.v("connectivity", e.toString());
+        }
+        return connected;
     }
 }

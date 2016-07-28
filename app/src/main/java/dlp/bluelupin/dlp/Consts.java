@@ -34,4 +34,5 @@ public class Consts {
 
 
  // 'Course','Subject','Chapter','Topic','Text','Image','Video','Url','Audio','Comment','Home','Other','File','Folder'
+    public static  final String OFFLINE_MESSAGE = "You are not online!!!!";
 }

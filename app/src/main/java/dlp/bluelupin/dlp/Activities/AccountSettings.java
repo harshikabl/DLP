@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,9 +31,17 @@ import java.util.List;
 import java.util.Locale;
 
 import dlp.bluelupin.dlp.Adapters.LanguageAdapter;
+import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
+import dlp.bluelupin.dlp.Services.IServiceManager;
+import dlp.bluelupin.dlp.Services.ServiceCaller;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.EnumLanguage;
 import dlp.bluelupin.dlp.Utilities.Utility;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Neeraj on 7/25/2016.
@@ -43,8 +52,9 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
     private TextView title, leftArrow;
     private TextView emailLable, nameLable, phoneLable, lanLable, genderLable, cancel, save;
 
-    private EditText enterName,enterEmail,enterPhone;
-    String name_string,pnone_no_string,email_string;
+    private EditText enterName, enterEmail, enterPhone;
+    String name_string, pnone_no_string, email_string;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +62,12 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
         setContentView(R.layout.activity_account_settings);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Consts.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final IServiceManager service = retrofit.create(IServiceManager.class);
         init();
     }
 
@@ -65,7 +81,6 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
         Typeface materialdesignicons_font = Typeface.createFromAsset(this.getAssets(), "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
-
 
 
         leftArrow.setTypeface(materialdesignicons_font);
@@ -95,9 +110,9 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
         male.setTypeface(VodafoneRg);
         female.setTypeface(VodafoneRg);
         leftArrow.setText(Html.fromHtml("&#xf04d;"));
-        enterName= (EditText) findViewById(R.id.enterName);
-        enterEmail= (EditText) findViewById(R.id.enterEmail);
-        enterPhone= (EditText) findViewById(R.id.enterPhone);
+        enterName = (EditText) findViewById(R.id.enterName);
+        enterEmail = (EditText) findViewById(R.id.enterEmail);
+        enterPhone = (EditText) findViewById(R.id.enterPhone);
 
         spinner = (Spinner) findViewById(R.id.spinner);
         spinner.getBackground().setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.SRC_ATOP);
@@ -122,8 +137,40 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
         });
 
     }
-    private void setLanguage(int langpos){
-        switch(langpos) {
+
+    //call create account service
+    private void callCreateAccountService() {
+        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
+        customProgressDialog.show();
+        AccountServiceRequest accountServiceRequest = new AccountServiceRequest();
+        accountServiceRequest.setName(name_string);
+        accountServiceRequest.setEmail(email_string);
+        accountServiceRequest.setPhone(pnone_no_string);
+        accountServiceRequest.setPreferred_language_id(1);
+        if (Utility.isOnline(this)) {
+            ServiceCaller sc = new ServiceCaller(AccountSettings.this);
+            sc.CreateAccount(accountServiceRequest, new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+
+                    if (isComplete) {
+                        Log.d(Consts.LOG_TAG, " callCreateAccountService success result: " + isComplete);
+                        Intent intentOtp = new Intent(AccountSettings.this, VerificationActivity.class);
+                        startActivity(intentOtp);
+                        customProgressDialog.dismiss();
+                    } else {
+                        customProgressDialog.dismiss();
+                    }
+
+                }
+            });
+        } else {
+            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, AccountSettings.this);
+        }
+    }
+
+    private void setLanguage(int langpos) {
+        switch (langpos) {
             case 0: //English
                 Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.en);
                 return;
@@ -160,43 +207,43 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
         name_string = enterName.getText().toString().trim();
         email_string = enterEmail.getText().toString().trim();
         pnone_no_string = enterPhone.getText().toString().trim();
-        if (pnone_no_string.length() == 0) {
-            Utility.alertForErrorMessage("Enter phone number",this);
+        if (name_string.length() == 0) {
+            Utility.alertForErrorMessage("Enter name", this);
             return false;
-        } else if (pnone_no_string.length() != 10) {
-            Utility.alertForErrorMessage("Enter a valid phone number", this);
-            return false;
-        }else if (!pnone_no_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Enter a valid phone number",this);
-            return false;
-        }
-        else if (email_string.length() == 0) {
+        } else if (email_string.length() == 0) {
             Utility.alertForErrorMessage("Enter E-mail address", this);
             return false;
         } else if (!email_string.matches(emailRegex)) {
             Utility.alertForErrorMessage("Enter valid E-mail address", this);
             return false;
+        } else if (pnone_no_string.length() == 0) {
+            Utility.alertForErrorMessage("Enter phone number", this);
+            return false;
+        } else if (pnone_no_string.length() != 10) {
+            Utility.alertForErrorMessage("Enter a valid phone number", this);
+            return false;
+        } else if (!pnone_no_string.matches(numberRegex)) {
+            Utility.alertForErrorMessage("Enter a valid phone number", this);
+            return false;
         }
+
         return true;
 
     }
 
 
-
-
-
-
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.leftArrow:
-                Intent intent=new Intent(this,LanguageActivity.class);
+                Intent intent = new Intent(this, LanguageActivity.class);
                 startActivity(intent);
-            break;
+                break;
             case R.id.save:
-                Intent intentOtp=new Intent(this,VerificationActivity.class);
-                startActivity(intentOtp);
-                v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_animation));//onclick animation
+                if (isValidate()) {
+                    callCreateAccountService();
+                    v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_animation));//onclick animation
+                }
                 break;
         }
     }

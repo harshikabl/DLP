@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.Data;
 
@@ -34,6 +35,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS DataEntity");
         db.execSQL("DROP TABLE IF EXISTS ResourceEntity");
         db.execSQL("DROP TABLE IF EXISTS MediaEntity");
+        db.execSQL("DROP TABLE IF EXISTS AccountEntity");
         onCreate(db);
     }
 
@@ -57,6 +59,10 @@ public class DbHelper extends SQLiteOpenHelper {
         String CREATE_MediaEntity_TABLE = "CREATE TABLE MediaEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, type TEXT, url TEXT, file_path TEXT, language_id INTEGER , created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
         //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at
         db.execSQL(CREATE_MediaEntity_TABLE);
+
+        String CREATE_AccountEntity_TABLE = "CREATE TABLE AccountEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, email TEXT, phone TEXT, preferred_language_id INTEGER, role TEXT, api_token TEXT, otp INTEGER)";
+        //clientId, server_id , name , email , phone ,preferred_language_id , role, api_token, otp
+        db.execSQL(CREATE_AccountEntity_TABLE);
     }
 
 
@@ -200,7 +206,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public boolean upsertDataEntity(Data ob) {
         boolean done = false;
         Data data = null;
-        if (ob.getId()!=0) {
+        if (ob.getId() != 0) {
             data = getDataEntityById(ob.getId());
             if (data == null) {
                 done = insertDataEntity(ob);
@@ -275,7 +281,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public boolean updateDataEntity(Data ob) {
 
         ContentValues values = new ContentValues();
-       // values.put("server_id", ob.getId());
+        // values.put("server_id", ob.getId());
         values.put("parent_id", ob.getParent_id());
         values.put("sequence", ob.getSequence());
         values.put("media_id", ob.getMedia_id());
@@ -290,7 +296,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         long i = 0;
-        if (ob.getId() !=0) {
+        if (ob.getId() != 0) {
             i = db.update("DataEntity", values, " server_id = " + ob.getId() + " ", null);
         }
         //Log.d(Consts.LOG_TAG, "updateDataEntity called with" + " server_id = '" + ob.getId());
@@ -364,7 +370,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public boolean upsertResourceEntity(Data ob) {
         boolean done = false;
         Data data = null;
-        if (ob.getId()!=0) {
+        if (ob.getId() != 0) {
             data = getResourceEntityById(ob.getId());
             if (data == null) {
                 done = insertResourceEntity(ob);
@@ -549,8 +555,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public Data getMediaEntityById(int id) {
-        String query = "SELECT clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at  from MediaEntity" +
-                " WHERE server_id = " + id + " ";
+        String query = "SELECT clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at  from MediaEntity WHERE clientId = " + id + " ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -654,4 +659,93 @@ public class DbHelper extends SQLiteOpenHelper {
         return list;
     }
     // endregion MediaEntity
+
+
+    //account data save
+    public boolean upsertAccountData(AccountData data) {
+        AccountData profileData = getAccountData();
+        boolean done = false;
+        if (profileData == null) {
+            done = insertAccountData(data);
+        } else {
+            done = updateAccountData(data);
+        }
+        return done;
+    }
+
+    public boolean insertAccountData(AccountData accountData) {
+
+        ContentValues values = new ContentValues();
+        values.put("server_id", accountData.getId());
+        values.put("name", accountData.getName());
+        values.put("email", accountData.getEmail());
+        values.put("phone", accountData.getPhone());
+        values.put("preferred_language_id", accountData.getPreferred_language_id());
+        values.put("role", accountData.getRole());
+        values.put("api_token", accountData.getApi_token());
+        values.put("otp", accountData.getOtp());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("AccountEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    public boolean updateAccountData(AccountData accountData) {
+        ContentValues values = new ContentValues();
+        values.put("server_id", accountData.getId());
+        values.put("name", accountData.getName());
+        values.put("email", accountData.getEmail());
+        values.put("phone", accountData.getPhone());
+        values.put("preferred_language_id", accountData.getPreferred_language_id());
+        values.put("role", accountData.getRole());
+        values.put("api_token", accountData.getApi_token());
+        values.put("otp", accountData.getOtp());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.update("AccountEntity", values, "server_id = '" + accountData.getId() + "'", null);
+
+        db.close();
+        return i > 0;
+    }
+
+    public AccountData getAccountData() {
+        //clientId, server_id , name , email , phone ,preferred_language_id , role, api_token,otp
+        String query = "Select clientId, server_id, name, email, phone, preferred_language_id, role  FROM AccountEntity ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        AccountData ob = new AccountData();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            //ob.setId(Integer.parseInt(cursor.getString(0)));
+            ob.setId(Integer.parseInt(cursor.getString(1)));
+            ob.setName(cursor.getString(2));
+            ob.setEmail(cursor.getString(3));
+            ob.setPhone(cursor.getString(4));
+            ob.setPreferred_language_id(Integer.parseInt(cursor.getString(5)));
+            ob.setRole(cursor.getString(6));
+            ob.setApi_token(cursor.getString(7));
+            ob.setOtp(Integer.parseInt(cursor.getString(8)));
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    public boolean deleteAccountData() {
+        boolean result = false;
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("AccountEntity", null, null);
+        db.close();
+        result = true;
+        return result;
+    }
 }
