@@ -1,34 +1,24 @@
 package dlp.bluelupin.dlp.Fragments;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.DownloadingBroadcastReceiver;
 import dlp.bluelupin.dlp.Adapters.ChaptersAdapter;
-import dlp.bluelupin.dlp.Adapters.CourseAdapter;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;

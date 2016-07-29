@@ -70,8 +70,8 @@
                 android:layout_marginLeft="@dimen/dimValue_20"
                 android:layout_marginRight="@dimen/dimValue_20"
                 android:layout_marginTop="@dimen/dimValue_30"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/appName"
@@ -144,15 +144,20 @@
                         android:orientation="horizontal">
 
                         <EditText
+                            android:id="@+id/oneNo"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.1"
                             android:background="@drawable/otp_edittext_round"
                             android:gravity="center"
                             android:hint="-"
-                            android:padding="@dimen/dimValue_10" />
+                            android:inputType="number"
+                            android:maxLength="1"
+                            android:padding="@dimen/dimValue_10"
+                            android:singleLine="true" />
 
                         <EditText
+                            android:id="@+id/twoNo"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="@dimen/dimValue_5"
@@ -160,9 +165,13 @@
                             android:background="@drawable/otp_edittext_round"
                             android:gravity="center"
                             android:hint="-"
-                            android:padding="@dimen/dimValue_10" />
+                            android:inputType="number"
+                            android:maxLength="1"
+                            android:padding="@dimen/dimValue_10"
+                            android:singleLine="true" />
 
                         <EditText
+                            android:id="@+id/threeNo"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="@dimen/dimValue_5"
@@ -170,9 +179,13 @@
                             android:background="@drawable/otp_edittext_round"
                             android:gravity="center"
                             android:hint="-"
-                            android:padding="@dimen/dimValue_10" />
+                            android:inputType="number"
+                            android:maxLength="1"
+                            android:padding="@dimen/dimValue_10"
+                            android:singleLine="true" />
 
                         <EditText
+                            android:id="@+id/fourNo"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="@dimen/dimValue_5"
@@ -180,9 +193,13 @@
                             android:background="@drawable/otp_edittext_round"
                             android:gravity="center"
                             android:hint="-"
-                            android:padding="@dimen/dimValue_10" />
+                            android:inputType="number"
+                            android:maxLength="1"
+                            android:padding="@dimen/dimValue_10"
+                            android:singleLine="true" />
 
                         <EditText
+                            android:id="@+id/fiveNo"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="@dimen/dimValue_5"
@@ -190,9 +207,13 @@
                             android:background="@drawable/otp_edittext_round"
                             android:gravity="center"
                             android:hint="-"
-                            android:padding="@dimen/dimValue_10" />
+                            android:inputType="number"
+                            android:maxLength="1"
+                            android:padding="@dimen/dimValue_10"
+                            android:singleLine="true" />
 
                         <EditText
+                            android:id="@+id/sixNo"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="@dimen/dimValue_5"
@@ -200,7 +221,10 @@
                             android:background="@drawable/otp_edittext_round"
                             android:gravity="center"
                             android:hint="-"
-                            android:padding="@dimen/dimValue_10" />
+                            android:inputType="number"
+                            android:maxLength="1"
+                            android:padding="@dimen/dimValue_10"
+                            android:singleLine="true" />
                     </LinearLayout>
                 </LinearLayout>
 

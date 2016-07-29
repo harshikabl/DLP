@@ -308,7 +308,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public List<Data> getDataEntityByParentId(Integer parentId) {
         String query = "Select clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at FROM DataEntity  WHERE parent_id = 0 order by sequence";
 
-        if(parentId != null) {
+        if (parentId != null) {
             query = "Select clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at FROM DataEntity WHERE parent_id = " + (int) parentId + " order by sequence";
         }
 
@@ -319,7 +319,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public List<Data> getDataEntityByParentIdAndType(Integer parentId, String type) {
         String query = "Select clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at FROM DataEntity  WHERE parent_id = 0 and type = '" + type + "'  order by sequence";
 
-        if(parentId != null) {
+        if (parentId != null) {
             query = "Select clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at FROM DataEntity WHERE parent_id = " + (int) parentId + " and type = '" + type + "' order by sequence";
         }
 
@@ -327,20 +327,19 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public String getTypeOfChildren(Integer parentId) {
-        String type ="";
+        String type = "";
         String query = "Select clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at FROM DataEntity  WHERE parent_id = 0 order by sequence LIMIT 1";
 
-        if(parentId != null) {
+        if (parentId != null) {
             query = "Select clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at FROM DataEntity WHERE parent_id = " + (int) parentId + " order by sequence LIMIT 1";
         }
 
         List<Data> dataList = populateContentDataFromDb(query);
-        if(dataList.size() > 0)
-        {
+        if (dataList.size() > 0) {
             Data data = dataList.get(0);
             type = data.getType();
         }
-        return  type;
+        return type;
     }
 
 
@@ -382,7 +381,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public Data getResourceEntityById(int id) {
-        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity WHERE server_id = " + id + " " ;
+        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity WHERE server_id = " + id + " ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -408,7 +407,6 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return ob;
     }
-
 
 
     public boolean insertResourceEntity(Data ob) {
@@ -443,7 +441,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         long i = 0;
-        if (ob.getId() !=0) {
+        if (ob.getId() != 0) {
             i = db.update("ResourceEntity", values, " server_id = " + ob.getId() + " ", null);
         }
         //Log.d(Consts.LOG_TAG, "updateDataEntity called with" + " server_id = '" + ob.getId());
@@ -454,7 +452,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public Data getResourceEntityByName(String name, int language_id) {
 
-        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity WHERE name = '" + name + "' and language_id =" + language_id + "" ;
+        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity WHERE name = '" + name + "' and language_id =" + language_id + "";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -482,7 +480,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public String getResourceContent(String name, int language_id) {
-        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity WHERE name = '" + name + "' and language_id =" + language_id + "" ;
+        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity WHERE name = '" + name + "' and language_id =" + language_id + "";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -511,7 +509,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public List<Data> getResources() {
-        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity" ;
+        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -543,7 +541,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public boolean upsertMediaEntity(Data ob) {
         boolean done = false;
         Data data = null;
-        if (ob.getId()!=0) {
+        if (ob.getId() != 0) {
             data = getMediaEntityById(ob.getId());
             if (data == null) {
                 done = insertMediaEntity(ob);
@@ -620,7 +618,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         long i = 0;
-        if (ob.getId() !=0) {
+        if (ob.getId() != 0) {
             i = db.update("MediaEntity", values, " server_id = " + ob.getId() + " ", null);
         }
         //Log.d(Consts.LOG_TAG, "updateDataEntity called with" + " server_id = '" + ob.getId());
@@ -630,7 +628,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public List<Data> getAllMedia() {
-        String query = "Select clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at FROM MediaEntity" ;
+        String query = "Select clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at FROM MediaEntity";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -713,7 +711,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public AccountData getAccountData() {
         //clientId, server_id , name , email , phone ,preferred_language_id , role, api_token,otp
-        String query = "Select clientId, server_id, name, email, phone, preferred_language_id, role  FROM AccountEntity ";
+        String query = "Select clientId, server_id, name, email, phone, preferred_language_id, role,api_token,otp  FROM AccountEntity ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 

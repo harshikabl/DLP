@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.R;
 
 

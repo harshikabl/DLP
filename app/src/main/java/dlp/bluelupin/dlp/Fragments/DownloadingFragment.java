@@ -3,22 +3,18 @@ package dlp.bluelupin.dlp.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import dlp.bluelupin.dlp.Activities.DownloadingBroadcastReceiver;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;

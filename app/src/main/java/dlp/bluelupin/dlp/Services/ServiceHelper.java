@@ -11,6 +11,7 @@ import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.ContentData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Models.OtpData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
 import dlp.bluelupin.dlp.Services.IServiceManager;
 import dlp.bluelupin.dlp.Services.IServiceSuccessCallback;
@@ -194,21 +195,22 @@ public class ServiceHelper {
     }
 
     //Otp verification service
-    public void callOtpVerificationService(OtpVerificationServiceRequest request, final IServiceSuccessCallback<AccountData> callback) {
-        request.setApi_token(Consts.API_KEY);
+    public void callOtpVerificationService(OtpVerificationServiceRequest request, final IServiceSuccessCallback<OtpData> callback) {
+        //request.setApi_token(Consts.API_KEY);
         Log.d(Consts.LOG_TAG, "payload***" + request);
-        Call<AccountData> ac = service.otpVerify(request);
+        Call<OtpData> ac = service.otpVerify(request);
         final DbHelper dbhelper = new DbHelper(context);
-        ac.enqueue(new Callback<AccountData>() {
+        ac.enqueue(new Callback<OtpData>() {
             @Override
-            public void onResponse(Call<AccountData> call, Response<AccountData> response) {
-                AccountData data = response.body();
-
+            public void onResponse(Call<OtpData> call, Response<OtpData> response) {
+                OtpData data = response.body();
                 if (data != null) {
+                    Log.d(Consts.LOG_TAG, "response data:" + response.toString());
                     Log.d(Consts.LOG_TAG, "Otp verify data:" + data.toString());
                     //Log.d(Consts.LOG_TAG, "Otp verify successfully ");
                     callback.onDone(Consts.CREATE_NEW_USER, data, null);
                 } else {
+                    Log.d(Consts.LOG_TAG, "response data:" + response.toString());
                     Log.d(Consts.LOG_TAG, "Otp not verify");
                     callback.onDone(Consts.CREATE_NEW_USER, null, null);
                 }
@@ -216,7 +218,7 @@ public class ServiceHelper {
             }
 
             @Override
-            public void onFailure(Call<AccountData> call, Throwable t) {
+            public void onFailure(Call<OtpData> call, Throwable t) {
                 Log.d(Consts.LOG_TAG, "Failure in service latestContent" + t.toString());
                 callback.onDone(Consts.URL_CONTENT_LATEST, null, t.toString());
             }

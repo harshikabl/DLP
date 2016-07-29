@@ -22,4 +22,9 @@ public class OtpVerificationServiceRequest {
     public void setOtp(String otp) {
         this.otp = otp;
     }
+
+    @Override
+    public String toString() {
+        return "ClassPojo [otp = " + otp + ", api_token = " + api_token + "]";
+    }
 }

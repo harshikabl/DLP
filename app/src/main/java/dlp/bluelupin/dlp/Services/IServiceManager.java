@@ -5,6 +5,7 @@ import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.ContentData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
+import dlp.bluelupin.dlp.Models.OtpData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -29,6 +30,6 @@ public interface IServiceManager {
     Call<AccountData> accountCreate(@Body AccountServiceRequest request);
 
     @POST(Consts.VERIFY_OTP)
-    Call<AccountData> otpVerify(@Body OtpVerificationServiceRequest request);
+    Call<OtpData> otpVerify(@Body OtpVerificationServiceRequest request);
 
 }

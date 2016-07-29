@@ -10,6 +10,7 @@ import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.ContentData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
+import dlp.bluelupin.dlp.Models.OtpData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
 
 /**
@@ -164,13 +165,13 @@ public class ServiceCaller {
     //call OTP verification service
     public void OtpVerification(final OtpVerificationServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
         final ServiceHelper sh = new ServiceHelper(context);
-        sh.callOtpVerificationService(request, new IServiceSuccessCallback<AccountData>() {
+        sh.callOtpVerificationService(request, new IServiceSuccessCallback<OtpData>() {
             @Override
-            public void onDone(final String callerUrl, final AccountData result, String error) {
+            public void onDone(final String callerUrl, final OtpData result, String error) {
                 Boolean success = false;
                 if (result != null) {
                     success = true;
-                    workCompletedCallback.onDone("OTP virify", success);
+                    workCompletedCallback.onDone(result.getMessage(), success);
 
                 } else {
                     success = false;

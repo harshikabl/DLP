@@ -1,14 +1,10 @@
 package dlp.bluelupin.dlp.Activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -25,10 +21,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import dlp.bluelupin.dlp.Adapters.LanguageAdapter;
 import dlp.bluelupin.dlp.Consts;
@@ -141,13 +137,14 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
     //call create account service
     private void callCreateAccountService() {
         final CustomProgressDialog customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
-        customProgressDialog.show();
+
         AccountServiceRequest accountServiceRequest = new AccountServiceRequest();
         accountServiceRequest.setName(name_string);
         accountServiceRequest.setEmail(email_string);
         accountServiceRequest.setPhone(pnone_no_string);
         accountServiceRequest.setPreferred_language_id(1);
         if (Utility.isOnline(this)) {
+            customProgressDialog.show();
             ServiceCaller sc = new ServiceCaller(AccountSettings.this);
             sc.CreateAccount(accountServiceRequest, new IAsyncWorkCompletedCallback() {
                 @Override
@@ -157,8 +154,10 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
                         Log.d(Consts.LOG_TAG, " callCreateAccountService success result: " + isComplete);
                         Intent intentOtp = new Intent(AccountSettings.this, VerificationActivity.class);
                         startActivity(intentOtp);
+                        Toast.makeText(AccountSettings.this, "OTP has been sent to the provided Phone Number.", Toast.LENGTH_LONG).show();
                         customProgressDialog.dismiss();
                     } else {
+                        Utility.alertForErrorMessage("Account not created", AccountSettings.this);
                         customProgressDialog.dismiss();
                     }
 
@@ -183,7 +182,7 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
             case 3: //tamil
                 Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.ta);
                 return;
-            case 4: //Hindi
+            case 4: //Kannada
                 Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.kn);
                 return;
             default: //By default set to english

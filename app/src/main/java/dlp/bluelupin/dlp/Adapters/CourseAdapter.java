@@ -1,6 +1,5 @@
 package dlp.bluelupin.dlp.Adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +16,6 @@ import java.util.List;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.ChaptersFragment;
-import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
