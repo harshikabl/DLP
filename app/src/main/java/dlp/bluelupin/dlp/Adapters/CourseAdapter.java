@@ -81,7 +81,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
                 FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
                 String type = dbHelper.getTypeOfChildren(data.getId());
                 if(Consts.IS_DEBUG_LOG)
-                    Log.d(Consts.LOG_TAG, "the type for data is: " + data.getId() + " type: " + type);
+                    Log.d(Consts.LOG_TAG, "Navigating to  data id: " + data.getId() + " type: " + type);
 
                 ChaptersFragment fragment = ChaptersFragment.newInstance(data.getId(), type);
 

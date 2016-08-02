@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,10 @@ import java.util.List;
 
 import dlp.bluelupin.dlp.Adapters.ChaptersAdapter;
 import dlp.bluelupin.dlp.Adapters.ContentAdapter;
+import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
+import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 
 /**
@@ -35,8 +39,8 @@ public class ContentFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int parentId;
+    private String type;
 
     private OnFragmentInteractionListener mListener;
 
@@ -44,20 +48,12 @@ public class ContentFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ContentFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ContentFragment newInstance(String param1, String param2) {
+
+    public static ContentFragment newInstance(int parentId, String type) {
         ContentFragment fragment = new ContentFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_PARAM1, parentId);
+        args.putString(ARG_PARAM2, type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,8 +62,8 @@ public class ContentFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            parentId = getArguments().getInt(ARG_PARAM1);
+            type = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -95,14 +91,16 @@ public class ContentFragment extends Fragment {
         content_title = (TextView) view.findViewById(R.id.content_title);
         content_title.setTypeface(VodafoneExB);
 
-        List<String> list = new ArrayList<String>();
-        list.add("English");
-        list.add("Hindi");
-        list.add("Tamil");
-        list.add("English");
-        list.add("Hindi");
-        list.add("Tamil");
-        ContentAdapter contentAdapter = new ContentAdapter(context, list);
+
+        DbHelper db = new DbHelper(context);
+        List<Data> dataList = db.getDataEntityByParentId(parentId);
+
+        if(Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "Content Fragment: data count: " + dataList.size());
+        }
+
+        //ChaptersAdapter chaptersAdapter = new ChaptersAdapter(context, dataList);
+        ContentAdapter contentAdapter = new ContentAdapter(context, dataList);
         RecyclerView contentRecyclerView = (RecyclerView) view.findViewById(R.id.contentRecyclerView);
         contentRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         contentRecyclerView.setHasFixedSize(true);

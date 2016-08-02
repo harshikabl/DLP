@@ -111,7 +111,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
                 String type = dbHelper.getTypeOfChildren(data.getId());
                 if(Consts.IS_DEBUG_LOG)
-                    Log.d(Consts.LOG_TAG, "the type for data is: " + data.getId() + " type: " + type);
+                    Log.d(Consts.LOG_TAG, "Navigating to  data id: " + data.getId() + " type: " + type);
                 if(type.equalsIgnoreCase(Consts.COURSE) || type.equalsIgnoreCase(Consts.CHAPTER) || type.equalsIgnoreCase(Consts.TOPIC))
                 {
                     FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
@@ -125,7 +125,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                 }
                 else {
                     FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
-                    ContentFragment fragment = ContentFragment.newInstance("", "");
+                    ContentFragment fragment = ContentFragment.newInstance(data.getId(), "");
 
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);

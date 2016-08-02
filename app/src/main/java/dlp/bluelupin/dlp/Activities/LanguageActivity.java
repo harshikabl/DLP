@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Adapters.LanguageAdapter;
+import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.MainActivity;
+import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.EnumLanguage;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -73,6 +76,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         List<String> list = new ArrayList<String>();
         list.add("English");
         list.add("Hindi");
+        list.add("Telugu");
         list.add("Tamil");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.language_item, list);
         LanguageAdapter languageAdapter=new LanguageAdapter(this,list);
@@ -104,7 +108,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
             case 3: //tamil
                 Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.ta);
                 return;
-            case 4: //Hindi
+            case 4: //Kannada
                 Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.kn);
                 return;
             default: //By default set to english
@@ -116,12 +120,28 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.doneLayout:
-                Intent intent=new Intent(this,AccountSettings.class);
-                startActivity(intent);
-                v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_animation));//onclick animation
-                break;
+//        switch (v.getId()){
+//            case R.id.doneLayout:
+//                Intent intent=new Intent(this,AccountSettings.class);
+//                startActivity(intent);
+//                v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_animation));//onclick animation
+//                break;
+//        }
+
+        checkRegistered();
+    }
+
+    private void checkRegistered() {
+        DbHelper dbhelper = new DbHelper(LanguageActivity.this);
+        AccountData accountData = dbhelper.getAccountData();
+        if (accountData != null && !accountData.equals("")) {
+            Intent mainIntent = new Intent(LanguageActivity.this, MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+        } else {
+            Intent mainIntent = new Intent(LanguageActivity.this, LanguageActivity.class);
+            startActivity(mainIntent);
+            finish();
         }
     }
 

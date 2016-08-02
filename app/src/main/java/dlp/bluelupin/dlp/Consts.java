@@ -1,5 +1,4 @@
 package dlp.bluelupin.dlp;
-
 /**
  * Created by subod on 21-Jul-16.
  */
@@ -27,17 +26,17 @@ public class Consts {
     public static final String CREATE_NEW_USER = "user/create";
     public static final String VERIFY_OTP = "user/verifyotp";
 
-    public static final String DownloadBroadcast = "DownloadBroadcast";
+    public static final String DownloadBroadcast="DownloadBroadcast";
 
-    public static final String COURSE = "Course";
+    public static final String COURSE =  "Course";
 
-    public static final String SUBJECT = "Subject";
-    public static final String CHAPTER = "Chapter";
-    public static final String TOPIC = "Topic";
+    public static final String SUBJECT =  "Subject";
+    public static final String CHAPTER =  "Chapter";
+    public static final String TOPIC =  "Topic";
 
     public static final String SENDER = "HP-MOBKNT";
 
 
-    // 'Course','Subject','Chapter','Topic','Text','Image','Video','Url','Audio','Comment','Home','Other','File','Folder'
-    public static final String OFFLINE_MESSAGE = "You are not online!!!!";
+ // 'Course','Subject','Chapter','Topic','Text','Image','Video','Url','Audio','Comment','Home','Other','File','Folder'
+    public static  final String OFFLINE_MESSAGE = "You are not online!!!!";
 }

@@ -221,7 +221,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
             overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
         } else if (id == R.id.nav_gallery) {
-
+            Intent intent = new Intent(this, LanguageActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_share) {
