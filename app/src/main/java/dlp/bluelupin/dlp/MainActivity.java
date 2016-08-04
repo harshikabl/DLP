@@ -3,8 +3,10 @@ package dlp.bluelupin.dlp;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -25,19 +27,15 @@ import dlp.bluelupin.dlp.Activities.LanguageActivity;
 import dlp.bluelupin.dlp.Activities.NotificationsActivity;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
+import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
+import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
-import dlp.bluelupin.dlp.Services.CallContentServiceTask;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.IServiceManager;
-import dlp.bluelupin.dlp.Models.ContentData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.Data;
-import dlp.bluelupin.dlp.Services.IServiceSuccessCallback;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
-import dlp.bluelupin.dlp.Services.ServiceHelper;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import dlp.bluelupin.dlp.Utilities.DecompressZipFile;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -100,6 +98,14 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+        TextView name = (TextView) header.findViewById(R.id.name);
+        TextView email = (TextView) header.findViewById(R.id.email);
+        AccountData accountData = dbhelper.getAccountData();
+        if (accountData != null && !accountData.equals("")) {
+            name.setText(accountData.getName());
+            email.setText(accountData.getEmail());
+        }
         setUpCourseFragment();
     }
 
@@ -185,7 +191,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
+        overridePendingTransition(R.anim.out_to_right, R.anim.in_from_right);
     }
 
     @Override
@@ -224,9 +230,25 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, LanguageActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.zip) {
+            String zipFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/content1.zip";
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "zipFile file: " + zipFile);
+            }
+            String unzipLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DlpContentUnzipped/";
+            Log.d(Consts.LOG_TAG, "unzipLocation: " + unzipLocation);
+            DecompressZipFile d = new DecompressZipFile(zipFile, unzipLocation,this);
+            d.unzip();
+        }else if (id == R.id.favorites) {
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            FavoritesFragment fragment = FavoritesFragment.newInstance("", "");
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top);
+            transaction.replace(R.id.container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+        else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 

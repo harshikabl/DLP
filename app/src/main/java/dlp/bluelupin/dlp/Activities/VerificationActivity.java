@@ -1,7 +1,9 @@
 package dlp.bluelupin.dlp.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +12,12 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -106,40 +110,40 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         five_string = fiveNo.getText().toString().trim();
         six_string = sixNo.getText().toString().trim();
         if (one_string.length() == 0) {
-            Utility.alertForErrorMessage("Please enter OTP", this);
+            Utility.alertForErrorMessage("Please enter OTP", VerificationActivity.this);
             return false;
         } else if (!one_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Please enter a valid OTP.", this);
+            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
             return false;
         } else if (two_string.length() == 0) {
-            Utility.alertForErrorMessage("Please enter OTP", this);
+            Utility.alertForErrorMessage("Please enter OTP", VerificationActivity.this);
             return false;
         } else if (!two_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Please enter a valid OTP.", this);
+            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
             return false;
         } else if (three_string.length() == 0) {
-            Utility.alertForErrorMessage("Please enter OTP", this);
+            Utility.alertForErrorMessage("Please enter OTP", VerificationActivity.this);
             return false;
         } else if (!three_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Please enter a valid OTP.", this);
+            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
             return false;
         } else if (four_string.length() == 0) {
-            Utility.alertForErrorMessage("Please enter OTP", this);
+            Utility.alertForErrorMessage("Please enter OTP", VerificationActivity.this);
             return false;
         } else if (!four_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Please enter a valid OTP.", this);
+            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
             return false;
         } else if (five_string.length() == 0) {
-            Utility.alertForErrorMessage("Please enter OTP", this);
+            Utility.alertForErrorMessage("Please enter OTP", VerificationActivity.this);
             return false;
         } else if (!five_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Please enter a valid OTP.", this);
+            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
             return false;
         } else if (six_string.length() == 0) {
-            Utility.alertForErrorMessage("Please enter OTP", this);
+            Utility.alertForErrorMessage("Please enter OTP", VerificationActivity.this);
             return false;
         } else if (!six_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Please enter a valid OTP.", this);
+            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
             return false;
         }
 
@@ -147,12 +151,29 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
     }
 
+    //to hide keyboard from otside touch
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.leftArrow:
-                Intent intent = new Intent(this, AccountSettings.class);
+                Intent intent = new Intent(this, AccountSettingsActivity.class);
                 startActivity(intent);
                 break;
             case R.id.verify:
@@ -176,12 +197,13 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
         DbHelper dbHelper = new DbHelper(VerificationActivity.this);
         AccountData acData = dbHelper.getAccountData();
+        int languageId = Utility.getLanguageIdFromSharedPreferences(this).ordinal();
         if (acData != null) {
             AccountServiceRequest accountServiceRequest = new AccountServiceRequest();
             accountServiceRequest.setName(acData.getName());
             accountServiceRequest.setEmail(acData.getEmail());
             accountServiceRequest.setPhone(acData.getPhone());
-            accountServiceRequest.setPreferred_language_id(1);
+            accountServiceRequest.setPreferred_language_id(languageId);
             if (Utility.isOnline(this)) {
                 customProgressDialog.show();
                 ServiceCaller sc = new ServiceCaller(VerificationActivity.this);
@@ -190,7 +212,9 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
                     public void onDone(String workName, boolean isComplete) {
 
                         if (isComplete) {
-                            Log.d(Consts.LOG_TAG, " callCreateAccountService success result: " + isComplete);
+                            if (Consts.IS_DEBUG_LOG) {
+                                Log.d(Consts.LOG_TAG, " callCreateAccountService success result: " + isComplete);
+                            }
                             Intent intentOtp = new Intent(VerificationActivity.this, VerificationActivity.class);
                             startActivity(intentOtp);
                             customProgressDialog.dismiss();

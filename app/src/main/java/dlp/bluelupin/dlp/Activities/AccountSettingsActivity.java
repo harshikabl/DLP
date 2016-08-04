@@ -1,18 +1,22 @@
 package dlp.bluelupin.dlp.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -31,18 +35,15 @@ import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
-import dlp.bluelupin.dlp.Services.IServiceManager;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.EnumLanguage;
 import dlp.bluelupin.dlp.Utilities.Utility;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Neeraj on 7/25/2016.
  */
-public class AccountSettings extends AppCompatActivity implements View.OnClickListener {
+public class AccountSettingsActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView chooseLanguage;
     private Spinner spinner;
     private TextView title, leftArrow;
@@ -59,11 +60,11 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
         setContentView(R.layout.activity_account_settings);
 
-        Retrofit retrofit = new Retrofit.Builder()
+      /*  Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Consts.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        final IServiceManager service = retrofit.create(IServiceManager.class);
+        final IServiceManager service = retrofit.create(IServiceManager.class);*/
         init();
     }
 
@@ -116,6 +117,7 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
         list.add("English");
         list.add("Hindi");
         list.add("Tamil");
+        list.add("Kannada");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.language_item, list);
         LanguageAdapter languageAdapter = new LanguageAdapter(this, list);
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -138,33 +140,37 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
     private void callCreateAccountService() {
         final CustomProgressDialog customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
 
+        int languageId=Utility.getLanguageIdFromSharedPreferences(this).ordinal();
+
         AccountServiceRequest accountServiceRequest = new AccountServiceRequest();
         accountServiceRequest.setName(name_string);
         accountServiceRequest.setEmail(email_string);
         accountServiceRequest.setPhone(pnone_no_string);
-        accountServiceRequest.setPreferred_language_id(1);
+        accountServiceRequest.setPreferred_language_id(languageId);
         if (Utility.isOnline(this)) {
             customProgressDialog.show();
-            ServiceCaller sc = new ServiceCaller(AccountSettings.this);
+            ServiceCaller sc = new ServiceCaller(AccountSettingsActivity.this);
             sc.CreateAccount(accountServiceRequest, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
 
                     if (isComplete) {
-                        Log.d(Consts.LOG_TAG, " callCreateAccountService success result: " + isComplete);
-                        Intent intentOtp = new Intent(AccountSettings.this, VerificationActivity.class);
+                        if (Consts.IS_DEBUG_LOG) {
+                            Log.d(Consts.LOG_TAG, " callCreateAccountService success result: " + isComplete);
+                        }
+                        Intent intentOtp = new Intent(AccountSettingsActivity.this, VerificationActivity.class);
                         startActivity(intentOtp);
-                        Toast.makeText(AccountSettings.this, "OTP has been sent to the provided Phone Number.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AccountSettingsActivity.this, "OTP has been sent to the provided Phone Number.", Toast.LENGTH_LONG).show();
                         customProgressDialog.dismiss();
                     } else {
-                        Utility.alertForErrorMessage("Account not created", AccountSettings.this);
+                        Utility.alertForErrorMessage("Account not created", AccountSettingsActivity.this);
                         customProgressDialog.dismiss();
                     }
 
                 }
             });
         } else {
-            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, AccountSettings.this);
+            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, AccountSettingsActivity.this);
         }
     }
 
@@ -196,7 +202,23 @@ public class AccountSettings extends AppCompatActivity implements View.OnClickLi
         super.onBackPressed();
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
-
+    //to hide keyboard from otside touch
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
+    }
     // ----validation -----
     private boolean isValidate() {
         String numberRegex = "[0-9]+";
