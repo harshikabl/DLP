@@ -88,8 +88,8 @@ public class ContentFragment extends Fragment {
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
-        content_title = (TextView) view.findViewById(R.id.content_title);
-        content_title.setTypeface(VodafoneExB);
+//        content_title = (TextView) view.findViewById(R.id.content_title);
+//        content_title.setTypeface(VodafoneExB);
 
 
         DbHelper db = new DbHelper(context);

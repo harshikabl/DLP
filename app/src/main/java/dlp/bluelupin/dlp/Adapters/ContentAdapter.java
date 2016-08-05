@@ -8,11 +8,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.style.LineHeightSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -71,30 +74,68 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                         Log.d(Consts.LOG_TAG, " resource text: " + resource.getContent());
                     }
                     TextView dynamicTextView = new TextView(context);
-                    dynamicTextView.setText(resource.getContent());
+                    dynamicTextView.setText(Html.fromHtml(resource.getContent()));
 
-                    dynamicTextView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                    layoutParams.setMargins(0,10,0,10);
+                    dynamicTextView.setLayoutParams(layoutParams);
                     holder.contentContainer.addView(dynamicTextView);
                 }
             }
             if (data.getType().equalsIgnoreCase("Image")) {
                 if (data.getMedia_id() != 0) {
-                    ImageView dynamicImageView = new ImageView(context);
-                    dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
                     Data media = dbHelper.getMediaEntityById(data.getMedia_id());
                     if (Consts.IS_DEBUG_LOG) {
                         Log.d(Consts.LOG_TAG, " Image Url: " + media.getUrl());
                     }
                     if (media != null) {
-                        new DownloadImageTask(dynamicImageView)
-                                .execute(media.getUrl());
+                        String titleText = null;
+                        if(resource!= null)
+                        {
+                            titleText = resource.getContent();
+                        }
+                        FrameLayout imageContainer = makeImage(media.getUrl(),titleText);
+                        holder.contentContainer.addView(imageContainer);
                     }
-                    holder.contentContainer.addView(dynamicImageView);
+
                 }
             }
 
         }
+    }
+
+    private FrameLayout makeImage(String url, String titleText)
+    {
+        FrameLayout frameLayout = new FrameLayout(context);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        layoutParams.setMargins(0,10,0,10);
+        frameLayout.setLayoutParams(layoutParams);
+        ImageView dynamicImageView = new ImageView(context);
+        dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        new DownloadImageTask(dynamicImageView)
+                .execute(url);
+
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        linearLayout.setVerticalGravity(Gravity.BOTTOM);
+        linearLayout.setBackground(context.getResources().getDrawable(R.drawable.gradient_black, null));//;background="@drawable/gradient_black"
+
+        TextView dynamicTextView = new TextView(context);
+        dynamicTextView.setText(Html.fromHtml(titleText));
+
+        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        textViewParams.gravity =  Gravity.BOTTOM;
+        //textViewParams.setMargins(0,10,0,10);
+        dynamicTextView.setLayoutParams(textViewParams);
+
+        linearLayout.addView(dynamicTextView);
+
+        frameLayout.addView(dynamicImageView);
+        frameLayout.addView(linearLayout);
+        return frameLayout;
     }
 
     @Override
