@@ -25,8 +25,10 @@ public class SmsReceiver extends BroadcastReceiver {
                     String senderAddress = currentMessage.getDisplayOriginatingAddress();
                     String message = currentMessage.getDisplayMessageBody();
 
-                    Log.d(Consts.LOG_TAG, "Received SMS: " + message + ", Sender: " + senderAddress);
 
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "Received SMS: " + message + ", Sender: " + senderAddress);
+                    }
                     // if the SMS is not from our gateway, ignore the message
                     if (!senderAddress.toLowerCase().contains(Consts.SENDER.toLowerCase())) {
                         return;
@@ -34,9 +36,9 @@ public class SmsReceiver extends BroadcastReceiver {
 
                     // verification code from sms
                     String verificationCode = getVerificationCode(message);
-
-                    Log.d(Consts.LOG_TAG, "OTP received: " + verificationCode);
-
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "OTP received: " + verificationCode);
+                    }
                     Intent serviceIntent = new Intent(context, OtpService.class);
                     serviceIntent.putExtra("otp", verificationCode);
                     context.startService(serviceIntent);
@@ -46,6 +48,7 @@ public class SmsReceiver extends BroadcastReceiver {
             Log.d(Consts.LOG_TAG, "Exception: " + e.getMessage());
         }
     }
+
     /**
      * Getting the OTP from sms message body
      * ':' is the separator of OTP from the message

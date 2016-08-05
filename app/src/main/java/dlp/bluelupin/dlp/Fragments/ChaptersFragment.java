@@ -107,16 +107,15 @@ public class ChaptersFragment extends Fragment {
             Log.d(Consts.LOG_TAG, "Chapter Fragment: data count: " + dataList.size());
         }
 
-        ChaptersAdapter chaptersAdapter = new ChaptersAdapter(context, dataList);
+        ChaptersAdapter chaptersAdapter = new ChaptersAdapter(context, dataList,type);
         RecyclerView chaptersRecyclerView = (RecyclerView) view.findViewById(R.id.chaptersRecyclerView);
         chaptersRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         chaptersRecyclerView.setHasFixedSize(true);
         //chaptersRecyclerView.setNestedScrollingEnabled(false);
         chaptersRecyclerView.setAdapter(chaptersAdapter);
 
-
-
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

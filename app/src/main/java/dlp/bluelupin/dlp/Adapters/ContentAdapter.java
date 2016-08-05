@@ -74,6 +74,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                         Log.d(Consts.LOG_TAG, " resource text: " + resource.getContent());
                     }
                     TextView dynamicTextView = new TextView(context);
+                    dynamicTextView.setTypeface(VodafoneRg);
                     dynamicTextView.setText(Html.fromHtml(resource.getContent()));
 
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);

@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -78,6 +77,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         list.add("Hindi");
         list.add("Telugu");
         list.add("Tamil");
+        list.add("Kannada");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.language_item, list);
         LanguageAdapter languageAdapter=new LanguageAdapter(this,list);
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -122,7 +122,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
 //        switch (v.getId()){
 //            case R.id.doneLayout:
-//                Intent intent=new Intent(this,AccountSettings.class);
+//                Intent intent=new Intent(this,AccountSettingsActivity.class);
 //                startActivity(intent);
 //                v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_animation));//onclick animation
 //                break;

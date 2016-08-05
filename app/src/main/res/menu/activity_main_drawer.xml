@@ -11,9 +11,13 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Change Language" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/zip"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="Download Zip" />
+        <item
+            android:id="@+id/favorites"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Favorites" />
         <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_menu_manage"

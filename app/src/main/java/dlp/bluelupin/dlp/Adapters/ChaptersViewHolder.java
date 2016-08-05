@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
@@ -18,6 +19,7 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder  {
     public TextView chapterTitle, chapterDescription,favorite,starIcon,download,downloadIcon;
     public android.support.v7.widget.CardView cardView;
     public ImageView chapterImage;
+    public LinearLayout favorite_layout;
 
     public ChaptersViewHolder(View itemView) {
         super(itemView);
@@ -32,6 +34,7 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder  {
         download = (TextView) itemView.findViewById(R.id.download);
         downloadIcon = (TextView) itemView.findViewById(R.id.downloadIcon);
         chapterImage = (ImageView) itemView.findViewById(R.id.chapterImage);
+        favorite_layout= (LinearLayout) itemView.findViewById(R.id.favorite_layout);
     }
 
 

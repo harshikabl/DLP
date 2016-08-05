@@ -34,10 +34,12 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
     private List<Data> itemList;
     private Context context;
     private Boolean favFlage = false;
+    private String type;
 
-    public ChaptersAdapter(Context context, List<Data> itemList) {
+    public ChaptersAdapter(Context context, List<Data> itemList, String type) {
         this.itemList = itemList;
         this.context = context;
+        this.type = type;
     }
 
     @Override
@@ -61,13 +63,19 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         holder.downloadIcon.setTypeface(materialdesignicons_font);
         holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
 
+        //show and hide favorite icon layout only in chapter layout
+        if (type.equalsIgnoreCase(Consts.CHAPTER)) {
+            holder.favorite_layout.setVisibility(View.VISIBLE);
+        } else {
+            holder.favorite_layout.setVisibility(View.GONE);
+        }
 
         final DbHelper dbHelper = new DbHelper(context);
         final Data data = itemList.get(position);
 
         final Data resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
                 Utility.getLanguageIdFromSharedPreferences(context).ordinal());
-        if(data.getLang_resource_name() != null) {
+        if (data.getLang_resource_name() != null) {
             Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
                     Utility.getLanguageIdFromSharedPreferences(context).ordinal());
             if (titleResource != null) {
@@ -75,7 +83,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             }
         }
 
-        if(data.getLang_resource_description() != null) {
+        if (data.getLang_resource_description() != null) {
             Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
                     Utility.getLanguageIdFromSharedPreferences(context).ordinal());
             if (descriptionResource != null) {
@@ -83,10 +91,9 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             }
         }
 
-        if(data.getThumbnail_media_id() != 0)
-        {
+        if (data.getThumbnail_media_id() != 0) {
             Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-            if(media != null) {
+            if (media != null) {
                 //holder.chapterImage.
                 new DownloadImageTask(holder.chapterImage)
                         .execute(media.getUrl());
@@ -105,10 +112,10 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                         .commit();
             }
         });
+
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String type = dbHelper.getTypeOfChildren(data.getId());
                 if(Consts.IS_DEBUG_LOG)
                     Log.d(Consts.LOG_TAG, "Navigating to  data id: " + data.getId() + " type: " + type);
