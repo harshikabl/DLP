@@ -1,30 +1,49 @@
 package dlp.bluelupin.dlp.Fragments;
 
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import dlp.bluelupin.dlp.Activities.DownloadService;
+import dlp.bluelupin.dlp.Adapters.DownloadingAdapter;
+import dlp.bluelupin.dlp.Adapters.FavoritesListAdapter;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.BindService;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link DownloadingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DownloadingFragment extends Fragment implements View.OnClickListener{
+public class DownloadingFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -67,8 +86,8 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
     }
 
     private Context context;
-    private TextView cancelIcon, cancel, uploadMsg, description;
-    private ProgressBar mProgress;
+    private BindService serviceBinder;
+    Intent serviceIntent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,71 +102,63 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
 
     private void init(View view) {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setdownloadContainer(true);
+        rootActivity.setScreenTitle("Daksh");
 
-        Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
-        Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
-        cancelIcon = (TextView) view.findViewById(R.id.cancelIcon);
-        cancelIcon.setTypeface(materialdesignicons_font);
-        cancelIcon.setText(Html.fromHtml("&#xf156"));
-        cancelIcon.setOnClickListener(this);
-        cancel = (TextView) view.findViewById(R.id.cancel);
-        uploadMsg = (TextView) view.findViewById(R.id.uploadMsg);
-        uploadMsg.setTypeface(VodafoneExB);
-        cancel.setTypeface(VodafoneExB);
-        description = (TextView) view.findViewById(R.id.description);
-        description.setTypeface(VodafoneRg);
-        mProgress = (ProgressBar) view.findViewById(R.id.progressBar);
-        //mProgress.setProgress(25);   // Main Progress
-        // mProgress.setSecondaryProgress(50); // Secondary Progress
-        // mProgress.setMax(100); // Maximum Progress
-        new ShowCustomProgressBarAsyncTask().execute();
-        Intent intent = new Intent();
-        intent.setAction(Consts.DownloadBroadcast);
-        context.sendBroadcast(intent);
+        TextView download = (TextView) view.findViewById(R.id.download);
+        download.setTypeface(VodafoneExB);
+        /* List<String> list=new ArrayList<String>();
+        DownloadingAdapter downloadingAdapter = new DownloadingAdapter(context, list);
+        RecyclerView downloadingRecyclerView = (RecyclerView) view.findViewById(R.id.downloadingRecyclerView);
+        downloadingRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        downloadingRecyclerView.setHasFixedSize(true);
+        //downloadingRecyclerView.setNestedScrollingEnabled(false);
+        downloadingRecyclerView.setAdapter(downloadingAdapter);*/
+
+
+        serviceIntent = new Intent(context, DownloadService.class);
+        context.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+
+        BroadcastReceiver intentReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Toast.makeText(context, "File downloaded!",
+                        Toast.LENGTH_LONG).show();
+            }
+        };
     }
+
+    private ServiceConnection connection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            //---called when the connection is made---
+            serviceBinder = ((BindService.MyBinder) service).getService();
+            try {
+                URL[] urls = new URL[]{
+                        new URL("https://s3.ap-south-1.amazonaws.com/classkonnect-test/011+Resetting+data.mp4")};
+                //---assign the URLs to the service through the serviceBinder object---
+                serviceBinder.urls = urls;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            context.startService(serviceIntent);
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            //---called when the service disconnects---
+            serviceBinder = null;
+        }
+    };
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.cancelIcon:
-                MainActivity rootActivity = (MainActivity) getActivity();
-                rootActivity.setdownloadContainer(false);
-                break;
+        switch (v.getId()) {
+
         }
     }
 
-    public class ShowCustomProgressBarAsyncTask extends AsyncTask<Void, Integer, Void> {
-        int myProgress;
 
-        @Override
-        protected void onPostExecute(Void result) {
-           /* textview.setText("Finish work with custom ProgressBar");
-            button1.setEnabled(true);
-            progressBar2.setVisibility(View.INVISIBLE);*/
-        }
-
-        @Override
-        protected void onPreExecute() {
-            myProgress = 0;
-            //progressBar.setSecondaryProgress(0);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            while (myProgress < 100) {
-                myProgress++;
-                publishProgress(myProgress);
-                SystemClock.sleep(100);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            mProgress.setProgress(values[0]);
-            mProgress.setSecondaryProgress(values[0] + 5);
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

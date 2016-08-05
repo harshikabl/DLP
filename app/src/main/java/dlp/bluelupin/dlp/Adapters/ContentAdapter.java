@@ -122,7 +122,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         linearLayout.setVerticalGravity(Gravity.BOTTOM);
-        linearLayout.setBackground(context.getResources().getDrawable(R.drawable.gradient_black, null));//;background="@drawable/gradient_black"
+        linearLayout.setBackground(context.getResources().getDrawable(R.drawable.gradient_black));//;background="@drawable/gradient_black"
 
         TextView dynamicTextView = new TextView(context);
         dynamicTextView.setText(Html.fromHtml(titleText));
