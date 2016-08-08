@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import dlp.bluelupin.dlp.Activities.DownloadingBroadcastReceiver;
+import dlp.bluelupin.dlp.Activities.DownloadService;
 import dlp.bluelupin.dlp.Adapters.ChaptersAdapter;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
@@ -62,7 +62,6 @@ public class ChaptersFragment extends Fragment {
 
     private TextView chapterTitle;
     private Context context;
-    private DownloadingBroadcastReceiver downloadingBroadcastReceiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,11 +77,8 @@ public class ChaptersFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chapters, container, false);
-        downloadingBroadcastReceiver = new DownloadingBroadcastReceiver();
 
-        // register receiver
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(downloadingBroadcastReceiver,
-                new IntentFilter(Consts.DownloadBroadcast));
+
         context = getActivity();
         init(view);
         return view;
@@ -116,11 +112,7 @@ public class ChaptersFragment extends Fragment {
 
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(downloadingBroadcastReceiver);
-    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

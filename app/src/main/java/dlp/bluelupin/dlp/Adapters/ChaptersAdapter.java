@@ -107,7 +107,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                 DownloadingFragment fragment = DownloadingFragment.newInstance("", "");
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top);
-                transaction.replace(R.id.downloadContainer, fragment)
+                transaction.replace(R.id.container, fragment)
                         //.addToBackStack(null)
                         .commit();
             }

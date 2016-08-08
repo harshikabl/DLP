@@ -34,14 +34,8 @@
             android:name=".Activities.NotificationsActivity"
             android:label="@string/title_activity_notifications"
             android:theme="@style/AppTheme"></activity>
-        <receiver
-            android:name=".Activities.DownloadingBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="DownloadBroadcast" />
-            </intent-filter>
-        </receiver>
+
+        <service android:name=".Activities.DownloadService"/>
 
 
         <!-- SMS Receiver -->
