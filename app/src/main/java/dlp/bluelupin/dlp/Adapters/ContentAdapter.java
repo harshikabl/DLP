@@ -88,7 +88,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                 if (data.getMedia_id() != 0) {
                     Data media = dbHelper.getMediaEntityById(data.getMedia_id());
                     if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, " Image Url: " + media.getUrl());
+                        Log.d(Consts.LOG_TAG,"Media id" + media.getId() +  " Image Url: " + media.getUrl());
                     }
                     if (media != null) {
                         String titleText = null;
@@ -97,6 +97,26 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                             titleText = resource.getContent();
                         }
                         FrameLayout imageContainer = makeImage(media.getUrl(),titleText);
+                        holder.contentContainer.addView(imageContainer);
+                    }
+
+                }
+            }
+
+            if (data.getType().equalsIgnoreCase("video")) {
+                if (data.getMedia_id() != 0) {
+                    Data media = dbHelper.getMediaEntityById(data.getMedia_id());
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG,"Media id" + media.getId() +  " video Url: " + media.getUrl());
+                    }
+                    if (media != null) {
+                        String titleText = null;
+                        if(resource!= null)
+                        {
+                            titleText = resource.getContent();
+                        }
+                        Data videoThumbnail = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
+                        FrameLayout imageContainer = makeImage(videoThumbnail.getUrl(),titleText);
                         holder.contentContainer.addView(imageContainer);
                     }
 

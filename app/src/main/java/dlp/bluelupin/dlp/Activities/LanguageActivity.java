@@ -139,7 +139,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
             startActivity(mainIntent);
             finish();
         } else {
-            Intent mainIntent = new Intent(LanguageActivity.this, AccountSettings.class);
+            Intent mainIntent = new Intent(LanguageActivity.this, AccountSettingsActivity.class);
             startActivity(mainIntent);
             finish();
         }
