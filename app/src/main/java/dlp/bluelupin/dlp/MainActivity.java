@@ -35,6 +35,7 @@ import dlp.bluelupin.dlp.Services.IServiceManager;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DecompressZipFile;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     private TextView title;
     public FrameLayout downloadContainer;
     private static MainActivity mainActivity;
+    CustomProgressDialog customProgressDialog;
 
     public static MainActivity getInstace() {
         return mainActivity;
@@ -61,34 +63,33 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
         title.setTypeface(VodafoneExB);
+        customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
 
         downloadContainer = (FrameLayout) findViewById(R.id.downloadContainer);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Consts.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        final IServiceManager service = retrofit.create(IServiceManager.class);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final DbHelper dbhelper = new DbHelper(this);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ContentServiceRequest request = new ContentServiceRequest();
-                callContentAsync();
-                callResourceAsync();
-                callMediaAsync();
-            }
+        customProgressDialog.show();
+        callSync();
 
-            ;
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//
 
-
-//         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-
-        });
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ContentServiceRequest request = new ContentServiceRequest();
+//                callContentAsync();
+//                callResourceAsync();
+//                callMediaAsync();
+//            }
+//
+//            ;
+//
+//
+////         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+////                        .setAction("Action", null).show();
+//
+//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -106,70 +107,7 @@ public class MainActivity extends AppCompatActivity
             name.setText(accountData.getName());
             email.setText(accountData.getEmail());
         }
-        setUpCourseFragment();
-    }
 
-    private void callContentAsync() {
-        ContentServiceRequest request = new ContentServiceRequest();
-        request.setPage(1);
-        DbHelper db = new DbHelper(MainActivity.this);
-        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_CONTENT_LATEST);
-        if (cacheSeviceCallData != null) {
-            request.setStart_date(cacheSeviceCallData.getLastCalled());
-            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
-        }
-        ServiceCaller sc = new ServiceCaller(MainActivity.this);
-        sc.getAllContent(request, new IAsyncWorkCompletedCallback() {
-            @Override
-            public void onDone(String workName, boolean isComplete) {
-                Log.d(Consts.LOG_TAG, "MainActivity: callContentAsync success result: " + isComplete);
-                DbHelper db = new DbHelper(MainActivity.this);
-                List<Data> data = db.getDataEntityByParentId(null);
-                Log.d(Consts.LOG_TAG, "MainActivity: data count: " + data.size());
-            }
-        });
-    }
-
-    private void callResourceAsync() {
-        ContentServiceRequest request = new ContentServiceRequest();
-        request.setPage(1);
-        DbHelper db = new DbHelper(MainActivity.this);
-        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_LANGUAGE_RESOURCE_LATEST);
-        if (cacheSeviceCallData != null) {
-            request.setStart_date(cacheSeviceCallData.getLastCalled());
-            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData for URL_LANGUAGE_RESOURCE_LATEST: " + cacheSeviceCallData.getLastCalled());
-        }
-        ServiceCaller sc = new ServiceCaller(MainActivity.this);
-        sc.getAllResource(request, new IAsyncWorkCompletedCallback() {
-            @Override
-            public void onDone(String workName, boolean isComplete) {
-                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync success result: " + isComplete);
-                DbHelper db = new DbHelper(MainActivity.this);
-                List<Data> data = db.getResources();
-                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data count: " + data.size());
-            }
-        });
-    }
-
-    private void callMediaAsync() {
-        ContentServiceRequest request = new ContentServiceRequest();
-        request.setPage(1);
-        DbHelper db = new DbHelper(MainActivity.this);
-        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_MEDIA_LATEST);
-        if (cacheSeviceCallData != null) {
-            request.setStart_date(cacheSeviceCallData.getLastCalled());
-            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData for URL_MEDIA_LATEST: " + cacheSeviceCallData.getLastCalled());
-        }
-        ServiceCaller sc = new ServiceCaller(MainActivity.this);
-        sc.getAllMedia(request, new IAsyncWorkCompletedCallback() {
-            @Override
-            public void onDone(String workName, boolean isComplete) {
-                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync success result: " + isComplete);
-                DbHelper db = new DbHelper(MainActivity.this);
-                List<Data> data = db.getAllMedia();
-                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data count: " + data.size());
-            }
-        });
     }
 
 
@@ -237,9 +175,9 @@ public class MainActivity extends AppCompatActivity
             }
             String unzipLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DlpContentUnzipped/";
             Log.d(Consts.LOG_TAG, "unzipLocation: " + unzipLocation);
-            DecompressZipFile d = new DecompressZipFile(zipFile, unzipLocation,this);
+            DecompressZipFile d = new DecompressZipFile(zipFile, unzipLocation, this);
             d.unzip();
-        }else if (id == R.id.favorites) {
+        } else if (id == R.id.favorites) {
             FragmentManager fragmentManager = this.getSupportFragmentManager();
             FavoritesFragment fragment = FavoritesFragment.newInstance("", "");
             FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -247,8 +185,7 @@ public class MainActivity extends AppCompatActivity
             transaction.replace(R.id.container, fragment)
                     .addToBackStack(null)
                     .commit();
-        }
-        else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
@@ -278,4 +215,93 @@ public class MainActivity extends AppCompatActivity
             downloadContainer.setVisibility(View.GONE);
         }
     }
+
+    private void callSync() {
+        callContentAsync();
+        callResourceAsync();
+        callMediaAsync();
+    }
+
+    private Boolean contentCallDone = false, resourceCallDone = false, mediaCallDone = false;
+
+    private void sendMessageIfAllCallsDone() {
+        if (contentCallDone && resourceCallDone && mediaCallDone) {
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "Sync Call done in Splash");
+            }
+            customProgressDialog.dismiss();
+            setUpCourseFragment();
+        }
+    }
+
+    private void callContentAsync() {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(MainActivity.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_CONTENT_LATEST);
+        if (cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(MainActivity.this);
+        sc.getAllContent(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+                Log.d(Consts.LOG_TAG, "MainActivity: callContentAsync success result: " + isComplete);
+                DbHelper db = new DbHelper(MainActivity.this);
+                List<Data> data = db.getDataEntityByParentId(null);
+                Log.d(Consts.LOG_TAG, "MainActivity: data count: " + data.size());
+                contentCallDone = true;
+                sendMessageIfAllCallsDone();
+            }
+        });
+    }
+
+    private void callResourceAsync() {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(MainActivity.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_LANGUAGE_RESOURCE_LATEST);
+        if (cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData for URL_LANGUAGE_RESOURCE_LATEST: " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(MainActivity.this);
+        sc.getAllResource(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync success result: " + isComplete);
+                DbHelper db = new DbHelper(MainActivity.this);
+                List<Data> data = db.getResources();
+                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data count: " + data.size());
+                resourceCallDone = true;
+                sendMessageIfAllCallsDone();
+            }
+        });
+    }
+
+    private void callMediaAsync() {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(MainActivity.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_MEDIA_LATEST);
+        if (cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData for URL_MEDIA_LATEST: " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(MainActivity.this);
+        sc.getAllMedia(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync success result: " + isComplete);
+                DbHelper db = new DbHelper(MainActivity.this);
+                List<Data> data = db.getAllMedia();
+                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data count: " + data.size());
+                mediaCallDone = true;
+                sendMessageIfAllCallsDone();
+            }
+        });
+    }
 }
+
+
