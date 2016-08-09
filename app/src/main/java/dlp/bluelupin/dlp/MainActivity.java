@@ -1,5 +1,6 @@
 package dlp.bluelupin.dlp;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
@@ -37,6 +39,7 @@ import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DecompressZipFile;
+import dlp.bluelupin.dlp.Utilities.Utility;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -154,6 +157,14 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -169,11 +180,16 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
             overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
         } else if (id == R.id.zip) {
-            String zipFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/content1.zip";
+            Utility.verifyStoragePermissions(this);
+            String zipFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/dlp/content1.zip";
             if (Consts.IS_DEBUG_LOG) {
                 Log.d(Consts.LOG_TAG, "zipFile file: " + zipFile);
             }
             String unzipLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DlpContentUnzipped/";
+            File unziplocation = new File(unzipLocation);
+            if(!unziplocation.exists()) {
+                unziplocation.mkdirs();
+            }
             Log.d(Consts.LOG_TAG, "unzipLocation: " + unzipLocation);
             DecompressZipFile d = new DecompressZipFile(zipFile, unzipLocation, this);
             d.unzip();

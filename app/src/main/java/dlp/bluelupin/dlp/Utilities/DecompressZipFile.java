@@ -38,11 +38,18 @@ public class DecompressZipFile {
         this.location = location;
         this.context = context;
 
-        _dirChecker("");
+        //_dirChecker("");
     }
 
     public void unzip() {
         try {
+            File f = new File(zipFile);
+
+            if (!f.exists()) {
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "zip file NOT located at: " + zipFile);
+                }
+            }
             FileInputStream fin = new FileInputStream(zipFile);
             ZipInputStream zin = new ZipInputStream(fin);
             ZipEntry ze = null;
@@ -52,7 +59,7 @@ public class DecompressZipFile {
                     Log.d(Consts.LOG_TAG, "Unzipping " + ze.getName());
                 }
                 if (ze.isDirectory()) {
-                    _dirChecker(ze.getName());
+                    _dirChecker(ze.getName() + "/");
                 } else {
                     String localFilePath;
                     String fileName = ze.getName();
@@ -60,6 +67,7 @@ public class DecompressZipFile {
                         localFilePath = location + fileName;
                     } else {
                         String[] file = fileName.split("/");
+
                         localFilePath = location + file[1];
                     }
                     FileOutputStream fout = new FileOutputStream(localFilePath);
@@ -70,9 +78,15 @@ public class DecompressZipFile {
                     }
                     zin.closeEntry();
                     fout.close();
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "file unzipped at " + localFilePath);
+                    }
                 }
             }
             zin.close();
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "json file read successfully: " + ze.getName());
+            }
             copyZipDataIntoDatabase();
         } catch (Exception e) {
             Log.e("Decompress", "unzip", e);
@@ -91,7 +105,9 @@ public class DecompressZipFile {
              builder = new StringBuilder();
             int ch;
             while((ch = fis.read()) != -1){
-                Log.d(Consts.LOG_TAG, "ch : " + ch);
+                if(Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "ch : " + ch);
+                }
                 builder=builder.append((char)ch);
             }
 
@@ -122,8 +138,12 @@ public class DecompressZipFile {
 
     public void _dirChecker(String dir) {
         File f = new File(location + dir);
-
-        if (!f.isDirectory()) {
+        if(Consts.IS_DEBUG_LOG)
+        {
+            Log.d(Consts.LOG_TAG, "_dirchecker. creating directory: " + f.getPath());
+        }
+        //if (!f.isDirectory()) {
+        if (!f.exists()) {
             f.mkdirs();
         }
     }

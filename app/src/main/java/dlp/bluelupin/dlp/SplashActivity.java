@@ -106,7 +106,9 @@ public class SplashActivity extends Activity {
         DbHelper dbhelper = new DbHelper(SplashActivity.this);
         AccountData accountData = dbhelper.getAccountData();
         if (accountData != null && !accountData.equals("")) {
-            invokeServiceForBackgroundUpdate(); // app already ran once; put all updates in background
+
+           // invokeServiceForBackgroundUpdate(); // app already ran once; put all updates in background
+
             Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(mainIntent);
             finish();
