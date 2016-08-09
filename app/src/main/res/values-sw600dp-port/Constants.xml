@@ -103,9 +103,7 @@
     <dimen name="dimValue_120">187dip</dimen>
     <dimen name="dimValue_121">188dip</dimen>
 
-    <!-- Constant String -->
-    <string name="user">iris@lava.com</string>
-    <string name="pass">iris</string>
+
 
     <!-- tabbar dimantion -->
     <dimen name="corner_radius">1dp</dimen>

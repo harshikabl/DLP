@@ -16,7 +16,9 @@ import java.util.List;
 import dlp.bluelupin.dlp.Adapters.ChaptersAdapter;
 import dlp.bluelupin.dlp.Adapters.FavoritesListAdapter;
 import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
+import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.R;
 
 /**
@@ -88,6 +90,10 @@ public class FavoritesListFragment extends Fragment {
         list.add("English");
         list.add("Hindi");
         list.add("Tamil");
+
+        DbHelper dbHelper = new DbHelper(context);
+        List<FavoritesData> favoritesData = dbHelper.getFavoritesListData();
+
         FavoritesListAdapter chaptersAdapter = new FavoritesListAdapter(context, list);
         RecyclerView chaptersRecyclerView = (RecyclerView) view.findViewById(R.id.favoritesRecyclerView);
         chaptersRecyclerView.setLayoutManager(new LinearLayoutManager(context));

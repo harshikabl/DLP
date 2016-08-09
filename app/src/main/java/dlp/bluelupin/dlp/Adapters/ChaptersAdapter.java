@@ -22,6 +22,7 @@ import dlp.bluelupin.dlp.Fragments.ChaptersFragment;
 import dlp.bluelupin.dlp.Fragments.ContentFragment;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -33,7 +34,6 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
     private List<Data> itemList;
     private Context context;
-    private Boolean favFlage = false;
     private String type;
 
     public ChaptersAdapter(Context context, List<Data> itemList, String type) {
@@ -64,11 +64,11 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
 
         //show and hide favorite icon layout only in chapter layout
-        if (type.equalsIgnoreCase(Consts.CHAPTER)) {
+        /*if (type.equalsIgnoreCase(Consts.CHAPTER)) {
             holder.favorite_layout.setVisibility(View.VISIBLE);
         } else {
             holder.favorite_layout.setVisibility(View.GONE);
-        }
+        }*/
 
         final DbHelper dbHelper = new DbHelper(context);
         final Data data = itemList.get(position);
@@ -117,10 +117,9 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             @Override
             public void onClick(View v) {
                 String type = dbHelper.getTypeOfChildren(data.getId());
-                if(Consts.IS_DEBUG_LOG)
+                if (Consts.IS_DEBUG_LOG)
                     Log.d(Consts.LOG_TAG, "Navigating to  data id: " + data.getId() + " type: " + type);
-                if(type.equalsIgnoreCase(Consts.COURSE) || type.equalsIgnoreCase(Consts.CHAPTER) || type.equalsIgnoreCase(Consts.TOPIC))
-                {
+                if (type.equalsIgnoreCase(Consts.COURSE) || type.equalsIgnoreCase(Consts.CHAPTER) || type.equalsIgnoreCase(Consts.TOPIC)) {
                     FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
                     ChaptersFragment fragment = ChaptersFragment.newInstance(data.getId(), type);
 
@@ -129,8 +128,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                     transaction.replace(R.id.container, fragment)
                             .addToBackStack(null)
                             .commit();
-                }
-                else {
+                } else {
                     FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
                     ContentFragment fragment = ContentFragment.newInstance(data.getId(), "");
 
@@ -142,23 +140,14 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                 }
             }
         });
-        if (favFlage) {
-            holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
-            holder.starIcon.setTextColor(Color.parseColor("#e60000"));
-        } else {
-            holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
-            holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
-        }
+
+        isFavorites(data, holder);//set favorites icon
         holder.starIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (favFlage) {
-                    favFlage = false;
-
-                } else {
-                    favFlage = true;
-                }
+                setFavorites(data);
                 v.startAnimation(AnimationUtils.loadAnimation(context, R.anim.click_animation));//onclick animation
+
             }
         });
     }
@@ -166,5 +155,44 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
     @Override
     public int getItemCount() {
         return itemList.size();
+    }
+
+    //set favorites
+    private void setFavorites(Data data) {
+        DbHelper dbHelper = new DbHelper(context);
+        FavoritesData favoritesData = dbHelper.getFavoritesData(data.getId());
+        FavoritesData favoData = new FavoritesData();
+        if (favoritesData != null) {
+            if (favoritesData.getFavoritesFlag().equals("1")) {
+                favoData.setId(data.getId());
+                favoData.setFavoritesFlag("0");
+            } else {
+                favoData.setId(data.getId());
+                favoData.setFavoritesFlag("1");
+            }
+        } else {
+            favoData.setId(data.getId());
+            favoData.setFavoritesFlag("1");
+        }
+        dbHelper.upsertFavoritesData(favoData);
+        notifyDataSetChanged();
+    }
+
+    //set favorites icon
+    private void isFavorites(Data data, ChaptersViewHolder holder) {
+        DbHelper dbHelper = new DbHelper(context);
+        FavoritesData favoritesData = dbHelper.getFavoritesData(data.getId());
+        if (favoritesData != null) {
+            if (favoritesData.getFavoritesFlag().equals("1")) {
+                holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
+                holder.starIcon.setTextColor(Color.parseColor("#e60000"));
+            } else {
+                holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
+                holder.starIcon.setTextColor(Color.parseColor("#000000"));
+            }
+        } else {
+            holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
+            holder.starIcon.setTextColor(Color.parseColor("#000000"));
+        }
     }
 }
