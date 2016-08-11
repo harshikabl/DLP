@@ -2,6 +2,7 @@ package dlp.bluelupin.dlp.Fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -91,5 +92,15 @@ public class SelectLocationFragment extends Fragment {
         defaultText.setTypeface(VodafoneExB);
         path.setTypeface(VodafoneRg);
         selectFolder.setTypeface(VodafoneRg);
+        selectFolder.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("file/*");
+                startActivity(intent);
+            }
+        });
     }
 }
