@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top|center"
+    android:orientation="vertical"
+    tools:context="dlp.bluelupin.dlp.Fragments.SelectLocationFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimValue_16"
+        android:layout_marginRight="@dimen/dimValue_16"
+        android:layout_marginTop="@dimen/dimTextSize_40"
+        android:background="@drawable/select_folder"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/defaultText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimValue_10"
+            android:layout_marginTop="@dimen/dimValue_10"
+            android:padding="@dimen/dimValue_10"
+            android:text="Default Folder"
+            android:textColor="#000"
+            android:textSize="@dimen/dimTextSize_20" />
+
+        <TextView
+            android:id="@+id/path"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/dimValue_10"
+            android:layout_marginLeft="@dimen/dimValue_10"
+            android:padding="@dimen/dimValue_10"
+            android:text="/storage/sdcard/DLP/download"
+            android:textColor="#4a4d4e"
+            android:textSize="@dimen/dimTextSize_18" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="@dimen/size_250px"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimValue_20"
+        android:background="@drawable/done_corner_round"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/selectFolder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="@dimen/dimValue_13"
+            android:text="SELECT FOLDER"
+            android:textColor="#fff"
+            android:textSize="@dimen/dimTextSize_22" />
+    </LinearLayout>
+</LinearLayout>

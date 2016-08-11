@@ -1,5 +1,6 @@
 package dlp.bluelupin.dlp.Activities;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import dlp.bluelupin.dlp.Adapters.NotificationAdapter;
 import dlp.bluelupin.dlp.Fragments.SimpleItemTouchHelperCallback;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.Utility;
 
 public class NotificationsActivity extends AppCompatActivity implements View.OnClickListener{
     private TextView title, leftArrow;
@@ -27,6 +29,11 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
+        if (Utility.isTablet(this)) {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         init();
     }
     private void init() {

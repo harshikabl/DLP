@@ -3,27 +3,24 @@ package dlp.bluelupin.dlp.Fragments;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTabHost;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import dlp.bluelupin.dlp.Adapters.FavoritesPagerAdapter;
-import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FavoritesFragment#newInstance} factory method to
+ * Use the {@link SelectLocationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FavoritesFragment extends Fragment {
+public class SelectLocationFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,7 +31,7 @@ public class FavoritesFragment extends Fragment {
     private String mParam2;
 
 
-    public FavoritesFragment() {
+    public SelectLocationFragment() {
         // Required empty public constructor
     }
 
@@ -44,11 +41,11 @@ public class FavoritesFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FavoritesFragment.
+     * @return A new instance of fragment SelectLocationFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FavoritesFragment newInstance(String param1, String param2) {
-        FavoritesFragment fragment = new FavoritesFragment();
+    public static SelectLocationFragment newInstance(String param1, String param2) {
+        SelectLocationFragment fragment = new SelectLocationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -66,13 +63,12 @@ public class FavoritesFragment extends Fragment {
     }
 
     private Context context;
-    private ViewPager viewPager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_favotites, container, false);
+        View view = inflater.inflate(R.layout.fragment_select_location, container, false);
         context = getActivity();
         if (Utility.isTablet(context)) {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -83,32 +79,17 @@ public class FavoritesFragment extends Fragment {
         return view;
     }
 
-    public void init(View view) {
-        //TabHost mTabHost = getTabHost();
-        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-        // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
-        tabLayout.setupWithViewPager(viewPager);
-        //setUpCustomView(tabLayout);
+    private void init(View view) {
+        MainActivity rootActivity = (MainActivity) getActivity();
+        rootActivity.setScreenTitle("Select Location");
 
-
-    }
-
-    private void setUpCustomView(TabLayout tabLayout) {
-        TextView tabOne = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab, null);
-        tabOne.setText("CHAPTERS");
-        //tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_tab_favourite, 0, 0);
-        TextView tabTwo = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab, null);
-        tabTwo.setText("TOPICS");
-        tabLayout.getTabAt(0).setCustomView(tabOne);
-        tabLayout.getTabAt(1).setCustomView(tabTwo);
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        FavoritesPagerAdapter adapter = new FavoritesPagerAdapter(getActivity().getSupportFragmentManager());
-        adapter.addFrag(new FavoritesListFragment().newInstance(Consts.CHAPTER), "CHAPTERS");
-        adapter.addFrag(new FavoritesListFragment().newInstance(Consts.TOPIC), "TOPICS");
-        viewPager.setAdapter(adapter);
+        Typeface VodafoneExB = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VodafoneExB.TTF");
+        Typeface VodafoneRg = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VodafoneRg.ttf");
+        TextView defaultText = (TextView) view.findViewById(R.id.defaultText);
+        TextView path = (TextView) view.findViewById(R.id.path);
+        TextView selectFolder = (TextView) view.findViewById(R.id.selectFolder);
+        defaultText.setTypeface(VodafoneExB);
+        path.setTypeface(VodafoneRg);
+        selectFolder.setTypeface(VodafoneRg);
     }
 }

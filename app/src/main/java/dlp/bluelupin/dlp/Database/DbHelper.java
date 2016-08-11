@@ -857,4 +857,45 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+
+    //get chapters favorites and topic list data
+    public List<FavoritesData> getFavoritesChaptersAndTopicListData(String type) {
+        //clientId, Content_id , updated_at,Favorites_Flag
+        List<FavoritesData> list = new ArrayList<FavoritesData>();
+        String query = "Select FavoritesEntity.clientId, FavoritesEntity.Content_id, FavoritesEntity.updated_at, FavoritesEntity.Favorites_Flag, DataEntity.server_id , "
+                + "DataEntity.parent_id ,  DataEntity.sequence , DataEntity.media_id , DataEntity.thumbnail_media_id , DataEntity.lang_resource_name , DataEntity.lang_resource_description , DataEntity.type ,  DataEntity.url,DataEntity.created_at , DataEntity.updated_at , DataEntity.deleted_at  FROM FavoritesEntity " +
+                "INNER JOIN DataEntity ON FavoritesEntity.Content_id=DataEntity.server_id  where FavoritesEntity.Favorites_Flag = '" + 1 + "' and  DataEntity.type='" + type + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                FavoritesData ob = new FavoritesData();
+                //ob.setId(Integer.parseInt(cursor.getString(0)));
+                ob.setId(Integer.parseInt(cursor.getString(1)));
+                ob.setUpdatedAt(cursor.getString(2));
+                ob.setFavoritesFlag(cursor.getString(3));
+
+                ob.setServerId(Integer.parseInt(cursor.getString(4)));
+                ob.setParent_id(Integer.parseInt(cursor.getString(5)));
+                ob.setSequence(cursor.getInt(6));
+                ob.setMedia_id(Integer.parseInt(cursor.getString(7)));
+                ob.setThumbnail_media_id(Integer.parseInt(cursor.getString(8)));
+                ob.setLang_resource_name(cursor.getString(9));
+                ob.setLang_resource_description(cursor.getString(10));
+                ob.setType(cursor.getString(11));
+                ob.setUrl(cursor.getString(12));
+                ob.setCreated_at(cursor.getString(13));
+                ob.setUpdated_at(cursor.getString(14));
+                ob.setDeleted_at(cursor.getString(15));
+
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
 }

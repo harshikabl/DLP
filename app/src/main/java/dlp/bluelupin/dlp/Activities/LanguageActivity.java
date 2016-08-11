@@ -1,6 +1,7 @@
 package dlp.bluelupin.dlp.Activities;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -42,6 +43,11 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
         setContentView(R.layout.activity_language);
+        if (Utility.isTablet(this)) {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         init();
     }
     //get all id's

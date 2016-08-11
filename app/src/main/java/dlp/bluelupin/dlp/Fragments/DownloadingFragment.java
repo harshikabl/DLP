@@ -5,38 +5,26 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.DownloadService;
-import dlp.bluelupin.dlp.Adapters.DownloadingAdapter;
-import dlp.bluelupin.dlp.Adapters.FavoritesListAdapter;
-import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.BindService;
+import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -96,6 +84,11 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         View view = inflater.inflate(R.layout.fragment_downloading, container, false);
 
         context = getActivity();
+        if (Utility.isTablet(context)) {
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         init(view);
         return view;
     }

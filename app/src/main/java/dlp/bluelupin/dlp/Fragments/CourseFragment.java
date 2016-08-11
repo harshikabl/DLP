@@ -1,6 +1,7 @@
 package dlp.bluelupin.dlp.Fragments;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,10 +87,12 @@ public class CourseFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_course, container, false);
         context = getActivity();
+        if (Utility.isTablet(context)) {
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         init(view);
-
-
-
         return view;
 
     }

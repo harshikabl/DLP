@@ -28,33 +28,33 @@ import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
- * Created by Neeraj on 8/4/2016.
+ * Created by Neeraj on 8/10/2016.
  */
-public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHolder> {
+public class FavoritesTopicListAdapter extends RecyclerView.Adapter<FavoritesTopicViewHolder> {
 
     private List<FavoritesData> favoritesList;
     private Context context;
     private Boolean favFlage = false;
     private String type;
 
-    public FavoritesListAdapter(Context context, List<FavoritesData> favoritesData) {
+    public FavoritesTopicListAdapter(Context context, List<FavoritesData> favoritesData) {
         this.favoritesList = favoritesData;
         this.context = context;
         this.type = type;
     }
 
     @Override
-    public FavoritesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.favorites_list_view_item, parent, false);
-        return new FavoritesViewHolder(layoutView);
+    public FavoritesTopicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.favorites_topic_list_view_item, parent, false);
+        return new FavoritesTopicViewHolder(layoutView);
     }
 
     @Override
-    public void onBindViewHolder(FavoritesViewHolder holder, final int position) {
+    public void onBindViewHolder(FavoritesTopicViewHolder holder, final int position) {
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
-        holder.chapterTitle.setTypeface(VodafoneExB);
-        holder.chapterDescription.setTypeface(VodafoneRg);
+        holder.topicTitle.setTypeface(VodafoneExB);
+        holder.topicDescription.setTypeface(VodafoneRg);
 
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
         holder.starIcon.setTypeface(materialdesignicons_font);
@@ -71,7 +71,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
             Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
                     Utility.getLanguageIdFromSharedPreferences(context).ordinal());
             if (titleResource != null) {
-                holder.chapterTitle.setText(titleResource.getContent());
+                holder.topicTitle.setText(titleResource.getContent());
             }
         }
 
@@ -79,7 +79,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
             Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
                     Utility.getLanguageIdFromSharedPreferences(context).ordinal());
             if (descriptionResource != null) {
-                holder.chapterDescription.setText(descriptionResource.getContent());
+                holder.topicDescription.setText(descriptionResource.getContent());
             }
         }
 
@@ -87,7 +87,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
             Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
             if (media != null) {
                 //holder.chapterImage.
-                new DownloadImageTask(holder.chapterImage)
+                new DownloadImageTask(holder.topicImage)
                         .execute(media.getUrl());
             }
         }
@@ -174,7 +174,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
     }
 
     //set favorites icon
-    private void isFavorites(FavoritesData data, FavoritesViewHolder holder) {
+    private void isFavorites(FavoritesData data, FavoritesTopicViewHolder holder) {
         DbHelper dbHelper = new DbHelper(context);
         FavoritesData favoritesData = dbHelper.getFavoritesData(data.getId());
         if (favoritesData != null) {

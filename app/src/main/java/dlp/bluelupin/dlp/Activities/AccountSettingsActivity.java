@@ -2,6 +2,7 @@ package dlp.bluelupin.dlp.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
@@ -59,7 +60,11 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
         setContentView(R.layout.activity_account_settings);
-
+        if (Utility.isTablet(this)) {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
       /*  Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Consts.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
