@@ -29,19 +29,17 @@ import dlp.bluelupin.dlp.Models.Data;
  * Created by Neeraj on 8/3/2016.
  */
 public class DecompressZipFile {
-    private String zipFile;
-    private String location;
+
     private Context context;
 
-    public DecompressZipFile(String zipFile, String location, Context context) {
-        this.zipFile = zipFile;
-        this.location = location;
+    public DecompressZipFile(Context context) {
+
         this.context = context;
 
         //_dirChecker("");
     }
 
-    public void unzip() {
+    public void unzip(String zipFile, String strExtractLocation) {
         try {
             File f = new File(zipFile);
 
@@ -50,29 +48,36 @@ public class DecompressZipFile {
                     Log.d(Consts.LOG_TAG, "zip file NOT located at: " + zipFile);
                 }
             }
-            FileInputStream fin = new FileInputStream(zipFile);
+            File extractLocation = new File(strExtractLocation);
+
+            if (!extractLocation.exists()) {
+                extractLocation.mkdirs();
+            }
+            FileInputStream fin = new FileInputStream(f.getPath());
             ZipInputStream zin = new ZipInputStream(fin);
             ZipEntry ze = null;
-            byte[] buffer = new byte[1024];
+
             while ((ze = zin.getNextEntry()) != null) {
-                if (Consts.IS_DEBUG_LOG) {
-                    Log.d(Consts.LOG_TAG, "Unzipping " + ze.getName());
-                }
+                //byte[] buffer = new byte[1024];
                 if (ze.isDirectory()) {
-                    _dirChecker(ze.getName() + "/");
+
+                    _dirChecker(extractLocation.getPath(), ze.getName() + "/");
                 } else {
                     String localFilePath;
                     String fileName = ze.getName();
                     if (fileName.contains(".json")) {
-                        localFilePath = location + fileName;
+                        localFilePath = addTrailingSlash(extractLocation.getPath()) + fileName;
                     } else {
                         String[] file = fileName.split("/");
 
-                        localFilePath = location + file[1];
+                        localFilePath = addTrailingSlash(extractLocation.getPath()) + file[1];
+                    }
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "Unzipping " + ze.getName() + " to " + localFilePath);
                     }
                     FileOutputStream fout = new FileOutputStream(localFilePath);
                     if (fout != null) {
-                        for (int c = zin.read(buffer); c != -1; c = zin.read()) {
+                        for (int c = zin.read(); c != -1; c = zin.read()) {
                             fout.write(c);
                         }
                     }
@@ -82,17 +87,64 @@ public class DecompressZipFile {
                         Log.d(Consts.LOG_TAG, "file unzipped at " + localFilePath);
                     }
                 }
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "Zip file extracted successfully: " + ze.getName());
+                }
             }
             zin.close();
-            if (Consts.IS_DEBUG_LOG) {
-                Log.d(Consts.LOG_TAG, "json file read successfully: " + ze.getName());
-            }
-            copyZipDataIntoDatabase();
+
+           // copyZipDataIntoDatabase();
         } catch (Exception e) {
             Log.e("Decompress", "unzip", e);
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "DecompressZipFile: unzip " + e);
+            }
         }
-
     }
+
+    public String getFileContentFromZip(String zipFile, String inputFileName) {
+        String fileContent = null;
+        try {
+            File f = new File(zipFile);
+
+            if (!f.exists()) {
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "zip file NOT located at: " + zipFile);
+                }
+            }
+
+            FileInputStream fin = new FileInputStream(f.getPath());
+            ZipInputStream zin = new ZipInputStream(fin);
+            ZipEntry ze = null;
+            byte[] buffer = new byte[1024];
+            Boolean fileFound = true;
+            while ((ze = zin.getNextEntry()) != null) {
+
+                if (!ze.isDirectory()) {
+                    String localFilePath;
+                    String fileName = ze.getName();
+
+                    if(inputFileName.equalsIgnoreCase(fileName)) {
+                        if (Consts.IS_DEBUG_LOG) {
+                            Log.d(Consts.LOG_TAG, "reading the file " + ze.getName());
+                        }
+                        byte[] bytes= new byte[(int)ze.getSize()];
+                        zin.read(bytes, 0, bytes.length);
+                        fileContent= new String( bytes, "UTF-8");
+                        break; // file found; break the while loop...
+                    }
+                }
+            }
+            zin.close();
+        } catch (Exception e) {
+            Log.e("DecompressZipFile", "getFileContentFromZip", e);
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "DecompressZipFile: getFileContentFromZip " + e);
+            }
+        }
+        return fileContent;
+    }
+
 
     //copy data into database
     public void copyZipDataIntoDatabase() {
@@ -136,7 +188,7 @@ public class DecompressZipFile {
         }
     }
 
-    public void _dirChecker(String dir) {
+    public void _dirChecker(String location, String dir) {
         File f = new File(location + dir);
         if(Consts.IS_DEBUG_LOG)
         {
@@ -147,5 +199,16 @@ public class DecompressZipFile {
             f.mkdirs();
         }
     }
+
+    public String addTrailingSlash(String path)
+    {
+        if (path.length()>0) {
+            if ( path.charAt(path.length() - 1) != '/') {
+                path += "/";
+            }
+        }
+        return path;
+    }
+
 }
 

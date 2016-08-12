@@ -37,6 +37,7 @@ import dlp.bluelupin.dlp.Services.IServiceManager;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
+import dlp.bluelupin.dlp.Utilities.CardReaderHelper;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DecompressZipFile;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -181,18 +182,10 @@ public class MainActivity extends AppCompatActivity
             overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
         } else if (id == R.id.zip) {
             Utility.verifyStoragePermissions(this);
-            String zipFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/dlp/content1.zip";
-            if (Consts.IS_DEBUG_LOG) {
-                Log.d(Consts.LOG_TAG, "zipFile file: " + zipFile);
-            }
-            String unzipLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DlpContentUnzipped/";
-            File unziplocation = new File(unzipLocation);
-            if(!unziplocation.exists()) {
-                unziplocation.mkdirs();
-            }
-            Log.d(Consts.LOG_TAG, "unzipLocation: " + unzipLocation);
-            DecompressZipFile d = new DecompressZipFile(zipFile, unzipLocation, this);
-            d.unzip();
+            CardReaderHelper cardReaderHelper = new CardReaderHelper(MainActivity.this);
+            String SDPath = ""; // get this location from sharedpreferance;
+            cardReaderHelper.readDataFromSDCard(SDPath);
+
         } else if (id == R.id.favorites) {
             FragmentManager fragmentManager = this.getSupportFragmentManager();
             FavoritesFragment fragment = FavoritesFragment.newInstance("", "");

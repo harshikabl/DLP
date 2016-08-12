@@ -63,6 +63,8 @@ public class Utility {
         }
     }
 
+
+
     //set languagae
     public static void setLanguageIntoSharedPreferences(Context context, EnumLanguage language) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString("EnumLanguage", language.name()).commit();
@@ -153,6 +155,19 @@ public class Utility {
         return pkName;
     }
 
+
+    public static Date parseDateFromString(String strDate)
+    {
+        Date date = null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            date = format.parse(strDate);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 
     //convert date for gate day month year hours min am/pm
     public static String convertDate(String date) {
