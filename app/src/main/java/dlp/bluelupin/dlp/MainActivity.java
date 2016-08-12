@@ -40,6 +40,7 @@ import dlp.bluelupin.dlp.Services.IServiceManager;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
+import dlp.bluelupin.dlp.Utilities.CardReaderHelper;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DecompressZipFile;
 import dlp.bluelupin.dlp.Utilities.Utility;
