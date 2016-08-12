@@ -44,7 +44,7 @@ public class Utility {
 
     /**
      * Checks if the app has permission to write to device storage
-     *
+     * <p/>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity
@@ -62,7 +62,6 @@ public class Utility {
             );
         }
     }
-
 
 
     //set languagae
@@ -85,7 +84,7 @@ public class Utility {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         Configuration config = context.getResources().getConfiguration();
 
-        String lang = settings.getString("EnumLanguage",  EnumLanguage.en.name());
+        String lang = settings.getString("EnumLanguage", EnumLanguage.en.name());
         if (!lang.equals("") && !config.locale.getLanguage().equals(lang)) {
             Locale locale = new Locale(lang);
             Locale.setDefault(locale);
@@ -101,7 +100,7 @@ public class Utility {
 
         String lang = settings.getString("EnumLanguage", EnumLanguage.en.name());
         if (!lang.equals("")) {
-           return Enum.valueOf(EnumLanguage.class,lang);
+            return Enum.valueOf(EnumLanguage.class, lang);
         }
         return EnumLanguage.en;
     }
@@ -156,8 +155,7 @@ public class Utility {
     }
 
 
-    public static Date parseDateFromString(String strDate)
-    {
+    public static Date parseDateFromString(String strDate) {
         Date date = null;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
@@ -271,6 +269,7 @@ public class Utility {
         }
         return connected;
     }
+
     /**
      * Determine if the device is a tablet (i.e. it has a large screen).
      *
@@ -280,4 +279,15 @@ public class Utility {
         return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) > Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
+    //set select folder path
+    public static void setSelectFolderPathIntoSharedPreferences(Context context, String path) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("folderPath", path).commit();
+    }
+
+    //get selcet folder path
+    public static String getSelectFolderPathFromSharedPreferences(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        String folderPath = settings.getString("folderPath", null);
+        return folderPath;
+    }
 }
