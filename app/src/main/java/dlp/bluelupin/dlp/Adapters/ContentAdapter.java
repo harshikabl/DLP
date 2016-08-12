@@ -65,9 +65,10 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
 
         if (Consts.IS_DEBUG_LOG)
             Log.d(Consts.LOG_TAG, " data id: " + data.getId() + " type: " + data.getType());
+        Data resource = null;
         if (data.getLang_resource_name() != null) {
 
-            Data resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
+            resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
                     Utility.getLanguageIdFromSharedPreferences(context).ordinal());
             if (resource != null) {
 
@@ -86,44 +87,45 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                     holder.contentContainer.addView(dynamicTextView);
                 }
             }
-            if (data.getType().equalsIgnoreCase("Image")) {
-                if (data.getMedia_id() != 0) {
-                    Data media = dbHelper.getMediaEntityById(data.getMedia_id());
-                    if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " Image Url: " + media.getUrl());
-                    }
-                    if (media != null) {
-                        String titleText = null;
-                        if (resource != null) {
-                            titleText = resource.getContent();
-                        }
-                        FrameLayout imageContainer = makeImage(media.getUrl(), titleText);
-                        holder.contentContainer.addView(imageContainer);
-                    }
-
-                }
-            }
-
-            if (data.getType().equalsIgnoreCase("video")) {
-                if (data.getMedia_id() != 0) {
-                    Data media = dbHelper.getMediaEntityById(data.getMedia_id());
-                    if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " video Url: " + media.getUrl());
-                    }
-                    if (media != null) {
-                        String titleText = null;
-                        if (resource != null) {
-                            titleText = resource.getContent();
-                        }
-                        Data videoThumbnail = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-                        FrameLayout imageContainer = makeImage(videoThumbnail.getUrl(), titleText);
-                        holder.contentContainer.addView(imageContainer);
-                    }
-
-                }
-            }
-
         }
+        if (data.getType().equalsIgnoreCase("Image")) {
+            if (data.getMedia_id() != 0) {
+                Data media = dbHelper.getMediaEntityById(data.getMedia_id());
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " Image Url: " + media.getUrl());
+                }
+                if (media != null) {
+                    String titleText = null;
+                    if (resource != null) {
+                        titleText = resource.getContent();
+                    }
+                    FrameLayout imageContainer = makeImage(media.getUrl(), titleText);
+                    holder.contentContainer.addView(imageContainer);
+                }
+
+            }
+        }
+
+        if (data.getType().equalsIgnoreCase("video")) {
+            if (data.getMedia_id() != 0) {
+                Data media = dbHelper.getMediaEntityById(data.getMedia_id());
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " video Url: " + media.getUrl());
+                }
+                if (media != null) {
+                    String titleText = null;
+                    if (resource != null) {
+                        titleText = resource.getContent();
+                    }
+                    Data videoThumbnail = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
+                    FrameLayout imageContainer = makeImage(videoThumbnail.getUrl(), titleText);
+                    holder.contentContainer.addView(imageContainer);
+                }
+
+            }
+        }
+
+
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +135,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                         String url = media.getUrl();
                         if (url != null && !url.equals("")) {
                             Intent intent = new Intent(context, VideoPlayerActivity.class);
-                            intent.putExtra("videoUrl",url);
+                            intent.putExtra("videoUrl", url);
                             context.startActivity(intent);
                         }
                     }
@@ -160,7 +162,9 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         linearLayout.setBackground(context.getResources().getDrawable(R.drawable.gradient_black));//;background="@drawable/gradient_black"
 
         TextView dynamicTextView = new TextView(context);
-        dynamicTextView.setText(Html.fromHtml(titleText));
+        if(titleText != null) {
+            dynamicTextView.setText(Html.fromHtml(titleText));
+        }
 
         LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         textViewParams.gravity = Gravity.BOTTOM;

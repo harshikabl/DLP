@@ -8,11 +8,11 @@ public class Consts {
     public final static boolean PROD = false; //false;
     public final static String API_KEY = "XsMwq2updd3L5MZAtgwx7PAA0wKaylFnCejD0ei9WjSuwQVmXMQxGg3ZiH5X";
 
-    public static String BASE_URL = "http://dlpdev.bluelup.in/api/v1/"; // http://dlp-qa.bluelup.in //"http://180.151.10.60:8080/classkonnect/api/";
+    public static String BASE_URL = "http://dlp-qa.bluelup.in/api/v1/";//http://dlpdev.bluelup.in/api/v1/"; // http://dlp-qa.bluelup.in //"http://180.151.10.60:8080/classkonnect/api/";
 
     public static String getBaseUrl() {
         if (PROD) {
-            BASE_URL = "http://dlpdev.bluelup.in/api/v1/";
+            BASE_URL = "http://dlp-qa.bluelup.in/api/v1/";
             return BASE_URL;
         }
         return BASE_URL;
