@@ -22,6 +22,7 @@ import dlp.bluelupin.dlp.Fragments.ChaptersFragment;
 import dlp.bluelupin.dlp.Fragments.ContentFragment;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -29,27 +30,27 @@ import dlp.bluelupin.dlp.Utilities.Utility;
 /**
  * Created by Neeraj on 8/4/2016.
  */
-public class FavoritesListAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
+public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHolder> {
 
-    private List<String> list;
+    private List<FavoritesData> favoritesList;
     private Context context;
     private Boolean favFlage = false;
     private String type;
 
-    public FavoritesListAdapter(Context context, List<String> list) {
-        this.list = list;
+    public FavoritesListAdapter(Context context, List<FavoritesData> favoritesData) {
+        this.favoritesList = favoritesData;
         this.context = context;
         this.type = type;
     }
 
     @Override
-    public ChaptersViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FavoritesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.favorites_list_view_item, parent, false);
-        return new ChaptersViewHolder(layoutView);
+        return new FavoritesViewHolder(layoutView);
     }
 
     @Override
-    public void onBindViewHolder(ChaptersViewHolder holder, int position) {
+    public void onBindViewHolder(FavoritesViewHolder holder, final int position) {
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
         holder.chapterTitle.setTypeface(VodafoneExB);
@@ -63,8 +64,61 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<ChaptersViewHolde
         holder.downloadIcon.setTypeface(materialdesignicons_font);
         holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
 
-        holder.chapterTitle.setText(list.get(position));
 
+        final DbHelper dbHelper = new DbHelper(context);
+        final FavoritesData data = favoritesList.get(position);
+        if (data.getLang_resource_name() != null) {
+            Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
+                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+            if (titleResource != null) {
+                holder.chapterTitle.setText(titleResource.getContent());
+            }
+        }
+
+        if (data.getLang_resource_description() != null) {
+            Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
+                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+            if (descriptionResource != null) {
+                holder.chapterDescription.setText(descriptionResource.getContent());
+            }
+        }
+
+        if (data.getThumbnail_media_id() != 0) {
+            Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
+            if (media != null) {
+                //holder.chapterImage.
+                new DownloadImageTask(holder.chapterImage)
+                        .execute(media.getUrl());
+            }
+        }
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String type = dbHelper.getTypeOfChildren(data.getId());
+                if (Consts.IS_DEBUG_LOG)
+                    Log.d(Consts.LOG_TAG, "Navigating to  data id: " + data.getId() + " type: " + type);
+                if (type.equalsIgnoreCase(Consts.COURSE) || type.equalsIgnoreCase(Consts.CHAPTER) || type.equalsIgnoreCase(Consts.TOPIC)) {
+                    FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
+                    ChaptersFragment fragment = ChaptersFragment.newInstance(data.getId(), type);
+
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                    transaction.replace(R.id.container, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                } else {
+                    FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
+                    ContentFragment fragment = ContentFragment.newInstance(data.getId(), "");
+
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                    transaction.replace(R.id.container, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
+            }
+        });
 
 
         holder.downloadIcon.setOnClickListener(new View.OnClickListener() {
@@ -81,29 +135,59 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<ChaptersViewHolde
         });
 
 
-        if (favFlage) {
-            holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
-            holder.starIcon.setTextColor(Color.parseColor("#e60000"));
-        } else {
-            holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
-            holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
-        }
+        isFavorites(data, holder);//set favorites icon
         holder.starIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (favFlage) {
-                    favFlage = false;
-
-                } else {
-                    favFlage = true;
-                }
+                setFavorites(data, position);
                 v.startAnimation(AnimationUtils.loadAnimation(context, R.anim.click_animation));//onclick animation
+
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return favoritesList.size();
+    }
+
+    //set favorites
+    private void setFavorites(FavoritesData data, int position) {
+        DbHelper dbHelper = new DbHelper(context);
+        FavoritesData favoritesData = dbHelper.getFavoritesData(data.getId());
+        FavoritesData favoData = new FavoritesData();
+        if (favoritesData != null) {
+            if (favoritesData.getFavoritesFlag().equals("1")) {
+                favoData.setId(data.getId());
+                favoData.setFavoritesFlag("0");
+            } else {
+                favoData.setId(data.getId());
+                favoData.setFavoritesFlag("1");
+            }
+        } else {
+            favoData.setId(data.getId());
+            favoData.setFavoritesFlag("1");
+        }
+        dbHelper.upsertFavoritesData(favoData);
+        favoritesList.remove(position);//remove unfavourites item from list
+        notifyDataSetChanged();
+    }
+
+    //set favorites icon
+    private void isFavorites(FavoritesData data, FavoritesViewHolder holder) {
+        DbHelper dbHelper = new DbHelper(context);
+        FavoritesData favoritesData = dbHelper.getFavoritesData(data.getId());
+        if (favoritesData != null) {
+            if (favoritesData.getFavoritesFlag().equals("1")) {
+                holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
+                holder.starIcon.setTextColor(Color.parseColor("#e60000"));
+            } else {
+                holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
+                holder.starIcon.setTextColor(Color.parseColor("#000000"));
+            }
+        } else {
+            holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
+            holder.starIcon.setTextColor(Color.parseColor("#000000"));
+        }
     }
 }

@@ -16,13 +16,14 @@ import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Models.FavoritesData;
 
 /**
  * Created by subod on 21-Jul-16.
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "dlp_db.db";
 
     public DbHelper(Context context) {
@@ -36,6 +37,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS ResourceEntity");
         db.execSQL("DROP TABLE IF EXISTS MediaEntity");
         db.execSQL("DROP TABLE IF EXISTS AccountEntity");
+        db.execSQL("DROP TABLE IF EXISTS FavoritesEntity");
         onCreate(db);
     }
 
@@ -63,6 +65,10 @@ public class DbHelper extends SQLiteOpenHelper {
         String CREATE_AccountEntity_TABLE = "CREATE TABLE AccountEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, email TEXT, phone TEXT, preferred_language_id INTEGER, role TEXT, api_token TEXT, otp INTEGER)";
         //clientId, server_id , name , email , phone ,preferred_language_id , role, api_token, otp
         db.execSQL(CREATE_AccountEntity_TABLE);
+
+        String CREATE_FavoritesEntity_TABLE = "CREATE TABLE FavoritesEntity(clientId INTEGER PRIMARY KEY, Content_id INTEGER, updated_at DATETIME, Favorites_Flag TEXT, FOREIGN KEY (Content_id) REFERENCES DataEntity(server_id))";
+        //clientId, Content_id , updated_at,Favorites_Flag FavoritesEntity
+        db.execSQL(CREATE_FavoritesEntity_TABLE);
     }
 
 
@@ -745,5 +751,151 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         result = true;
         return result;
+    }
+
+    //favorites data save
+    public boolean upsertFavoritesData(FavoritesData favoritesData) {
+        FavoritesData favData = getFavoritesData(favoritesData.getId());
+        boolean done = false;
+        if (favData == null) {
+            done = insertFavoritesData(favoritesData);
+        } else {
+            done = updateFavoritesData(favoritesData);
+        }
+        return done;
+    }
+
+    public boolean insertFavoritesData(FavoritesData favoritesData) {
+
+        ContentValues values = new ContentValues();
+        values.put("Content_id", favoritesData.getId());
+        values.put("updated_at", favoritesData.getUpdatedAt());
+        values.put("Favorites_Flag", favoritesData.getFavoritesFlag());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("FavoritesEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    public boolean updateFavoritesData(FavoritesData favoritesData) {
+        ContentValues values = new ContentValues();
+        values.put("Content_id", favoritesData.getId());
+        values.put("updated_at", favoritesData.getUpdatedAt());
+        values.put("Favorites_Flag", favoritesData.getFavoritesFlag());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.update("FavoritesEntity", values, "Content_id = '" + favoritesData.getId() + "'", null);
+
+        db.close();
+        return i > 0;
+    }
+
+    //get favorites data into FavoritesEntity
+    public FavoritesData getFavoritesData(int id) {
+        //clientId, Content_id , updated_at,Favorites_Flag
+        //String query = "Select FavoritesEntity.clientId, FavoritesEntity.Content_id, FavoritesEntity.updated_at, FavoritesEntity.Favorites_Flag  FROM FavoritesEntity INNER JOIN DataEntity ON FavoritesEntity.Content_id=DataEntity.server_id  where FavoritesEntity.Content_id = '" + id + "'";
+        String query = "Select clientId, Content_id, updated_at, Favorites_Flag  FROM FavoritesEntity  where Content_id = '" + id + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        FavoritesData ob = new FavoritesData();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            //ob.setId(Integer.parseInt(cursor.getString(0)));
+            ob.setId(Integer.parseInt(cursor.getString(1)));
+            ob.setUpdatedAt(cursor.getString(2));
+            ob.setFavoritesFlag(cursor.getString(3));
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    public List<FavoritesData> getFavoritesListData() {
+        //clientId, Content_id , updated_at,Favorites_Flag
+        List<FavoritesData> list = new ArrayList<FavoritesData>();
+        String query = "Select FavoritesEntity.clientId, FavoritesEntity.Content_id, FavoritesEntity.updated_at, FavoritesEntity.Favorites_Flag, DataEntity.server_id , "
+                + "DataEntity.parent_id ,  DataEntity.sequence , DataEntity.media_id , DataEntity.thumbnail_media_id , DataEntity.lang_resource_name , DataEntity.lang_resource_description , DataEntity.type ,  DataEntity.url,DataEntity.created_at , DataEntity.updated_at , DataEntity.deleted_at  FROM FavoritesEntity INNER JOIN DataEntity ON FavoritesEntity.Content_id=DataEntity.server_id  where FavoritesEntity.Favorites_Flag = '" + 1 + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                FavoritesData ob = new FavoritesData();
+                //ob.setId(Integer.parseInt(cursor.getString(0)));
+                ob.setId(Integer.parseInt(cursor.getString(1)));
+                ob.setUpdatedAt(cursor.getString(2));
+                ob.setFavoritesFlag(cursor.getString(3));
+
+                ob.setServerId(Integer.parseInt(cursor.getString(4)));
+                ob.setParent_id(Integer.parseInt(cursor.getString(5)));
+                ob.setSequence(cursor.getInt(6));
+                ob.setMedia_id(Integer.parseInt(cursor.getString(7)));
+                ob.setThumbnail_media_id(Integer.parseInt(cursor.getString(8)));
+                ob.setLang_resource_name(cursor.getString(9));
+                ob.setLang_resource_description(cursor.getString(10));
+                ob.setType(cursor.getString(11));
+                ob.setUrl(cursor.getString(12));
+                ob.setCreated_at(cursor.getString(13));
+                ob.setUpdated_at(cursor.getString(14));
+                ob.setDeleted_at(cursor.getString(15));
+
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
+    //get chapters favorites and topic list data
+    public List<FavoritesData> getFavoritesChaptersAndTopicListData(String type) {
+        //clientId, Content_id , updated_at,Favorites_Flag
+        List<FavoritesData> list = new ArrayList<FavoritesData>();
+        String query = "Select FavoritesEntity.clientId, FavoritesEntity.Content_id, FavoritesEntity.updated_at, FavoritesEntity.Favorites_Flag, DataEntity.server_id , "
+                + "DataEntity.parent_id ,  DataEntity.sequence , DataEntity.media_id , DataEntity.thumbnail_media_id , DataEntity.lang_resource_name , DataEntity.lang_resource_description , DataEntity.type ,  DataEntity.url,DataEntity.created_at , DataEntity.updated_at , DataEntity.deleted_at  FROM FavoritesEntity " +
+                "INNER JOIN DataEntity ON FavoritesEntity.Content_id=DataEntity.server_id  where FavoritesEntity.Favorites_Flag = '" + 1 + "' and  DataEntity.type='" + type + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                FavoritesData ob = new FavoritesData();
+                //ob.setId(Integer.parseInt(cursor.getString(0)));
+                ob.setId(Integer.parseInt(cursor.getString(1)));
+                ob.setUpdatedAt(cursor.getString(2));
+                ob.setFavoritesFlag(cursor.getString(3));
+
+                ob.setServerId(Integer.parseInt(cursor.getString(4)));
+                ob.setParent_id(Integer.parseInt(cursor.getString(5)));
+                ob.setSequence(cursor.getInt(6));
+                ob.setMedia_id(Integer.parseInt(cursor.getString(7)));
+                ob.setThumbnail_media_id(Integer.parseInt(cursor.getString(8)));
+                ob.setLang_resource_name(cursor.getString(9));
+                ob.setLang_resource_description(cursor.getString(10));
+                ob.setType(cursor.getString(11));
+                ob.setUrl(cursor.getString(12));
+                ob.setCreated_at(cursor.getString(13));
+                ob.setUpdated_at(cursor.getString(14));
+                ob.setDeleted_at(cursor.getString(15));
+
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
     }
 }

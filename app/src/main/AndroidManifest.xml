@@ -31,6 +31,7 @@
         <activity android:name=".Activities.AccountSettingsActivity" />
         <activity android:name=".Activities.VerificationActivity" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".Activities.VideoPlayerActivity" />
         <activity
             android:name=".Activities.NotificationsActivity"
             android:label="@string/title_activity_notifications"

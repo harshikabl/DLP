@@ -208,11 +208,11 @@ public class ServiceHelper {
                     Log.d(Consts.LOG_TAG, "response data:" + response.toString());
                     Log.d(Consts.LOG_TAG, "Otp verify data:" + data.toString());
                     //Log.d(Consts.LOG_TAG, "Otp verify successfully ");
-                    callback.onDone(Consts.CREATE_NEW_USER, data, null);
+                    callback.onDone(Consts.VERIFY_OTP, data, null);
                 } else {
                     Log.d(Consts.LOG_TAG, "response data:" + response.toString());
                     Log.d(Consts.LOG_TAG, "Otp not verify");
-                    callback.onDone(Consts.CREATE_NEW_USER, null, null);
+                    callback.onDone(Consts.VERIFY_OTP, null, null);
                 }
 
             }

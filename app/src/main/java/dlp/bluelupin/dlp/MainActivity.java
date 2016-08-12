@@ -2,6 +2,7 @@ package dlp.bluelupin.dlp;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,9 +28,11 @@ import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
 import dlp.bluelupin.dlp.Activities.NotificationsActivity;
+import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
+import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
@@ -37,7 +40,6 @@ import dlp.bluelupin.dlp.Services.IServiceManager;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
-import dlp.bluelupin.dlp.Utilities.CardReaderHelper;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DecompressZipFile;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -67,6 +69,12 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
         title.setTypeface(VodafoneExB);
+        if (Utility.isTablet(this)) {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
         customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
 
         downloadContainer = (FrameLayout) findViewById(R.id.downloadContainer);
@@ -182,6 +190,7 @@ public class MainActivity extends AppCompatActivity
             overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
         } else if (id == R.id.zip) {
             Utility.verifyStoragePermissions(this);
+
             CardReaderHelper cardReaderHelper = new CardReaderHelper(MainActivity.this);
             String SDPath = ""; // get this location from sharedpreferance;
             cardReaderHelper.readDataFromSDCard(SDPath);
@@ -190,12 +199,18 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = this.getSupportFragmentManager();
             FavoritesFragment fragment = FavoritesFragment.newInstance("", "");
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top);
+            transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
             transaction.replace(R.id.container, fragment)
                     .addToBackStack(null)
                     .commit();
-        } else if (id == R.id.nav_share) {
-
+        } else if (id == R.id.selectFolder) {
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            SelectLocationFragment fragment = SelectLocationFragment.newInstance("", "");
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+            transaction.replace(R.id.container, fragment)
+                    .addToBackStack(null)
+                    .commit();
         } else if (id == R.id.nav_send) {
 
         } else if (id == R.id.logout) {

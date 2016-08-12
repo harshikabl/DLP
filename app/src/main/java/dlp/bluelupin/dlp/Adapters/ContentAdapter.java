@@ -1,6 +1,7 @@
 package dlp.bluelupin.dlp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.ContentFragment;
@@ -79,7 +81,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
 
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                    layoutParams.setMargins(0,10,0,10);
+                    layoutParams.setMargins(0, 10, 0, 10);
                     dynamicTextView.setLayoutParams(layoutParams);
                     holder.contentContainer.addView(dynamicTextView);
                 }
@@ -88,15 +90,14 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                 if (data.getMedia_id() != 0) {
                     Data media = dbHelper.getMediaEntityById(data.getMedia_id());
                     if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG,"Media id" + media.getId() +  " Image Url: " + media.getUrl());
+                        Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " Image Url: " + media.getUrl());
                     }
                     if (media != null) {
                         String titleText = null;
-                        if(resource!= null)
-                        {
+                        if (resource != null) {
                             titleText = resource.getContent();
                         }
-                        FrameLayout imageContainer = makeImage(media.getUrl(),titleText);
+                        FrameLayout imageContainer = makeImage(media.getUrl(), titleText);
                         holder.contentContainer.addView(imageContainer);
                     }
 
@@ -107,16 +108,15 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                 if (data.getMedia_id() != 0) {
                     Data media = dbHelper.getMediaEntityById(data.getMedia_id());
                     if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG,"Media id" + media.getId() +  " video Url: " + media.getUrl());
+                        Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " video Url: " + media.getUrl());
                     }
                     if (media != null) {
                         String titleText = null;
-                        if(resource!= null)
-                        {
+                        if (resource != null) {
                             titleText = resource.getContent();
                         }
                         Data videoThumbnail = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-                        FrameLayout imageContainer = makeImage(videoThumbnail.getUrl(),titleText);
+                        FrameLayout imageContainer = makeImage(videoThumbnail.getUrl(), titleText);
                         holder.contentContainer.addView(imageContainer);
                     }
 
@@ -124,14 +124,29 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
             }
 
         }
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (data.getType().equalsIgnoreCase("video")) {
+                    if (data.getMedia_id() != 0) {
+                        Data media = dbHelper.getMediaEntityById(data.getMedia_id());
+                        String url = media.getUrl();
+                        if (url != null && !url.equals("")) {
+                            Intent intent = new Intent(context, VideoPlayerActivity.class);
+                            intent.putExtra("videoUrl",url);
+                            context.startActivity(intent);
+                        }
+                    }
+                }
+            }
+        });
     }
 
-    private FrameLayout makeImage(String url, String titleText)
-    {
+    private FrameLayout makeImage(String url, String titleText) {
         FrameLayout frameLayout = new FrameLayout(context);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        layoutParams.setMargins(0,10,0,10);
+        layoutParams.setMargins(0, 10, 0, 10);
         frameLayout.setLayoutParams(layoutParams);
         ImageView dynamicImageView = new ImageView(context);
         dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -148,7 +163,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         dynamicTextView.setText(Html.fromHtml(titleText));
 
         LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        textViewParams.gravity =  Gravity.BOTTOM;
+        textViewParams.gravity = Gravity.BOTTOM;
         //textViewParams.setMargins(0,10,0,10);
         dynamicTextView.setLayoutParams(textViewParams);
 
