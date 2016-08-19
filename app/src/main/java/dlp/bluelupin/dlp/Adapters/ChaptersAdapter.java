@@ -1,6 +1,7 @@
 package dlp.bluelupin.dlp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
@@ -99,19 +100,29 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                         .execute(media.getUrl());
             }
         }
+        //if meadia not downloaded then show download_layout
+        if (data.getThumbnail_media_id() != 0) {
+            final Data media = dbHelper.getDownloadMediaEntityById(data.getThumbnail_media_id());
+            if (media != null) {
+                holder.download_layout.setVisibility(View.VISIBLE);
+                holder.downloadIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                        DownloadingFragment fragment = DownloadingFragment.newInstance(data.getThumbnail_media_id(), media.getUrl());
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                        transaction.replace(R.id.container, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
 
-        holder.downloadIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                DownloadingFragment fragment = DownloadingFragment.newInstance("", "");
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top);
-                transaction.replace(R.id.container, fragment)
-                        //.addToBackStack(null)
-                        .commit();
+            } else {
+                holder.download_layout.setVisibility(View.GONE);
             }
-        });
+        }
+
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

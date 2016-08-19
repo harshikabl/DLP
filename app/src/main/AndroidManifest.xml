@@ -38,6 +38,7 @@
             android:theme="@style/AppTheme"></activity>
 
         <service android:name=".Activities.DownloadService"/>
+        <service android:name=".Utilities.BindService" />
 
 
         <!-- SMS Receiver -->
@@ -56,7 +57,10 @@
         <service
             android:name=".Services.BackgroundSyncService"
             android:enabled="true" >
+
         </service>
+
+
     </application>
 
 </manifest>

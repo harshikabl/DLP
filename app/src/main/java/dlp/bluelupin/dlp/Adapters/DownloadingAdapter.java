@@ -28,21 +28,25 @@ import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.DownloadService;
 import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
+import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
+import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
  * Created by Neeraj on 8/5/2016.
  */
 public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHolder> {
 
-    private List<String> list;
+    private List<Data> itemList;
     private Context context;
     private Boolean favFlage = false;
     private String type;
 
-    public DownloadingAdapter(Context context, List<String> list) {
-        this.list = list;
+    public DownloadingAdapter(Context context, List<Data> list) {
+        this.itemList = list;
         this.context = context;
         this.type = type;
     }
@@ -64,17 +68,54 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
         holder.download.setTypeface(VodafoneRg);
         holder.cancelIcon.setTypeface(materialdesignicons_font);
         holder.cancelIcon.setText(Html.fromHtml("&#xf156"));
-        holder.mediaTitle.setText(list.get(position));
         // starting the download service
+        final DbHelper dbHelper = new DbHelper(context);
+        final Data data = itemList.get(position);
 
+        final Data resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
+                Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+        if (data.getLang_resource_name() != null) {
+            Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
+                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+            if (titleResource != null) {
+                holder.mediaTitle.setText(titleResource.getContent());
+            }
+        }
+        if (data.getLang_resource_description() != null) {
+            Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
+                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+            if (descriptionResource != null) {
+                holder.mediaDescription.setText(descriptionResource.getContent());
+            }
+        }
+        if (data.getThumbnail_media_id() != 0) {
+            Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
+            if (media != null) {
+                //holder.chapterImage.
+                new DownloadImageTask(holder.mediaImage)
+                        .execute(media.getUrl());
+            }
+        }
+        if (data.getProgress() != 0) {
+            holder.downloadProgress.setText(data.getProgress()+"% Completed");
+            holder.mProgress.setProgress(data.getProgress());
+        }
+        holder.cancelIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
+                broadcastIntent.putExtra("mediaId",data.getId());
+                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return itemList.size();
     }
-
 
 
 }

@@ -105,7 +105,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
                     transaction.replace(R.id.container, fragment)
-                            .addToBackStack(null)
+                            //.addToBackStack(null)
                             .commit();
                 } else {
                     FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
@@ -114,25 +114,35 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
                     transaction.replace(R.id.container, fragment)
-                            .addToBackStack(null)
+                            //.addToBackStack(null)
                             .commit();
                 }
             }
         });
 
+        //if meadia not downloaded then show download_layout
+        if (data.getThumbnail_media_id() != 0) {
+            final Data media = dbHelper.getDownloadMediaEntityById(data.getThumbnail_media_id());
+            if (media != null) {
+                holder.download_layout.setVisibility(View.VISIBLE);
+                holder.downloadIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                        DownloadingFragment fragment = DownloadingFragment.newInstance(data.getThumbnail_media_id(), media.getUrl());
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                        transaction.replace(R.id.container, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
 
-        holder.downloadIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                DownloadingFragment fragment = DownloadingFragment.newInstance("", "");
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top);
-                transaction.replace(R.id.downloadContainer, fragment)
-                        //.addToBackStack(null)
-                        .commit();
+            } else {
+                holder.download_layout.setVisibility(View.GONE);
             }
-        });
+        }
+
 
 
         isFavorites(data, holder);//set favorites icon

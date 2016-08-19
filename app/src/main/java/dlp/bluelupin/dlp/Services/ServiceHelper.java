@@ -136,8 +136,24 @@ public class ServiceHelper {
                     if (dbhelper.upsertMediaEntity(d)) {
                         // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
                         // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
+                        Data data = dbhelper.getMediaEntityById(d.getId());
+                        if (data != null) {
+                            if (data.getLocalFilePath() != null && !data.getLocalFilePath().equals("")) {
+                                if (Consts.IS_DEBUG_LOG) {
+                                    Log.d(Consts.LOG_TAG, "getLocalFilePath " + null);
+                                }
+                            } else {
+                                //upsert media entity if not downloaded
+                                dbhelper.upsertDownloadMediaEntity(d);
+                                if (Consts.IS_DEBUG_LOG) {
+                                    Log.d(Consts.LOG_TAG, " Data for page: " + d);
+                                }
+                            }
+                        }
                     } else {
-                        Log.d(Consts.LOG_TAG, "failure adding Media Data for page: " + cd.getCurrent_page());
+                        if (Consts.IS_DEBUG_LOG) {
+                            Log.d(Consts.LOG_TAG, "failure adding Media Data for page: " + cd.getCurrent_page());
+                        }
                     }
                 }
                 String lastCalled = response.headers().get("last_request_date");

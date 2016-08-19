@@ -13,6 +13,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
@@ -27,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.R;
 
 
@@ -44,7 +46,7 @@ public class Utility {
 
     /**
      * Checks if the app has permission to write to device storage
-     * <p/>
+     * <p>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity
@@ -289,5 +291,11 @@ public class Utility {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         String folderPath = settings.getString("folderPath", null);
         return folderPath;
+    }
+
+    //get DLP directory for download files
+    public static File getFilePath(Context context) {
+        File DLPDirectory = new File(Environment.getExternalStorageDirectory(), Consts.APP_DIRECTORY);
+        return DLPDirectory;
     }
 }

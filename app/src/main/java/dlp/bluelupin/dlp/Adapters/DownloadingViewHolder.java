@@ -45,7 +45,7 @@ public class DownloadingViewHolder extends RecyclerView.ViewHolder {
          /* holder.mProgress.setProgress(25);   // Main Progress
         holder.mProgress.setSecondaryProgress(50); // Secondary Progress
         holder.mProgress.setMax(100); // Maximum Progress*/
-        new ShowCustomProgressBarAsyncTask().execute();
+       //new ShowCustomProgressBarAsyncTask().execute();
 
     }
     public class ShowCustomProgressBarAsyncTask extends AsyncTask<Void, Integer, Void> {

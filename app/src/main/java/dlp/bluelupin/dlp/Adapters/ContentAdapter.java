@@ -117,9 +117,11 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                     if (resource != null) {
                         titleText = resource.getContent();
                     }
-                    Data videoThumbnail = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-                    FrameLayout imageContainer = makeImage(videoThumbnail.getUrl(), titleText);
-                    holder.contentContainer.addView(imageContainer);
+                    if (data.getThumbnail_media_id() != 0) {
+                        Data videoThumbnail = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
+                        FrameLayout imageContainer = makeImage(videoThumbnail.getUrl(), titleText);
+                        holder.contentContainer.addView(imageContainer);
+                    }
                 }
 
             }
@@ -132,16 +134,34 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                 if (data.getType().equalsIgnoreCase("video")) {
                     if (data.getMedia_id() != 0) {
                         Data media = dbHelper.getMediaEntityById(data.getMedia_id());
-                        String url = media.getUrl();
-                        if (url != null && !url.equals("")) {
-                            Intent intent = new Intent(context, VideoPlayerActivity.class);
-                            intent.putExtra("videoUrl", url);
-                            context.startActivity(intent);
-                        }
+                        navigateBasedOnMediaType(media);
                     }
                 }
             }
         });
+    }
+
+    private void navigateBasedOnMediaType(Data media) {
+        String url;
+        switch (media.getType()) {
+            case "video":
+                url = media.getUrl();
+                if (url != null && !url.equals("")) {
+                    Intent intent = new Intent(context, VideoPlayerActivity.class);
+                    intent.putExtra("videoUrl", url);
+                    context.startActivity(intent);
+                }
+                break;
+            case "Youtube":
+                url = media.getUrl();
+                if (url != null && !url.equals("")) {
+                    Intent intent = new Intent(context, VideoPlayerActivity.class);
+                    intent.putExtra("videoUrl", url);
+                    context.startActivity(intent);
+                }
+                break;
+
+        }
     }
 
     private FrameLayout makeImage(String url, String titleText) {
@@ -162,7 +182,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         linearLayout.setBackground(context.getResources().getDrawable(R.drawable.gradient_black));//;background="@drawable/gradient_black"
 
         TextView dynamicTextView = new TextView(context);
-        if(titleText != null) {
+        if (titleText != null) {
             dynamicTextView.setText(Html.fromHtml(titleText));
         }
 
