@@ -82,7 +82,13 @@ public class MainActivity extends AppCompatActivity
         final DbHelper dbhelper = new DbHelper(this);
 
         customProgressDialog.show();
-        callSync();
+        if (Utility.isOnline(this)) {
+            callSync();
+        } else {
+            customProgressDialog.dismiss();
+            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, MainActivity.this);
+        }
+
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //

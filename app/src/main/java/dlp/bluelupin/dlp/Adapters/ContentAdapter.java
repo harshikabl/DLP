@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -155,9 +156,10 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
             case "Youtube":
                 url = media.getUrl();
                 if (url != null && !url.equals("")) {
-                    Intent intent = new Intent(context, VideoPlayerActivity.class);
+                   /* Intent intent = new Intent(context, VideoPlayerActivity.class);
                     intent.putExtra("videoUrl", url);
-                    context.startActivity(intent);
+                    context.startActivity(intent);*/
+                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                 }
                 break;
 

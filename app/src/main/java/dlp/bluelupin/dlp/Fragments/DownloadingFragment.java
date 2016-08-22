@@ -142,13 +142,13 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
     BroadcastReceiver intentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-           /* if (intent.getAction().equals(mBroadcastDeleteAction)) {
+            if (intent.getAction().equals(Consts.mBroadcastDeleteAction)) {
                 //LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                 context.stopService(intent);
                 Toast.makeText(context, "DownloadFile cancel!",
                         Toast.LENGTH_LONG).show();
-            }*/
-            if (intent.getAction().equals(Consts.mBroadcastDeleteAction)) {
+            }
+            if (intent.getAction().equals(Consts.mBroadcastProgressUpdateAction)) {
                 int pro = intent.getIntExtra("progresss", 0);
 
                 DbHelper dbHelper = new DbHelper(getActivity());
@@ -157,7 +157,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
                 downloadingRecyclerView.setAdapter(downloadingAdapter);
                 downloadingAdapter.notifyDataSetChanged();
 
-                Toast.makeText(context, "progress  update= " + pro, Toast.LENGTH_LONG).show();
+               // Toast.makeText(context, "progress  update= " + pro, Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -165,6 +165,8 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
     private void registerReceiver() {
         unregisterReceiver();
         IntentFilter intentToReceiveFilter = new IntentFilter();
+        intentToReceiveFilter
+                .addAction(Consts.mBroadcastProgressUpdateAction);
         intentToReceiveFilter
                 .addAction(Consts.mBroadcastDeleteAction);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(intentReceiver, intentToReceiveFilter);

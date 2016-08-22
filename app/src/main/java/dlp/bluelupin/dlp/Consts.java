@@ -42,5 +42,5 @@ public class Consts {
     public static  final String OFFLINE_MESSAGE = "You are not online!!!!";
     public static final String APP_DIRECTORY = "/DLP"+ "Directory/";
     public static final String mBroadcastDeleteAction = "deleteDownload";
-    public static final String mBroadcastProgressUpdateAction = "progressUpdate";
+    public static final String mBroadcastProgressUpdateAction = "downloadProgress";
 }

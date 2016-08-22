@@ -32,6 +32,7 @@ import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Services.ServiceHelper;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -97,16 +98,23 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
             }
         }
         if (data.getProgress() != 0) {
-            holder.downloadProgress.setText(data.getProgress()+"% Completed");
+            holder.downloadProgress.setText(data.getProgress() + "% Completed");
             holder.mProgress.setProgress(data.getProgress());
         }
         holder.cancelIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent broadcastIntent = new Intent();
+             /*   Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
                 broadcastIntent.putExtra("mediaId",data.getId());
-                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);*/
+                final ServiceHelper sh = new ServiceHelper(context);
+                Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
+                if (media != null) {
+                    String url = media.getUrl();
+                    sh.callDownloadDeleteRequest(url);
+                }
+
             }
         });
 
