@@ -17,6 +17,7 @@ import android.view.animation.AnimationUtils;
 
 import java.util.List;
 
+import dlp.bluelupin.dlp.Activities.DownloadActivity;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.ChaptersFragment;
@@ -115,10 +116,15 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                         transaction.replace(R.id.container, fragment)
                                 .addToBackStack(null)
                                 .commit();
+
                     }
                 });
 
             } else {
+               /* Intent intent=new Intent(context, DownloadActivity.class);
+                intent.putExtra("url","https://s3.ap-south-1.amazonaws.com/classkonnect-test/011+Resetting+data.mp4");
+                intent.putExtra("urlId",101);
+                context.startActivity(intent);*/
                 holder.download_layout.setVisibility(View.GONE);
             }
         }
