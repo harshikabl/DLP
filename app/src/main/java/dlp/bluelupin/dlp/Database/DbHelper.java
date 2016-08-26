@@ -23,7 +23,7 @@ import dlp.bluelupin.dlp.Models.FavoritesData;
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "dlp_db.db";
 
     public DbHelper(Context context) {
@@ -64,7 +64,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at
         db.execSQL(CREATE_MediaEntity_TABLE);
 
-        String CREATE_AccountEntity_TABLE = "CREATE TABLE AccountEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, email TEXT, phone TEXT, preferred_language_id INTEGER, role TEXT, api_token TEXT, otp INTEGER)";
+        String CREATE_AccountEntity_TABLE = "CREATE TABLE AccountEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, email TEXT, phone TEXT, preferred_language_id INTEGER, role TEXT, api_token TEXT, otp INTEGER, isVerified INTEGER)";
         //clientId, server_id , name , email , phone ,preferred_language_id , role, api_token, otp
         db.execSQL(CREATE_AccountEntity_TABLE);
 
@@ -645,6 +645,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return i > 0;
     }
+
     public boolean updateMediaLocalFilePathEntity(Data ob) {
 
         ContentValues values = new ContentValues();
@@ -660,6 +661,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return i > 0;
     }
+
     public List<Data> getAllMedia() {
         String query = "Select clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path FROM MediaEntity";
 
@@ -743,9 +745,23 @@ public class DbHelper extends SQLiteOpenHelper {
         return i > 0;
     }
 
+    //update account verified
+    public boolean updateAccountDataVerified(AccountData accountData) {
+        ContentValues values = new ContentValues();
+        //values.put("server_id", accountData.getId());
+        values.put("isVerified", accountData.getIsVerified());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.update("AccountEntity", values, "server_id = '" + accountData.getId() + "'", null);
+
+        db.close();
+        return i > 0;
+    }
+
     public AccountData getAccountData() {
         //clientId, server_id , name , email , phone ,preferred_language_id , role, api_token,otp
-        String query = "Select clientId, server_id, name, email, phone, preferred_language_id, role,api_token,otp  FROM AccountEntity ";
+        String query = "Select clientId, server_id, name, email, phone, preferred_language_id, role,api_token,otp,isVerified  FROM AccountEntity ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -764,6 +780,7 @@ public class DbHelper extends SQLiteOpenHelper {
             ob.setRole(cursor.getString(6));
             ob.setApi_token(cursor.getString(7));
             ob.setOtp(Integer.parseInt(cursor.getString(8)));
+            ob.setIsVerified(Integer.parseInt(cursor.getString(9)));
             cursor.close();
         } else {
             ob = null;
@@ -1019,6 +1036,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return i > 0;
     }
+
     public boolean updateDownloadMediaLocalFilePathEntity(Data ob) {
 
         ContentValues values = new ContentValues();

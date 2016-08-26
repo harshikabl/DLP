@@ -33,10 +33,11 @@ import dlp.bluelupin.dlp.Utilities.Utility;
  */
 public class LanguageActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView languageIcon,chooseLanguage,description;
-    private  Spinner spinner;
-    private TextView tickIcon,done,title;
+    private TextView languageIcon, chooseLanguage, description;
+    private Spinner spinner;
+    private TextView tickIcon, done, title;
     private LinearLayout doneLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,23 +51,24 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         }
         init();
     }
+
     //get all id's
-    private void init(){
+    private void init() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        title= (TextView) toolbar.findViewById(R.id.title);
+        title = (TextView) toolbar.findViewById(R.id.title);
         Typeface custom_fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(this.getAssets(), "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
 
-        languageIcon= (TextView) findViewById(R.id.languageIcon);
-        chooseLanguage= (TextView) findViewById(R.id.chooseLanguage);
-        description= (TextView) findViewById(R.id.description);
-        done= (TextView) findViewById(R.id.done);
-        doneLayout= (LinearLayout) findViewById(R.id.doneLayout);
+        languageIcon = (TextView) findViewById(R.id.languageIcon);
+        chooseLanguage = (TextView) findViewById(R.id.chooseLanguage);
+        description = (TextView) findViewById(R.id.description);
+        done = (TextView) findViewById(R.id.done);
+        doneLayout = (LinearLayout) findViewById(R.id.doneLayout);
         doneLayout.setOnClickListener(this);
-        tickIcon= (TextView) findViewById(R.id.tickIcon);
+        tickIcon = (TextView) findViewById(R.id.tickIcon);
         tickIcon.setTypeface(custom_fontawesome);
         title.setTypeface(VodafoneExB);
         done.setTypeface(VodafoneRg);
@@ -85,7 +87,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         list.add("Tamil");
         list.add("Kannada");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.language_item, list);
-        LanguageAdapter languageAdapter=new LanguageAdapter(this,list);
+        LanguageAdapter languageAdapter = new LanguageAdapter(this, list);
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(languageAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -100,8 +102,9 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
             }
         });
     }
-    private void setLanguage(int langpos){
-        switch(langpos) {
+
+    private void setLanguage(int langpos) {
+        switch (langpos) {
             case 0: //English
                 Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.en);
                 return;
@@ -144,6 +147,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
             Intent mainIntent = new Intent(LanguageActivity.this, MainActivity.class);
             startActivity(mainIntent);
             finish();
+
         } else {
             Intent mainIntent = new Intent(LanguageActivity.this, AccountSettingsActivity.class);
             startActivity(mainIntent);
@@ -151,9 +155,9 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-   @Override
-   public void onBackPressed() {
-       super.onBackPressed();
-       overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
-   }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
+    }
 }

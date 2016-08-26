@@ -185,7 +185,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             case R.id.verify:
                 if (isValidate()) {
                     String otp = one_string + two_string + three_string + four_string + five_string + six_string;
-                    Intent otpIntent = new Intent(getApplicationContext(), OtpService.class);
+                    Intent otpIntent = new Intent(VerificationActivity.this, OtpService.class);
                     otpIntent.putExtra("otp", otp);
                     startService(otpIntent);
                 }

@@ -195,6 +195,13 @@ public class ServiceHelper {
         Log.d(Consts.LOG_TAG, "payload***" + request);
         Call<AccountData> ac = service.accountCreate(request);
         final DbHelper dbhelper = new DbHelper(context);
+        String device_token = Utility.getDeviceIDFromSharedPreferences(context);
+        if (device_token != null) {
+            //request.setDevice_token(device_token);
+        }
+        request.setService(Consts.SERVICE);
+        request.setIs_development(Consts.IS_DEVELOPMENT);
+
         ac.enqueue(new Callback<AccountData>() {
             @Override
             public void onResponse(Call<AccountData> call, Response<AccountData> response) {
@@ -203,6 +210,7 @@ public class ServiceHelper {
                 if (data != null) {
                     Log.d(Consts.LOG_TAG, "account create data:" + data.toString());
                     if (dbhelper.upsertAccountData(data)) {
+                        Utility.setUserServerIdIntoSharedPreferences(context, data.getId());//for check verification done or not
                         Log.d(Consts.LOG_TAG, "Account successfully add in database ");
                     }
                     callback.onDone(Consts.CREATE_NEW_USER, data, null);
@@ -275,7 +283,7 @@ public class ServiceHelper {
                     }
 
                     boolean writtenToDisk = writeResponseBodyToDisk(response.body(), fileUrl, mediaId);
-                    if(writtenToDisk){
+                    if (writtenToDisk) {
                         DbHelper dbHelper = new DbHelper(context);
                         dbHelper.deleteFileDownloadedByMediaId(mediaId);
                     }

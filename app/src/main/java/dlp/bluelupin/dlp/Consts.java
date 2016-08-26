@@ -43,4 +43,7 @@ public class Consts {
     public static final String APP_DIRECTORY = "/DLP"+ "Directory/";
     public static final String mBroadcastDeleteAction = "deleteDownload";
     public static final String mBroadcastProgressUpdateAction = "downloadProgress";
+
+    public static  final String SERVICE = "gcm";//“apns”, “gcm”, “mpns”
+    public static  final Boolean IS_DEVELOPMENT = true;
 }

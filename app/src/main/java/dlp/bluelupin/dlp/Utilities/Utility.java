@@ -16,6 +16,7 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -46,7 +47,7 @@ public class Utility {
 
     /**
      * Checks if the app has permission to write to device storage
-     * <p>
+     * <p/>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity
@@ -297,5 +298,53 @@ public class Utility {
     public static File getFilePath(Context context) {
         File DLPDirectory = new File(Environment.getExternalStorageDirectory(), Consts.APP_DIRECTORY);
         return DLPDirectory;
+    }
+
+    //set user server id
+    public static void setUserServerIdIntoSharedPreferences(Context context, int serverId) {
+        SharedPreferences prefs = context.getSharedPreferences("UserServerId", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("ServerId", serverId);
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "serverId set*********" + serverId);
+        }
+        editor.commit();
+    }
+
+    //get selcet folder path
+    public static int getUserServerIdFromSharedPreferences(Context context) {
+        int ServerId = 0;
+        SharedPreferences prefs = context.getSharedPreferences("UserServerId", Context.MODE_PRIVATE);
+        if (prefs != null) {
+            ServerId = prefs.getInt("ServerId", 0);
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "ServerId get*********" + ServerId);
+            }
+        }
+        return ServerId;
+    }
+
+    //set device id for  GCM
+    public static void setDeviceIDIntoSharedPreferences(Context context, String device_token) {
+        SharedPreferences prefs = context.getSharedPreferences("GCMDeviceId", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("device_token", device_token);
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "device_token set*********" + device_token);
+        }
+        editor.commit();
+    }
+
+    //get device id for  GCM
+    public static String getDeviceIDFromSharedPreferences(Context context) {
+        String device_token = null;
+        SharedPreferences prefs = context.getSharedPreferences("GCMDeviceId", Context.MODE_PRIVATE);
+        if (prefs != null) {
+            device_token = prefs.getString("device_token", null);
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "device_token get*********" + device_token);
+            }
+        }
+        return device_token;
     }
 }
