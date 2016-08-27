@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -16,11 +17,16 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Adapters.LanguageAdapter;
+import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.AccountData;
@@ -49,6 +55,28 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         init();
+
+        //Check Google play service
+//        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+//        int resultCode = googleAPI.isGooglePlayServicesAvailable(this);
+//
+//        if (resultCode != ConnectionResult.SUCCESS) {
+//            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+//                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+//                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+//            } else {
+//                Log.e(LOG_TAG, "This device is not supported.");
+//                finish();
+//            }
+//        }
+//
+//        Log.i(TAG, "InstanceID token: " + FirebaseInstanceId.getInstance().getToken());
+        String token = FirebaseInstanceId.getInstance().getToken();
+
+        // Log and toast
+        String msg = getString(R.string.msg_token_fmt, token);
+        Log.d(Consts.LOG_TAG, msg);
+        Toast.makeText(LanguageActivity.this, msg, Toast.LENGTH_SHORT).show();
     }
     //get all id's
     private void init(){

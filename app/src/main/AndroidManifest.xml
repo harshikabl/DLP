@@ -57,6 +57,23 @@
             android:name=".Services.BackgroundSyncService"
             android:enabled="true" >
         </service>
+
+        <!-- [START firebase_service] -->
+        <service
+            android:name=".Firebase.DlpFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <!-- [END firebase_service] -->
+        <!-- [START firebase_iid_service] -->
+        <service
+            android:name=".Firebase.DlpFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <!-- [END firebase_iid_service] -->
     </application>
 
 </manifest>
