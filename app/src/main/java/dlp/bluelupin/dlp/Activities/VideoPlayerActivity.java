@@ -9,11 +9,13 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.FrameLayout;
 
+import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -73,10 +75,11 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         }
     }
 
+
+
     @Override
-    protected void onPause() {
-        super.onPause();
-        //player.reset();
+    protected void onDestroy() {
+        super.onDestroy();
         player.release();
     }
 
@@ -137,17 +140,32 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
 
     @Override
     public int getCurrentPosition() {
-        return player.getCurrentPosition();
+        try {
+            return player.getCurrentPosition();
+        } catch (Exception e) {
+            Log.e(Consts.LOG_TAG, "error: " + e.getMessage(), e);
+        }
+        return 0;
     }
 
     @Override
     public int getDuration() {
-        return player.getDuration();
+        try {
+            return player.getDuration();
+        } catch (Exception e) {
+            Log.e(Consts.LOG_TAG, "error: " + e.getMessage(), e);
+        }
+        return 0;
     }
 
     @Override
     public boolean isPlaying() {
-        return player.isPlaying();
+        try {
+            return player.isPlaying();
+        } catch (Exception e) {
+            Log.e(Consts.LOG_TAG, "error: " + e.getMessage(), e);
+        }
+        return false;
     }
 
     @Override

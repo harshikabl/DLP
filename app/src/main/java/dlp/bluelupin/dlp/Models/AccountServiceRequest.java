@@ -62,10 +62,38 @@ public class AccountServiceRequest {
         this.preferred_language_id = preferred_language_id;
     }
 
+    private String device_token;
+    private String service;
+    private Boolean is_development;
+
+    public String getDevice_token() {
+        return device_token;
+    }
+
+    public void setDevice_token(String device_token) {
+        this.device_token = device_token;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
+
+    public Boolean getIs_development() {
+        return is_development;
+    }
+
+    public void setIs_development(Boolean is_development) {
+        this.is_development = is_development;
+    }
+
     @Override
     public String toString()
     {
-        return "ClassPojo [phone = "+phone+", email = "+email+", name = "+name+", api_token = "+api_token+", preferred_language_id = "+preferred_language_id+"]";
+        return "ClassPojo [phone = "+phone+", email = "+email+", name = "+name+", api_token = "+api_token+", preferred_language_id = "+preferred_language_id+", device_token = "+device_token+"]";
     }
 }
 

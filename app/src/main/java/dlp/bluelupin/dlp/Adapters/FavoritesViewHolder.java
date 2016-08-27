@@ -15,7 +15,7 @@ public class FavoritesViewHolder extends RecyclerView.ViewHolder  {
     public TextView chapterTitle, chapterDescription,favorite,starIcon,download,downloadIcon;
     public android.support.v7.widget.CardView cardView;
     public ImageView chapterImage;
-    public LinearLayout favorite_layout;
+    public LinearLayout favorite_layout,download_layout;
 
     public FavoritesViewHolder(View itemView) {
         super(itemView);
@@ -31,6 +31,7 @@ public class FavoritesViewHolder extends RecyclerView.ViewHolder  {
         downloadIcon = (TextView) itemView.findViewById(R.id.downloadIcon);
         chapterImage = (ImageView) itemView.findViewById(R.id.chapterImage);
         favorite_layout= (LinearLayout) itemView.findViewById(R.id.favorite_layout);
+        download_layout= (LinearLayout) itemView.findViewById(R.id.download_layout);
     }
 
 

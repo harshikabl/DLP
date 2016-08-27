@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -27,6 +28,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".Activities.DownloadActivity" />
+        <service android:name=".Activities.DownloadActivity$DownloadingService" />
         <activity android:name=".Activities.LanguageActivity" />
         <activity android:name=".Activities.AccountSettingsActivity" />
         <activity android:name=".Activities.VerificationActivity" />
@@ -38,6 +42,7 @@
             android:theme="@style/AppTheme"></activity>
 
         <service android:name=".Activities.DownloadService"/>
+        <service android:name=".Utilities.BindService" />
 
 
         <!-- SMS Receiver -->

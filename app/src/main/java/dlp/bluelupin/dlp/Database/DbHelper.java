@@ -23,7 +23,7 @@ import dlp.bluelupin.dlp.Models.FavoritesData;
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "dlp_db.db";
 
     public DbHelper(Context context) {
@@ -38,6 +38,8 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS MediaEntity");
         db.execSQL("DROP TABLE IF EXISTS AccountEntity");
         db.execSQL("DROP TABLE IF EXISTS FavoritesEntity");
+        db.execSQL("DROP TABLE IF EXISTS DownloadMediaEntity");
+        db.execSQL("DROP TABLE IF EXISTS DownloadingFileEntity");
         onCreate(db);
     }
 
@@ -58,17 +60,25 @@ public class DbHelper extends SQLiteOpenHelper {
         //clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at
         db.execSQL(CREATE_ResourceEntity_TABLE);
 
-        String CREATE_MediaEntity_TABLE = "CREATE TABLE MediaEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, type TEXT, url TEXT, file_path TEXT, language_id INTEGER , created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
+        String CREATE_MediaEntity_TABLE = "CREATE TABLE MediaEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, type TEXT, url TEXT, file_path TEXT, language_id INTEGER , created_at DATETIME, updated_at DATETIME, deleted_at DATETIME,Local_file_path TEXT)";
         //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at
         db.execSQL(CREATE_MediaEntity_TABLE);
 
-        String CREATE_AccountEntity_TABLE = "CREATE TABLE AccountEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, email TEXT, phone TEXT, preferred_language_id INTEGER, role TEXT, api_token TEXT, otp INTEGER)";
+        String CREATE_AccountEntity_TABLE = "CREATE TABLE AccountEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, email TEXT, phone TEXT, preferred_language_id INTEGER, role TEXT, api_token TEXT, otp INTEGER, isVerified INTEGER)";
         //clientId, server_id , name , email , phone ,preferred_language_id , role, api_token, otp
         db.execSQL(CREATE_AccountEntity_TABLE);
 
         String CREATE_FavoritesEntity_TABLE = "CREATE TABLE FavoritesEntity(clientId INTEGER PRIMARY KEY, Content_id INTEGER, updated_at DATETIME, Favorites_Flag TEXT, FOREIGN KEY (Content_id) REFERENCES DataEntity(server_id))";
         //clientId, Content_id , updated_at,Favorites_Flag FavoritesEntity
         db.execSQL(CREATE_FavoritesEntity_TABLE);
+
+        String CREATE_DownloadMediaEntity_TABLE = "CREATE TABLE DownloadMediaEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, type TEXT, url TEXT, file_path TEXT, language_id INTEGER , created_at DATETIME, updated_at DATETIME, deleted_at DATETIME,Local_file_path TEXT)";
+        //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at
+        db.execSQL(CREATE_DownloadMediaEntity_TABLE);
+
+        String CREATE_DownloadingFileEntity_TABLE = "CREATE TABLE DownloadingFileEntity(id INTEGER PRIMARY KEY, MediaId INTEGER, progress INTEGER, FOREIGN KEY (MediaId) REFERENCES DownloadMediaEntity(clientId))";
+        //id , MediaId , progress
+        db.execSQL(CREATE_DownloadingFileEntity_TABLE);
     }
 
 
@@ -559,7 +569,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public Data getMediaEntityById(int id) {
-        String query = "SELECT clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at  from MediaEntity WHERE clientId = " + id + " ";
+        String query = "SELECT clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path  from MediaEntity WHERE clientId = " + id + " ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -579,6 +589,7 @@ public class DbHelper extends SQLiteOpenHelper {
             ob.setCreated_at(cursor.getString(7));
             ob.setUpdated_at(cursor.getString(8));
             ob.setDeleted_at(cursor.getString(9));
+            ob.setLocalFilePath(cursor.getString(10));
 
             cursor.close();
         } else {
@@ -589,7 +600,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public boolean insertMediaEntity(Data ob) {
-//clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at
+//clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at,Local_file_path
 
         ContentValues values = new ContentValues();
         values.put("server_id", ob.getId());
@@ -601,6 +612,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("created_at", ob.getCreated_at());
         values.put("updated_at", ob.getUpdated_at());
         values.put("deleted_at", ob.getDeleted_at());
+        values.put("Local_file_path", ob.getLocalFilePath());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -621,6 +633,23 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("created_at", ob.getCreated_at());
         values.put("updated_at", ob.getUpdated_at());
         values.put("deleted_at", ob.getDeleted_at());
+        values.put("Local_file_path", ob.getLocalFilePath());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() != 0) {
+            i = db.update("MediaEntity", values, " server_id = " + ob.getId() + " ", null);
+        }
+        //Log.d(Consts.LOG_TAG, "updateDataEntity called with" + " server_id = '" + ob.getId());
+
+        db.close();
+        return i > 0;
+    }
+
+    public boolean updateMediaLocalFilePathEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        values.put("Local_file_path", ob.getLocalFilePath());
 
         SQLiteDatabase db = this.getWritableDatabase();
         long i = 0;
@@ -634,7 +663,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public List<Data> getAllMedia() {
-        String query = "Select clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at FROM MediaEntity";
+        String query = "Select clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path FROM MediaEntity";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -655,6 +684,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 ob.setCreated_at(cursor.getString(7));
                 ob.setUpdated_at(cursor.getString(8));
                 ob.setDeleted_at(cursor.getString(9));
+                ob.setLocalFilePath(cursor.getString(10));
                 list.add(ob);
                 cursor.moveToNext();
             }
@@ -715,9 +745,23 @@ public class DbHelper extends SQLiteOpenHelper {
         return i > 0;
     }
 
+    //update account verified
+    public boolean updateAccountDataVerified(AccountData accountData) {
+        ContentValues values = new ContentValues();
+        //values.put("server_id", accountData.getId());
+        values.put("isVerified", accountData.getIsVerified());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.update("AccountEntity", values, "server_id = '" + accountData.getId() + "'", null);
+
+        db.close();
+        return i > 0;
+    }
+
     public AccountData getAccountData() {
         //clientId, server_id , name , email , phone ,preferred_language_id , role, api_token,otp
-        String query = "Select clientId, server_id, name, email, phone, preferred_language_id, role,api_token,otp  FROM AccountEntity ";
+        String query = "Select clientId, server_id, name, email, phone, preferred_language_id, role,api_token,otp,isVerified  FROM AccountEntity ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -736,6 +780,7 @@ public class DbHelper extends SQLiteOpenHelper {
             ob.setRole(cursor.getString(6));
             ob.setApi_token(cursor.getString(7));
             ob.setOtp(Integer.parseInt(cursor.getString(8)));
+            ob.setIsVerified(Integer.parseInt(cursor.getString(9)));
             cursor.close();
         } else {
             ob = null;
@@ -897,5 +942,228 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         db.close();
         return list;
+    }
+
+    //download MediaEntity
+    public boolean upsertDownloadMediaEntity(Data ob) {
+        boolean done = false;
+        Data data = null;
+        if (ob.getId() != 0) {
+            data = getDownloadMediaEntityById(ob.getId());
+            if (data == null) {
+                done = insertDownloadMediaEntity(ob);
+            } else {
+                done = updateDownloadMediaEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    public Data getDownloadMediaEntityById(int id) {
+        String query = "SELECT clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at,Local_file_path  from DownloadMediaEntity WHERE clientId = " + id + " ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            ob.setClientId(Integer.parseInt(cursor.getString(0)));
+            ob.setId(Integer.parseInt(cursor.getString(1))); // this represents server Id
+            ob.setName(cursor.getString(2));
+            ob.setType(cursor.getString(3));
+            ob.setUrl(cursor.getString(4));
+            ob.setFile_path(cursor.getString(5));
+            ob.setLanguage_id(cursor.getInt(6));
+            ob.setCreated_at(cursor.getString(7));
+            ob.setUpdated_at(cursor.getString(8));
+            ob.setDeleted_at(cursor.getString(9));
+            ob.setLocalFilePath(cursor.getString(10));
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    public boolean insertDownloadMediaEntity(Data ob) {
+//clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at
+
+        ContentValues values = new ContentValues();
+        values.put("server_id", ob.getId());
+        values.put("name", ob.getName());
+        values.put("type", ob.getType());
+        values.put("url", ob.getUrl());
+        values.put("file_path", ob.getFile_path());
+        values.put("language_id", ob.getLanguage_id());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getDeleted_at());
+        values.put("Local_file_path", ob.getLocalFilePath());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("DownloadMediaEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    public boolean updateDownloadMediaEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        // values.put("server_id", ob.getId());
+        values.put("name", ob.getName());
+        values.put("type", ob.getType());
+        values.put("url", ob.getUrl());
+        values.put("file_path", ob.getFile_path());
+        values.put("language_id", ob.getLanguage_id());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getDeleted_at());
+        values.put("Local_file_path", ob.getLocalFilePath());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() != 0) {
+            i = db.update("DownloadMediaEntity", values, " server_id = " + ob.getId() + " ", null);
+        }
+        //Log.d(Consts.LOG_TAG, "DownloadMediaEntity called with" + " server_id = '" + ob.getId());
+
+        db.close();
+        return i > 0;
+    }
+
+    public boolean updateDownloadMediaLocalFilePathEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        values.put("Local_file_path", ob.getLocalFilePath());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() != 0) {
+            i = db.update("DownloadMediaEntity", values, " server_id = " + ob.getId() + " ", null);
+        }
+        //Log.d(Consts.LOG_TAG, "updateDataEntity called with" + " server_id = '" + ob.getId());
+
+        db.close();
+        return i > 0;
+    }
+
+    //downloading file
+    public boolean upsertDownloadingFileEntity(Data ob) {
+        boolean done = false;
+        Data data = null;
+        if (ob.getMediaId() != 0) {
+            data = getDownloadingFileEntityById(ob.getMediaId());
+            if (data == null) {
+                done = insertDownloadingFileEntity(ob);
+            } else {
+                done = updateDownloadingFileEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    public Data getDownloadingFileEntityById(int id) {
+        String query = "SELECT MediaId , progress from DownloadingFileEntity WHERE MediaId = " + id + " ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            ob.setMediaId(Integer.parseInt(cursor.getString(0)));
+            ob.setProgress(Integer.parseInt(cursor.getString(1)));
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    public boolean insertDownloadingFileEntity(Data ob) {
+
+
+        ContentValues values = new ContentValues();
+        values.put("MediaId", ob.getMediaId());
+        values.put("progress", ob.getProgress());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("DownloadingFileEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    public boolean updateDownloadingFileEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        values.put("MediaId", ob.getMediaId());
+        values.put("progress", ob.getProgress());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getMediaId() != 0) {
+            i = db.update("DownloadingFileEntity", values, " MediaId = " + ob.getMediaId() + " ", null);
+        }
+
+        db.close();
+        return i > 0;
+    }
+
+    //get All Downloading Media data through join into DownloadMediaEntity table and DownloadingFileEntity
+    public List<Data> getAllDownloadingMediaFile() {
+        //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path
+        String query = "Select DownloadMediaEntity.clientId, DownloadMediaEntity.server_id, DownloadMediaEntity.name, DownloadMediaEntity.type, DownloadMediaEntity.url , "
+                + "DownloadMediaEntity.file_path ,  DownloadMediaEntity.language_id , DownloadMediaEntity.created_at , DownloadMediaEntity.updated_at , DownloadMediaEntity.deleted_at, DownloadMediaEntity.Local_file_path , DownloadingFileEntity.MediaId , DownloadingFileEntity.progress FROM DownloadingFileEntity " +
+                "INNER JOIN DownloadMediaEntity ON  DownloadingFileEntity.MediaId=DownloadMediaEntity.clientId ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<Data> list = new ArrayList<Data>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                Data ob = new Data();
+                ob.setClientId(Integer.parseInt(cursor.getString(0)));
+                ob.setId(Integer.parseInt(cursor.getString(1))); // this represents server Id
+                ob.setName(cursor.getString(2));
+                ob.setType(cursor.getString(3));
+                ob.setUrl(cursor.getString(4));
+                ob.setFile_path(cursor.getString(5));
+                ob.setLanguage_id(cursor.getInt(6));
+                ob.setCreated_at(cursor.getString(7));
+                ob.setUpdated_at(cursor.getString(8));
+                ob.setDeleted_at(cursor.getString(9));
+                ob.setLocalFilePath(cursor.getString(10));
+                ob.setMediaId(Integer.parseInt(cursor.getString(11)));
+                ob.setProgress(Integer.parseInt(cursor.getString(12)));
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
+    //delete downloaded file data by media id
+    public boolean deleteFileDownloadedByMediaId(int id) {
+        boolean result = false;
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "MediaId = '" + id + "' ";
+        db.delete("DownloadingFileEntity", query, null);
+        db.close();
+        result = true;
+        return result;
     }
 }

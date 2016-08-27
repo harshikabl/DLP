@@ -82,7 +82,13 @@ public class MainActivity extends AppCompatActivity
         final DbHelper dbhelper = new DbHelper(this);
 
         customProgressDialog.show();
-        callSync();
+        if (Utility.isOnline(this)) {
+            callSync();
+        } else {
+            customProgressDialog.dismiss();
+            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, MainActivity.this);
+        }
+
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //
@@ -174,7 +180,6 @@ public class MainActivity extends AppCompatActivity
     };
 
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -193,8 +198,12 @@ public class MainActivity extends AppCompatActivity
             Utility.verifyStoragePermissions(this);
 
             CardReaderHelper cardReaderHelper = new CardReaderHelper(MainActivity.this);
-            String SDPath = ""; // get this location from sharedpreferance;
-            cardReaderHelper.readDataFromSDCard(SDPath);
+            String SDPath = Utility.getSelectFolderPathFromSharedPreferences(MainActivity.this);// get this location from sharedpreferance;
+            if (SDPath != null && !SDPath.equals("")) {
+                cardReaderHelper.readDataFromSDCard(SDPath);
+            } else {
+                cardReaderHelper.readDataFromSDCard(Consts.inputDirectoryLocation);
+            }
 
         } else if (id == R.id.favorites) {
             FragmentManager fragmentManager = this.getSupportFragmentManager();

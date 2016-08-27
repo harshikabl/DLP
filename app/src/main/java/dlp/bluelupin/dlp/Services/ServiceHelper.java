@@ -1,7 +1,16 @@
 package dlp.bluelupin.dlp.Services;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
@@ -15,6 +24,8 @@ import dlp.bluelupin.dlp.Models.OtpData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
 import dlp.bluelupin.dlp.Services.IServiceManager;
 import dlp.bluelupin.dlp.Services.IServiceSuccessCallback;
+import dlp.bluelupin.dlp.Utilities.Utility;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -136,8 +147,24 @@ public class ServiceHelper {
                     if (dbhelper.upsertMediaEntity(d)) {
                         // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
                         // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
+                        Data data = dbhelper.getMediaEntityById(d.getId());
+                        if (data != null) {
+                            if (data.getLocalFilePath() != null && !data.getLocalFilePath().equals("")) {
+                                if (Consts.IS_DEBUG_LOG) {
+                                    Log.d(Consts.LOG_TAG, "getLocalFilePath " + null);
+                                }
+                            } else {
+                                //upsert media entity if not downloaded
+                                dbhelper.upsertDownloadMediaEntity(d);
+                                if (Consts.IS_DEBUG_LOG) {
+                                    Log.d(Consts.LOG_TAG, " Data for page: " + d);
+                                }
+                            }
+                        }
                     } else {
-                        Log.d(Consts.LOG_TAG, "failure adding Media Data for page: " + cd.getCurrent_page());
+                        if (Consts.IS_DEBUG_LOG) {
+                            Log.d(Consts.LOG_TAG, "failure adding Media Data for page: " + cd.getCurrent_page());
+                        }
                     }
                 }
                 String lastCalled = response.headers().get("last_request_date");
@@ -168,6 +195,13 @@ public class ServiceHelper {
         Log.d(Consts.LOG_TAG, "payload***" + request);
         Call<AccountData> ac = service.accountCreate(request);
         final DbHelper dbhelper = new DbHelper(context);
+        String device_token = Utility.getDeviceIDFromSharedPreferences(context);
+        if (device_token != null) {
+            //request.setDevice_token(device_token);
+        }
+        request.setService(Consts.SERVICE);
+        request.setIs_development(Consts.IS_DEVELOPMENT);
+
         ac.enqueue(new Callback<AccountData>() {
             @Override
             public void onResponse(Call<AccountData> call, Response<AccountData> response) {
@@ -176,6 +210,7 @@ public class ServiceHelper {
                 if (data != null) {
                     Log.d(Consts.LOG_TAG, "account create data:" + data.toString());
                     if (dbhelper.upsertAccountData(data)) {
+                        Utility.setUserServerIdIntoSharedPreferences(context, data.getId());//for check verification done or not
                         Log.d(Consts.LOG_TAG, "Account successfully add in database ");
                     }
                     callback.onDone(Consts.CREATE_NEW_USER, data, null);
@@ -205,13 +240,17 @@ public class ServiceHelper {
             public void onResponse(Call<OtpData> call, Response<OtpData> response) {
                 OtpData data = response.body();
                 if (data != null) {
-                    Log.d(Consts.LOG_TAG, "response data:" + response.toString());
-                    Log.d(Consts.LOG_TAG, "Otp verify data:" + data.toString());
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "response data:" + response.toString());
+                        Log.d(Consts.LOG_TAG, "Otp verify data:" + data.toString());
+                    }
                     //Log.d(Consts.LOG_TAG, "Otp verify successfully ");
                     callback.onDone(Consts.VERIFY_OTP, data, null);
                 } else {
-                    Log.d(Consts.LOG_TAG, "response data:" + response.toString());
-                    Log.d(Consts.LOG_TAG, "Otp not verify");
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "response data:" + response.toString());
+                        Log.d(Consts.LOG_TAG, "Otp not verify");
+                    }
                     callback.onDone(Consts.VERIFY_OTP, null, null);
                 }
 
@@ -224,5 +263,156 @@ public class ServiceHelper {
             }
 
         });
+    }
+
+    //download file request delete
+    public void callDownloadDeleteRequest(String fileUrl) {
+        Call<ResponseBody> call = service.downloadFileWithDynamicUrlSync(fileUrl);
+        call.cancel();
+    }
+
+    //download file service
+    public void callDownloadFileService(final String fileUrl, final int mediaId, final IServiceSuccessCallback<String> callback) {
+        Call<ResponseBody> call = service.downloadFileWithDynamicUrlSync(fileUrl);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "server contacted and has file");
+                    }
+
+                    boolean writtenToDisk = writeResponseBodyToDisk(response.body(), fileUrl, mediaId);
+                    if (writtenToDisk) {
+                        DbHelper dbHelper = new DbHelper(context);
+                        dbHelper.deleteFileDownloadedByMediaId(mediaId);
+                    }
+                    callback.onDone(fileUrl, response.toString(), null);
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "file download was a success? " + writtenToDisk);
+                    }
+                } else {
+                    callback.onDone(fileUrl, null, null);
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "server contact failed");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.e(Consts.LOG_TAG, "error");
+                }
+            }
+        });
+
+
+    }
+
+    //write download file
+    private boolean writeResponseBodyToDisk(ResponseBody body, String fileUrl, int mediaId) {
+        try {
+            //File futureStudioIconFile = new File(getExternalFilesDir(null) + File.separator + "Future Studio Icon.png");
+
+            File testDirectory = Utility.getFilePath(context);
+            String localFilePath = null;
+
+            if (fileUrl.contains(".mp4")) {
+                localFilePath = testDirectory + File.separator + mediaId + ".mp4";
+            } else {
+                if (fileUrl.contains(".jpg")) {
+                    localFilePath = testDirectory + File.separator + mediaId + ".jpg";
+                } else if (fileUrl.contains(".png")) {
+                    localFilePath = testDirectory + File.separator + mediaId + ".png";
+                } else if (fileUrl.contains(".jpeg")) {
+                    localFilePath = testDirectory + File.separator + mediaId + ".jpeg";
+                } else {
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "downloading file worng formate");
+                    }
+                }
+            }
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "localFilePath = " + localFilePath);
+            }
+
+
+            InputStream inputStream = null;
+            FileOutputStream outputStream = null;
+
+            try {
+                testDirectory.mkdirs();
+                if (!testDirectory.exists()) {
+                    testDirectory.mkdir();
+                }
+
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+                long total = 0;
+                int progress = 0;
+
+                inputStream = body.byteStream();
+                long lenghtOfFile = body.contentLength();
+                outputStream = new FileOutputStream(localFilePath);
+                DbHelper dbHelper = new DbHelper(context);
+                while (true) {
+                    int read = inputStream.read(fileReader);
+                    total += read;
+                    int progress_temp = (int) ((int) total * 100 / lenghtOfFile);
+
+                    progress = progress_temp;
+                    Data downloadingFileData = new Data();
+                    downloadingFileData.setMediaId(mediaId);
+                    downloadingFileData.setProgress(progress);
+                    dbHelper.upsertDownloadingFileEntity(downloadingFileData);
+
+                    Intent broadcastIntent = new Intent();
+                    broadcastIntent.setAction(Consts.mBroadcastProgressUpdateAction);
+                    broadcastIntent.putExtra("progresss", progress);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
+
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "progress: " + progress + " progress_temp " + progress_temp);
+                    }
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "file download: " + fileSizeDownloaded + " of " + fileSize);
+                    }
+                }
+                //update MediaEntity table for local file path
+                Data fileData = new Data();
+                fileData.setLocalFilePath(localFilePath);
+                fileData.setId(mediaId);
+                dbHelper.updateMediaLocalFilePathEntity(fileData);
+                dbHelper.updateDownloadMediaLocalFilePathEntity(fileData);
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
     }
 }

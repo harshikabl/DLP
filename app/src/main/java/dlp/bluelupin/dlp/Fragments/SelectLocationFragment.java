@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +65,8 @@ public class SelectLocationFragment extends Fragment {
     }
 
     private Context context;
+    private int PICKFILE_REQUEST_CODE = 101;
+    private TextView path;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,7 +90,7 @@ public class SelectLocationFragment extends Fragment {
         Typeface VodafoneExB = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VodafoneRg.ttf");
         TextView defaultText = (TextView) view.findViewById(R.id.defaultText);
-        TextView path = (TextView) view.findViewById(R.id.path);
+        path = (TextView) view.findViewById(R.id.path);
         TextView selectFolder = (TextView) view.findViewById(R.id.selectFolder);
         defaultText.setTypeface(VodafoneExB);
         path.setTypeface(VodafoneRg);
@@ -99,8 +102,24 @@ public class SelectLocationFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("file/*");
-                startActivity(intent);
+
+                startActivityForResult(Intent.createChooser(intent,"Select folder"), PICKFILE_REQUEST_CODE);
             }
         });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICKFILE_REQUEST_CODE) {
+            if (data != null) {
+                String Fpath = data.getDataString();
+                if (Fpath != null) {
+                    Utility.setSelectFolderPathIntoSharedPreferences(context, Fpath);
+                    path.setText(Fpath);
+                }
+            }
+        }
+    }
+
 }

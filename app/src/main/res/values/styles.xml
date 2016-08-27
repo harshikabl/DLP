@@ -48,4 +48,7 @@
         <item name="android:textColor">#4a4d4e</item>
         <item name="textAllCaps">true</item>
     </style>
+
+
+
 </resources>

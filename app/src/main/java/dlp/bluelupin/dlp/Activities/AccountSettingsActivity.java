@@ -65,11 +65,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         } else {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-      /*  Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Consts.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        final IServiceManager service = retrofit.create(IServiceManager.class);*/
+
         init();
     }
 

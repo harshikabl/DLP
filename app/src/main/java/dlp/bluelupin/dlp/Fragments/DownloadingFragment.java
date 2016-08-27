@@ -5,23 +5,39 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.DownloadService;
+import dlp.bluelupin.dlp.Adapters.DownloadingAdapter;
+import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
+import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.BindService;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -38,8 +54,8 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int mediaId;
+    private String mediaUrl;
 
 
     public DownloadingFragment() {
@@ -50,15 +66,15 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param Id     Parameter 1.
      * @param param2 Parameter 2.
      * @return A new instance of fragment DownloadingFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DownloadingFragment newInstance(String param1, String param2) {
+    public static DownloadingFragment newInstance(int Id, String param2) {
         DownloadingFragment fragment = new DownloadingFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putInt(ARG_PARAM1, Id);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -68,14 +84,18 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mediaId = getArguments().getInt(ARG_PARAM1);
+            mediaUrl = getArguments().getString(ARG_PARAM2);
         }
     }
 
     private Context context;
     private BindService serviceBinder;
     Intent serviceIntent;
+
+    private boolean mReceiversRegistered;
+    DownloadingAdapter downloadingAdapter;
+    RecyclerView downloadingRecyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -100,25 +120,70 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         TextView download = (TextView) view.findViewById(R.id.download);
         download.setTypeface(VodafoneExB);
-        /* List<String> list=new ArrayList<String>();
-        DownloadingAdapter downloadingAdapter = new DownloadingAdapter(context, list);
-        RecyclerView downloadingRecyclerView = (RecyclerView) view.findViewById(R.id.downloadingRecyclerView);
+
+
+        DbHelper dbHelper = new DbHelper(getActivity());
+        List<Data> data = dbHelper.getAllDownloadingMediaFile();
+
+        downloadingAdapter = new DownloadingAdapter(context, data);
+        downloadingRecyclerView = (RecyclerView) view.findViewById(R.id.downloadingRecyclerView);
         downloadingRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         downloadingRecyclerView.setHasFixedSize(true);
         //downloadingRecyclerView.setNestedScrollingEnabled(false);
-        downloadingRecyclerView.setAdapter(downloadingAdapter);*/
+        downloadingRecyclerView.setAdapter(downloadingAdapter);
 
-
-        serviceIntent = new Intent(context, DownloadService.class);
+        serviceIntent = new Intent(context, BindService.class);
         context.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
 
-        BroadcastReceiver intentReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Toast.makeText(context, "File downloaded!",
+        registerReceiver();
+
+    }
+
+    BroadcastReceiver intentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Consts.mBroadcastDeleteAction)) {
+                //LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+                context.stopService(intent);
+                Toast.makeText(context, "DownloadFile cancel!",
                         Toast.LENGTH_LONG).show();
             }
-        };
+            if (intent.getAction().equals(Consts.mBroadcastProgressUpdateAction)) {
+                int pro = intent.getIntExtra("progresss", 0);
+
+                DbHelper dbHelper = new DbHelper(getActivity());
+                List<Data> data = dbHelper.getAllDownloadingMediaFile();
+                downloadingAdapter = new DownloadingAdapter(context, data);
+                downloadingRecyclerView.setAdapter(downloadingAdapter);
+                downloadingAdapter.notifyDataSetChanged();
+
+               // Toast.makeText(context, "progress  update= " + pro, Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
+    private void registerReceiver() {
+        unregisterReceiver();
+        IntentFilter intentToReceiveFilter = new IntentFilter();
+        intentToReceiveFilter
+                .addAction(Consts.mBroadcastProgressUpdateAction);
+        intentToReceiveFilter
+                .addAction(Consts.mBroadcastDeleteAction);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(intentReceiver, intentToReceiveFilter);
+        mReceiversRegistered = true;
+    }
+
+    private void unregisterReceiver() {
+        if (mReceiversRegistered) {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(intentReceiver);
+            mReceiversRegistered = false;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver();
     }
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -127,9 +192,10 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
             serviceBinder = ((BindService.MyBinder) service).getService();
             try {
                 URL[] urls = new URL[]{
-                        new URL("https://s3.ap-south-1.amazonaws.com/classkonnect-test/011+Resetting+data.mp4")};
+                        new URL(mediaUrl)};
                 //---assign the URLs to the service through the serviceBinder object---
                 serviceBinder.urls = urls;
+                serviceBinder.mediaId = mediaId;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -150,8 +216,4 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
     }
 
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 }

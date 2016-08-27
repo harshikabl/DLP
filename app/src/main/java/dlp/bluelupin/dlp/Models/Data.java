@@ -215,10 +215,38 @@ public class Data
         this.parent_id = parent_id;
     }
 
+    public String getLocalFilePath() {
+        return localFilePath;
+    }
+
+    public void setLocalFilePath(String localFilePath) {
+        this.localFilePath = localFilePath;
+    }
+
+    private String localFilePath;
+
+    private int mediaId;
+    private int progress;
+
+    public int getMediaId() {
+        return mediaId;
+    }
+
+    public void setMediaId(int mediaId) {
+        this.mediaId = mediaId;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
     @Override
     public String toString()
     {
-        return "ClassPojo [id = "+id+", updated_at = "+updated_at+", sequence = "+sequence+", deleted_at = "+deleted_at+", media_id = "+media_id+", created_at = "+created_at+", thumbnail_media_id = "+thumbnail_media_id+", lang_resource_description = "+lang_resource_description+", lang_resource_name = "+lang_resource_name+", type = "+type+", url = "+url+", parent_id = "+parent_id+"]";
+        return "ClassPojo [id = "+id+", updated_at = "+updated_at+", sequence = "+sequence+", deleted_at = "+deleted_at+", media_id = "+media_id+", created_at = "+created_at+", thumbnail_media_id = "+thumbnail_media_id+", lang_resource_description = "+lang_resource_description+", lang_resource_name = "+lang_resource_name+", type = "+type+", url = "+url+", parent_id = "+parent_id+", localFilePath = "+localFilePath+"]";
     }
 }
 

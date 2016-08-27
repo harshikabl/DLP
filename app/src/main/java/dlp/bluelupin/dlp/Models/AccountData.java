@@ -29,6 +29,7 @@ public class AccountData {
         private int otp;
 
 
+
     public String getCreated_by ()
     {
         return created_by;
@@ -141,6 +142,16 @@ public class AccountData {
 
     public void setOtp(int otp) {
         this.otp = otp;
+    }
+
+    private int isVerified;
+
+    public int getIsVerified() {
+        return isVerified;
+    }
+
+    public void setIsVerified(int isVerified) {
+        this.isVerified = isVerified;
     }
 
     @Override

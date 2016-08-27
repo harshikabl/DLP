@@ -98,12 +98,7 @@
                                 android:textSize="@dimen/dimTextSize_15" />
                         </RelativeLayout>
 
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="right|center"
-                            android:layout_marginLeft="@dimen/dimValue_10"
-                            android:background="#e60000" />
+
                     </LinearLayout>
                 </LinearLayout>
 
@@ -111,10 +106,14 @@
                     android:id="@+id/download_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimValue_10"
                     android:layout_weight="0.5"
                     android:orientation="horizontal">
-
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="left|center"
+                        android:layout_marginRight="@dimen/dimValue_10"
+                        android:background="#e60000" />
                     <TextView
                         android:id="@+id/download"
                         android:layout_width="0dp"

@@ -13,8 +13,10 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.R;
 
 
@@ -44,7 +47,7 @@ public class Utility {
 
     /**
      * Checks if the app has permission to write to device storage
-     *
+     * <p/>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity
@@ -62,7 +65,6 @@ public class Utility {
             );
         }
     }
-
 
 
     //set languagae
@@ -85,7 +87,7 @@ public class Utility {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         Configuration config = context.getResources().getConfiguration();
 
-        String lang = settings.getString("EnumLanguage",  EnumLanguage.en.name());
+        String lang = settings.getString("EnumLanguage", EnumLanguage.en.name());
         if (!lang.equals("") && !config.locale.getLanguage().equals(lang)) {
             Locale locale = new Locale(lang);
             Locale.setDefault(locale);
@@ -101,7 +103,7 @@ public class Utility {
 
         String lang = settings.getString("EnumLanguage", EnumLanguage.en.name());
         if (!lang.equals("")) {
-           return Enum.valueOf(EnumLanguage.class,lang);
+            return Enum.valueOf(EnumLanguage.class, lang);
         }
         return EnumLanguage.en;
     }
@@ -156,8 +158,7 @@ public class Utility {
     }
 
 
-    public static Date parseDateFromString(String strDate)
-    {
+    public static Date parseDateFromString(String strDate) {
         Date date = null;
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
@@ -271,6 +272,7 @@ public class Utility {
         }
         return connected;
     }
+
     /**
      * Determine if the device is a tablet (i.e. it has a large screen).
      *
@@ -280,4 +282,69 @@ public class Utility {
         return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) > Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
+    //set select folder path
+    public static void setSelectFolderPathIntoSharedPreferences(Context context, String path) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("folderPath", path).commit();
+    }
+
+    //get selcet folder path
+    public static String getSelectFolderPathFromSharedPreferences(Context context) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        String folderPath = settings.getString("folderPath", null);
+        return folderPath;
+    }
+
+    //get DLP directory for download files
+    public static File getFilePath(Context context) {
+        File DLPDirectory = new File(Environment.getExternalStorageDirectory(), Consts.APP_DIRECTORY);
+        return DLPDirectory;
+    }
+
+    //set user server id
+    public static void setUserServerIdIntoSharedPreferences(Context context, int serverId) {
+        SharedPreferences prefs = context.getSharedPreferences("UserServerId", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("ServerId", serverId);
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "serverId set*********" + serverId);
+        }
+        editor.commit();
+    }
+
+    //get selcet folder path
+    public static int getUserServerIdFromSharedPreferences(Context context) {
+        int ServerId = 0;
+        SharedPreferences prefs = context.getSharedPreferences("UserServerId", Context.MODE_PRIVATE);
+        if (prefs != null) {
+            ServerId = prefs.getInt("ServerId", 0);
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "ServerId get*********" + ServerId);
+            }
+        }
+        return ServerId;
+    }
+
+    //set device id for  GCM
+    public static void setDeviceIDIntoSharedPreferences(Context context, String device_token) {
+        SharedPreferences prefs = context.getSharedPreferences("GCMDeviceId", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("device_token", device_token);
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "device_token set*********" + device_token);
+        }
+        editor.commit();
+    }
+
+    //get device id for  GCM
+    public static String getDeviceIDFromSharedPreferences(Context context) {
+        String device_token = null;
+        SharedPreferences prefs = context.getSharedPreferences("GCMDeviceId", Context.MODE_PRIVATE);
+        if (prefs != null) {
+            device_token = prefs.getString("device_token", null);
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "device_token get*********" + device_token);
+            }
+        }
+        return device_token;
+    }
 }
