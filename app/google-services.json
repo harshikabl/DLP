@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1061156052826",
+    "firebase_url": "https://dlphih-ba977.firebaseio.com",
+    "project_id": "dlphih-ba977",
+    "storage_bucket": "dlphih-ba977.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061156052826:android:c72a5487c04994ec",
+        "android_client_info": {
+          "package_name": "dlp.bluelupin.dlp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1061156052826-2ch1nppq7ier9v4ng76qr0dq1v1fmpnk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTDfPdDW8MGa8x5-fEubQTYb0tKtmiZA4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
