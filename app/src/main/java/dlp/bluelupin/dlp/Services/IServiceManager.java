@@ -39,4 +39,7 @@ public interface IServiceManager {
     @GET
     Call<ResponseBody> downloadFileWithDynamicUrlSync(@Url String fileUrl);
 
+    @POST(Consts.MediaLanguage_Latest)
+    Call<ContentData> MedialanguageLatestContent(@Body ContentServiceRequest request);
+
 }

@@ -79,4 +79,8 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         super.onBackPressed();
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
+
+    private void callNotificationService(){
+
+    }
 }

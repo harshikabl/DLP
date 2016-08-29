@@ -23,7 +23,7 @@ import dlp.bluelupin.dlp.Models.FavoritesData;
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "dlp_db.db";
 
     public DbHelper(Context context) {
@@ -40,6 +40,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS FavoritesEntity");
         db.execSQL("DROP TABLE IF EXISTS DownloadMediaEntity");
         db.execSQL("DROP TABLE IF EXISTS DownloadingFileEntity");
+        db.execSQL("DROP TABLE IF EXISTS MedialanguageLatestEntity");
         onCreate(db);
     }
 
@@ -79,6 +80,10 @@ public class DbHelper extends SQLiteOpenHelper {
         String CREATE_DownloadingFileEntity_TABLE = "CREATE TABLE DownloadingFileEntity(id INTEGER PRIMARY KEY, MediaId INTEGER, progress INTEGER, FOREIGN KEY (MediaId) REFERENCES DownloadMediaEntity(clientId))";
         //id , MediaId , progress
         db.execSQL(CREATE_DownloadingFileEntity_TABLE);
+
+        String CREATE_MedialanguageLatestDataEntity_TABLE = "CREATE TABLE MedialanguageLatestEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, media_id INTEGER, language_id INTEGER ,file_path TEXT, url TEXT,created_at DATETIME, updated_at DATETIME, download_url TEXT, created_by INTEGER, updated_by INTEGER, cloud_transferred INTEGER)";
+        //clientId , server_id  , media_id, language_id ,file_path ,url ,created_at , updated_at ,download_url ,created_by ,updated_by ,cloud_transferred
+        db.execSQL(CREATE_MedialanguageLatestDataEntity_TABLE);
     }
 
 
@@ -718,6 +723,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("role", accountData.getRole());
         values.put("api_token", accountData.getApi_token());
         values.put("otp", accountData.getOtp());
+        values.put("isVerified", accountData.getIsVerified());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -736,6 +742,8 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("role", accountData.getRole());
         values.put("api_token", accountData.getApi_token());
         values.put("otp", accountData.getOtp());
+        values.put("isVerified", accountData.getIsVerified());
+
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -1165,5 +1173,131 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         result = true;
         return result;
+    }
+
+
+    //Medialanguage Latest DataEntity
+    public boolean upsertMedialanguageLatestDataEntity(Data ob) {
+        boolean done = false;
+        Data data = null;
+        if (ob.getId() != 0) {
+            data = getMedialanguageLatestDataEntityById(ob.getId());
+            if (data == null) {
+                done = insertMedialanguageLatestDataEntity(ob);
+            } else {
+                done = updateMedialanguageLatestDataEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    //clientId , server_id  , media_id, language_id ,file_path ,url ,created_at , updated_at ,download_url ,created_by ,updated_by ,cloud_transferred
+    public Data getMedialanguageLatestDataEntityById(int id) {
+        String query = "Select clientId , server_id , media_id ,language_id ,file_path , url,created_at , updated_at,download_url,created_by,updated_by,cloud_transferred  FROM MedialanguageLatestEntity WHERE clientId = " + id + " ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            populateMedialanguageLatestDataEntity(cursor, ob);
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    //clientId , server_id  , media_id, language_id ,file_path ,url ,created_at , updated_at ,download_url ,created_by ,updated_by ,cloud_transferred
+    private void populateMedialanguageLatestDataEntity(Cursor cursor, Data ob) {
+        ob.setClientId(Integer.parseInt(cursor.getString(0)));
+        ob.setId(Integer.parseInt(cursor.getString(1))); // this represets server Id
+        ob.setMediaId(Integer.parseInt(cursor.getString(2)));
+        ob.setLanguage_id(Integer.parseInt(cursor.getString(3)));
+        ob.setFile_path(cursor.getString(4));
+        ob.setUrl(cursor.getString(5));
+        ob.setCreated_at(cursor.getString(6));
+        ob.setUpdated_at(cursor.getString(7));
+        ob.setDownload_url(cursor.getString(8));
+        ob.setCreated_by(Integer.parseInt(cursor.getString(9)));
+        ob.setUpdated_by(Integer.parseInt(cursor.getString(10)));
+        ob.setCloud_transferred(Integer.parseInt(cursor.getString(11)));
+    }
+
+    //get all data
+    public List<Data> getAllMedialanguageLatestDataEntity() {
+        String query = "Select clientId , server_id , media_id ,language_id ,file_path , url,created_at , updated_at,download_url,created_by,updated_by,cloud_transferred  FROM MedialanguageLatestEntity ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<Data> list = new ArrayList<Data>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                Data ob = new Data();
+                populateMedialanguageLatestDataEntity(cursor, ob);
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
+    public boolean insertMedialanguageLatestDataEntity(Data ob) {
+        //clientId , server_id  , media_id, language_id ,file_path ,url ,created_at , updated_at ,download_url ,created_by ,updated_by ,cloud_transferred
+
+        ContentValues values = new ContentValues();
+        values.put("server_id", ob.getId());
+        values.put("media_id", ob.getMedia_id());
+        values.put("language_id", ob.getLanguage_id());
+        values.put("file_path", ob.getFile_path());
+        values.put("url", ob.getUrl());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("download_url", ob.getDownload_url());
+        values.put("created_by", ob.getCreated_by());
+        values.put("updated_by", ob.getUpdated_by());
+        values.put("cloud_transferred", ob.getCloud_transferred());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("MedialanguageLatestEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    public boolean updateMedialanguageLatestDataEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        // values.put("server_id", ob.getId());
+        values.put("media_id", ob.getMedia_id());
+        values.put("language_id", ob.getLanguage_id());
+        values.put("file_path", ob.getFile_path());
+        values.put("url", ob.getUrl());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("download_url", ob.getDownload_url());
+        values.put("created_by", ob.getCreated_by());
+        values.put("updated_by", ob.getUpdated_by());
+        values.put("cloud_transferred", ob.getCloud_transferred());
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() != 0) {
+            i = db.update("MedialanguageLatestEntity", values, " server_id = " + ob.getId() + " ", null);
+        }
+        //Log.d(Consts.LOG_TAG, "MedialanguageLatestEntity called with" + " server_id = '" + ob.getId());
+
+        db.close();
+        return i > 0;
     }
 }

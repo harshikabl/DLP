@@ -143,6 +143,47 @@ public class ServiceCaller {
         });
     }
 
+    //get all getAllMedialanguageLatestContent
+    public void getAllMedialanguageLatestContent(final ContentServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final ServiceHelper sh = new ServiceHelper(context);
+        sh.callMedialanguageLatestContentService(request, new IServiceSuccessCallback<ContentData>() {
+            @Override
+            public void onDone(final String callerUrl, final ContentData result, String error) {
+                Boolean success = false;
+                if (result != null) {
+                    if (request.getPage() <= result.getLast_page()) {
+                        Log.d(Consts.LOG_TAG, "Recursively calling next content page: " + result.getCurrent_page());
+                        final ContentServiceRequest nextRequest = new ContentServiceRequest();
+                        nextRequest.setPage(result.getCurrent_page() + 1);
+                        getAllContent(nextRequest, new IAsyncWorkCompletedCallback() {
+                            @Override
+                            public void onDone(String workName, boolean isComplete) {
+                                // Log.d(Consts.LOG_TAG, "Success: Service caller getAllContent done at page: " + nextRequest.getPage());
+                                if (nextRequest.getPage() > result.getLast_page()) {
+                                    Log.d(Consts.LOG_TAG, "Content Parsed successfully till page: " + result.getCurrent_page());
+                                    workCompletedCallback.onDone("getAllMedialanguageLatestContent", true);
+
+                                } else {
+                                    // all parsed successfully; recursion complete
+                                    workCompletedCallback.onDone("getAllMedialanguageLatestContent", true);
+                                }
+                            }
+                        });
+
+                    } else {
+                        // all parsed successfully; recursion complete
+                        // Log.d(Consts.LOG_TAG, "Content Parsed successfully till page: " + result.getCurrent_page());
+                        success = true;
+                        workCompletedCallback.onDone("getAllMedialanguageLatestContent", success);
+                    }
+
+                } else {
+                    success = false;
+                }
+            }
+        });
+    }
+
     //call create account service
     public void CreateAccount(final AccountServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
         final ServiceHelper sh = new ServiceHelper(context);

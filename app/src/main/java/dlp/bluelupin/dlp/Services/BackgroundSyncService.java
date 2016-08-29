@@ -20,7 +20,7 @@ import dlp.bluelupin.dlp.Models.Data;
 /**
  * Created by subod on 08-Aug-16.
  */
-public class BackgroundSyncService   extends IntentService {
+public class BackgroundSyncService extends IntentService {
 
     private int result = Activity.RESULT_CANCELED;
 
@@ -31,11 +31,11 @@ public class BackgroundSyncService   extends IntentService {
     // Will be called asynchronously be Android
     @Override
     protected void onHandleIntent(Intent intent) {
-        if(Consts.IS_DEBUG_LOG)
+        if (Consts.IS_DEBUG_LOG)
             Log.d(Consts.LOG_TAG, "starting BackgroundSyncService onHandleIntent");
-       // Uri data = intent.getData();
+        // Uri data = intent.getData();
         String someData = intent.getStringExtra("appName");
-        if(Consts.IS_DEBUG_LOG)
+        if (Consts.IS_DEBUG_LOG)
             Log.d(Consts.LOG_TAG, someData);
 
         Bundle extras = intent.getExtras();
@@ -44,18 +44,17 @@ public class BackgroundSyncService   extends IntentService {
         callContentAsync(extras);
         callResourceAsync(extras);
         callMediaAsync(extras);
+        callMedialanguageLatestAsync(extras);
         result = Activity.RESULT_OK; // success
 
         sendMessageIfAllCallsDone(extras);
     }
 
-    private Boolean contentCallDone = false, resourceCallDone = false, mediaCallDone  = false;
-    private void sendMessageIfAllCallsDone(Bundle extras)
-    {
-        if(contentCallDone && resourceCallDone && mediaCallDone)
-        {
-            if(Consts.IS_DEBUG_LOG)
-            {
+    private Boolean contentCallDone = false, resourceCallDone = false, mediaCallDone = false;
+
+    private void sendMessageIfAllCallsDone(Bundle extras) {
+        if (contentCallDone && resourceCallDone && mediaCallDone) {
+            if (Consts.IS_DEBUG_LOG) {
                 Log.d(Consts.LOG_TAG, "BackgroundSyncServicemessage: ALL DONE");
             }
 //            if (extras != null) {
@@ -138,6 +137,29 @@ public class BackgroundSyncService   extends IntentService {
                 List<Data> data = db.getAllMedia();
                 Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data count: " + data.size());
                 mediaCallDone = true;
+                sendMessageIfAllCallsDone(extras);
+            }
+        });
+    }
+
+    private void callMedialanguageLatestAsync(final Bundle extras) {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(BackgroundSyncService.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.MediaLanguage_Latest);
+        if (cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "BackgroundSyncService: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(BackgroundSyncService.this);
+        sc.getAllMedialanguageLatestContent(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+                Log.d(Consts.LOG_TAG, "BackgroundSyncService: callMedialanguageLatestAsync success result: " + isComplete);
+                DbHelper db = new DbHelper(BackgroundSyncService.this);
+                List<Data> data = db.getAllMedialanguageLatestDataEntity();
+                Log.d(Consts.LOG_TAG, "BackgroundSyncService: data count: " + data.size());
+                contentCallDone = true;
                 sendMessageIfAllCallsDone(extras);
             }
         });

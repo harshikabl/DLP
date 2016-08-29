@@ -254,6 +254,7 @@ public class MainActivity extends AppCompatActivity
         callContentAsync();
         callResourceAsync();
         callMediaAsync();
+        callMedialanguageLatestAsync();
     }
 
     private Boolean contentCallDone = false, resourceCallDone = false, mediaCallDone = false;
@@ -332,6 +333,29 @@ public class MainActivity extends AppCompatActivity
                 List<Data> data = db.getAllMedia();
                 Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data count: " + data.size());
                 mediaCallDone = true;
+                sendMessageIfAllCallsDone();
+            }
+        });
+    }
+
+    private void callMedialanguageLatestAsync() {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(MainActivity.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.MediaLanguage_Latest);
+        if (cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(MainActivity.this);
+        sc.getAllMedialanguageLatestContent(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+                Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync success result: " + isComplete);
+                DbHelper db = new DbHelper(MainActivity.this);
+                List<Data> data = db.getAllMedialanguageLatestDataEntity();
+                Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync data count: " + data.size());
+                contentCallDone = true;
                 sendMessageIfAllCallsDone();
             }
         });

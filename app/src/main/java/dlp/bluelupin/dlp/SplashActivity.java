@@ -5,39 +5,22 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-
-import java.io.IOException;
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
 
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Models.AccountData;
-import dlp.bluelupin.dlp.Models.CacheServiceCallData;
-import dlp.bluelupin.dlp.Models.ContentServiceRequest;
-import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Services.BackgroundSyncService;
-import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
-import dlp.bluelupin.dlp.Services.ServiceCaller;
-import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
  * Created by Neeraj on 7/22/2016.
@@ -48,16 +31,8 @@ public class SplashActivity extends Activity {
     private PendingIntent pendingIntent;
     GregorianCalendar calendar;
 
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000; // for checking play services installed or not
-    String regid;
-    public static final String PROPERTY_REG_ID = "registration_id";
-    private static final String PROPERTY_APP_VERSION = "appVersion";
     private Context context;
-    /**
-     * Substitute you own sender ID here. This is the project number you got
-     * from the API Console, as described in "Getting Started."
-     */
-    String SENDER_ID = "569234788511"; //key=AIzaSyBvKebpsTcu2PB0krI1DBcp2CVAsygk-Gc
+    private long timeIntervel = 18000000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +43,6 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         context = SplashActivity.this;
 
-        if (savedInstanceState == null) {
-
-        }
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -81,7 +52,7 @@ public class SplashActivity extends Activity {
         }, 800);
     }
 
-
+    //call service at every 5 hours of intervel
     private void invokeServiceForBackgroundUpdate() {
         calendar = (GregorianCalendar) Calendar.getInstance();
         if (Consts.IS_DEBUG_LOG)
@@ -119,7 +90,7 @@ public class SplashActivity extends Activity {
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(),
-                1500, pendingIntent);
+                timeIntervel, pendingIntent);
     }
 
     //check user registered or not
@@ -147,12 +118,5 @@ public class SplashActivity extends Activity {
             startActivity(mainIntent);
             finish();
         }
-    }
-
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 }

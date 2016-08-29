@@ -189,6 +189,50 @@ public class ServiceHelper {
         });
     }
 
+    //call medialanguage/latest Service
+    public void callMedialanguageLatestContentService(ContentServiceRequest request, final IServiceSuccessCallback<ContentData> callback) {
+        request.setApi_token(Consts.API_KEY);
+
+        Call<ContentData> cd = service.MedialanguageLatestContent(request);
+        final DbHelper dbhelper = new DbHelper(context);
+        cd.enqueue(new Callback<ContentData>() {
+            @Override
+            public void onResponse(Call<ContentData> call, Response<ContentData> response) {
+                ContentData cd = response.body();
+                //Log.d(Consts.LOG_TAG, cd.toString());
+                if (response.body() != null) {
+                    for (Data d : response.body().getData()) {
+                        if (dbhelper.upsertMedialanguageLatestDataEntity(d)) {
+                            // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
+                            // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
+                        } else {
+                            Log.d(Consts.LOG_TAG, "failure adding Data for page: " + cd.getCurrent_page());
+                        }
+                    }
+                }
+                String lastcalled = response.headers().get("last_request_date");
+                Log.d(Consts.LOG_TAG, "response last_request_date: " + lastcalled);
+                if (lastcalled != null) {
+                    DbHelper dbhelper = new DbHelper(context);
+                    CacheServiceCallData ob = new CacheServiceCallData();
+                    ob.setUrl(Consts.MediaLanguage_Latest);
+                    ob.setLastCalled(lastcalled);
+
+                    dbhelper.upsertCacheServiceCall(ob);
+                }
+                callback.onDone(Consts.MediaLanguage_Latest, cd, null);
+
+            }
+
+            @Override
+            public void onFailure(Call<ContentData> call, Throwable t) {
+                Log.d(Consts.LOG_TAG, "Failure in service callMedialanguageLatestAsync" + t.toString());
+                callback.onDone(Consts.MediaLanguage_Latest, null, t.toString());
+            }
+
+        });
+    }
+
     //create account service
     public void callCreateAccountService(AccountServiceRequest request, final IServiceSuccessCallback<AccountData> callback) {
         request.setApi_token(Consts.API_KEY);
