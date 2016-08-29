@@ -29,8 +29,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activities.DownloadActivity" />
-        <service android:name=".Activities.DownloadActivity$DownloadingService" />
         <activity android:name=".Activities.LanguageActivity" />
         <activity android:name=".Activities.AccountSettingsActivity" />
         <activity android:name=".Activities.VerificationActivity" />
