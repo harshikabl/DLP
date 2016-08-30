@@ -1,10 +1,13 @@
 package dlp.bluelupin.dlp.Services;
 
+import java.util.List;
+
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.ContentData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
+import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Models.OtpData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
 import okhttp3.ResponseBody;
@@ -41,5 +44,11 @@ public interface IServiceManager {
 
     @POST(Consts.MediaLanguage_Latest)
     Call<ContentData> MedialanguageLatestContent(@Body ContentServiceRequest request);
+
+    @GET
+    Call<List<LanguageData>> getLanguage(@Url String languageUrl);
+
+    @POST(Consts.Notifications)
+    Call<ContentData> NotificationContent(@Body ContentServiceRequest request);
 
 }

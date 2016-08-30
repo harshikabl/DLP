@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.R;
 
 /**
@@ -21,8 +22,8 @@ public class LanguageAdapter  extends BaseAdapter {
 
     LayoutInflater inflater;
     Context mContext;
-    List<String> languageList;
-    public LanguageAdapter(Context context, List<String> list) {
+    List<LanguageData> languageList;
+    public LanguageAdapter(Context context, List<LanguageData> list) {
         this.mContext=context;
         this.languageList=list;
         inflater = LayoutInflater.from(mContext);
@@ -59,7 +60,7 @@ public class LanguageAdapter  extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.language.setText(languageList.get(position));
+        holder.language.setText(languageList.get(position).getName());
 
         return convertView;
     }

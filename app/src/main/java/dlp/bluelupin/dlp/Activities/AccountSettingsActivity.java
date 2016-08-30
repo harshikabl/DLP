@@ -33,7 +33,9 @@ import java.util.List;
 
 import dlp.bluelupin.dlp.Adapters.LanguageAdapter;
 import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Models.AccountServiceRequest;
+import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
@@ -52,6 +54,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
 
     private EditText enterName, enterEmail, enterPhone;
     String name_string, pnone_no_string, email_string;
+    List<LanguageData> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,15 +117,15 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
 
         spinner = (Spinner) findViewById(R.id.spinner);
         spinner.getBackground().setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.SRC_ATOP);
-        List<String> list = new ArrayList<String>();
-        list.add("English");
-        list.add("Hindi");
-        list.add("Tamil");
-        list.add("Kannada");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.language_item, list);
-        LanguageAdapter languageAdapter = new LanguageAdapter(this, list);
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(languageAdapter);
+
+
+        DbHelper db = new DbHelper(AccountSettingsActivity.this);
+        data = db.getAllLanguageDataEntity();
+        if (data != null) {
+            LanguageAdapter languageAdapter = new LanguageAdapter(this, data);
+            //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(languageAdapter);
+        }
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -141,7 +144,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
     private void callCreateAccountService() {
         final CustomProgressDialog customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
 
-        int languageId=Utility.getLanguageIdFromSharedPreferences(this).ordinal();
+        int languageId=Utility.getLanguageIdFromSharedPreferences(this);
 
         AccountServiceRequest accountServiceRequest = new AccountServiceRequest();
         accountServiceRequest.setName(name_string);
@@ -176,25 +179,12 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
     }
 
     private void setLanguage(int langpos) {
-        switch (langpos) {
-            case 0: //English
-                Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.en);
-                return;
-            case 1: //Hindi
-                Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.hi);
-                return;
-            case 2: //telugu
-                Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.te);
-                return;
-            case 3: //tamil
-                Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.ta);
-                return;
-            case 4: //Kannada
-                Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.kn);
-                return;
-            default: //By default set to english
-                Utility.setLanguageIntoSharedPreferences(this, EnumLanguage.en);
-                return;
+        if (data != null) {
+            String StringCode=data.get(langpos).getCode();
+            String[] parts = StringCode.split("-");
+            String code = parts[0];
+            String part2 = parts[1];
+            Utility.setLanguageIntoSharedPreferences(this, data.get(langpos).getId(), code);
         }
     }
 

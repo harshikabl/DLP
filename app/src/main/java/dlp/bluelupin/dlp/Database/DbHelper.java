@@ -17,13 +17,14 @@ import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.FavoritesData;
+import dlp.bluelupin.dlp.Models.LanguageData;
 
 /**
  * Created by subod on 21-Jul-16.
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "dlp_db.db";
 
     public DbHelper(Context context) {
@@ -41,6 +42,8 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS DownloadMediaEntity");
         db.execSQL("DROP TABLE IF EXISTS DownloadingFileEntity");
         db.execSQL("DROP TABLE IF EXISTS MedialanguageLatestEntity");
+        db.execSQL("DROP TABLE IF EXISTS LanguageEntity");
+        db.execSQL("DROP TABLE IF EXISTS NotificationEntity");
         onCreate(db);
     }
 
@@ -84,6 +87,16 @@ public class DbHelper extends SQLiteOpenHelper {
         String CREATE_MedialanguageLatestDataEntity_TABLE = "CREATE TABLE MedialanguageLatestEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, media_id INTEGER, language_id INTEGER ,file_path TEXT, url TEXT,created_at DATETIME, updated_at DATETIME, download_url TEXT, created_by INTEGER, updated_by INTEGER, cloud_transferred INTEGER)";
         //clientId , server_id  , media_id, language_id ,file_path ,url ,created_at , updated_at ,download_url ,created_by ,updated_by ,cloud_transferred
         db.execSQL(CREATE_MedialanguageLatestDataEntity_TABLE);
+
+        String CREATE_LanguageEntity_TABLE = "CREATE TABLE LanguageEntity(id INTEGER PRIMARY KEY, LanguageId INTEGER, Name TEXT, DeletedAt TEXT ,code TEXT)";
+        //id , LanguageId , Name ,DeletedAt
+        db.execSQL(CREATE_LanguageEntity_TABLE);
+
+
+        String CREATE_NotificationDataEntity_TABLE = "CREATE TABLE NotificationEntity(id INTEGER PRIMARY KEY, client_id INTEGER, send_at DATETIME,  message TEXT, language_id INTEGER, status TEXT, custom_data TEXT, created_by INTEGER, updated_by INTEGER, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
+        //id , client_id , send_at ,  message , language_id , status , custom_data ,created_by ,updated_by , created_at , updated_at , deleted_at
+        db.execSQL(CREATE_NotificationDataEntity_TABLE);
+
     }
 
 
@@ -1296,6 +1309,239 @@ public class DbHelper extends SQLiteOpenHelper {
             i = db.update("MedialanguageLatestEntity", values, " server_id = " + ob.getId() + " ", null);
         }
         //Log.d(Consts.LOG_TAG, "MedialanguageLatestEntity called with" + " server_id = '" + ob.getId());
+
+        db.close();
+        return i > 0;
+    }
+
+
+    //Languages DataEntity
+    public boolean upsertLanguageDataEntity(LanguageData ob) {
+        boolean done = false;
+        LanguageData data = null;
+        if (ob.getId() != 0) {
+            data = getLanguageDataEntityById(ob.getId());
+            if (data == null) {
+                done = insertLanguageDataEntity(ob);
+            } else {
+                done = updateLanguageDataEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    //id , LanguageId , Name ,DeletedAt
+    public LanguageData getLanguageDataEntityById(int id) {
+        String query = "Select LanguageId , Name , DeletedAt ,code  FROM LanguageEntity WHERE LanguageId = " + id + " ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        LanguageData ob = new LanguageData();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            populateLanguageDataEntity(cursor, ob);
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    private void populateLanguageDataEntity(Cursor cursor, LanguageData ob) {
+        ob.setId(Integer.parseInt(cursor.getString(0)));
+        ob.setName(cursor.getString(1));
+        ob.setDeleted_at(cursor.getString(2));
+        ob.setCode(cursor.getString(3));
+    }
+
+    //get all language data
+    public List<LanguageData> getAllLanguageDataEntity() {
+        String query = "Select LanguageId , Name , DeletedAt ,code FROM LanguageEntity ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<LanguageData> list = new ArrayList<LanguageData>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                LanguageData ob = new LanguageData();
+                populateLanguageDataEntity(cursor, ob);
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
+    //insert language
+    public boolean insertLanguageDataEntity(LanguageData ob) {
+        //id , LanguageId , Name ,DeletedAt
+
+        ContentValues values = new ContentValues();
+        values.put("LanguageId", ob.getId());
+        values.put("Name", ob.getName());
+        values.put("DeletedAt", ob.getDeleted_at());
+        values.put("code", ob.getCode());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("LanguageEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    //update language
+    public boolean updateLanguageDataEntity(LanguageData ob) {
+
+        ContentValues values = new ContentValues();
+        values.put("LanguageId", ob.getId());
+        values.put("Name", ob.getName());
+        values.put("DeletedAt", ob.getDeleted_at());
+        values.put("code", ob.getCode());
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() != 0) {
+            i = db.update("LanguageEntity", values, " LanguageId = " + ob.getId() + " ", null);
+        }
+        //Log.d(Consts.LOG_TAG, "LanguageEntity called with" + " LanguageId = '" + ob.getId());
+
+        db.close();
+        return i > 0;
+    }
+
+
+    //Notification DataEntity
+    public boolean upsertNotificationDataEntity(Data ob) {
+        boolean done = false;
+        Data data = null;
+        if (ob.getId() != 0) {
+            data = getNotificationDataEntityById(ob.getId());
+            if (data == null) {
+                done = insertNotificationDataEntity(ob);
+            } else {
+                done = updateNotificationDataEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    //id , client_id , send_at ,  message , language_id , status , custom_data ,created_by ,updated_by , created_at , updated_at , deleted_at
+    public Data getNotificationDataEntityById(int id) {
+        String query = "Select id, client_id , send_at , message ,  language_id , status , custom_data , created_by , updated_by , created_at , updated_at ,deleted_at FROM NotificationEntity WHERE id = " + id + " ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            populateNotificationDataEntity(cursor, ob);
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+    //get all notification data
+    public List<Data> getAllNotificationDataEntity() {
+        String query = "Select id, client_id , send_at , message ,  language_id , status , custom_data , created_by , updated_by , created_at , updated_at ,deleted_at FROM NotificationEntity ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<Data> list = new ArrayList<Data>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                Data ob = new Data();
+                populateNotificationDataEntity(cursor, ob);
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+    //id , client_id , send_at ,  message , language_id , status , custom_data ,created_by ,updated_by , created_at , updated_at , deleted_at
+    private void populateNotificationDataEntity(Cursor cursor, Data ob) {
+        ob.setId(Integer.parseInt(cursor.getString(0)));
+        ob.setClientId(Integer.parseInt(cursor.getString(1)));
+        ob.setSend_at(cursor.getString(2));
+        ob.setMessage(cursor.getString(3));
+        ob.setLanguage_id(cursor.getInt(4));
+        ob.setStatus(cursor.getString(5));
+        ob.setCustom_data(cursor.getString(6));
+        ob.setCreated_by(cursor.getInt(7));
+        ob.setUpdated_by(cursor.getInt(8));
+        ob.setCreated_at(cursor.getString(9));
+        ob.setUpdated_at(cursor.getString(10));
+        ob.setDeleted_at(cursor.getString(11));
+
+    }
+
+    //insert notification
+    public boolean insertNotificationDataEntity(Data ob) {
+//id , client_id , send_at ,  message , language_id , status , custom_data ,created_by ,updated_by , created_at , updated_at , deleted_at
+
+        ContentValues values = new ContentValues();
+        values.put("id", ob.getId());
+        values.put("client_id", ob.getClient_id());
+        values.put("send_at", ob.getSend_at());
+        values.put("message", ob.getMessage());
+        values.put("language_id", ob.getLanguage_id());
+        values.put("status", ob.getStatus());
+        values.put("custom_data", ob.getCustom_data());
+        values.put("created_by", ob.getCreated_by());
+        values.put("updated_by", ob.getUpdated_by());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getDeleted_at());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("NotificationEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    //update notification
+    public boolean updateNotificationDataEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        values.put("id", ob.getId());
+        values.put("client_id", ob.getClient_id());
+        values.put("send_at", ob.getSend_at());
+        values.put("message", ob.getMessage());
+        values.put("language_id", ob.getLanguage_id());
+        values.put("status", ob.getStatus());
+        values.put("custom_data", ob.getCustom_data());
+        values.put("created_by", ob.getCreated_by());
+        values.put("updated_by", ob.getUpdated_by());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getDeleted_at());
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() != 0) {
+            i = db.update("NotificationEntity", values, " id = " + ob.getId() + " ", null);
+        }
+        //Log.d(Consts.LOG_TAG, "NotificationEntity called with" + " id = '" + ob.getId());
 
         db.close();
         return i > 0;

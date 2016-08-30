@@ -75,10 +75,10 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         final Data data = itemList.get(position);
 
         final Data resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
-                Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+                Utility.getLanguageIdFromSharedPreferences(context));
         if (data.getLang_resource_name() != null) {
             Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
-                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+                    Utility.getLanguageIdFromSharedPreferences(context));
             if (titleResource != null) {
                 holder.chapterTitle.setText(titleResource.getContent());
             }
@@ -86,7 +86,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
         if (data.getLang_resource_description() != null) {
             Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
-                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+                    Utility.getLanguageIdFromSharedPreferences(context));
             if (descriptionResource != null) {
                 holder.chapterDescription.setText(descriptionResource.getContent());
             }

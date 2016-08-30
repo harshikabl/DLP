@@ -70,7 +70,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         if (data.getLang_resource_name() != null) {
 
             resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
-                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+                    Utility.getLanguageIdFromSharedPreferences(context));
             if (resource != null) {
 
                 if (data.getType().equalsIgnoreCase("Text")) {

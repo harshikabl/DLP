@@ -74,17 +74,17 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
         final Data data = itemList.get(position);
 
         final Data resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
-                Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+                Utility.getLanguageIdFromSharedPreferences(context));
         if (data.getLang_resource_name() != null) {
             Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
-                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+                    Utility.getLanguageIdFromSharedPreferences(context));
             if (titleResource != null) {
                 holder.mediaTitle.setText(titleResource.getContent());
             }
         }
         if (data.getLang_resource_description() != null) {
             Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
-                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+                    Utility.getLanguageIdFromSharedPreferences(context));
             if (descriptionResource != null) {
                 holder.mediaDescription.setText(descriptionResource.getContent());
             }

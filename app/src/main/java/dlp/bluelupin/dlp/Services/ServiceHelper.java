@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
@@ -20,6 +21,7 @@ import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.ContentData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Models.OtpData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
 import dlp.bluelupin.dlp.Services.IServiceManager;
@@ -459,4 +461,83 @@ public class ServiceHelper {
             return false;
         }
     }
+
+    //call languages service
+    public void calllanguagesService(final IServiceSuccessCallback<String> callback) {
+        Call<List<LanguageData>> call = service.getLanguage(Consts.Languages);
+        final DbHelper dbHelper = new DbHelper(context);
+        call.enqueue(new Callback<List<LanguageData>>() {
+            @Override
+            public void onResponse(Call<List<LanguageData>> call, Response<List<LanguageData>> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        for (LanguageData data : response.body()) {
+                            if (Consts.IS_DEBUG_LOG) {
+                                Log.d(Consts.LOG_TAG, "Language data " + data);
+                            }
+                            if (dbHelper.upsertLanguageDataEntity(data)) {
+                                // Log.d(Consts.LOG_TAG,"successfully adding Data: "+ data.getName());
+                            } else {
+                                Log.d(Consts.LOG_TAG, "failure adding Data for page: " + data.getName());
+                            }
+                        }
+                    }
+                    callback.onDone(Consts.Languages, "Done", null);
+                } else {
+                    callback.onDone(Consts.Languages, null, null);
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "server response false");
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<LanguageData>> call, Throwable t) {
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.e(Consts.LOG_TAG, "error");
+                }
+            }
+        });
+    }
+
+    //call notification service to get notification data
+    public void callNotificationService(ContentServiceRequest request, final IServiceSuccessCallback<ContentData> callback) {
+        request.setApi_token(Consts.API_KEY);
+
+        Call<ContentData> cd = service.NotificationContent(request);
+        final DbHelper dbhelper = new DbHelper(context);
+        cd.enqueue(new Callback<ContentData>() {
+            @Override
+            public void onResponse(Call<ContentData> call, Response<ContentData> response) {
+                ContentData cd = response.body();
+                //Log.d(Consts.LOG_TAG, cd.toString());
+
+                for (Data d : response.body().getData()) {
+                    if (dbhelper.upsertNotificationDataEntity(d)) {
+                        // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
+                    } else {
+                        Log.d(Consts.LOG_TAG, "failure adding Data for page: " + cd.getCurrent_page());
+                    }
+                }
+                String lastcalled = response.headers().get("last_request_date");
+                Log.d(Consts.LOG_TAG, "response last_request_date: " + lastcalled);
+                if (lastcalled != null) {
+                    DbHelper dbhelper = new DbHelper(context);
+                    CacheServiceCallData ob = new CacheServiceCallData();
+                    ob.setUrl(Consts.Notifications);
+                    ob.setLastCalled(lastcalled);
+
+                    dbhelper.upsertCacheServiceCall(ob);
+                }
+                callback.onDone(Consts.Notifications, cd, null);
+            }
+
+            @Override
+            public void onFailure(Call<ContentData> call, Throwable t) {
+                Log.d(Consts.LOG_TAG, "Failure in service latestContent" + t.toString());
+                callback.onDone(Consts.Notifications, null, t.toString());
+            }
+
+        });
+    }
+
 }

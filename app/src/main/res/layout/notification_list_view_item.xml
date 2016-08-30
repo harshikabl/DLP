@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:background="@drawable/selector_row_notification">
 
     <LinearLayout
@@ -52,4 +53,4 @@
         android:layout_gravity="bottom"
         android:layout_marginTop="@dimen/dimValue_10"
         android:background="#929495" />
-</android.support.v7.widget.CardView>
+</LinearLayout>

@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Fragments.ItemTouchHelperInterface;
+import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 
 /**
@@ -21,10 +22,10 @@ import dlp.bluelupin.dlp.R;
  */
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHolder> implements ItemTouchHelperInterface {
     Context context;
-    private List<String> itemList;
+    private List<Data>  itemList;
     private SparseBooleanArray selectedItems;
 
-    public NotificationAdapter(Context context, List<String> itemList) {
+    public NotificationAdapter(Context context, List<Data> itemList) {
         this.context = context;
         this.itemList = itemList;
         selectedItems = new SparseBooleanArray();
@@ -40,14 +41,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHo
     public void onBindViewHolder(final NotificationViewHolder holder, final int position) {
         // Set the selected state of the row depending on the position
         holder.cardView.setSelected(selectedItems.get(position, false));
+
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
         holder.notification.setTypeface(VodafoneExB);
         holder.notificationDescription.setTypeface(VodafoneRg);
         holder.dateTime.setTypeface(VodafoneRg);
-        holder.notification.setText(itemList.get(position));
+        holder.notification.setText("Notification " + itemList.get(position).getId());
+        holder.notificationDescription.setText(itemList.get(position).getMessage());
+        holder.dateTime.setText(itemList.get(position).getSend_at());
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showSelectionItemRow(holder, position);

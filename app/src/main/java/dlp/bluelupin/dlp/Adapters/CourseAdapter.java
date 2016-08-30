@@ -51,7 +51,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
         final Data data = itemList.get(position);
         if(data.getLang_resource_name() != null) {
             Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
-                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+                    Utility.getLanguageIdFromSharedPreferences(context));
             if (titleResource != null) {
                 holder.courseTitle.setText(titleResource.getContent());
             }
@@ -59,7 +59,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
 
         if(data.getLang_resource_description() != null) {
             Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
-                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+                    Utility.getLanguageIdFromSharedPreferences(context));
             if (descriptionResource != null) {
                 holder.courseDescription.setText(descriptionResource.getContent());
             }

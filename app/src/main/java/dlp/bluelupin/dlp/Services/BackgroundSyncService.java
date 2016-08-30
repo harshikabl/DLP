@@ -16,6 +16,8 @@ import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Models.LanguageData;
+import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
  * Created by subod on 08-Aug-16.
@@ -45,6 +47,7 @@ public class BackgroundSyncService extends IntentService {
         callResourceAsync(extras);
         callMediaAsync(extras);
         callMedialanguageLatestAsync(extras);
+        callGetAllLanguage(extras);
         result = Activity.RESULT_OK; // success
 
         sendMessageIfAllCallsDone(extras);
@@ -159,9 +162,26 @@ public class BackgroundSyncService extends IntentService {
                 DbHelper db = new DbHelper(BackgroundSyncService.this);
                 List<Data> data = db.getAllMedialanguageLatestDataEntity();
                 Log.d(Consts.LOG_TAG, "BackgroundSyncService: data count: " + data.size());
-                contentCallDone = true;
-                sendMessageIfAllCallsDone(extras);
             }
         });
+    }
+    //Language service call
+    public void callGetAllLanguage(final Bundle extras) {
+        if (Utility.isOnline(BackgroundSyncService.this)) {
+            final ServiceHelper sh = new ServiceHelper(BackgroundSyncService.this);
+            sh.calllanguagesService( new IServiceSuccessCallback<String>() {
+                @Override
+                public void onDone(final String callerUrl, String d, String error) {
+                    DbHelper db = new DbHelper(BackgroundSyncService.this);
+                    List<LanguageData> data = db.getAllLanguageDataEntity();
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "MainActivity: callGetAllLanguage data count: " + data.size()+"  "+data);
+                    }
+                }
+            });
+
+        } else {
+            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, BackgroundSyncService.this);
+        }
     }
 }

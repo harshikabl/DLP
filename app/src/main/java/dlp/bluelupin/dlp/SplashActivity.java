@@ -16,11 +16,16 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Models.AccountData;
+import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Services.BackgroundSyncService;
+import dlp.bluelupin.dlp.Services.IServiceSuccessCallback;
+import dlp.bluelupin.dlp.Services.ServiceHelper;
+import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
  * Created by Neeraj on 7/22/2016.
@@ -42,14 +47,8 @@ public class SplashActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         context = SplashActivity.this;
+        callGetAllLanguage();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                /* Create an Intent that will start the Menu-Activity. */
-                checkRegistered();
-            }
-        }, 800);
     }
 
     //call service at every 5 hours of intervel
@@ -117,6 +116,37 @@ public class SplashActivity extends Activity {
             Intent mainIntent = new Intent(SplashActivity.this, LanguageActivity.class);
             startActivity(mainIntent);
             finish();
+        }
+    }
+
+    private void init() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                /* Create an Intent that will start the Menu-Activity. */
+                checkRegistered();
+            }
+        }, 800);
+    }
+
+    //Language service call
+    public void callGetAllLanguage() {
+        if (Utility.isOnline(SplashActivity.this)) {
+            final ServiceHelper sh = new ServiceHelper(SplashActivity.this);
+            sh.calllanguagesService(new IServiceSuccessCallback<String>() {
+                @Override
+                public void onDone(final String callerUrl, String d, String error) {
+                    DbHelper db = new DbHelper(SplashActivity.this);
+                    List<LanguageData> data = db.getAllLanguageDataEntity();
+                    init();
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "SplashActivity: callGetAllLanguage data count: " + data.size() + "  " + data);
+                    }
+                }
+            });
+
+        } else {
+            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, SplashActivity.this);
         }
     }
 }

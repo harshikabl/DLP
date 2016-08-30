@@ -203,7 +203,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
 
         DbHelper dbHelper = new DbHelper(VerificationActivity.this);
         AccountData acData = dbHelper.getAccountData();
-        int languageId = Utility.getLanguageIdFromSharedPreferences(this).ordinal();
+        int languageId = Utility.getLanguageIdFromSharedPreferences(this);
         if (acData != null) {
             AccountServiceRequest accountServiceRequest = new AccountServiceRequest();
             accountServiceRequest.setName(acData.getName());

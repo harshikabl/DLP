@@ -256,10 +256,46 @@ public class Data {
     }
 
 
+    private String send_at;
+    private String message;
+    private String status;
+    private String custom_data;
+
+    public String getSend_at() {
+        return send_at;
+    }
+
+    public void setSend_at(String send_at) {
+        this.send_at = send_at;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCustom_data() {
+        return custom_data;
+    }
+
+    public void setCustom_data(String custom_data) {
+        this.custom_data = custom_data;
+    }
 
     @Override
     public String toString() {
-        return "ClassPojo [id = " + id + ", updated_at = " + updated_at + ", sequence = " + sequence + ", deleted_at = " + deleted_at + ", media_id = " + media_id + ", created_at = " + created_at + ", thumbnail_media_id = " + thumbnail_media_id + ", lang_resource_description = " + lang_resource_description + ", lang_resource_name = " + lang_resource_name + ", type = " + type + ", url = " + url + ", parent_id = " + parent_id + ", localFilePath = " + localFilePath + ", download_url = " + download_url + ", created_by = " + created_by + ", updated_by = " + updated_by + ", cloud_transferred = " + cloud_transferred + "]";
+        return "ClassPojo [id = " + id + ", updated_at = " + updated_at + ", sequence = " + sequence + ", deleted_at = " + deleted_at + ", media_id = " + media_id + ", created_at = " + created_at + ", thumbnail_media_id = " + thumbnail_media_id + ", lang_resource_description = " + lang_resource_description + ", lang_resource_name = " + lang_resource_name + ", type = " + type + ", url = " + url + ", parent_id = " + parent_id + ", localFilePath = " + localFilePath + ", download_url = " + download_url + ", created_by = " + created_by + ", updated_by = " + updated_by + ", cloud_transferred = " + cloud_transferred + ", send_at = " + send_at + ", message = " + message + ", status = " + status + ", custom_data = " + custom_data + "]";
     }
 }
 

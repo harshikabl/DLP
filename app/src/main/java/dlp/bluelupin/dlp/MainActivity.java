@@ -35,11 +35,14 @@ import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
 import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
+import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.IServiceManager;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Services.IServiceSuccessCallback;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
+import dlp.bluelupin.dlp.Services.ServiceHelper;
 import dlp.bluelupin.dlp.Utilities.CardReaderHelper;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DecompressZipFile;
@@ -351,15 +354,18 @@ public class MainActivity extends AppCompatActivity
         sc.getAllMedialanguageLatestContent(request, new IAsyncWorkCompletedCallback() {
             @Override
             public void onDone(String workName, boolean isComplete) {
-                Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync success result: " + isComplete);
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync success result: " + isComplete);
+                }
                 DbHelper db = new DbHelper(MainActivity.this);
                 List<Data> data = db.getAllMedialanguageLatestDataEntity();
-                Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync data count: " + data.size());
-                contentCallDone = true;
-                sendMessageIfAllCallsDone();
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync data count: " + data.size());
+                }
             }
         });
     }
+
 }
 
 

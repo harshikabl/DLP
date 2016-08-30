@@ -65,24 +65,44 @@ public class Utility {
             );
         }
     }
-
-
     //set languagae
+    public static void setLanguageIntoSharedPreferences(Context context, int id,String LanguageCode) {
+        SharedPreferences prefs = context.getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("languageId", id);
+        editor.putString("LanguageCode", LanguageCode);
+        editor.commit();
+        setLangRecreate(context, LanguageCode);
+    }
+
+    //get language id
+    public static int getLanguageIdFromSharedPreferences(Context context) {
+        int LanguageId = 0;
+        SharedPreferences prefs = context.getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE);
+        if (prefs != null) {
+            LanguageId = prefs.getInt("languageId", 1);
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "LanguageId*********" + LanguageId);
+            }
+        }
+        return LanguageId;
+    }
+   /* //set languagae
     public static void setLanguageIntoSharedPreferences(Context context, EnumLanguage language) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString("EnumLanguage", language.name()).commit();
         setLangRecreate(context, language);
-    }
+    }*/
 
     //set language into locale
-    public static void setLangRecreate(Context context, EnumLanguage language) {
+    public static void setLangRecreate(Context context,String LanguageName) {
         Configuration config = new Configuration();
-        Locale locale = new Locale(language.name());
+        Locale locale = new Locale(LanguageName);
         Locale.setDefault(locale);
         config.locale = locale;
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 
-    private void setLanguageFromSharedPreferencesOnContext(Context context) {
+  /*  private void setLanguageFromSharedPreferencesOnContext(Context context) {
         //getting language from SharedPreferences
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         Configuration config = context.getResources().getConfiguration();
@@ -94,9 +114,9 @@ public class Utility {
             config.locale = locale;
             context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
         }
-    }
+    }*/
 
-    public static EnumLanguage getLanguageIdFromSharedPreferences(Context context) {
+   /* public static EnumLanguage getLanguageIdFromSharedPreferences(Context context) {
         //getting language from SharedPreferences
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         Configuration config = context.getResources().getConfiguration();
@@ -106,7 +126,7 @@ public class Utility {
             return Enum.valueOf(EnumLanguage.class, lang);
         }
         return EnumLanguage.en;
-    }
+    }*/
 
     /**
      * @return Application's version code from the {@code PackageManager}.

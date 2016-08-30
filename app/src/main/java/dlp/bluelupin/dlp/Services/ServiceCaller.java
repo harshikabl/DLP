@@ -155,7 +155,7 @@ public class ServiceCaller {
                         Log.d(Consts.LOG_TAG, "Recursively calling next content page: " + result.getCurrent_page());
                         final ContentServiceRequest nextRequest = new ContentServiceRequest();
                         nextRequest.setPage(result.getCurrent_page() + 1);
-                        getAllContent(nextRequest, new IAsyncWorkCompletedCallback() {
+                        getAllMedialanguageLatestContent(nextRequest, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {
                                 // Log.d(Consts.LOG_TAG, "Success: Service caller getAllContent done at page: " + nextRequest.getPage());
@@ -221,5 +221,44 @@ public class ServiceCaller {
             }
         });
     }
+    //call notification service
+    public void getAllNotificationContent(final ContentServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final ServiceHelper sh = new ServiceHelper(context);
+        sh.callNotificationService(request, new IServiceSuccessCallback<ContentData>() {
+            @Override
+            public void onDone(final String callerUrl, final ContentData result, String error) {
+                Boolean success = false;
+                if (result != null) {
+                    if (request.getPage() <= result.getLast_page()) {
+                        Log.d(Consts.LOG_TAG, "Recursively calling next content page: " + result.getCurrent_page());
+                        final ContentServiceRequest nextRequest = new ContentServiceRequest();
+                        nextRequest.setPage(result.getCurrent_page() + 1);
+                        getAllNotificationContent(nextRequest, new IAsyncWorkCompletedCallback() {
+                            @Override
+                            public void onDone(String workName, boolean isComplete) {
+                                // Log.d(Consts.LOG_TAG, "Success: Service caller getAllNotification done at page: " + nextRequest.getPage());
+                                if (nextRequest.getPage() > result.getLast_page()) {
+                                    Log.d(Consts.LOG_TAG, "Content Parsed successfully till page: " + result.getCurrent_page());
+                                    workCompletedCallback.onDone("getAllNotification", true);
 
+                                } else {
+                                    // all parsed successfully; recursion complete
+                                    workCompletedCallback.onDone("getAllNotification", true);
+                                }
+                            }
+                        });
+
+                    } else {
+                        // all parsed successfully; recursion complete
+                        // Log.d(Consts.LOG_TAG, "Content Parsed successfully till page: " + result.getCurrent_page());
+                        success = true;
+                        workCompletedCallback.onDone("getAllNotification", success);
+                    }
+
+                } else {
+                    success = false;
+                }
+            }
+        });
+    }
 }

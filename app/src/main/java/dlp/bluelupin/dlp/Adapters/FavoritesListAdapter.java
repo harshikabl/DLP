@@ -69,7 +69,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
         final FavoritesData data = favoritesList.get(position);
         if (data.getLang_resource_name() != null) {
             Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
-                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+                    Utility.getLanguageIdFromSharedPreferences(context));
             if (titleResource != null) {
                 holder.chapterTitle.setText(titleResource.getContent());
             }
@@ -77,7 +77,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
 
         if (data.getLang_resource_description() != null) {
             Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
-                    Utility.getLanguageIdFromSharedPreferences(context).ordinal());
+                    Utility.getLanguageIdFromSharedPreferences(context));
             if (descriptionResource != null) {
                 holder.chapterDescription.setText(descriptionResource.getContent());
             }
