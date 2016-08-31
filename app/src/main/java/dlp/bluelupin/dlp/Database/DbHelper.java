@@ -587,7 +587,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public Data getMediaEntityById(int id) {
-        String query = "SELECT clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path  from MediaEntity WHERE clientId = " + id + " ";
+        String query = "SELECT clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path  from MediaEntity WHERE server_id = " + id + " ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -981,7 +981,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public Data getDownloadMediaEntityById(int id) {
-        String query = "SELECT clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at,Local_file_path  from DownloadMediaEntity WHERE clientId = " + id + " ";
+        String query = "SELECT clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at,Local_file_path  from DownloadMediaEntity WHERE server_id = " + id + " ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -1206,7 +1206,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //clientId , server_id  , media_id, language_id ,file_path ,url ,created_at , updated_at ,download_url ,created_by ,updated_by ,cloud_transferred
     public Data getMedialanguageLatestDataEntityById(int id) {
-        String query = "Select clientId , server_id , media_id ,language_id ,file_path , url,created_at , updated_at,download_url,created_by,updated_by,cloud_transferred  FROM MedialanguageLatestEntity WHERE clientId = " + id + " ";
+        String query = "Select clientId , server_id , media_id ,language_id ,file_path , url,created_at , updated_at,download_url,created_by,updated_by,cloud_transferred  FROM MedialanguageLatestEntity WHERE server_id = " + id + " ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 

@@ -1,9 +1,15 @@
 package dlp.bluelupin.dlp;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
@@ -118,18 +124,20 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
         TextView name = (TextView) header.findViewById(R.id.name);
         TextView email = (TextView) header.findViewById(R.id.email);
+        name.setTypeface(VodafoneExB);
+        email.setTypeface(VodafoneRg);
         AccountData accountData = dbhelper.getAccountData();
         if (accountData != null && !accountData.equals("")) {
             name.setText(accountData.getName());
             email.setText(accountData.getEmail());
         }
-
     }
 
 
@@ -183,13 +191,12 @@ public class MainActivity extends AppCompatActivity
     };
 
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.notification) {
+            //item.setIcon(R.drawable.ic_media_play);
             Intent intent = new Intent(this, NotificationsActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
@@ -229,7 +236,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.logout) {
             DbHelper dbhelper = new DbHelper(MainActivity.this);
             dbhelper.deleteAccountData();
-            Toast.makeText(MainActivity.this, "Account deleted successfully", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "You have been logged out.", Toast.LENGTH_LONG).show();
             Intent mainIntent = new Intent(MainActivity.this, LanguageActivity.class);
             startActivity(mainIntent);
             finish();

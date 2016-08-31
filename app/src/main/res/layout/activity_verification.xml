@@ -100,8 +100,8 @@
                     android:layout_marginTop="@dimen/dimValue_20"
                     android:gravity="center"
                     android:text="@string/description"
-                    android:textColor="#4a4d4e"
-                    android:textSize="@dimen/dimTextSize_20" />
+                    android:textColor="#5b5b5b"
+                    android:textSize="@dimen/dimTextSize_18" />
 
                 <LinearLayout
                     android:id="@+id/otpLayout"
@@ -118,7 +118,7 @@
                         android:gravity="center"
                         android:text="@string/otp_text"
                         android:textColor="#4a4d4e"
-                        android:textSize="@dimen/dimTextSize_20" />
+                        android:textSize="@dimen/dimTextSize_18" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -228,14 +228,14 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <TextView
+              <!--  <TextView
                     android:id="@+id/otpmsg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimValue_10"
                     android:text="@string/otp_msg"
                     android:textColor="#4a4d4e"
-                    android:textSize="@dimen/dimTextSize_16" />
+                    android:textSize="@dimen/dimTextSize_16" />-->
 
                 <LinearLayout
                     android:id="@+id/verifyLayout"
@@ -245,7 +245,7 @@
                     android:gravity="center">
 
                     <LinearLayout
-                        android:layout_width="@dimen/size_180px"
+                        android:layout_width="@dimen/size_140px"
                         android:layout_height="match_parent"
                         android:background="@drawable/done_corner_round"
                         android:gravity="center">

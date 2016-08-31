@@ -125,6 +125,7 @@ public class CourseFragment extends Fragment {
 
         DbHelper db = new DbHelper(context);
         List<Data> dataList = db.getDataEntityByParentIdAndType(null, "Course"); // first level is course
+
         if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "CourseFragment: data count: " + dataList.size());
         }

@@ -67,6 +67,8 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         Typeface materialdesignicons_font = Typeface.createFromAsset(this.getAssets(), "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
+        Typeface VodafoneLt = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneLt.ttf");
+        Typeface VodafoneRgBd = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRgBd.ttf");
 
 
         leftArrow.setTypeface(materialdesignicons_font);
@@ -79,14 +81,12 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         verify = (TextView) findViewById(R.id.verify);
         verify.setTypeface(VodafoneRg);
         verify.setOnClickListener(this);
-        otpmsg = (TextView) findViewById(R.id.otpmsg);
-        otpmsg.setTypeface(VodafoneRg);
         otpLable = (TextView) findViewById(R.id.otpLable);
-        otpLable.setTypeface(VodafoneRg);
+        otpLable.setTypeface(VodafoneExB);
         description = (TextView) findViewById(R.id.description);
-        description.setTypeface(VodafoneRg);
+        description.setTypeface(VodafoneRgBd);
         phoneNo = (TextView) findViewById(R.id.phoneNo);
-        phoneNo.setTypeface(VodafoneRg);
+        phoneNo.setTypeface(VodafoneLt);
         appName = (TextView) findViewById(R.id.appName);
         appName.setTypeface(VodafoneRg);
         oneNo = (EditText) findViewById(R.id.oneNo);

@@ -140,7 +140,7 @@ public class SplashActivity extends Activity {
                     List<LanguageData> data = db.getAllLanguageDataEntity();
                     init();
                     if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "SplashActivity: callGetAllLanguage data count: " + data.size() + "  " + data);
+                       // Log.d(Consts.LOG_TAG, "SplashActivity: callGetAllLanguage data count: " + data.size() + "  " + data);
                     }
                 }
             });

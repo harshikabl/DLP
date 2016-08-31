@@ -77,7 +77,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView android:id="@+id/nameLable"
+                    <TextView
+                        android:id="@+id/nameLable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/name"
@@ -107,7 +108,8 @@
                     android:layout_marginTop="@dimen/dimValue_30"
                     android:orientation="vertical">
 
-                    <TextView android:id="@+id/emailLable"
+                    <TextView
+                        android:id="@+id/emailLable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/email"
@@ -137,7 +139,8 @@
                     android:layout_marginTop="@dimen/dimValue_30"
                     android:orientation="vertical">
 
-                    <TextView android:id="@+id/phoneLable"
+                    <TextView
+                        android:id="@+id/phoneLable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/phone"
@@ -168,7 +171,8 @@
                     android:layout_marginTop="@dimen/dimValue_30"
                     android:orientation="vertical">
 
-                    <TextView android:id="@+id/lanLable"
+                    <TextView
+                        android:id="@+id/lanLable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/app_language"
@@ -177,9 +181,14 @@
 
                     <Spinner
                         android:id="@+id/spinner"
-                        style="@style/Widget.AppCompat.Spinner.Underlined"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content" />
+
+                    <View
+                        android:id="@+id/spinnerLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#4a4d4e" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -188,12 +197,13 @@
                     android:layout_marginTop="@dimen/dimValue_30"
                     android:orientation="vertical">
 
-                        <CheckBox android:id="@+id/autoPlay"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:text="@string/autoplay_videos"
-                            android:textColor="#4a4d4e"
-                            android:textSize="@dimen/dimTextSize_20"/>
+                    <CheckBox
+                        android:id="@+id/autoPlay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/autoplay_videos"
+                        android:textColor="#4a4d4e"
+                        android:textSize="@dimen/dimTextSize_20" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -202,7 +212,8 @@
                     android:layout_marginTop="@dimen/dimValue_30"
                     android:orientation="vertical">
 
-                    <TextView android:id="@+id/genderLable"
+                    <TextView
+                        android:id="@+id/genderLable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

@@ -121,7 +121,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         tickIcon.setText(Html.fromHtml("&#xf00c;"));
 
         spinner = (Spinner) findViewById(R.id.spinner);
-        spinner.getBackground().setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.SRC_ATOP);
+        //spinner.getBackground().setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.SRC_ATOP);
 
         /*List<String> list = new ArrayList<String>();
         list.add("English");

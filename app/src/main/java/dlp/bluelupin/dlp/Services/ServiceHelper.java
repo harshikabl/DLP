@@ -503,6 +503,10 @@ public class ServiceHelper {
     public void callNotificationService(ContentServiceRequest request, final IServiceSuccessCallback<ContentData> callback) {
         request.setApi_token(Consts.API_KEY);
 
+        int languageId = Utility.getLanguageIdFromSharedPreferences(context);
+        if (languageId != 0) {
+            request.setLanguage_id(languageId);
+        }
         Call<ContentData> cd = service.NotificationContent(request);
         final DbHelper dbhelper = new DbHelper(context);
         cd.enqueue(new Callback<ContentData>() {

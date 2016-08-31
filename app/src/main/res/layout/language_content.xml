@@ -29,11 +29,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/languageIcon"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="@dimen/dimValue_40"
             android:gravity="center"
             android:text="Choose Language"
             android:textColor="#000"
-            android:textSize="25sp"
+            android:textSize="@dimen/dimTextSize_25"
             android:textStyle="bold" />
 
         <TextView
@@ -41,33 +41,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/chooseLanguage"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/dimValue_20"
             android:gravity="center"
             android:text="Lorem ipsum dolor sit amet, consectetur dolor sit"
-            android:textColor="#000"
-            android:textSize="20sp" />
+            android:textColor="#4a4d4e"
+            android:textSize="@dimen/dimTextSize_20" />
 
         <Spinner
             android:id="@+id/spinner"
-            style="@style/Widget.AppCompat.Spinner.Underlined"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/description"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="70dp" />
+            android:layout_marginLeft="@dimen/dimValue_20"
+            android:layout_marginRight="@dimen/dimValue_20"
+            android:layout_marginTop="@dimen/dimValue_70" />
+        <View
+            android:id="@+id/spinnerLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/spinner"
+            android:layout_marginLeft="@dimen/dimValue_30"
+            android:layout_marginRight="@dimen/dimValue_25"
+            android:background="#4a4d4e" />
 
         <LinearLayout
             android:id="@+id/done_linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/spinner"
-            android:layout_marginTop="50dp"
+            android:layout_below="@+id/spinnerLine"
+            android:layout_marginTop="@dimen/dimValue_50"
             android:gravity="center">
 
             <LinearLayout
                 android:id="@+id/doneLayout"
-                android:layout_width="@dimen/size_180px"
+                android:layout_width="@dimen/size_140px"
                 android:layout_height="wrap_content"
                 android:background="@drawable/done_corner_round"
                 android:gravity="center">
@@ -79,7 +86,7 @@
                     android:gravity="center"
                     android:text="ti"
                     android:textColor="#fff"
-                    android:textSize="20sp" />
+                    android:textSize="@dimen/dimTextSize_20" />
 
                 <TextView
                     android:id="@+id/done"
@@ -89,7 +96,7 @@
                     android:padding="@dimen/dimValue_13"
                     android:text="Done"
                     android:textColor="#fff"
-                    android:textSize="22sp" />
+                    android:textSize="@dimen/dimTextSize_22" />
 
             </LinearLayout>
 

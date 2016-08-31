@@ -98,11 +98,6 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         ServiceCaller sc = new ServiceCaller(NotificationsActivity.this);
         final CustomProgressDialog customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
 
-        int languageId = Utility.getLanguageIdFromSharedPreferences(this);
-
-        if (languageId != 0) {
-            request.setLanguage_id(languageId);
-        }
         if (Utility.isOnline(this)) {
             customProgressDialog.show();
             sc.getAllNotificationContent(request, new IAsyncWorkCompletedCallback() {

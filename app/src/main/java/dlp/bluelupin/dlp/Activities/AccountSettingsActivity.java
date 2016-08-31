@@ -116,7 +116,8 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         enterPhone = (EditText) findViewById(R.id.enterPhone);
 
         spinner = (Spinner) findViewById(R.id.spinner);
-        spinner.getBackground().setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.SRC_ATOP);
+       // style="@style/Widget.AppCompat.Spinner.Underlined"
+        spinner.getBackground().setColorFilter(Color.parseColor("#4a4d4e"), PorterDuff.Mode.SRC_ATOP);
 
 
         DbHelper db = new DbHelper(AccountSettingsActivity.this);
@@ -167,7 +168,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
                         Toast.makeText(AccountSettingsActivity.this, "OTP has been sent to the provided Phone Number.", Toast.LENGTH_LONG).show();
                         customProgressDialog.dismiss();
                     } else {
-                        Utility.alertForErrorMessage("Account not created", AccountSettingsActivity.this);
+                        Utility.alertForErrorMessage("This account is not yet created.", AccountSettingsActivity.this);
                         customProgressDialog.dismiss();
                     }
 
