@@ -179,9 +179,6 @@ public class BackgroundSyncService extends IntentService {
                     }
                 }
             });
-
-        } else {
-            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, BackgroundSyncService.this);
         }
     }
 }

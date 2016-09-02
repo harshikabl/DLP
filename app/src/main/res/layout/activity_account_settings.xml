@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="#fff"
     tools:context="dlp.bluelupin.dlp.MainActivity">
 
     <RelativeLayout
@@ -69,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimValue_16"
                 android:layout_marginRight="@dimen/dimValue_16"
-                android:layout_marginTop="@dimen/dimValue_30"
+                android:layout_marginTop="@dimen/dimValue_20"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -83,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/name"
                         android:textColor="#4a4d4e"
-                        android:textSize="@dimen/dimTextSize_20" />
+                        android:textSize="@dimen/dimTextSize_18" />
 
                     <EditText
                         android:id="@+id/enterName"
@@ -114,7 +115,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/email"
                         android:textColor="#4a4d4e"
-                        android:textSize="@dimen/dimTextSize_20" />
+                        android:textSize="@dimen/dimTextSize_18" />
 
                     <EditText
                         android:id="@+id/enterEmail"
@@ -145,7 +146,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/phone"
                         android:textColor="#4a4d4e"
-                        android:textSize="@dimen/dimTextSize_20" />
+                        android:textSize="@dimen/dimTextSize_18" />
 
                     <EditText
                         android:id="@+id/enterPhone"
@@ -177,7 +178,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/app_language"
                         android:textColor="#4a4d4e"
-                        android:textSize="@dimen/dimTextSize_20" />
+                        android:textSize="@dimen/dimTextSize_18" />
 
                     <Spinner
                         android:id="@+id/spinner"
@@ -188,13 +189,13 @@
                         android:id="@+id/spinnerLine"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#4a4d4e" />
+                        android:background="#929495" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimValue_30"
+                    android:layout_marginTop="@dimen/dimValue_25"
                     android:orientation="vertical">
 
                     <CheckBox
@@ -203,13 +204,13 @@
                         android:layout_height="match_parent"
                         android:text="@string/autoplay_videos"
                         android:textColor="#4a4d4e"
-                        android:textSize="@dimen/dimTextSize_20" />
+                        android:textSize="@dimen/dimTextSize_18" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimValue_30"
+                    android:layout_marginTop="@dimen/dimValue_25"
                     android:orientation="vertical">
 
                     <TextView
@@ -219,7 +220,7 @@
                         android:layout_weight="1"
                         android:text="@string/gender"
                         android:textColor="#4a4d4e"
-                        android:textSize="@dimen/dimTextSize_20" />
+                        android:textSize="@dimen/dimTextSize_18" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -235,25 +236,29 @@
 
                             <RadioButton
                                 android:id="@+id/radioM"
+                                style="@style/radionbutton"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
                                 android:layout_weight="0.4"
                                 android:checked="true"
+                                android:padding="@dimen/dimValue_10"
                                 android:text="@string/male"
                                 android:textColor="#4a4d4e"
-                                android:textSize="@dimen/dimTextSize_20" />
+                                android:textSize="@dimen/dimTextSize_18" />
 
                             <RadioButton
                                 android:id="@+id/radioF"
+                                style="@style/radionbutton"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="right"
                                 android:layout_weight="0.6"
+                                android:padding="@dimen/dimValue_10"
                                 android:checked="false"
                                 android:text="@string/female"
                                 android:textColor="#4a4d4e"
-                                android:textSize="@dimen/dimTextSize_20" />
+                                android:textSize="@dimen/dimTextSize_18" />
                         </RadioGroup>
 
                     </LinearLayout>
@@ -268,6 +273,7 @@
                             android:id="@+id/cancel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/dimValue_10"
                             android:layout_marginRight="@dimen/dimValue_10"
                             android:layout_weight="0.5"
                             android:background="@drawable/cancel_corner_round"
@@ -282,6 +288,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/dimValue_10"
+                            android:layout_marginRight="@dimen/dimValue_10"
                             android:layout_weight="0.5"
                             android:background="@drawable/done_corner_round"
                             android:gravity="center"
@@ -295,7 +302,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="@dimen/dimValue_40"
                     android:background="#00000000" />
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="#fff"
     tools:context="dlp.bluelupin.dlp.MainActivity">
 
     <RelativeLayout
@@ -69,7 +70,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dimValue_20"
                 android:layout_marginRight="@dimen/dimValue_20"
-                android:layout_marginTop="@dimen/dimValue_30"
+                android:layout_marginTop="@dimen/dimValue_20"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -87,7 +88,7 @@
                     android:id="@+id/phoneNo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="@dimen/dimValue_20"
                     android:gravity="center"
                     android:text="+91 1234567890"
                     android:textColor="#4a4d4e"
@@ -101,7 +102,7 @@
                     android:gravity="center"
                     android:text="@string/description"
                     android:textColor="#5b5b5b"
-                    android:textSize="@dimen/dimTextSize_18" />
+                    android:textSize="@dimen/dimTextSize_16" />
 
                 <LinearLayout
                     android:id="@+id/otpLayout"
@@ -245,7 +246,7 @@
                     android:gravity="center">
 
                     <LinearLayout
-                        android:layout_width="@dimen/size_140px"
+                        android:layout_width="@dimen/size_130px"
                         android:layout_height="match_parent"
                         android:background="@drawable/done_corner_round"
                         android:gravity="center">
@@ -275,10 +276,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:padding="10dp"
+                        android:padding="@dimen/dimValue_10"
                         android:text="@string/try_otp"
                         android:textColor="#4a4d4e"
-                        android:textSize="@dimen/dimTextSize_18" />
+                        android:textSize="@dimen/dimTextSize_16" />
 
                     <TextView
                         android:id="@+id/resend_otp"
@@ -288,13 +289,13 @@
                         android:gravity="left"
                         android:text="@string/resend_otp"
                         android:textColor="#e60000"
-                        android:textSize="@dimen/dimTextSize_18"
+                        android:textSize="@dimen/dimTextSize_16"
                         android:textStyle="bold" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="fill_parent"
-                    android:layout_height="100dp" />
+                    android:layout_height="10dp" />
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </RelativeLayout>

@@ -65,7 +65,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_ResourceEntity_TABLE);
 
         String CREATE_MediaEntity_TABLE = "CREATE TABLE MediaEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, type TEXT, url TEXT, file_path TEXT, language_id INTEGER , created_at DATETIME, updated_at DATETIME, deleted_at DATETIME,Local_file_path TEXT)";
-        //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at
+        //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at,Local_file_path
         db.execSQL(CREATE_MediaEntity_TABLE);
 
         String CREATE_AccountEntity_TABLE = "CREATE TABLE AccountEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, email TEXT, phone TEXT, preferred_language_id INTEGER, role TEXT, api_token TEXT, otp INTEGER, isVerified INTEGER)";

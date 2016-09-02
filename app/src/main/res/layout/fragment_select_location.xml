@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="top|center"
     android:orientation="vertical"
+    android:background="#fff"
     tools:context="dlp.bluelupin.dlp.Fragments.SelectLocationFragment">
 
     <LinearLayout

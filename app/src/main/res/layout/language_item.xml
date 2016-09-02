@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#000"
-        android:padding="@dimen/dimValue_10"
+        android:layout_marginBottom="@dimen/dimValue_10"
+        android:layout_marginTop="@dimen/dimValue_10"
         android:textSize="@dimen/dimTextSize_18"
         android:text="English" />
    <!-- <View

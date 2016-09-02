@@ -109,7 +109,7 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
                 broadcastIntent.putExtra("mediaId",data.getId());
                 LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);*/
                 final ServiceHelper sh = new ServiceHelper(context);
-                Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
+                Data media = dbHelper.getMediaEntityById(data.getMedia_id());
                 if (media != null) {
                     String url = media.getUrl();
                     sh.callDownloadDeleteRequest(url);

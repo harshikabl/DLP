@@ -150,7 +150,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
     private void navigateBasedOnMediaType(Data media) {
         String url;
         switch (media.getType()) {
-            case "video":
+            case "Video":
                 url = media.getUrl();
                 if (url != null && !url.equals("")) {
                     Intent intent = new Intent(context, VideoPlayerActivity.class);
@@ -173,12 +173,13 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
 
     private FrameLayout makeImage(String url, String titleText) {
         FrameLayout frameLayout = new FrameLayout(context);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
         layoutParams.setMargins(0, 10, 0, 10);
         frameLayout.setLayoutParams(layoutParams);
         ImageView dynamicImageView = new ImageView(context);
-        dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        dynamicImageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
         new DownloadImageTask(dynamicImageView)
                 .execute(url);
