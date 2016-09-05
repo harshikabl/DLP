@@ -65,14 +65,7 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         title.setTypeface(VodafoneExB);
 
         callNotificationService();
-
-        notificationRecyclerView = (RecyclerView) findViewById(R.id.notificationRecyclerView);
-        notificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        notificationRecyclerView.setHasFixedSize(true);
-        //notificationRecyclerView.setNestedScrollingEnabled(false);
-
     }
-
     @Override
     public void onClick(View v) {
 
@@ -119,6 +112,10 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         DbHelper db = new DbHelper(NotificationsActivity.this);
         List<Data> data = db.getAllNotificationDataEntity();
         if (data != null) {
+            notificationRecyclerView = (RecyclerView) findViewById(R.id.notificationRecyclerView);
+            notificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            notificationRecyclerView.setHasFixedSize(true);
+            //notificationRecyclerView.setNestedScrollingEnabled(false);
             Log.d(Consts.LOG_TAG, "NotificationActivity: data count: " + data.size());
             NotificationAdapter notificationsAdapter = new NotificationAdapter(NotificationsActivity.this, data);
             notificationRecyclerView.setAdapter(notificationsAdapter);

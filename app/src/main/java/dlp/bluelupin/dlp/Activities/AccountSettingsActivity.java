@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -50,11 +51,13 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
     private TextView chooseLanguage;
     private Spinner spinner;
     private TextView title, leftArrow;
-    private TextView emailLable, nameLable, phoneLable, lanLable, genderLable, cancel, save;
+    private TextView emailLable, nameLable, phoneLable, lanLable, genderLable, cancel, save, autoPlayCheck;
 
     private EditText enterName, enterEmail, enterPhone;
     String name_string, pnone_no_string, email_string;
     List<LanguageData> data;
+    private Boolean checkFlag = false;
+    private ImageView autoPlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,14 +101,17 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         cancel = (TextView) findViewById(R.id.cancel);
         save = (TextView) findViewById(R.id.save);
         save.setOnClickListener(this);
-        CheckBox autoPlay = (CheckBox) findViewById(R.id.autoPlay);
+        autoPlayCheck = (TextView) findViewById(R.id.autoPlayCheck);
+        autoPlay = (ImageView) findViewById(R.id.autoPlay);
+        autoPlay.setOnClickListener(this);
+        autoPlay.setImageResource(R.drawable.checkbox);
         title.setTypeface(VodafoneExB);
-        nameLable.setTypeface(VodafoneRg);
-        emailLable.setTypeface(VodafoneRg);
-        phoneLable.setTypeface(VodafoneRg);
-        lanLable.setTypeface(VodafoneRg);
-        autoPlay.setTypeface(VodafoneRg);
-        genderLable.setTypeface(VodafoneRg);
+        nameLable.setTypeface(VodafoneExB);
+        emailLable.setTypeface(VodafoneExB);
+        phoneLable.setTypeface(VodafoneExB);
+        lanLable.setTypeface(VodafoneExB);
+        autoPlayCheck.setTypeface(VodafoneRg);
+        genderLable.setTypeface(VodafoneExB);
         cancel.setTypeface(VodafoneRg);
         save.setTypeface(VodafoneRg);
         male.setTypeface(VodafoneRg);
@@ -116,7 +122,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         enterPhone = (EditText) findViewById(R.id.enterPhone);
 
         spinner = (Spinner) findViewById(R.id.spinner);
-       // style="@style/Widget.AppCompat.Spinner.Underlined"
+        // style="@style/Widget.AppCompat.Spinner.Underlined"
         spinner.getBackground().setColorFilter(Color.parseColor("#4a4d4e"), PorterDuff.Mode.SRC_ATOP);
 
 
@@ -145,7 +151,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
     private void callCreateAccountService() {
         final CustomProgressDialog customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
 
-        int languageId=Utility.getLanguageIdFromSharedPreferences(this);
+        int languageId = Utility.getLanguageIdFromSharedPreferences(this);
 
         AccountServiceRequest accountServiceRequest = new AccountServiceRequest();
         accountServiceRequest.setName(name_string);
@@ -181,7 +187,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
 
     private void setLanguage(int langpos) {
         if (data != null) {
-            String StringCode=data.get(langpos).getCode();
+            String StringCode = data.get(langpos).getCode();
             String[] parts = StringCode.split("-");
             String code = parts[0];
             String part2 = parts[1];
@@ -194,6 +200,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         super.onBackPressed();
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
+
     //to hide keyboard from otside touch
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -211,6 +218,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         }
         return super.dispatchTouchEvent(event);
     }
+
     // ----validation -----
     private boolean isValidate() {
         String numberRegex = "[0-9]+";
@@ -256,6 +264,15 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
                 if (isValidate()) {
                     callCreateAccountService();
                     v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_animation));//onclick animation
+                }
+                break;
+            case R.id.autoPlay:
+                if (checkFlag) {
+                    checkFlag = false;
+                    autoPlay.setImageResource(R.drawable.checkbox);
+                } else {
+                    checkFlag = true;
+                    autoPlay.setImageResource(R.drawable.checkboxchecked);
                 }
                 break;
         }
