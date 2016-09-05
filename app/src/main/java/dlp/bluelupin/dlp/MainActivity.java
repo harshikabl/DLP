@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         email.setTypeface(VodafoneRg);
         logOut.setTypeface(custom_fontawesome);
         logOut.setText(Html.fromHtml("&#xf08b;"));
-        
+
         AccountData accountData = dbhelper.getAccountData();
         if (accountData != null && !accountData.equals("")) {
             name.setText(accountData.getName());
@@ -165,38 +165,33 @@ public class MainActivity extends AppCompatActivity {
         setMenuLayout();
     }
 
+    //set slider item value
     public void setMenuLayout() {
         Typeface VodafoneRgBd = Typeface.createFromAsset(getAssets(), "fonts/VodafoneRgBd.ttf");
-        TextView userSetting = (TextView) findViewById(R.id.userSetting);
-        userSetting.setTypeface(VodafoneRgBd);
 
         ListView menuList = (ListView) findViewById(R.id.lst_menu_items);
-        ListView menuFirstList = (ListView) findViewById(R.id.lst_menu_items_first);
-        List<String> menuTitleList = new ArrayList<String>();
-        List<String> menuFirstTitleList = new ArrayList<String>();
-        menuFirstTitleList.add("Notifications");
-        menuFirstTitleList.add("Favorites");
-        menuFirstTitleList.add("Downloads");
-        menuTitleList.add("Profile");
-        menuTitleList.add("Change Language");
-        menuTitleList.add("Change Downloads Folder");
-        menuTitleList.add("Terms of use");
-        menuTitleList.add("About Us");
+        menuList.setDivider(null);
+        List<String> itemList = new ArrayList<String>();
+        itemList.add("Notifications");
+        itemList.add("Favorites");
+        itemList.add("Downloads");
+        itemList.add("Profile");
+        itemList.add("Change Language");
+        itemList.add("Change Downloads Folder");
+        itemList.add("Terms of use");
+        itemList.add("About Us");
 
         List<String> menuIconList = new ArrayList<String>();
-        List<String> menuFirstIconList = new ArrayList<String>();
-        menuFirstIconList.add("f09c");
-        menuFirstIconList.add("f4ce");
-        menuFirstIconList.add("f1da");
+        menuIconList.add("f09c");
+        menuIconList.add("f4ce");
+        menuIconList.add("f1da");
         menuIconList.add("f631");
         menuIconList.add("f493");
         menuIconList.add("f1da");
         menuIconList.add("f219");
         menuIconList.add("f2fd");
-        NavigationMenuAdapter navigationMenuAdapter = new NavigationMenuAdapter(MainActivity.this, menuTitleList, menuIconList);
+        NavigationMenuAdapter navigationMenuAdapter = new NavigationMenuAdapter(MainActivity.this, itemList, menuIconList);
         menuList.setAdapter(navigationMenuAdapter);
-        NavigationMenuAdapter navigationMenuFirstAdapter = new NavigationMenuAdapter(MainActivity.this, menuFirstTitleList, menuFirstIconList);
-        menuFirstList.setAdapter(navigationMenuFirstAdapter);
     }
 
     private void setUpCourseFragment() {

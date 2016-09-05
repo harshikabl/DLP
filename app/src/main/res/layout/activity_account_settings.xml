@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="#fff"
+    android:fitsSystemWindows="true"
     tools:context="dlp.bluelupin.dlp.MainActivity">
 
     <RelativeLayout
@@ -196,12 +196,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimValue_25"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <CheckBox
+                    <ImageView
                         android:id="@+id/autoPlay"
+                        android:layout_width="@dimen/size_20px"
+                        android:layout_height="@dimen/size_20px" />
+
+                    <TextView
+                        android:id="@+id/autoPlayCheck"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimValue_10"
                         android:text="@string/autoplay_videos"
                         android:textColor="#4a4d4e"
                         android:textSize="@dimen/dimTextSize_18" />
@@ -254,8 +260,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="right"
                                 android:layout_weight="0.6"
-                                android:padding="@dimen/dimValue_10"
                                 android:checked="false"
+                                android:padding="@dimen/dimValue_10"
                                 android:text="@string/female"
                                 android:textColor="#4a4d4e"
                                 android:textSize="@dimen/dimTextSize_18" />

@@ -45,49 +45,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.4"
-                android:background="#fff"
-                android:orientation="vertical">
-
-                <ListView
-                    android:id="@+id/lst_menu_items_first"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimValue_16"
-                    android:background="#fff" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.1"
-                android:background="#fff"
-                android:orientation="vertical">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@+id/spinner"
-                    android:background="#929495" />
-
-                <TextView
-                    android:id="@+id/userSetting"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/dimValue_10"
-                    android:text="User Settings"
-                    android:textColor="#4a4d4e"
-                    android:textSize="@dimen/dimTextSize_18" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/dimValue_5"
-                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="#fff"
                 android:orientation="vertical">
 
@@ -95,8 +54,36 @@
                     android:id="@+id/lst_menu_items"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimValue_16"
                     android:background="#fff" />
+
             </LinearLayout>
+
+            <!-- <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="0dp"
+                 android:layout_weight="0.1"
+                 android:background="#fff"
+                 android:orientation="vertical">
+
+                 <View
+                     android:layout_width="match_parent"
+                     android:layout_height="1dp"
+                     android:layout_below="@+id/spinner"
+                     android:background="#929495" />
+
+                 <TextView
+                     android:id="@+id/userSetting"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:padding="@dimen/dimValue_10"
+                     android:text="User Settings"
+                     android:textColor="#4a4d4e"
+                     android:textSize="@dimen/dimTextSize_18" />
+
+             </LinearLayout>-->
+
+
         </LinearLayout>
     </android.support.design.widget.NavigationView>
 

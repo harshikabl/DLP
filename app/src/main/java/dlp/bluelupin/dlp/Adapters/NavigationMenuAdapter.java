@@ -78,7 +78,8 @@ public class NavigationMenuAdapter extends BaseAdapter {
             Typeface materialdesignicons_font = Typeface.createFromAsset(mContext.getAssets(), "fonts/materialdesignicons-webfont.otf");
             Typeface custom_fontawesome = Typeface.createFromAsset(mContext.getAssets(), "fonts/fontawesome-webfont.ttf");
             Typeface VodafoneRgBd = Typeface.createFromAsset(mContext.getAssets(), "fonts/VodafoneRgBd.ttf");
-            holder.menuTitel.setTypeface(VodafoneRgBd);
+            Typeface VodafoneRg = Typeface.createFromAsset(mContext.getAssets(), "fonts/VodafoneRg.ttf");
+            holder.menuTitel.setTypeface(VodafoneRg);
             holder.menuIcon.setTypeface(materialdesignicons_font);
             convertView.setTag(holder);
         } else {

@@ -221,6 +221,7 @@ public class ServiceCaller {
             }
         });
     }
+
     //call notification service
     public void getAllNotificationContent(final ContentServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
         final ServiceHelper sh = new ServiceHelper(context);
