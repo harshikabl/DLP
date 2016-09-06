@@ -2,16 +2,23 @@ package dlp.bluelupin.dlp;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -146,7 +153,35 @@ public class SplashActivity extends Activity {
             });
 
         } else {
-            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, SplashActivity.this);
+            alertForErrorMessage(Consts.OFFLINE_MESSAGE, SplashActivity.this);
         }
+    }
+
+    //alert for error message
+    public  void alertForErrorMessage(String errorMessage, Context mContext) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        Typeface VodafoneExB = Typeface.createFromAsset(mContext.getAssets(), "fonts/VodafoneExB.TTF");
+        final AlertDialog alert = builder.create();
+        alert.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
+        View view = alert.getLayoutInflater().inflate(R.layout.custom_error_alert, null);
+        TextView title = (TextView) view.findViewById(R.id.title);
+        title.setTypeface(VodafoneExB);
+        TextView ok = (TextView) view.findViewById(R.id.Ok);
+        ok.setTypeface(VodafoneExB);
+        LinearLayout layout_titleBar = (LinearLayout) view.findViewById(R.id.alert_layout_titleBar);
+        View divider = (View) view.findViewById(R.id.divider);
+        GradientDrawable drawable = (GradientDrawable) ok.getBackground();
+        drawable.setStroke(5, Color.parseColor("#e60000"));// set stroke width and stroke color
+        drawable.setColor(Color.parseColor("#e60000")); //
+        title.setText(errorMessage);
+        alert.setCustomTitle(view);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+                init();
+            }
+        });
+        alert.show();
     }
 }

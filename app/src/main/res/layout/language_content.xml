@@ -12,7 +12,7 @@
         <View
             android:id="@+id/topSpece"
             android:layout_width="match_parent"
-            android:layout_height="70dp" />
+            android:layout_height="@dimen/dimValue_50" />
 
         <TextView
             android:id="@+id/languageIcon"
@@ -33,7 +33,7 @@
             android:gravity="center"
             android:text="Choose Language"
             android:textColor="#000"
-            android:textSize="@dimen/dimTextSize_25"
+            android:textSize="@dimen/dimTextSize_20"
             android:textStyle="bold" />
 
         <TextView
@@ -42,10 +42,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/chooseLanguage"
             android:layout_marginTop="@dimen/dimValue_20"
+            android:layout_marginRight="@dimen/dimValue_20"
+            android:layout_marginLeft="@dimen/dimValue_20"
             android:gravity="center"
             android:text="Lorem ipsum dolor sit amet, consectetur dolor sit"
             android:textColor="#4a4d4e"
-            android:textSize="@dimen/dimTextSize_20" />
+            android:textSize="@dimen/dimTextSize_16" />
 
         <Spinner
             android:id="@+id/spinner"
@@ -54,13 +56,13 @@
             android:layout_below="@+id/description"
             android:layout_marginLeft="@dimen/dimValue_20"
             android:layout_marginRight="@dimen/dimValue_20"
-            android:layout_marginTop="@dimen/dimValue_70" />
+            android:layout_marginTop="@dimen/dimValue_50" />
         <View
             android:id="@+id/spinnerLine"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/spinner"
-            android:layout_marginLeft="@dimen/dimValue_30"
+            android:layout_marginLeft="@dimen/dimValue_20"
             android:layout_marginRight="@dimen/dimValue_25"
             android:background="#4a4d4e" />
 
@@ -74,7 +76,7 @@
 
             <LinearLayout
                 android:id="@+id/doneLayout"
-                android:layout_width="@dimen/size_140px"
+                android:layout_width="@dimen/size_130px"
                 android:layout_height="wrap_content"
                 android:background="@drawable/done_corner_round"
                 android:gravity="center">
@@ -104,7 +106,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/dimValue_10"
             android:layout_below="@+id/done_linear"
             android:background="#00000000" />
 

@@ -277,10 +277,8 @@ public class ServiceHelper {
 
     //Otp verification service
     public void callOtpVerificationService(OtpVerificationServiceRequest request, final IServiceSuccessCallback<OtpData> callback) {
-        //request.setApi_token(Consts.API_KEY);
         Log.d(Consts.LOG_TAG, "payload***" + request);
         Call<OtpData> ac = service.otpVerify(request);
-        final DbHelper dbhelper = new DbHelper(context);
         ac.enqueue(new Callback<OtpData>() {
             @Override
             public void onResponse(Call<OtpData> call, Response<OtpData> response) {
@@ -490,6 +488,7 @@ public class ServiceHelper {
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<List<LanguageData>> call, Throwable t) {
                 if (Consts.IS_DEBUG_LOG) {

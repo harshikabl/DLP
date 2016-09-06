@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="#fff"
     tools:context="dlp.bluelupin.dlp.MainActivity">
 
     <RelativeLayout
@@ -33,11 +34,12 @@
                         android:id="@+id/logoLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/dimValue_5"
+                        android:layout_marginTop="@dimen/dimValue_5"
+                        android:layout_marginBottom="@dimen/dimValue_5"
                         android:gravity="center">
 
                         <ImageView
-                            android:layout_width="50dp"
+                            android:layout_width="40dp"
                             android:layout_height="wrap_content"
                             android:src="@drawable/hihlogo" />
                     </LinearLayout>
@@ -46,7 +48,7 @@
                         android:id="@+id/title"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/dimValue_10"
+                        android:layout_marginLeft="@dimen/dimValue_16"
                         android:gravity="left|center"
                         android:text="Select Language"
                         android:textColor="#fff"

@@ -57,12 +57,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
         holder.chapterDescription.setTypeface(VodafoneRg);
 
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
-        holder.starIcon.setTypeface(materialdesignicons_font);
-        holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
-        holder.favorite.setTypeface(VodafoneExB);
-        holder.download.setTypeface(VodafoneExB);
-        holder.downloadIcon.setTypeface(materialdesignicons_font);
-        holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
+        holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
 
 
         final DbHelper dbHelper = new DbHelper(context);
@@ -144,7 +139,6 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
         }
 
 
-
         isFavorites(data, holder);//set favorites icon
         holder.starIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,15 +183,12 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
         FavoritesData favoritesData = dbHelper.getFavoritesData(data.getId());
         if (favoritesData != null) {
             if (favoritesData.getFavoritesFlag().equals("1")) {
-                holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
-                holder.starIcon.setTextColor(Color.parseColor("#e60000"));
+                holder.starIcon.setImageResource(R.drawable.markfav);
             } else {
-                holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
-                holder.starIcon.setTextColor(Color.parseColor("#000000"));
+                holder.starIcon.setImageResource(R.drawable.markedfav);
             }
         } else {
-            holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
-            holder.starIcon.setTextColor(Color.parseColor("#000000"));
+            holder.starIcon.setImageResource(R.drawable.markedfav);
         }
     }
 }

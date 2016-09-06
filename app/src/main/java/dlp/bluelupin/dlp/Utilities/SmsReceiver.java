@@ -1,21 +1,35 @@
 package dlp.bluelupin.dlp.Utilities;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import android.widget.Toast;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.MainActivity;
+import dlp.bluelupin.dlp.Models.AccountData;
+import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
+import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
+import dlp.bluelupin.dlp.Services.ServiceCaller;
 
 /**
  * Created by Neeraj on 7/29/2016.
  */
 public class SmsReceiver extends BroadcastReceiver {
+    Context mContext;
+
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        mContext = context;
         final Bundle bundle = intent.getExtras();
         try {
             if (bundle != null) {
@@ -39,9 +53,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     if (Consts.IS_DEBUG_LOG) {
                         Log.d(Consts.LOG_TAG, "OTP received: " + verificationCode);
                     }
-                    Intent serviceIntent = new Intent(context, OtpService.class);
-                    serviceIntent.putExtra("otp", verificationCode);
-                    context.startService(serviceIntent);
+                    callOTPVerificationService(verificationCode);
                 }
             }
         } catch (Exception e) {
@@ -58,15 +70,73 @@ public class SmsReceiver extends BroadcastReceiver {
      */
     private String getVerificationCode(String message) {
         String code = null;
-        int index = message.indexOf("is");
-
-        if (index != -1) {
-            int start = index + 3;
-            int length = 6;
-            code = message.substring(start, start + length);
-            return code;
+        Pattern digitPatternRegex = Pattern.compile("\\d{6}");
+        Matcher matcher = digitPatternRegex.matcher(message);
+        while (matcher.find()) {
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "code: " + matcher.group(0));
+            }
+            code = matcher.group(0);
         }
 
         return code;
     }
+
+    //call OTP verification service
+    private void callOTPVerificationService(String otp) {
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, " otp*****   " + otp);
+        }
+        OtpVerificationServiceRequest otpServiceRequest = new OtpVerificationServiceRequest();
+        DbHelper dbHelper = new DbHelper(mContext);
+        AccountData accountData = dbHelper.getAccountData();
+        if (accountData != null) {
+            if (accountData.getApi_token() != null) {
+                otpServiceRequest.setApi_token(accountData.getApi_token());
+            }
+            otpServiceRequest.setOtp(otp);
+            if (Utility.isOnline(mContext)) {
+                final DbHelper dbhelper = new DbHelper(mContext);
+                ServiceCaller sc = new ServiceCaller(mContext);
+                sc.OtpVerification(otpServiceRequest, new IAsyncWorkCompletedCallback() {
+                    @Override
+                    public void onDone(String message, boolean isComplete) {
+                        int serverId = Utility.getUserServerIdFromSharedPreferences(mContext);
+                        AccountData accountData = new AccountData();
+                        if (isComplete) {
+                            accountData.setId(serverId);
+                            accountData.setIsVerified(1);
+                            //update account verified for check account verified or not
+                            dbhelper.updateAccountDataVerified(accountData);
+                            if (Consts.IS_DEBUG_LOG) {
+                                Log.d(Consts.LOG_TAG, " callOTPVerificationService success result: " + isComplete);
+                            }
+                            Intent intentOtp = new Intent(mContext, MainActivity.class);
+                            intentOtp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            mContext.startActivity(intentOtp);
+                            //stopReceiver(mContext);
+                            Toast.makeText(mContext, "You are registered successfully.", Toast.LENGTH_LONG).show();
+                        } else {
+                            accountData.setId(serverId);
+                            accountData.setIsVerified(0);
+                            //update account verified for check account verified or not
+                            dbhelper.updateAccountDataVerified(accountData);
+                            Toast.makeText(mContext, "Please enter a valid OTP.", Toast.LENGTH_LONG).show();
+                            //Utility.alertForErrorMessage("Please enter a valid OTP.", mContext);
+                        }
+                    }
+                });
+            } else {
+                Toast.makeText(mContext, Consts.OFFLINE_MESSAGE, Toast.LENGTH_LONG).show();
+                //Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, mContext);
+            }
+        }
+    }
+
+    /*public void stopReceiver(Context mContext) {
+        PackageManager pm = mContext.getPackageManager();
+        ComponentName componentName = new ComponentName(mContext, SmsReceiver.class);
+        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+    }*/
 }

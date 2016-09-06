@@ -25,13 +25,14 @@ import android.widget.Toast;
 
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.AccountServiceRequest;
+import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
-import dlp.bluelupin.dlp.Utilities.OtpService;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -185,9 +186,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
             case R.id.verify:
                 if (isValidate()) {
                     String otp = one_string + two_string + three_string + four_string + five_string + six_string;
-                    Intent otpIntent = new Intent(VerificationActivity.this, OtpService.class);
-                    otpIntent.putExtra("otp", otp);
-                    startService(otpIntent);
+                    callOTPVerificationService(otp);
                 }
                 v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click_animation));//onclick animation
                 break;
@@ -196,7 +195,54 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
                 break;
         }
     }
-
+    //call OTP verification service
+    private void callOTPVerificationService(String otp) {
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, " otp*****   " + otp);
+        }
+        OtpVerificationServiceRequest otpServiceRequest = new OtpVerificationServiceRequest();
+        DbHelper dbHelper = new DbHelper(VerificationActivity.this);
+        AccountData accountData = dbHelper.getAccountData();
+        if (accountData != null) {
+            if (accountData.getApi_token() != null) {
+                otpServiceRequest.setApi_token(accountData.getApi_token());
+            }
+            otpServiceRequest.setOtp(otp);
+            if (Utility.isOnline(this)) {
+                final DbHelper dbhelper = new DbHelper(VerificationActivity.this);
+                ServiceCaller sc = new ServiceCaller(VerificationActivity.this);
+                sc.OtpVerification(otpServiceRequest, new IAsyncWorkCompletedCallback() {
+                    @Override
+                    public void onDone(String message, boolean isComplete) {
+                        int serverId = Utility.getUserServerIdFromSharedPreferences(VerificationActivity.this);
+                        AccountData accountData = new AccountData();
+                        if (isComplete) {
+                            accountData.setId(serverId);
+                            accountData.setIsVerified(1);
+                            //update account verified for check account verified or not
+                            dbhelper.updateAccountDataVerified(accountData);
+                            if (Consts.IS_DEBUG_LOG) {
+                                Log.d(Consts.LOG_TAG, " callOTPVerificationService success result: " + isComplete);
+                            }
+                            Intent intentOtp = new Intent(VerificationActivity.this, MainActivity.class);
+                            intentOtp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intentOtp);
+                            Toast.makeText(VerificationActivity.this, "You are registered successfully.", Toast.LENGTH_LONG).show();
+                        } else {
+                            accountData.setId(serverId);
+                            accountData.setIsVerified(0);
+                            //update account verified for check account verified or not
+                            dbhelper.updateAccountDataVerified(accountData);
+                            //Toast.makeText(VerificationActivity.this, "Please enter a valid OTP.", Toast.LENGTH_LONG).show();
+                            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
+                        }
+                    }
+                });
+            } else {
+                Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, VerificationActivity.this);
+            }
+        }
+    }
     //call resend OTP service
     private void callResendOtpService() {
         final CustomProgressDialog customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);

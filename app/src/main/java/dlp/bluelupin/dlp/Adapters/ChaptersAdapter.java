@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +65,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         holder.chapterTitle.setTypeface(VodafoneExB);
         holder.chapterDescription.setTypeface(VodafoneRg);
 
+        holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
         holder.starIcon.setTypeface(materialdesignicons_font);
         holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
@@ -218,7 +218,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
     }
 
     //set favorites
-    private void setFavorites(Data data) {
+    private void setFavoritesAfterClick(Data data) {
         DbHelper dbHelper = new DbHelper(context);
         FavoritesData favoritesData = dbHelper.getFavoritesData(data.getId());
         FavoritesData favoData = new FavoritesData();
@@ -244,15 +244,16 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         FavoritesData favoritesData = dbHelper.getFavoritesData(data.getId());
         if (favoritesData != null) {
             if (favoritesData.getFavoritesFlag().equals("1")) {
-                holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
-                holder.starIcon.setTextColor(Color.parseColor("#e60000"));
+                //holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
+                //holder.starIcon.setTextColor(Color.parseColor("#e60000"));
+                holder.starIcon.setImageResource(R.drawable.markfav);
             } else {
-                holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
-                holder.starIcon.setTextColor(Color.parseColor("#000000"));
+                //holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
+                //holder.starIcon.setTextColor(Color.parseColor("#000000"));
+                holder.starIcon.setImageResource(R.drawable.markedfav);
             }
         } else {
-            holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
-            holder.starIcon.setTextColor(Color.parseColor("#000000"));
+            holder.starIcon.setImageResource(R.drawable.markedfav);
         }
     }
 }

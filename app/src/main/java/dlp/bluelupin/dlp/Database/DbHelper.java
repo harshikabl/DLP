@@ -65,7 +65,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at
         db.execSQL(CREATE_ResourceEntity_TABLE);
 
-        String CREATE_MediaEntity_TABLE = "CREATE TABLE MediaEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, type TEXT, url TEXT, download_url TEXT, thumbnail_url TEXT, file_path TEXT, language_id INTEGER , created_at DATETIME, updated_at DATETIME, deleted_at DATETIME,Local_file_path TEXT)";
+        String CREATE_MediaEntity_TABLE = "CREATE TABLE MediaEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, type TEXT, url TEXT, file_path TEXT, language_id INTEGER , created_at DATETIME, updated_at DATETIME, deleted_at DATETIME,Local_file_path TEXT)";
         //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at
         db.execSQL(CREATE_MediaEntity_TABLE);
 
@@ -361,60 +361,6 @@ public class DbHelper extends SQLiteOpenHelper {
         return populateContentDataFromDb(query);
     }
 
-    public List<Data> getResourcesToDownload(Integer parentId) {
-         List<Data> resourceListToDownload = new ArrayList<Data>();
-        List<Data> children = getDataEntityByParentId(parentId);
-        if (children.size() != 0) {
-            for (Data child : children) {
-                Data media = getMediaEntityById(child.getMedia_id());
-                if (media != null) {
-                    resourceListToDownload.add(media);
-                    if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "added media: " + media.getId() + " type: " + media.getType() + " download url: " + media.getDownload_url() + " localfilePath: " + media.getLocalFilePath());
-
-                    }
-                }
-                List<Data> childContents = getResourcesToDownload(child.getId());
-                resourceListToDownload.addAll(childContents);
-//                if (Consts.IS_DEBUG_LOG) {
-//                    Log.d(Consts.LOG_TAG, "childId: " + child.getId() + " childContents: " + childContents.size());
-//                }
-            }
-        }
-        return resourceListToDownload;
-    }
-
-    private List<Data> getDownloadResourceOfChild(String type,  Data parent) {
-        List<Data> resourceListToDownload = new ArrayList<Data>();
-        List<Data> resourceListOfChild = getDataEntityByParentIdAndType(parent.getId(), type);
-        for (Data child: resourceListOfChild){
-            Data media = getMediaEntityById(child.getMedia_id());
-            if (media != null) {
-                resourceListToDownload.add(media);
-            }
-        }
-        return resourceListToDownload;
-    }
-
-    public List<Data> getThumbnailsToDownload(Integer parentId, List<Data> resourceListToDownload)
-    {
-        List<Data> children = getDataEntityByParentId(parentId);
-        if(children.size() <=0)
-        {
-            return resourceListToDownload;
-        }
-        for (Data child:children) {
-            if(child.getThumbnail_media_id() != 0) {
-                Data media = getMediaEntityById(child.getThumbnail_media_id());
-                if (media != null) {
-                    resourceListToDownload.add(media);
-                }
-            }
-            resourceListToDownload.addAll(getThumbnailsToDownload(child.getId(),new ArrayList<Data>()));
-        }
-        return resourceListToDownload;
-    }
-
     public String getTypeOfChildren(Integer parentId) {
         String type = "";
         String query = "Select clientId , server_id , parent_id ,  sequence , media_id , thumbnail_media_id , lang_resource_name , lang_resource_description , type ,  url,created_at , updated_at , deleted_at FROM DataEntity  WHERE parent_id = 0 order by sequence LIMIT 1";
@@ -642,7 +588,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public Data getMediaEntityById(int id) {
-        String query = "SELECT clientId , server_id , name , type , url , download_url , thumbnail_url, file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path  from MediaEntity WHERE server_id = " + id + " ";
+        String query = "SELECT clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path  from MediaEntity WHERE server_id = " + id + " ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -657,14 +603,12 @@ public class DbHelper extends SQLiteOpenHelper {
             ob.setName(cursor.getString(2));
             ob.setType(cursor.getString(3));
             ob.setUrl(cursor.getString(4));
-            ob.setDownload_url(cursor.getString(5));
-            ob.setThumbnail_url(cursor.getString(6));
-            ob.setFile_path(cursor.getString(7));
-            ob.setLanguage_id(cursor.getInt(8));
-            ob.setCreated_at(cursor.getString(9));
-            ob.setUpdated_at(cursor.getString(10));
-            ob.setDeleted_at(cursor.getString(11));
-            ob.setLocalFilePath(cursor.getString(12));
+            ob.setFile_path(cursor.getString(5));
+            ob.setLanguage_id(cursor.getInt(6));
+            ob.setCreated_at(cursor.getString(7));
+            ob.setUpdated_at(cursor.getString(8));
+            ob.setDeleted_at(cursor.getString(9));
+            ob.setLocalFilePath(cursor.getString(10));
 
             cursor.close();
         } else {
@@ -682,8 +626,6 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("name", ob.getName());
         values.put("type", ob.getType());
         values.put("url", ob.getUrl());
-        values.put("download_url", ob.getDownload_url());
-        values.put("thumbnail_url", ob.getThumbnail_url());
         values.put("file_path", ob.getFile_path());
         values.put("language_id", ob.getLanguage_id());
         values.put("created_at", ob.getCreated_at());
@@ -705,8 +647,6 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("name", ob.getName());
         values.put("type", ob.getType());
         values.put("url", ob.getUrl());
-        values.put("download_url", ob.getDownload_url());
-        values.put("thumbnail_url", ob.getThumbnail_url());
         values.put("file_path", ob.getFile_path());
         values.put("language_id", ob.getLanguage_id());
         values.put("created_at", ob.getCreated_at());
@@ -735,14 +675,14 @@ public class DbHelper extends SQLiteOpenHelper {
         if (ob.getId() != 0) {
             i = db.update("MediaEntity", values, " server_id = " + ob.getId() + " ", null);
         }
-        Log.d(Consts.LOG_TAG, "updateMediaLocalFilePathEntity called with" + " server_id = '" + ob.getId());
+        //Log.d(Consts.LOG_TAG, "updateDataEntity called with" + " server_id = '" + ob.getId());
 
         db.close();
         return i > 0;
     }
 
     public List<Data> getAllMedia() {
-        String query = "Select clientId , server_id , name , type , url , download_url , thumbnail_url, file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path FROM MediaEntity";
+        String query = "Select clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path FROM MediaEntity";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -758,14 +698,12 @@ public class DbHelper extends SQLiteOpenHelper {
                 ob.setName(cursor.getString(2));
                 ob.setType(cursor.getString(3));
                 ob.setUrl(cursor.getString(4));
-                ob.setDownload_url(cursor.getString(5));
-                ob.setThumbnail_url(cursor.getString(6));
-                ob.setFile_path(cursor.getString(7));
-                ob.setLanguage_id(cursor.getInt(8));
-                ob.setCreated_at(cursor.getString(9));
-                ob.setUpdated_at(cursor.getString(10));
-                ob.setDeleted_at(cursor.getString(11));
-                ob.setLocalFilePath(cursor.getString(12));
+                ob.setFile_path(cursor.getString(5));
+                ob.setLanguage_id(cursor.getInt(6));
+                ob.setCreated_at(cursor.getString(7));
+                ob.setUpdated_at(cursor.getString(8));
+                ob.setDeleted_at(cursor.getString(9));
+                ob.setLocalFilePath(cursor.getString(10));
                 list.add(ob);
                 cursor.moveToNext();
             }
@@ -1208,7 +1146,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path
         String query = "Select DownloadMediaEntity.clientId, DownloadMediaEntity.server_id, DownloadMediaEntity.name, DownloadMediaEntity.type, DownloadMediaEntity.url , "
                 + "DownloadMediaEntity.file_path ,  DownloadMediaEntity.language_id , DownloadMediaEntity.created_at , DownloadMediaEntity.updated_at , DownloadMediaEntity.deleted_at, DownloadMediaEntity.Local_file_path , DownloadingFileEntity.MediaId , DownloadingFileEntity.progress FROM DownloadingFileEntity " +
-                "INNER JOIN DownloadMediaEntity ON  DownloadingFileEntity.MediaId=DownloadMediaEntity.server_id ";
+                "INNER JOIN DownloadMediaEntity ON  DownloadingFileEntity.MediaId=DownloadMediaEntity.clientId ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -1520,9 +1458,8 @@ public class DbHelper extends SQLiteOpenHelper {
         return ob;
     }
     //get all notification data
-    public List<Data> getAllNotificationDataEntity(int languageId) {
-        String query = "Select id, client_id , send_at , message ,  language_id , status , custom_data , created_by , updated_by , created_at , updated_at ,deleted_at FROM NotificationEntity " +
-                " where language_id = " + languageId ;
+    public List<Data> getAllNotificationDataEntity() {
+        String query = "Select id, client_id , send_at , message ,  language_id , status , custom_data , created_by , updated_by , created_at , updated_at ,deleted_at FROM NotificationEntity ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 

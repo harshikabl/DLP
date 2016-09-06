@@ -19,6 +19,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -30,22 +31,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
 import dlp.bluelupin.dlp.Activities.NotificationsActivity;
 import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
+import dlp.bluelupin.dlp.Adapters.NavigationMenuAdapter;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
 import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
-import dlp.bluelupin.dlp.Models.DownloadData;
 import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.IServiceManager;
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final int PERMISSION_REQUEST_CODE = 1;
 
+public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TextView title;
     public FrameLayout downloadContainer;
@@ -105,6 +109,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             customProgressDialog.dismiss();
             Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, MainActivity.this);
+            setUpCourseFragment();
         }
 
 
@@ -136,17 +141,36 @@ public class MainActivity extends AppCompatActivity
         Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View header = navigationView.getHeaderView(0);
+        //navigationView.setNavigationItemSelectedListener(this);
+        //navigationView.setItemIconTintList(null);
+
+        //View header = navigationView.getHeaderView(0);
+        Typeface custom_fontawesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome-webfont.ttf");
+        View header = findViewById(R.id.navHader);
         TextView name = (TextView) header.findViewById(R.id.name);
         TextView email = (TextView) header.findViewById(R.id.email);
+        TextView logOut = (TextView) header.findViewById(R.id.logOut);
         name.setTypeface(VodafoneExB);
         email.setTypeface(VodafoneRg);
+        logOut.setTypeface(custom_fontawesome);
+        logOut.setText(Html.fromHtml("&#xf08b;"));
+
         AccountData accountData = dbhelper.getAccountData();
         if (accountData != null && !accountData.equals("")) {
             name.setText(accountData.getName());
             email.setText(accountData.getEmail());
         }
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DbHelper dbhelper = new DbHelper(MainActivity.this);
+                dbhelper.deleteAccountData();
+                Toast.makeText(MainActivity.this, "You have been logged out.", Toast.LENGTH_LONG).show();
+                Intent mainIntent = new Intent(MainActivity.this, LanguageActivity.class);
+                startActivity(mainIntent);
+                finish();
+            }
+        });
 
         //registerReceiver();
         String localFolderPath = Consts.outputDirectoryLocation;
@@ -155,6 +179,37 @@ public class MainActivity extends AppCompatActivity
         {
             outputFolder.mkdirs();
         }
+
+        setMenuLayout();
+    }
+
+    //set slider item value
+    public void setMenuLayout() {
+        Typeface VodafoneRgBd = Typeface.createFromAsset(getAssets(), "fonts/VodafoneRgBd.ttf");
+
+        ListView menuList = (ListView) findViewById(R.id.lst_menu_items);
+        menuList.setDivider(null);
+        List<String> itemList = new ArrayList<String>();
+        itemList.add("Notifications");
+        itemList.add("Favorites");
+        itemList.add("Downloads");
+        itemList.add("Profile");
+        itemList.add("Change Language");
+        itemList.add("Change Downloads Folder");
+        itemList.add("Terms of use");
+        itemList.add("About Us");
+
+        List<String> menuIconList = new ArrayList<String>();
+        menuIconList.add("f09c");
+        menuIconList.add("f4ce");
+        menuIconList.add("f1da");
+        menuIconList.add("f631");
+        menuIconList.add("f493");
+        menuIconList.add("f1da");
+        menuIconList.add("f219");
+        menuIconList.add("f2fd");
+        NavigationMenuAdapter navigationMenuAdapter = new NavigationMenuAdapter(MainActivity.this, itemList, menuIconList);
+        menuList.setAdapter(navigationMenuAdapter);
     }
 
     private void setUpCourseFragment() {
@@ -258,6 +313,11 @@ public class MainActivity extends AppCompatActivity
             finish();
         }
 
+
+          return true;
+      }*/
+    //close drawer after item select
+    public void closeDrawer() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

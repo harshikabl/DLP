@@ -43,7 +43,7 @@
         <service android:name=".Utilities.BindService" />
         <service android:name=".Services.DownloadService1"/>
 
-        <!-- SMS Receiver -->
+        <!-- SMS Receiver for otp-->
         <receiver android:name=".Utilities.SmsReceiver"
             android:enabled="true"
             android:exported="true">
@@ -51,10 +51,6 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-        <!-- Intent service for OTP -->
-        <service
-            android:name=".Utilities.OtpService"
-            android:exported="false" />
 
         <service
             android:name=".Services.BackgroundSyncService"
