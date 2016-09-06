@@ -204,7 +204,7 @@ public class ServiceCaller {
     }
 
     //call OTP verification service
-    public void OtpVerification(final OtpVerificationServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+    public void OtpVerification(OtpVerificationServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
         final ServiceHelper sh = new ServiceHelper(context);
         sh.callOtpVerificationService(request, new IServiceSuccessCallback<OtpData>() {
             @Override

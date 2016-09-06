@@ -37,7 +37,7 @@
 
 
     <!-- notification screen text-->
-    <string name="notification">Notifications</string>
+    <string name="notification">Notification</string>
 
 
 </resources>

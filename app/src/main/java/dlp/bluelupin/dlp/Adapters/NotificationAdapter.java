@@ -20,9 +20,9 @@ import dlp.bluelupin.dlp.R;
 /**
  * Created by Neeraj on 7/28/2016.
  */
-public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHolder> implements ItemTouchHelperInterface {
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHolder> {
     Context context;
-    private List<Data>  itemList;
+    private List<Data> itemList;
     private SparseBooleanArray selectedItems;
 
     public NotificationAdapter(Context context, List<Data> itemList) {
@@ -44,10 +44,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHo
 
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
-        holder.notification.setTypeface(VodafoneExB);
         holder.notificationDescription.setTypeface(VodafoneRg);
         holder.dateTime.setTypeface(VodafoneRg);
-        holder.notification.setText("Notification " + itemList.get(position).getId());
+        holder.on.setTypeface(VodafoneRg);
         holder.notificationDescription.setText(itemList.get(position).getMessage());
         holder.dateTime.setText(itemList.get(position).getSend_at());
 
@@ -75,7 +74,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHo
         return itemList.size();
     }
 
-    @Override
+   /* @Override
     public void onItemMove(int fromPosition, int toPosition) {
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
@@ -92,10 +91,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHo
     @Override
     public void onItemDismiss(int position) {
         itemList.remove(position);
-        notifyItemRemoved(position);
+         notifyItemRemoved(position);
         notifyItemChanged(position);
         selectedItems.delete(position);
 
-    }
+    }*/
 }
 

@@ -5,4 +5,5 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:textColor="#e60000"
-    android:textSize="@dimen/dimTextSize_20" />
+    android:text=""
+    android:textSize="@dimen/dimTextSize_16" />

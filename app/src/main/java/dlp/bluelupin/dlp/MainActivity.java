@@ -144,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
         email.setTypeface(VodafoneRg);
         logOut.setTypeface(custom_fontawesome);
         logOut.setText(Html.fromHtml("&#xf08b;"));
+        TextView createBy = (TextView) findViewById(R.id.createBy);
+        createBy.setTypeface(VodafoneRg);
 
         AccountData accountData = dbhelper.getAccountData();
         if (accountData != null && !accountData.equals("")) {
@@ -172,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         ListView menuList = (ListView) findViewById(R.id.lst_menu_items);
         menuList.setDivider(null);
         List<String> itemList = new ArrayList<String>();
-        itemList.add("Notifications");
+        itemList.add("Notification");
         itemList.add("Favorites");
         itemList.add("Downloads");
         itemList.add("Profile");

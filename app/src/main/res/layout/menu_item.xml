@@ -2,29 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/menuItemLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <TextView
         android:id="@+id/menuIcon"
         android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="0.2"
-        android:text="dsb"
         android:gravity="center"
-        android:textColor="@color/colorRad"
         android:padding="@dimen/dimValue_10"
-        android:textSize="@dimen/dimTextSize_25"
-        android:layout_height="wrap_content" />
+        android:text="dsb"
+        android:textColor="@color/colorRad"
+        android:textSize="@dimen/dimTextSize_25" />
 
     <TextView
         android:id="@+id/menuTitel"
         android:layout_width="0dp"
-        android:layout_weight="0.8"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dimValue_16"
-        android:paddingBottom="@dimen/dimValue_16"
         android:layout_marginLeft="@dimen/dimValue_10"
+        android:layout_weight="0.7"
+        android:text="hello"
         android:textColor="#4a4d4e"
-        android:textSize="@dimen/dimTextSize_18"
-        android:text="hello" />
+        android:textSize="@dimen/dimTextSize_18" />
+
+    <TextView
+        android:id="@+id/menuSelectDot"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:text="."
+        android:textColor="#fff"
+        android:textSize="@dimen/dimTextSize_30" />
 </LinearLayout>

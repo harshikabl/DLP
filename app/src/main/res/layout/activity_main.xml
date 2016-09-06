@@ -45,8 +45,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_height="0dp"
+                android:layout_weight="0.9"
                 android:background="#fff"
                 android:orientation="vertical">
 
@@ -59,29 +59,28 @@
 
             </LinearLayout>
 
-            <!-- <LinearLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="0dp"
-                 android:layout_weight="0.1"
-                 android:background="#fff"
-                 android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"
+                android:background="#fff"
+                android:orientation="horizontal">
 
-                 <View
-                     android:layout_width="match_parent"
-                     android:layout_height="1dp"
-                     android:layout_below="@+id/spinner"
-                     android:background="#929495" />
+                <TextView
+                    android:id="@+id/createBy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dimValue_10"
+                    android:text="Created by :"
+                    android:textColor="#4a4d4e"
+                    android:textSize="@dimen/dimTextSize_18" />
 
-                 <TextView
-                     android:id="@+id/userSetting"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:padding="@dimen/dimValue_10"
-                     android:text="User Settings"
-                     android:textColor="#4a4d4e"
-                     android:textSize="@dimen/dimTextSize_18" />
+                <ImageView
+                    android:layout_width="@dimen/size_80px"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/bl_logo" />
 
-             </LinearLayout>-->
+            </LinearLayout>
 
 
         </LinearLayout>

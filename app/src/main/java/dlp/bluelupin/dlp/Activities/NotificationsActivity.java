@@ -15,8 +15,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import dlp.bluelupin.dlp.Adapters.NotificationAdapter;
 import dlp.bluelupin.dlp.Consts;
@@ -36,6 +42,8 @@ import dlp.bluelupin.dlp.Utilities.Utility;
 public class NotificationsActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView title, leftArrow;
     private RecyclerView notificationRecyclerView;
+    private Boolean initFlag = false;
+    private TextView back, noRecordIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,19 +61,23 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
     private void init() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        leftArrow = (TextView) toolbar.findViewById(R.id.leftArrow);
         title = (TextView) toolbar.findViewById(R.id.title);
-        leftArrow.setOnClickListener(this);
         Typeface custom_fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(this.getAssets(), "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
-        leftArrow.setTypeface(materialdesignicons_font);
-        leftArrow.setText(Html.fromHtml("&#xf04d;"));
         title.setTypeface(VodafoneExB);
+        if (initFlag) {
+            noRecordIcon = (TextView) findViewById(R.id.noRecordIcon);
+            back = (TextView) findViewById(R.id.back);
+            noRecordIcon.setTypeface(materialdesignicons_font);
+            noRecordIcon.setText(Html.fromHtml("&#xf187;"));
+        } else {
+            callNotificationService();
+        }
 
-        callNotificationService();
     }
+
     @Override
     public void onClick(View v) {
 
@@ -110,8 +122,32 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
     //set notification data into adapter
     private void setNotification() {
         DbHelper db = new DbHelper(NotificationsActivity.this);
-        List<Data> data = db.getAllNotificationDataEntity();
+        final List<Data> data = db.getAllNotificationDataEntity();
         if (data != null) {
+            Collections.sort(data, new Comparator<Data>() {
+                //2016-07-08 12:06:30
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
+                public int compare(Data m1, Data m2) {
+                    Date date1 = null;
+                    Date date2 = null;
+                    int shortdate = 0;
+                    try {
+                        date1 = sdf.parse(m1.getSend_at());
+                        date2 = sdf.parse(m2.getSend_at());
+                        // Log.d(Contants.LOG_TAG, "date**********   " + date1 + "***" + date2);
+                        //Log.d(Contants.LOG_TAG, " output.format(date1);**********   " + output.format(date1));
+                        if (date1 != null && date2 != null) {
+                            shortdate = date1.getTime() > date2.getTime() ? -1 : 1;//descending
+                            //shortdate = date1.getTime() > date2.getTime() ? 1 : -1;     //ascending
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    return shortdate;
+                }
+            });
+
             notificationRecyclerView = (RecyclerView) findViewById(R.id.notificationRecyclerView);
             notificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             notificationRecyclerView.setHasFixedSize(true);
@@ -119,9 +155,14 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
             Log.d(Consts.LOG_TAG, "NotificationActivity: data count: " + data.size());
             NotificationAdapter notificationsAdapter = new NotificationAdapter(NotificationsActivity.this, data);
             notificationRecyclerView.setAdapter(notificationsAdapter);
-            ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(notificationsAdapter);
-            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-            touchHelper.attachToRecyclerView(notificationRecyclerView);
+            //ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(notificationsAdapter);
+            //ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+            //touchHelper.attachToRecyclerView(notificationRecyclerView);
+        } else {
+            initFlag = true;
+            setContentView(R.layout.no_record_found);
+            init();
+
         }
 
     }

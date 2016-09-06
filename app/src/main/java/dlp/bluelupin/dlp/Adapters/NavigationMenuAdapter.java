@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.HashSet;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
@@ -38,6 +39,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
     LayoutInflater inflater;
     private List<String> menuList = null;
     private List<String> iconList = null;
+    HashSet<Integer> selectedPosition = new HashSet<>();
 
     public NavigationMenuAdapter(Context context,
                                  List<String> menuList, List<String> iconList) {
@@ -75,6 +77,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
             holder.menuTitel = (TextView) convertView.findViewById(R.id.menuTitel);
             holder.menuIcon = (TextView) convertView.findViewById(R.id.menuIcon);
             holder.menuItemLayout = (LinearLayout) convertView.findViewById(R.id.menuItemLayout);
+            holder.menuSelectDot = (TextView) convertView.findViewById(R.id.menuSelectDot);
             Typeface materialdesignicons_font = Typeface.createFromAsset(mContext.getAssets(), "fonts/materialdesignicons-webfont.otf");
             Typeface custom_fontawesome = Typeface.createFromAsset(mContext.getAssets(), "fonts/fontawesome-webfont.ttf");
             Typeface VodafoneRgBd = Typeface.createFromAsset(mContext.getAssets(), "fonts/VodafoneRgBd.ttf");
@@ -85,20 +88,26 @@ public class NavigationMenuAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+        holder.menuTitel.setTag(position);
         holder.menuTitel.setText(menuList.get(position).toString());
         holder.menuIcon.setText(Html.fromHtml("&#x" + iconList.get(position).toString() + ";"));
-
-        holder.menuItemLayout.setOnClickListener(new View.OnClickListener() {
+//----------fill selected value------
+        if (selectedPosition.contains(position)) {
+            holder.menuItemLayout.setBackgroundColor(Color.RED);
+            holder.menuTitel.setTextColor(Color.WHITE);
+            holder.menuIcon.setTextColor(Color.WHITE);
+            //holder.menuSelectDot.setTextColor(Color.WHITE);
+        } else {
+            holder.menuItemLayout.setBackgroundColor(Color.WHITE);
+            holder.menuIcon.setTextColor(Color.RED);
+            holder.menuTitel.setTextColor(Color.parseColor("#4a4d4e"));
+            //holder.menuSelectDot.setTextColor(Color.WHITE);
+        }
+        holder.menuTitel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                /*    holder.menuItemLayout.setBackgroundColor(Color.RED);
-                    holder.menuTitel.setTextColor(Color.WHITE);
-                    holder.menuIcon.setTextColor(Color.WHITE);
-                holder.menuIcon.setTextColor(Color.RED);*/
-
-
-                if (menuList.get(position).toString().equalsIgnoreCase("Notifications")) {
+                if (menuList.get(position).toString().equalsIgnoreCase("Notification")) {
                     Intent intent = new Intent(mContext, NotificationsActivity.class);
                     mContext.startActivity(intent);
                     Activity activity = (Activity) mContext;
@@ -135,6 +144,16 @@ public class NavigationMenuAdapter extends BaseAdapter {
                             .addToBackStack(null)
                             .commit();
                 }
+                int pos = (int) v.getTag();
+                if (selectedPosition.contains(pos)) {
+                    //selectedPosition.remove(pos);
+                    //selectedPosition.clear();
+                    notifyDataSetChanged();
+                } else {
+                    selectedPosition.clear();
+                    selectedPosition.add(pos);
+                    notifyDataSetChanged();
+                }
                 MainActivity rootActivity = (MainActivity) mContext;
                 rootActivity.closeDrawer();
             }
@@ -145,7 +164,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
 
     public class ViewHolder {
         public TextView menuTitel;
-        public TextView menuIcon;
+        public TextView menuIcon, menuSelectDot;
         public LinearLayout menuItemLayout;
     }
 }

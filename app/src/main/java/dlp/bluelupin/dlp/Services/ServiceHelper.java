@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -277,20 +278,40 @@ public class ServiceHelper {
 
     //Otp verification service
     public void callOtpVerificationService(OtpVerificationServiceRequest request, final IServiceSuccessCallback<OtpData> callback) {
-        Log.d(Consts.LOG_TAG, "payload***" + request);
+
         Call<OtpData> ac = service.otpVerify(request);
+        final DbHelper dbhelper = new DbHelper(context);
+        final AccountData accountData = new AccountData();
+        final int serverId = Utility.getUserServerIdFromSharedPreferences(context);
+        AccountData accountDataApToken = dbhelper.getAccountData();
+        if (accountDataApToken != null) {
+            if (accountDataApToken.getApi_token() != null) {
+                request.setApi_token(accountDataApToken.getApi_token());
+            }
+        }
+        Log.d(Consts.LOG_TAG, "payload***" + request);
         ac.enqueue(new Callback<OtpData>() {
             @Override
             public void onResponse(Call<OtpData> call, Response<OtpData> response) {
                 OtpData data = response.body();
                 if (data != null) {
+                    accountData.setId(serverId);
+                    accountData.setIsVerified(1);
+                    //update account verified for check account verified or not
+                    dbhelper.updateAccountDataVerified(accountData);
                     if (Consts.IS_DEBUG_LOG) {
                         Log.d(Consts.LOG_TAG, "response data:" + response.toString());
                         Log.d(Consts.LOG_TAG, "Otp verify data:" + data.toString());
                     }
+                    Toast.makeText(context, "You are registered successfully.", Toast.LENGTH_LONG).show();
                     //Log.d(Consts.LOG_TAG, "Otp verify successfully ");
                     callback.onDone(Consts.VERIFY_OTP, data, null);
                 } else {
+                    accountData.setId(serverId);
+                    accountData.setIsVerified(0);
+                    //update account verified for check account verified or not
+                    dbhelper.updateAccountDataVerified(accountData);
+                    Toast.makeText(context, "Please enter a valid OTP.", Toast.LENGTH_LONG).show();
                     if (Consts.IS_DEBUG_LOG) {
                         Log.d(Consts.LOG_TAG, "response data:" + response.toString());
                         Log.d(Consts.LOG_TAG, "Otp not verify");
@@ -303,7 +324,7 @@ public class ServiceHelper {
             @Override
             public void onFailure(Call<OtpData> call, Throwable t) {
                 Log.d(Consts.LOG_TAG, "Failure in service latestContent" + t.toString());
-                callback.onDone(Consts.URL_CONTENT_LATEST, null, t.toString());
+                callback.onDone(Consts.VERIFY_OTP, null, t.toString());
             }
 
         });

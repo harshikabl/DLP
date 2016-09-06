@@ -26,6 +26,7 @@ import dlp.bluelupin.dlp.Services.ServiceCaller;
  */
 public class SmsReceiver extends BroadcastReceiver {
     Context mContext;
+    public static String verificationCode;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -49,12 +50,16 @@ public class SmsReceiver extends BroadcastReceiver {
                     }
 
                     // verification code from sms
-                    String verificationCode = getVerificationCode(message);
-                    if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "OTP received: " + verificationCode);
+                    String otpCode = getVerificationCode(message);
+                    if (otpCode != null) {
+                        verificationCode = otpCode;
+                        if (Consts.IS_DEBUG_LOG) {
+                            Log.d(Consts.LOG_TAG, "OTP received: " + verificationCode);
+                        }
                     }
-                    callOTPVerificationService(verificationCode);
+
                 }
+                callOTPVerificationService(verificationCode);
             }
         } catch (Exception e) {
             Log.d(Consts.LOG_TAG, "Exception: " + e.getMessage());
@@ -88,55 +93,29 @@ public class SmsReceiver extends BroadcastReceiver {
             Log.d(Consts.LOG_TAG, " otp*****   " + otp);
         }
         OtpVerificationServiceRequest otpServiceRequest = new OtpVerificationServiceRequest();
-        DbHelper dbHelper = new DbHelper(mContext);
-        AccountData accountData = dbHelper.getAccountData();
-        if (accountData != null) {
-            if (accountData.getApi_token() != null) {
-                otpServiceRequest.setApi_token(accountData.getApi_token());
-            }
-            otpServiceRequest.setOtp(otp);
-            if (Utility.isOnline(mContext)) {
-                final DbHelper dbhelper = new DbHelper(mContext);
-                ServiceCaller sc = new ServiceCaller(mContext);
-                sc.OtpVerification(otpServiceRequest, new IAsyncWorkCompletedCallback() {
-                    @Override
-                    public void onDone(String message, boolean isComplete) {
-                        int serverId = Utility.getUserServerIdFromSharedPreferences(mContext);
-                        AccountData accountData = new AccountData();
-                        if (isComplete) {
-                            accountData.setId(serverId);
-                            accountData.setIsVerified(1);
-                            //update account verified for check account verified or not
-                            dbhelper.updateAccountDataVerified(accountData);
-                            if (Consts.IS_DEBUG_LOG) {
-                                Log.d(Consts.LOG_TAG, " callOTPVerificationService success result: " + isComplete);
-                            }
-                            Intent intentOtp = new Intent(mContext, MainActivity.class);
-                            intentOtp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            mContext.startActivity(intentOtp);
-                            //stopReceiver(mContext);
-                            Toast.makeText(mContext, "You are registered successfully.", Toast.LENGTH_LONG).show();
-                        } else {
-                            accountData.setId(serverId);
-                            accountData.setIsVerified(0);
-                            //update account verified for check account verified or not
-                            dbhelper.updateAccountDataVerified(accountData);
-                            Toast.makeText(mContext, "Please enter a valid OTP.", Toast.LENGTH_LONG).show();
-                            //Utility.alertForErrorMessage("Please enter a valid OTP.", mContext);
+        otpServiceRequest.setOtp(otp);
+        if (Utility.isOnline(mContext)) {
+            ServiceCaller sc = new ServiceCaller(mContext);
+            sc.OtpVerification(otpServiceRequest, new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String message, boolean isComplete) {
+                    if (isComplete) {
+                        if (Consts.IS_DEBUG_LOG) {
+                            Log.d(Consts.LOG_TAG, " callOTPVerificationService success result: " + isComplete);
                         }
+                        Intent intentOtp = new Intent(mContext, MainActivity.class);
+                        intentOtp.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContext.startActivity(intentOtp);
+
+                    } else {
+                        //Utility.alertForErrorMessage("Please enter a valid OTP.", mContext);
                     }
-                });
-            } else {
-                Toast.makeText(mContext, Consts.OFFLINE_MESSAGE, Toast.LENGTH_LONG).show();
-                //Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, mContext);
-            }
+                }
+            });
+        } else {
+            Toast.makeText(mContext, Consts.OFFLINE_MESSAGE, Toast.LENGTH_LONG).show();
+            //Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, mContext);
         }
     }
 
-    /*public void stopReceiver(Context mContext) {
-        PackageManager pm = mContext.getPackageManager();
-        ComponentName componentName = new ComponentName(mContext, SmsReceiver.class);
-        pm.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
-    }*/
 }

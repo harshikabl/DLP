@@ -4,8 +4,8 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/selector_row_notification">
+    android:background="@drawable/selector_row_notification"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,37 +13,36 @@
         android:layout_margin="@dimen/dimValue_10"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/notification"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Notification 1"
-                android:textColor="#000"
-                android:textSize="@dimen/dimTextSize_20" />
-        </LinearLayout>
-
         <TextView
             android:id="@+id/notificationDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimValue_10"
             android:text="Lorem lpsum is simply dummy text of the printing and typesetting industry."
             android:textColor="#4a4d4e"
             android:textSize="@dimen/dimTextSize_18" />
 
-        <TextView
-            android:id="@+id/dateTime"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimValue_10"
-            android:text="14-june | 04.365 PM"
-            android:textColor="#e60000"
-            android:textSize="@dimen/dimTextSize_18" />
+            android:layout_margin="@dimen/dimValue_10"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="on "
+                android:textColor="#4a4d4e"
+                android:textSize="@dimen/dimTextSize_18" />
+
+            <TextView
+                android:id="@+id/dateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="14-june | 04.365 PM"
+                android:textColor="#e60000"
+                android:textSize="@dimen/dimTextSize_14" />
+        </LinearLayout>
     </LinearLayout>
 
     <View
@@ -51,6 +50,5 @@
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
-        android:layout_marginTop="@dimen/dimValue_10"
         android:background="#929495" />
 </LinearLayout>

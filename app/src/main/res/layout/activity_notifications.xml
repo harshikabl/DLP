@@ -25,26 +25,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dimValue_5"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/leftArrow"
-                        android:layout_width="50dp"
-                        android:layout_height="wrap_content"
-                        android:text="arr"
-                        android:textColor="#fff"
-                        android:textSize="@dimen/dimTextSize_30" />
-                </LinearLayout>
-
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dimValue_10"
+                    android:layout_marginLeft="@dimen/dimValue_16"
                     android:gravity="left|center"
                     android:text="@string/notification"
                     android:textColor="#fff"
