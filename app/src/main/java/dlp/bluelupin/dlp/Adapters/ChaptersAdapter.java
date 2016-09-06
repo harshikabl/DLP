@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,12 +68,12 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
         holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
-        holder.starIcon.setTypeface(materialdesignicons_font);
-        holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
-        holder.favorite.setTypeface(VodafoneExB);
-        holder.download.setTypeface(VodafoneExB);
-        holder.downloadIcon.setTypeface(materialdesignicons_font);
-        holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
+//        holder.starIcon.setTypeface(materialdesignicons_font);
+//        holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
+//        holder.favorite.setTypeface(VodafoneExB);
+//        holder.download.setTypeface(VodafoneExB);
+//        holder.downloadIcon.setTypeface(materialdesignicons_font);
+//        holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
 
         //show and hide favorite icon layout only in chapter layout
         /*if (type.equalsIgnoreCase(Consts.CHAPTER)) {
@@ -104,16 +105,17 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
         if (data.getThumbnail_media_id() != 0) {
             Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-            if (media != null ) {
+            if (media != null && media.getDownload_url()!= null) {
                 if (media.getLocalFilePath() == null) {
 
                     Gson gson = new Gson();
                     Intent intent = new Intent(context, DownloadService1.class);
                     String strJsonmedia = gson.toJson(media);
                     intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                    intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
                     context.startService(intent);
                     new DownloadImageTask(holder.chapterImage)
-                            .execute(media.getUrl());
+                            .execute(media.getDownload_url());
                 }
             }
         }
@@ -204,7 +206,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         holder.starIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setFavorites(data);
+                setFavoritesAfterClick(data);
                 v.startAnimation(AnimationUtils.loadAnimation(context, R.anim.click_animation));//onclick animation
 
             }

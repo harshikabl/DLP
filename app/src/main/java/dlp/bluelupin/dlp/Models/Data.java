@@ -303,6 +303,15 @@ public class Data {
 
     private String thumbnail_url;
 
+    public String getThumbnail_file_path() {
+        return thumbnail_file_path;
+    }
+
+    public void setThumbnail_file_path(String thumbnail_file_path) {
+        this.thumbnail_file_path = thumbnail_file_path;
+    }
+
+    private String thumbnail_file_path;
 
     @Override
     public String toString() {

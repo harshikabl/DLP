@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity
 
     private static final int PERMISSION_REQUEST_CODE = 1;
 
-public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TextView title;
     public FrameLayout downloadContainer;
@@ -315,12 +314,12 @@ public class MainActivity extends AppCompatActivity {
 
 
           return true;
-      }*/
+      }
     //close drawer after item select
     public void closeDrawer() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+        //return true;
     }
 
     public void setScreenTitle(String heading) {

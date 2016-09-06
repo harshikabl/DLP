@@ -162,11 +162,12 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
 
 
         Gson gson = new Gson();
-        uniqueResourcesToDownload =  getResourcesToDownload(resourcesToDownloadList);
-        for(Data media: uniqueResourcesToDownload) {
+        uniqueResourcesToDownload = getResourcesToDownload(resourcesToDownloadList);
+        for (Data media : uniqueResourcesToDownload) {
             Intent intent = new Intent(context, DownloadService1.class);
             String strJsonmedia = gson.toJson(media);
             intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+            intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
             context.startService(intent);
         }
         downloadingAdapter = new DownloadingAdapter(context, uniqueResourcesToDownload);

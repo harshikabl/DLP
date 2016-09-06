@@ -72,16 +72,17 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
         if(data.getThumbnail_media_id() != 0)
         {
             Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-            if (media != null ) {
+            if (media != null && media.getUrl()!= null) {
                 if (media.getLocalFilePath() == null) {
 
                     Gson gson = new Gson();
                     Intent intent = new Intent(context, DownloadService1.class);
                     String strJsonmedia = gson.toJson(media);
                     intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                    intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.URL);
                     context.startService(intent);
                     new DownloadImageTask(holder.courseImage)
-                            .execute(media.getThumbnail_url());
+                            .execute(media.getUrl());
                 }
             }
         }
