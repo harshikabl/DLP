@@ -124,7 +124,6 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         DbHelper db = new DbHelper(NotificationsActivity.this);
         int languageId = Utility.getLanguageIdFromSharedPreferences(NotificationsActivity.this);
         List<Data> data = db.getAllNotificationDataEntity(languageId);
-        final List<Data> data = db.getAllNotificationDataEntity();
         if (data != null) {
             Collections.sort(data, new Comparator<Data>() {
                 //2016-07-08 12:06:30
