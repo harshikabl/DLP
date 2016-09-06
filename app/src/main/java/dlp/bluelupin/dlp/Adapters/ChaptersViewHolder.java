@@ -17,11 +17,12 @@ import dlp.bluelupin.dlp.R;
  * Created by Neeraj on 7/26/2016.
  */
 public class ChaptersViewHolder extends RecyclerView.ViewHolder  {
-    public TextView chapterTitle, chapterDescription,favorite,download;
+    public TextView chapterTitle, chapterDescription,favorite,download,downloadIcon;
     public android.support.v7.widget.CardView cardView;
     public ImageView chapterImage;
     public LinearLayout favorite_layout,download_layout;
-    public ImageView starIcon,downloadIcon;
+    public ImageView starIcon;
+
 
     public ChaptersViewHolder(View itemView) {
         super(itemView);
@@ -34,7 +35,7 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder  {
        // favorite = (TextView) itemView.findViewById(R.id.favorite);
         starIcon = (ImageView) itemView.findViewById(R.id.starIcon);
         // = (TextView) itemView.findViewById(R.id.download);
-        downloadIcon = (ImageView) itemView.findViewById(R.id.downloadIcon);
+        downloadIcon = (TextView) itemView.findViewById(R.id.downloadIcon);
         chapterImage = (ImageView) itemView.findViewById(R.id.chapterImage);
         favorite_layout= (LinearLayout) itemView.findViewById(R.id.favorite_layout);
         download_layout= (LinearLayout) itemView.findViewById(R.id.download_layout);

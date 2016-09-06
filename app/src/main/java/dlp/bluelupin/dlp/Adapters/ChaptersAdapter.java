@@ -66,14 +66,14 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         holder.chapterTitle.setTypeface(VodafoneExB);
         holder.chapterDescription.setTypeface(VodafoneRg);
 
-        holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
+       // holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
 //        holder.starIcon.setTypeface(materialdesignicons_font);
 //        holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
 //        holder.favorite.setTypeface(VodafoneExB);
 //        holder.download.setTypeface(VodafoneExB);
-//        holder.downloadIcon.setTypeface(materialdesignicons_font);
-//        holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
+        holder.downloadIcon.setTypeface(materialdesignicons_font);
+        holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
 
         //show and hide favorite icon layout only in chapter layout
         /*if (type.equalsIgnoreCase(Consts.CHAPTER)) {
@@ -114,31 +114,31 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                     intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                     intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
                     context.startService(intent);
-                    new DownloadImageTask(holder.chapterImage)
-                            .execute(media.getDownload_url());
                 }
+                new DownloadImageTask(holder.chapterImage)
+                            .execute(media.getDownload_url());
+
             }
         }
 
+        DbHelper dbhelper = new DbHelper(context);
+        final List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId());
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
+        }
+        if (resourcesToDownloadList.size() <= 0) {
+            holder.downloadIcon.setTextColor(Color.parseColor("#000000"));
+        }
         //if meadia not downloaded then show download_layout
         if (data.getThumbnail_media_id() != 0) {
             final Data media = dbHelper.getDownloadMediaEntityById(data.getThumbnail_media_id());
             if (media != null) {
                 holder.download_layout.setVisibility(View.VISIBLE);
+
                 holder.downloadIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DbHelper dbhelper = new DbHelper(context);
-                        List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId());
-                        if (Consts.IS_DEBUG_LOG) {
-                            Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
-                        }
-                        for (Data resource : resourcesToDownloadList) {
-                            //dbHelper.upsertDownloadingFileEntity(resource);
-                            Log.d(Consts.LOG_TAG, "Resource to be DL: " + resource.getId() + " downloadUrl: " + resource.getDownload_url());
-                        }
-
-
+                        if (resourcesToDownloadList.size() > 0) {
 
 //                        {
 //                            List<Data> resourceListToDownload = new ArrayList<Data>();
@@ -151,25 +151,22 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 //                            }
 //                        }
 
-                        Gson gson = new Gson();
-                        String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
+                            Gson gson = new Gson();
+                            String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
 //
-                        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                        DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList);
-                        FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
-                        transaction.replace(R.id.container, fragment)
-                                .addToBackStack(null)
-                                .commit();
+                            FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                            DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList);
+                            FragmentTransaction transaction = fragmentManager.beginTransaction();
+                            transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                            transaction.replace(R.id.container, fragment)
+                                    .addToBackStack(null)
+                                    .commit();
 
+                        }
                     }
                 });
 
             } else {
-               /* Intent intent=new Intent(context, DownloadActivity.class);
-                intent.putExtra("url","https://s3.ap-south-1.amazonaws.com/classkonnect-test/011+Resetting+data.mp4");
-                intent.putExtra("urlId",101);
-                context.startActivity(intent);*/
                 holder.download_layout.setVisibility(View.GONE);
             }
         }

@@ -42,7 +42,7 @@ public class DownloadService1 extends IntentService {
     }
 
     private NotificationCompat.Builder notificationBuilder;
-    private NotificationManager notificationManager;
+//    private NotificationManager notificationManager;
     private int totalFileSize;
     private String urlPropertyForDownload = Consts.DOWNLOAD_URL;
     private Data media;
@@ -58,14 +58,14 @@ public class DownloadService1 extends IntentService {
             media = gson.fromJson(strJsonMedia, Data.class);
         }
 
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.hihlogo)
-                .setContentTitle("Download")
-                .setContentText("Downloading File" + media.getName())
-                .setAutoCancel(true);
-        notificationManager.notify(0, notificationBuilder.build());
+//        notificationBuilder = new NotificationCompat.Builder(this)
+//                .setSmallIcon(R.drawable.hihlogo)
+//                .setContentTitle("Download")
+//                .setContentText("Downloading File" + media.getName())
+//                .setAutoCancel(true);
+//        notificationManager.notify(0, notificationBuilder.build());
 
         initDownload(media);
 
@@ -217,7 +217,8 @@ public class DownloadService1 extends IntentService {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        notificationManager.cancel(0);
+
+        //notificationManager.cancel(0);
     }
 
 }

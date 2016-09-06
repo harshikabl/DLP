@@ -25,7 +25,7 @@ import dlp.bluelupin.dlp.Models.LanguageData;
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "dlp_db.db";
 
     public DbHelper(Context context) {
@@ -592,7 +592,7 @@ public class DbHelper extends SQLiteOpenHelper {
         if (children.size() != 0) {
             for (Data child : children) {
                 Data media = getMediaEntityById(child.getMedia_id());
-                if (media != null) {
+                if (media != null && media.getLocalFilePath()!= null) {
                     resourceListToDownload.add(media);
                     if (Consts.IS_DEBUG_LOG) {
                         Log.d(Consts.LOG_TAG, "added media: " + media.getId() + " type: " + media.getType() + " download url: " + media.getDownload_url() + " localfilePath: " + media.getLocalFilePath());

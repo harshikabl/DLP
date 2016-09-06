@@ -160,7 +160,7 @@ public class ServiceHelper {
                                 //upsert media entity if not downloaded
                                 dbhelper.upsertDownloadMediaEntity(d);
                                 if (Consts.IS_DEBUG_LOG) {
-                                    Log.d(Consts.LOG_TAG, " Data for page: " + d);
+                                    //Log.d(Consts.LOG_TAG, " Data for page: " + d);
                                 }
                             }
                         }
