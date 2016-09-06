@@ -97,7 +97,7 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         DbHelper db = new DbHelper(NotificationsActivity.this);
         CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.Notifications);
         if (cacheSeviceCallData != null) {
-           // request.setStart_date(cacheSeviceCallData.getLastCalled());
+            // request.setStart_date(cacheSeviceCallData.getLastCalled());
             Log.d(Consts.LOG_TAG, "NotificationActivity: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
         }
         ServiceCaller sc = new ServiceCaller(NotificationsActivity.this);

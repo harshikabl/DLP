@@ -26,8 +26,8 @@
                     android:layout_width="@dimen/size_70px"
                     android:layout_height="@dimen/size_70px"
                     android:layout_margin="@dimen/dimValue_5"
-                    android:src="@drawable/imageplaceholder"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/imageplaceholder" />
             </LinearLayout>
 
             <LinearLayout

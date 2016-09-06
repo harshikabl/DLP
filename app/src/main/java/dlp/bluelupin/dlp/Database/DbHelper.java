@@ -69,7 +69,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at
         db.execSQL(CREATE_MediaEntity_TABLE);
 
-        if(!tableAlreadyExists(db,"AccountEntity")) {
+        if (!tableAlreadyExists(db, "AccountEntity")) {
             String CREATE_AccountEntity_TABLE = "CREATE TABLE AccountEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, email TEXT, phone TEXT, preferred_language_id INTEGER, role TEXT, api_token TEXT, otp INTEGER, isVerified INTEGER)";
             //clientId, server_id , name , email , phone ,preferred_language_id , role, api_token, otp
             db.execSQL(CREATE_AccountEntity_TABLE);
@@ -106,8 +106,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         String query = "SELECT  COUNT(*) FROM  sqlite_master WHERE type='table' AND name='" + tableName + "'";
         Cursor cursor = db.rawQuery(query, null);
-        if (!cursor.moveToFirst())
-        {
+        if (!cursor.moveToFirst()) {
             return false;
         }
         int count = cursor.getInt(0);
@@ -609,10 +608,10 @@ public class DbHelper extends SQLiteOpenHelper {
         return resourceListToDownload;
     }
 
-    private List<Data> getDownloadResourceOfChild(String type,  Data parent) {
+    private List<Data> getDownloadResourceOfChild(String type, Data parent) {
         List<Data> resourceListToDownload = new ArrayList<Data>();
         List<Data> resourceListOfChild = getDataEntityByParentIdAndType(parent.getId(), type);
-        for (Data child: resourceListOfChild){
+        for (Data child : resourceListOfChild) {
             Data media = getMediaEntityById(child.getMedia_id());
             if (media != null) {
                 resourceListToDownload.add(media);
@@ -621,25 +620,22 @@ public class DbHelper extends SQLiteOpenHelper {
         return resourceListToDownload;
     }
 
-    public List<Data> getThumbnailsToDownload(Integer parentId, List<Data> resourceListToDownload)
-    {
+    public List<Data> getThumbnailsToDownload(Integer parentId, List<Data> resourceListToDownload) {
         List<Data> children = getDataEntityByParentId(parentId);
-        if(children.size() <=0)
-        {
+        if (children.size() <= 0) {
             return resourceListToDownload;
         }
-        for (Data child:children) {
-            if(child.getThumbnail_media_id() != 0) {
+        for (Data child : children) {
+            if (child.getThumbnail_media_id() != 0) {
                 Data media = getMediaEntityById(child.getThumbnail_media_id());
                 if (media != null) {
                     resourceListToDownload.add(media);
                 }
             }
-            resourceListToDownload.addAll(getThumbnailsToDownload(child.getId(),new ArrayList<Data>()));
+            resourceListToDownload.addAll(getThumbnailsToDownload(child.getId(), new ArrayList<Data>()));
         }
         return resourceListToDownload;
     }
-
 
 
     //region MediaEntity
@@ -698,8 +694,8 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("server_id", ob.getId());
         values.put("name", ob.getName());
         values.put("type", ob.getType());
-        values.put("download_url",ob.getDownload_url());
-        values.put("thumbnail_url",ob.getThumbnail_url());
+        values.put("download_url", ob.getDownload_url());
+        values.put("thumbnail_url", ob.getThumbnail_url());
         values.put("thumbnail_file_path", ob.getThumbnail_file_path());
         values.put("url", ob.getUrl());
         values.put("file_path", ob.getFile_path());
@@ -723,8 +719,8 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("name", ob.getName());
         values.put("type", ob.getType());
         values.put("url", ob.getUrl());
-        values.put("download_url",ob.getDownload_url());
-        values.put("thumbnail_url",ob.getThumbnail_url());
+        values.put("download_url", ob.getDownload_url());
+        values.put("thumbnail_url", ob.getThumbnail_url());
         values.put("thumbnail_file_path", ob.getThumbnail_file_path());
         values.put("file_path", ob.getFile_path());
         values.put("language_id", ob.getLanguage_id());
@@ -1539,10 +1535,11 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return ob;
     }
+
     //get all notification data
     public List<Data> getAllNotificationDataEntity(int languageId) {
         String query = "Select id, client_id , send_at , message ,  language_id , status , custom_data , created_by , updated_by , created_at , updated_at ,deleted_at FROM NotificationEntity " +
-                " where language_id = " + languageId ;
+                " where language_id = " + languageId;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -1561,6 +1558,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+
     //id , client_id , send_at ,  message , language_id , status , custom_data ,created_by ,updated_by , created_at , updated_at , deleted_at
     private void populateNotificationDataEntity(Cursor cursor, Data ob) {
         ob.setId(Integer.parseInt(cursor.getString(0)));

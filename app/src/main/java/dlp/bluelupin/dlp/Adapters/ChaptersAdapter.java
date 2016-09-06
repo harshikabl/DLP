@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.ActivityCompat;
@@ -114,9 +116,15 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                     intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                     intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
                     context.startService(intent);
-                }
-                new DownloadImageTask(holder.chapterImage)
+                    new DownloadImageTask(holder.chapterImage)
                             .execute(media.getDownload_url());
+                } else {
+                    File imgFile = new File(media.getLocalFilePath());
+                    if (imgFile.exists()) {
+                        Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        holder.chapterImage.setImageBitmap(bitmap);
+                    }
+                }
 
             }
         }
@@ -138,7 +146,17 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                 holder.downloadIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (resourcesToDownloadList.size() > 0) {
+                        DbHelper dbhelper = new DbHelper(context);
+                        List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId());
+                        if (Consts.IS_DEBUG_LOG) {
+                            Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
+                        }
+                        for (Data resource : resourcesToDownloadList) {
+                            //dbHelper.upsertDownloadingFileEntity(resource);
+                            Log.d(Consts.LOG_TAG, "Resource to be DL: " + resource.getId() + " downloadUrl: " + resource.getDownload_url());
+                        }
+
+
 
 //                        {
 //                            List<Data> resourceListToDownload = new ArrayList<Data>();
@@ -151,22 +169,22 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 //                            }
 //                        }
 
-                            Gson gson = new Gson();
-                            String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
+                        Gson gson = new Gson();
+                        String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
 //
-                            FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                            DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList);
-                            FragmentTransaction transaction = fragmentManager.beginTransaction();
-                            transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
-                            transaction.replace(R.id.container, fragment)
-                                    .addToBackStack(null)
-                                    .commit();
+                        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                        DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList);
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                        transaction.replace(R.id.container, fragment)
+                                .addToBackStack(null)
+                                .commit();
 
-                        }
                     }
                 });
 
             } else {
+               
                 holder.download_layout.setVisibility(View.GONE);
             }
         }

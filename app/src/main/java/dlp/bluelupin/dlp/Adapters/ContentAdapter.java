@@ -29,6 +29,7 @@ import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.ContentFragment;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
+import dlp.bluelupin.dlp.Fragments.WebFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
@@ -147,7 +148,6 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         }
 
 
-
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,6 +156,22 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                         Data media = dbHelper.getMediaEntityById(data.getMedia_id());
                         if (media != null) {
                             navigateBasedOnMediaType(media);
+                        }
+                    }
+                } else if (data.getType().equalsIgnoreCase("url")) {
+                    if (data.getMedia_id() != 0) {
+                        Data media = dbHelper.getMediaEntityById(data.getMedia_id());
+                        if (media != null) {
+                            String url = media.getUrl();
+                            if (url != null) {
+                                FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                                WebFragment fragment = WebFragment.newInstance(url, "");
+                                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                                transaction.replace(R.id.container, fragment)
+                                        .addToBackStack(null)
+                                        .commit();
+                            }
                         }
                     }
                 }

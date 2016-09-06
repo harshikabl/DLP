@@ -2,6 +2,8 @@ package dlp.bluelupin.dlp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Consts;
@@ -53,7 +56,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
 
         final DbHelper dbHelper = new DbHelper(context);
         final Data data = itemList.get(position);
-        if(data.getLang_resource_name() != null) {
+        if (data.getLang_resource_name() != null) {
             Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (titleResource != null) {
@@ -61,7 +64,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
             }
         }
 
-        if(data.getLang_resource_description() != null) {
+        if (data.getLang_resource_description() != null) {
             Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (descriptionResource != null) {
@@ -69,10 +72,9 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
             }
         }
 
-        if(data.getThumbnail_media_id() != 0)
-        {
+        if (data.getThumbnail_media_id() != 0) {
             Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-            if (media != null && media.getUrl()!= null) {
+            if (media != null && media.getUrl() != null) {
                 if (media.getLocalFilePath() == null) {
 
                     Gson gson = new Gson();
@@ -83,7 +85,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
                     context.startService(intent);
                     new DownloadImageTask(holder.courseImage)
                             .execute(media.getUrl());
+                } else {
+                    File imgFile = new File(media.getLocalFilePath());
+                    if (imgFile.exists()) {
+                        Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        holder.courseImage.setImageBitmap(bitmap);
+                    }
                 }
+
             }
         }
 
@@ -92,7 +101,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
             public void onClick(View v) {
                 FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
                 String type = dbHelper.getTypeOfChildren(data.getId());
-                if(Consts.IS_DEBUG_LOG)
+                if (Consts.IS_DEBUG_LOG)
                     Log.d(Consts.LOG_TAG, "Navigating to  data id: " + data.getId() + " type: " + type);
 
                 ChaptersFragment fragment = ChaptersFragment.newInstance(data.getId(), type);
