@@ -95,7 +95,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
 
                 if (media != null) {
                     if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " Image Url: " + media.getUrl());
+                        Log.d(Consts.LOG_TAG, "Media id " + media.getId() + " Image Url: " + media.getUrl());
                     }
                     String titleText = null;
                     if (resource != null) {
@@ -121,15 +121,31 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                     if (resource != null) {
                         titleText = resource.getContent();
                     }
-                    if (data.getThumbnail_media_id() != 0) {
-                        Data videoThumbnail = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-                        FrameLayout imageContainer = makeImage(videoThumbnail.getUrl(), titleText);
-                        holder.contentContainer.addView(imageContainer);
-                    }
+
+                    //Data videoThumbnail = dbHelper.getMediaEntityById(data.getMedia_id());
+                    FrameLayout imageContainer = makeImage(media.getThumbnail_url(), titleText);
+                    holder.contentContainer.addView(imageContainer);
+
                 }
 
             }
         }
+
+        if (data.getType().equalsIgnoreCase("Url")) {
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, " Url resource text: " + resource.getContent());
+            }
+            TextView dynamicTextView = new TextView(context);
+            dynamicTextView.setTypeface(VodafoneRg);
+            dynamicTextView.setText(Html.fromHtml(resource.getContent()));
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            layoutParams.setMargins(0, 10, 0, 10);
+            dynamicTextView.setLayoutParams(layoutParams);
+            holder.contentContainer.addView(dynamicTextView);
+        }
+
 
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -138,7 +154,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                 if (data.getType().equalsIgnoreCase("video")) {
                     if (data.getMedia_id() != 0) {
                         Data media = dbHelper.getMediaEntityById(data.getMedia_id());
-                        if(media!=null){
+                        if (media != null) {
                             navigateBasedOnMediaType(media);
                         }
                     }

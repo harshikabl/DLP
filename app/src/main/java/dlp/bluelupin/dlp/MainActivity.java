@@ -2,7 +2,10 @@ package dlp.bluelupin.dlp;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -15,6 +18,7 @@ import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -61,7 +65,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    private static final int PERMISSION_REQUEST_CODE = 1;
+
     private Toolbar toolbar;
     private TextView title;
     public FrameLayout downloadContainer;
@@ -164,6 +173,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //registerReceiver();
+        String localFolderPath = Consts.outputDirectoryLocation;
+        File outputFolder = new File(localFolderPath);
+        if(!outputFolder.exists())
+        {
+            outputFolder.mkdirs();
+        }
+
         setMenuLayout();
     }
 
@@ -246,63 +263,65 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    /*  @Override
-      public boolean onNavigationItemSelected(MenuItem item) {
-          // Handle navigation view item clicks here.
-          int id = item.getItemId();
-          if (id == R.id.notification) {
-              Intent intent = new Intent(this, NotificationsActivity.class);
-              startActivity(intent);
-              overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
-          } else if (id == R.id.nav_gallery) {
-              Intent intent = new Intent(this, LanguageActivity.class);
-              startActivity(intent);
-              overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
-          } else if (id == R.id.zip) {
-              Utility.verifyStoragePermissions(this);
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        if (id == R.id.notification) {
+            //item.setIcon(R.drawable.ic_media_play);
+            Intent intent = new Intent(this, NotificationsActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
+        } else if (id == R.id.nav_gallery) {
+            Intent intent = new Intent(this, LanguageActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
+        } else if (id == R.id.zip) {
+            Utility.verifyStoragePermissions(this);
 
-              CardReaderHelper cardReaderHelper = new CardReaderHelper(MainActivity.this);
-              String SDPath = Utility.getSelectFolderPathFromSharedPreferences(MainActivity.this);// get this location from sharedpreferance;
-              if (SDPath != null && !SDPath.equals("")) {
-                  cardReaderHelper.readDataFromSDCard(SDPath);
-              } else {
-                  cardReaderHelper.readDataFromSDCard(Consts.inputDirectoryLocation);
-              }
+            CardReaderHelper cardReaderHelper = new CardReaderHelper(MainActivity.this);
+            String SDPath = Utility.getSelectFolderPathFromSharedPreferences(MainActivity.this);// get this location from sharedpreferance;
+            if (SDPath != null && !SDPath.equals("")) {
+                cardReaderHelper.readDataFromSDCard(SDPath);
+            } else {
+                cardReaderHelper.readDataFromSDCard(Consts.inputDirectoryLocation);
+            }
 
-          } else if (id == R.id.favorites) {
-              FragmentManager fragmentManager = this.getSupportFragmentManager();
-              FavoritesFragment fragment = FavoritesFragment.newInstance("", "");
-              FragmentTransaction transaction = fragmentManager.beginTransaction();
-              transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
-              transaction.replace(R.id.container, fragment)
-                      .addToBackStack(null)
-                      .commit();
-          } else if (id == R.id.selectFolder) {
-              FragmentManager fragmentManager = this.getSupportFragmentManager();
-              SelectLocationFragment fragment = SelectLocationFragment.newInstance("", "");
-              FragmentTransaction transaction = fragmentManager.beginTransaction();
-              transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
-              transaction.replace(R.id.container, fragment)
-                      .addToBackStack(null)
-                      .commit();
-          } else if (id == R.id.nav_send) {
+        } else if (id == R.id.favorites) {
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            FavoritesFragment fragment = FavoritesFragment.newInstance("", "");
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+            transaction.replace(R.id.container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        } else if (id == R.id.selectFolder) {
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            SelectLocationFragment fragment = SelectLocationFragment.newInstance("", "");
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+            transaction.replace(R.id.container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        } else if (id == R.id.nav_send) {
 
-          } else if (id == R.id.logout) {
-              DbHelper dbhelper = new DbHelper(MainActivity.this);
-              dbhelper.deleteAccountData();
-              Toast.makeText(MainActivity.this, "You have been logged out.", Toast.LENGTH_LONG).show();
-              Intent mainIntent = new Intent(MainActivity.this, LanguageActivity.class);
-              startActivity(mainIntent);
-              finish();
-          }
+        } else if (id == R.id.logout) {
+            DbHelper dbhelper = new DbHelper(MainActivity.this);
+            dbhelper.deleteAccountData();
+            Toast.makeText(MainActivity.this, "You have been logged out.", Toast.LENGTH_LONG).show();
+            Intent mainIntent = new Intent(MainActivity.this, LanguageActivity.class);
+            startActivity(mainIntent);
+            finish();
+        }
 
 
           return true;
-      }*/
+      }
     //close drawer after item select
     public void closeDrawer() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        //return true;
     }
 
     public void setScreenTitle(String heading) {

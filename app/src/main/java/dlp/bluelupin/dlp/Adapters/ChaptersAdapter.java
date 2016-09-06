@@ -1,17 +1,29 @@
 package dlp.bluelupin.dlp.Adapters;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Consts;
@@ -22,6 +34,7 @@ import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -55,7 +68,12 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
         holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
-
+//        holder.starIcon.setTypeface(materialdesignicons_font);
+//        holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
+//        holder.favorite.setTypeface(VodafoneExB);
+//        holder.download.setTypeface(VodafoneExB);
+//        holder.downloadIcon.setTypeface(materialdesignicons_font);
+//        holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
 
         //show and hide favorite icon layout only in chapter layout
         /*if (type.equalsIgnoreCase(Consts.CHAPTER)) {
@@ -87,22 +105,57 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
         if (data.getThumbnail_media_id() != 0) {
             Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-            if (media != null) {
-                //holder.chapterImage.
-                new DownloadImageTask(holder.chapterImage)
-                        .execute(media.getUrl());
+            if (media != null && media.getDownload_url()!= null) {
+                if (media.getLocalFilePath() == null) {
+
+                    Gson gson = new Gson();
+                    Intent intent = new Intent(context, DownloadService1.class);
+                    String strJsonmedia = gson.toJson(media);
+                    intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                    intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
+                    context.startService(intent);
+                    new DownloadImageTask(holder.chapterImage)
+                            .execute(media.getDownload_url());
+                }
             }
         }
+
         //if meadia not downloaded then show download_layout
-        if (data.getMedia_id() != 0) {
-            final Data media = dbHelper.getDownloadMediaEntityById(data.getMedia_id());
+        if (data.getThumbnail_media_id() != 0) {
+            final Data media = dbHelper.getDownloadMediaEntityById(data.getThumbnail_media_id());
             if (media != null) {
                 holder.download_layout.setVisibility(View.VISIBLE);
                 holder.downloadIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        DbHelper dbhelper = new DbHelper(context);
+                        List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId());
+                        if (Consts.IS_DEBUG_LOG) {
+                            Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
+                        }
+                        for (Data resource : resourcesToDownloadList) {
+                            //dbHelper.upsertDownloadingFileEntity(resource);
+                            Log.d(Consts.LOG_TAG, "Resource to be DL: " + resource.getId() + " downloadUrl: " + resource.getDownload_url());
+                        }
+
+
+
+//                        {
+//                            List<Data> resourceListToDownload = new ArrayList<Data>();
+//                            List<Data> resourceToDownload = dbhelper.getThumbnailsToDownload(data.getId(),resourceListToDownload);
+//                            if (Consts.IS_DEBUG_LOG) {
+//                                Log.d(Consts.LOG_TAG, "Number of thumbnailsToDownload to download for chapter: " + data.getId() + " is: " + resourceToDownload.size());
+//                                for (Data resource:resourceToDownload) {
+//                                    Log.d(Consts.LOG_TAG, "Resource to be DL: " + resource.getId() + " url: " + resource.getUrl());
+//                                }
+//                            }
+//                        }
+
+                        Gson gson = new Gson();
+                        String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
+//
                         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                        DownloadingFragment fragment = DownloadingFragment.newInstance(data.getMedia_id(), media.getUrl());
+                        DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList);
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                         transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
                         transaction.replace(R.id.container, fragment)
@@ -120,7 +173,6 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                 holder.download_layout.setVisibility(View.GONE);
             }
         }
-
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +212,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             }
         });
     }
+
 
     @Override
     public int getItemCount() {

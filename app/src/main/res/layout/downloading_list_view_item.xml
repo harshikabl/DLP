@@ -112,7 +112,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="0.6"
                         android:gravity="left|center"
-                        android:text="70% Completed"
+                        android:text=""
                         android:textColor="#e60000"
                         android:textSize="@dimen/dimTextSize_13" />
 

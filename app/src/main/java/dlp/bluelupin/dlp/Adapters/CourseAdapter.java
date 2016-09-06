@@ -1,6 +1,7 @@
 package dlp.bluelupin.dlp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
 import dlp.bluelupin.dlp.Consts;
@@ -18,6 +21,7 @@ import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.ChaptersFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -68,10 +72,18 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
         if(data.getThumbnail_media_id() != 0)
         {
             Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-            if(media != null) {
-                //holder.chapterImage.
-                new DownloadImageTask(holder.courseImage)
-                        .execute(media.getUrl());
+            if (media != null && media.getUrl()!= null) {
+                if (media.getLocalFilePath() == null) {
+
+                    Gson gson = new Gson();
+                    Intent intent = new Intent(context, DownloadService1.class);
+                    String strJsonmedia = gson.toJson(media);
+                    intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                    intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.URL);
+                    context.startService(intent);
+                    new DownloadImageTask(holder.courseImage)
+                            .execute(media.getUrl());
+                }
             }
         }
 

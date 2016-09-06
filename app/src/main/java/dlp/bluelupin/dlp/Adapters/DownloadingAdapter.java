@@ -16,12 +16,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.List;
@@ -32,6 +35,7 @@ import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Services.ServiceHelper;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -50,6 +54,7 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
         this.itemList = list;
         this.context = context;
         this.type = type;
+
     }
 
     @Override
@@ -92,10 +97,20 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
         if (data.getThumbnail_media_id() != 0) {
             Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
             if (media != null) {
-                //holder.chapterImage.
-                new DownloadImageTask(holder.mediaImage)
-                        .execute(media.getUrl());
+                if (media.getLocalFilePath() == null) {
+
+                    Gson gson = new Gson();
+                    Intent intent = new Intent(context, DownloadService1.class);
+                    String strJsonmedia = gson.toJson(media);
+                    intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                    context.startService(intent);
+                    new DownloadImageTask(holder.mediaImage)
+                            .execute(media.getThumbnail_url());
+                }
             }
+        }
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "**** settinng progress for media Id: " + data.getId() + " progress:"+ data.getProgress() + "%");
         }
         if (data.getProgress() != 0) {
             holder.downloadProgress.setText(data.getProgress() + "% Completed");
