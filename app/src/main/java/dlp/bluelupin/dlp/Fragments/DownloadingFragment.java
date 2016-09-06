@@ -22,6 +22,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,7 +33,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import dlp.bluelupin.dlp.Activities.DownloadService;
 import dlp.bluelupin.dlp.Adapters.DownloadingAdapter;
@@ -38,7 +43,9 @@ import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Models.DownloadData;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.BindService;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -52,11 +59,13 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_RESOURCES = "resources";
 
     // TODO: Rename and change types of parameters
     private int mediaId;
     private String mediaUrl;
-
+    private  List<Data> resourcesToDownloadList =null;
+    private List<Data> uniqueResourcesToDownload = null;
 
     public DownloadingFragment() {
         // Required empty public constructor
@@ -80,12 +89,28 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         return fragment;
     }
 
+    public static DownloadingFragment newInstance(String strJsonMediaList) {
+        DownloadingFragment fragment = new DownloadingFragment();
+        Bundle args = new Bundle();
+
+       // resourcesToDownloadList
+        args.putString(ARG_RESOURCES, strJsonMediaList);
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mediaId = getArguments().getInt(ARG_PARAM1);
             mediaUrl = getArguments().getString(ARG_PARAM2);
+            if(getArguments().getString(ARG_RESOURCES) != null)
+            {
+                String strResourcesToDownloadList = getArguments().getString(ARG_RESOURCES);
+                resourcesToDownloadList = new Gson().fromJson(strResourcesToDownloadList, new TypeToken<List<Data>>() {}.getType());
+            }
         }
     }
 
@@ -121,23 +146,106 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         TextView download = (TextView) view.findViewById(R.id.download);
         download.setTypeface(VodafoneExB);
 
-
-        DbHelper dbHelper = new DbHelper(getActivity());
-        List<Data> data = dbHelper.getAllDownloadingMediaFile();
-
-        downloadingAdapter = new DownloadingAdapter(context, data);
         downloadingRecyclerView = (RecyclerView) view.findViewById(R.id.downloadingRecyclerView);
         downloadingRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         downloadingRecyclerView.setHasFixedSize(true);
         //downloadingRecyclerView.setNestedScrollingEnabled(false);
-        downloadingRecyclerView.setAdapter(downloadingAdapter);
 
-        serviceIntent = new Intent(context, BindService.class);
-        context.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+
+//        serviceIntent = new Intent(context, BindService.class);
+//        context.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE);
+//        context.startService(serviceIntent);
 
         registerReceiver();
+//        DbHelper dbHelper = new DbHelper(getActivity());
+//        List<Data> data = dbHelper.getAllDownloadingMediaFile();
+
+
+        Gson gson = new Gson();
+        uniqueResourcesToDownload =  getResourcesToDownload(resourcesToDownloadList);
+        for(Data media: uniqueResourcesToDownload) {
+            Intent intent = new Intent(context, DownloadService1.class);
+            String strJsonmedia = gson.toJson(media);
+            intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+            context.startService(intent);
+        }
+        downloadingAdapter = new DownloadingAdapter(context, uniqueResourcesToDownload);
+        downloadingRecyclerView.setAdapter(downloadingAdapter);
+    }
+
+    private List<Data> getResourcesToDownload(List<Data> inputList)
+    {
+        List<Data> outputList = new ArrayList<Data>();
+        for(Data media: inputList) {
+            if(media.getLocalFilePath() == null)
+            {
+                if(!isItemAlreadyExists(media, outputList)) {
+                    outputList.add(media);
+                }
+            }
+        }
+        return outputList;
+    }
+
+    private Boolean isItemAlreadyExists(Data item, List<Data> inputList)
+    {
+        for(Data media: inputList) {
+            if(media.getId() == item.getId())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void registerReceiver(){
+
+        LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(this.getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Consts.MESSAGE_PROGRESS);
+        bManager.registerReceiver(broadcastReceiver, intentFilter);
 
     }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if(intent.getAction().equals(Consts.MESSAGE_PROGRESS)){
+
+                DownloadData download = intent.getParcelableExtra(Consts.EXTRA_DOWNLOAD_DATA);
+               // mProgressBar.setProgress(download.getProgress());
+
+                for(Data media: uniqueResourcesToDownload) {
+                    if(media.getId() == download.getId())
+                    {
+                        media.setProgress(download.getProgress());
+                        if (Consts.IS_DEBUG_LOG) {
+                            Log.d(Consts.LOG_TAG, "**** media Id: " + download.getId() + " progress:"+ download.getProgress() + "%");
+                        }
+                    }
+                }
+                downloadingRecyclerView.setAdapter(downloadingAdapter);
+                downloadingAdapter.notifyDataSetChanged();
+//                if(download.getProgress() == 100){
+//
+//                    mProgressText.setText("File Download Complete");
+//
+//                } else {
+//
+//                    mProgressText.setText(String.format("Downloaded (%d/%d) MB",download.getCurrentFileSize(),download.getTotalFileSize()));
+//
+//                }
+            }
+        }
+    };
+
+    private Data getDataFromResourcesToDownloadList(int id)
+    {
+
+        return null;
+    }
+
 
     BroadcastReceiver intentReceiver = new BroadcastReceiver() {
         @Override
@@ -162,16 +270,16 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         }
     };
 
-    private void registerReceiver() {
-        unregisterReceiver();
-        IntentFilter intentToReceiveFilter = new IntentFilter();
-        intentToReceiveFilter
-                .addAction(Consts.mBroadcastProgressUpdateAction);
-        intentToReceiveFilter
-                .addAction(Consts.mBroadcastDeleteAction);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(intentReceiver, intentToReceiveFilter);
-        mReceiversRegistered = true;
-    }
+//    private void registerReceiver() {
+//        unregisterReceiver();
+//        IntentFilter intentToReceiveFilter = new IntentFilter();
+//        intentToReceiveFilter
+//                .addAction(Consts.mBroadcastProgressUpdateAction);
+//        intentToReceiveFilter
+//                .addAction(Consts.mBroadcastDeleteAction);
+//        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(intentReceiver, intentToReceiveFilter);
+//        mReceiversRegistered = true;
+//    }
 
     private void unregisterReceiver() {
         if (mReceiversRegistered) {
@@ -199,7 +307,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-            context.startService(serviceIntent);
+
         }
 
         public void onServiceDisconnected(ComponentName className) {

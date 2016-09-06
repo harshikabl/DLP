@@ -24,17 +24,13 @@ public class CardReaderHelper {
     {
         this.context = context;
     }
-    private static String SDPath = Environment.getExternalStorageDirectory().getAbsolutePath();
 
-
-    private static String outputBasePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-    private static String outputDirectoryLocation = outputBasePath + "/dlpUnzipped/";
 
     public Boolean readDataFromSDCard(String locationOnSdCard)
     {
         Boolean operationSuccess = false;
         // Determine if input data exists
-        String strInputLocation = SDPath + locationOnSdCard;
+        String strInputLocation = Consts.SDPath + locationOnSdCard;
         File inputLocation = new File(strInputLocation);
         if(!inputLocation.exists() || !inputLocation.isDirectory())
         {
@@ -50,7 +46,7 @@ public class CardReaderHelper {
             }
         }
         // Determine if output path exists
-        String strUnzipLocation = outputDirectoryLocation;
+        String strUnzipLocation = Consts.outputDirectoryLocation;
         File unzipLocation = new File(strUnzipLocation);
         if(!unzipLocation.exists()) {
             unzipLocation.mkdirs();

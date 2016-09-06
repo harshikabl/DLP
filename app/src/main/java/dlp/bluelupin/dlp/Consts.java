@@ -1,5 +1,7 @@
 package dlp.bluelupin.dlp;
 
+import android.os.Environment;
+
 /**
  * Created by subod on 21-Jul-16.
  */
@@ -37,6 +39,8 @@ public class Consts {
     public static final String Notifications = "notifications";
     public static final String MediaLanguage_Latest = "medialanguage/latest";
     public static final String Languages = "languages";
+    public static final String EXTRA_MEDIA = "extraMedia";
+    public static final String EXTRA_DOWNLOAD_DATA = "extraDownloadData";
 
     public static final String SENDER = "HP-MOBKNT";
     public static String inputDirectoryLocation = "/dlp/";
@@ -45,6 +49,12 @@ public class Consts {
     // 'Course','Subject','Chapter','Topic','Text','Image','Video','Url','Audio','Comment','Home','Other','DownloadFile','Folder'
     public static final String OFFLINE_MESSAGE = "You are not online!!!!";
     public static final String APP_DIRECTORY = "/DLP" + "Directory/";
+
+    public static final String MESSAGE_PROGRESS = "message_progress";
+    public static String SDPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+    public static String outputBasePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static String outputDirectoryLocation = outputBasePath + "/dlpUnzipped/";
     public static final String mBroadcastDeleteAction = "deleteDownload";
     public static final String mBroadcastProgressUpdateAction = "downloadProgress";
 

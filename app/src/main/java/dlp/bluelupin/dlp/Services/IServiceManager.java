@@ -51,4 +51,8 @@ public interface IServiceManager {
     @POST(Consts.Notifications)
     Call<ContentData> NotificationContent(@Body ContentServiceRequest request);
 
+    @GET
+    @Streaming
+    Call<ResponseBody> downloadFile(@Url String fileUrl);
+
 }

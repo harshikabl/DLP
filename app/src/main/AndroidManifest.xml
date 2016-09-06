@@ -41,7 +41,7 @@
 
         <service android:name=".Activities.DownloadService"/>
         <service android:name=".Utilities.BindService" />
-
+        <service android:name=".Services.DownloadService1"/>
 
         <!-- SMS Receiver -->
         <receiver android:name=".Utilities.SmsReceiver"

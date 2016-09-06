@@ -92,7 +92,7 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         DbHelper db = new DbHelper(NotificationsActivity.this);
         CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.Notifications);
         if (cacheSeviceCallData != null) {
-            request.setStart_date(cacheSeviceCallData.getLastCalled());
+           // request.setStart_date(cacheSeviceCallData.getLastCalled());
             Log.d(Consts.LOG_TAG, "NotificationActivity: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
         }
         ServiceCaller sc = new ServiceCaller(NotificationsActivity.this);
@@ -117,7 +117,8 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
     //set notification data into adapter
     private void setNotification() {
         DbHelper db = new DbHelper(NotificationsActivity.this);
-        List<Data> data = db.getAllNotificationDataEntity();
+        int languageId = Utility.getLanguageIdFromSharedPreferences(NotificationsActivity.this);
+        List<Data> data = db.getAllNotificationDataEntity(languageId);
         if (data != null) {
             Log.d(Consts.LOG_TAG, "NotificationActivity: data count: " + data.size());
             NotificationAdapter notificationsAdapter = new NotificationAdapter(NotificationsActivity.this, data);

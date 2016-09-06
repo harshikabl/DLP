@@ -2,7 +2,10 @@ package dlp.bluelupin.dlp;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -15,6 +18,7 @@ import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -41,6 +45,7 @@ import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
 import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
+import dlp.bluelupin.dlp.Models.DownloadData;
 import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.IServiceManager;
@@ -59,6 +64,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    private static final int PERMISSION_REQUEST_CODE = 1;
+
     private Toolbar toolbar;
     private TextView title;
     public FrameLayout downloadContainer;
@@ -138,8 +147,15 @@ public class MainActivity extends AppCompatActivity
             name.setText(accountData.getName());
             email.setText(accountData.getEmail());
         }
-    }
 
+        //registerReceiver();
+        String localFolderPath = Consts.outputDirectoryLocation;
+        File outputFolder = new File(localFolderPath);
+        if(!outputFolder.exists())
+        {
+            outputFolder.mkdirs();
+        }
+    }
 
     private void setUpCourseFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();

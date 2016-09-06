@@ -82,7 +82,7 @@ public class Utility {
         if (prefs != null) {
             LanguageId = prefs.getInt("languageId", 1);
             if (Consts.IS_DEBUG_LOG) {
-                Log.d(Consts.LOG_TAG, "LanguageId*********" + LanguageId);
+                //Log.d(Consts.LOG_TAG, "LanguageId*********" + LanguageId);
             }
         }
         return LanguageId;
