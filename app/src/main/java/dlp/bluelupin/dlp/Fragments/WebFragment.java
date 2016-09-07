@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -85,6 +86,10 @@ public class WebFragment extends Fragment {
     }
 
     private void init(View view) {
+        MainActivity rootActivity = (MainActivity) getActivity();
+        rootActivity.setScreenTitle(mParam2);
+
+
         webView = (WebView) view.findViewById(R.id.webView);
 
         // webView.setInitialScale(50);
@@ -103,18 +108,18 @@ public class WebFragment extends Fragment {
         webView.setHorizontalScrollBarEnabled(false);
         if (Utility.isOnline(context)) {
             if (webView != null) {
-                customProgressDialog.show();
+                /*customProgressDialog.show();
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
                         customProgressDialog.dismiss();
                     }
-                });
+                });*/
                 webView.loadUrl(mParam1);
             }
         } else {
             if (customProgressDialog.isShowing()) {
-                customProgressDialog.dismiss();
+                // customProgressDialog.dismiss();
             }
             Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, context);
         }

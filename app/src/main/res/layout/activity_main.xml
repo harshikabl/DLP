@@ -59,7 +59,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <LinearLayout android:id="@+id/poweredBylayout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.1"
@@ -71,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/dimValue_10"
-                    android:text="Created by :"
+                    android:text="Powered by"
                     android:textColor="#4a4d4e"
                     android:textSize="@dimen/dimTextSize_18" />
 

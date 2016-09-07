@@ -15,6 +15,7 @@ public class ContentViewHolder extends RecyclerView.ViewHolder {
     public android.support.v7.widget.CardView cardView;
     //public TextView contentTitle, contentDescription;
     public LinearLayout contentContainer;
+    public TextView playIcon;
 
     public ContentViewHolder(View itemView) {
         super(itemView);
@@ -25,6 +26,7 @@ public class ContentViewHolder extends RecyclerView.ViewHolder {
 //        contentTitle = (TextView) itemView.findViewById(R.id.contentTitle);
 //        contentDescription = (TextView) itemView.findViewById(R.id.contentDescription);
         contentContainer = (LinearLayout) itemView.findViewById(R.id.contentContainer);
+        playIcon = (TextView) itemView.findViewById(R.id.playIcon);
     }
 
 

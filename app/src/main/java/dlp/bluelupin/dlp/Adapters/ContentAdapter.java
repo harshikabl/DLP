@@ -20,6 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -61,6 +62,8 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
 //        holder.contentTitle.setTypeface(VodafoneExB);
 //        holder.contentDescription.setTypeface(VodafoneRg);
+        Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
+        holder.playIcon.setTypeface(materialdesignicons_font);
 
         final DbHelper dbHelper = new DbHelper(context);
         final Data data = itemList.get(position);
@@ -79,12 +82,13 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                         Log.d(Consts.LOG_TAG, " resource text: " + resource.getContent());
                     }
                     TextView dynamicTextView = new TextView(context);
+                    dynamicTextView.setTextSize(18);
                     dynamicTextView.setTypeface(VodafoneRg);
                     dynamicTextView.setText(Html.fromHtml(resource.getContent()));
 
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                    layoutParams.setMargins(0, 10, 0, 10);
+                    layoutParams.setMargins(10, 10, 10, 10);
                     dynamicTextView.setLayoutParams(layoutParams);
                     holder.contentContainer.addView(dynamicTextView);
                 }
@@ -118,10 +122,10 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                     if (resource != null) {
                         titleText = resource.getContent();
                     }
-
                     //Data videoThumbnail = dbHelper.getMediaEntityById(data.getMedia_id());
                     FrameLayout imageContainer = makeImage(media.getThumbnail_url(), titleText);
                     holder.contentContainer.addView(imageContainer);
+                    holder.playIcon.setText(Html.fromHtml("&#xf40d;"));
 
                 }
 
@@ -133,16 +137,16 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                 Log.d(Consts.LOG_TAG, " Url resource text: " + resource.getContent());
             }
             TextView dynamicTextView = new TextView(context);
+            dynamicTextView.setTextSize(18);
             dynamicTextView.setTypeface(VodafoneRg);
             dynamicTextView.setText(Html.fromHtml(resource.getContent()));
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-            layoutParams.setMargins(0, 10, 0, 10);
+            layoutParams.setMargins(10, 10, 10, 10);
             dynamicTextView.setLayoutParams(layoutParams);
             holder.contentContainer.addView(dynamicTextView);
         }
-
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,11 +218,11 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         FrameLayout frameLayout = new FrameLayout(context);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
-        layoutParams.setMargins(0, 10, 0, 10);
+        layoutParams.setMargins(0, 0, 0, 0);
         frameLayout.setLayoutParams(layoutParams);
         ImageView dynamicImageView = new ImageView(context);
         dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        dynamicImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        dynamicImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         if (url != null) {
             new DownloadImageTask(dynamicImageView)
                     .execute(url);
@@ -230,6 +234,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         linearLayout.setBackground(context.getResources().getDrawable(R.drawable.gradient_black));//;background="@drawable/gradient_black"
 
         TextView dynamicTextView = new TextView(context);
+        dynamicTextView.setTextSize(18);
         if (titleText != null) {
             dynamicTextView.setText(Html.fromHtml(titleText));
         }
@@ -238,6 +243,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         textViewParams.gravity = Gravity.BOTTOM;
         //textViewParams.setMargins(0,10,0,10);
         dynamicTextView.setLayoutParams(textViewParams);
+
 
         linearLayout.addView(dynamicTextView);
 

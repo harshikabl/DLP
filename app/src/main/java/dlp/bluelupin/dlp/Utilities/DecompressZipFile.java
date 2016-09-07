@@ -92,8 +92,7 @@ public class DecompressZipFile {
                 }
             }
             zin.close();
-
-           // copyZipDataIntoDatabase();
+            //copyZipDataIntoDatabase();
         } catch (Exception e) {
             Log.e("Decompress", "unzip", e);
             if (Consts.IS_DEBUG_LOG) {
@@ -124,13 +123,13 @@ public class DecompressZipFile {
                     String localFilePath;
                     String fileName = ze.getName();
 
-                    if(inputFileName.equalsIgnoreCase(fileName)) {
+                    if (inputFileName.equalsIgnoreCase(fileName)) {
                         if (Consts.IS_DEBUG_LOG) {
                             Log.d(Consts.LOG_TAG, "reading the file " + ze.getName());
                         }
-                        byte[] bytes= new byte[(int)ze.getSize()];
+                        byte[] bytes = new byte[(int) ze.getSize()];
                         zin.read(bytes, 0, bytes.length);
-                        fileContent= new String( bytes, "UTF-8");
+                        fileContent = new String(bytes, "UTF-8");
                         break; // file found; break the while loop...
                     }
                 }
@@ -154,13 +153,13 @@ public class DecompressZipFile {
         try {
             FileInputStream fis = new FileInputStream(zipFile);
             InputStream is = fis;
-             builder = new StringBuilder();
+            builder = new StringBuilder();
             int ch;
-            while((ch = fis.read()) != -1){
-                if(Consts.IS_DEBUG_LOG) {
+            while ((ch = fis.read()) != -1) {
+                if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "ch : " + ch);
                 }
-                builder=builder.append((char)ch);
+                builder = builder.append((char) ch);
             }
 
             int size = is.available();
@@ -190,8 +189,7 @@ public class DecompressZipFile {
 
     public void _dirChecker(String location, String dir) {
         File f = new File(location + dir);
-        if(Consts.IS_DEBUG_LOG)
-        {
+        if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "_dirchecker. creating directory: " + f.getPath());
         }
         //if (!f.isDirectory()) {
@@ -200,10 +198,9 @@ public class DecompressZipFile {
         }
     }
 
-    public String addTrailingSlash(String path)
-    {
-        if (path.length()>0) {
-            if ( path.charAt(path.length() - 1) != '/') {
+    public String addTrailingSlash(String path) {
+        if (path.length() > 0) {
+            if (path.charAt(path.length() - 1) != '/') {
                 path += "/";
             }
         }

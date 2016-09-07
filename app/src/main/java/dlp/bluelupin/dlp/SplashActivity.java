@@ -147,7 +147,7 @@ public class SplashActivity extends Activity {
                     List<LanguageData> data = db.getAllLanguageDataEntity();
                     init();
                     if (Consts.IS_DEBUG_LOG) {
-                       // Log.d(Consts.LOG_TAG, "SplashActivity: callGetAllLanguage data count: " + data.size() + "  " + data);
+                        // Log.d(Consts.LOG_TAG, "SplashActivity: callGetAllLanguage data count: " + data.size() + "  " + data);
                     }
                 }
             });
@@ -158,7 +158,7 @@ public class SplashActivity extends Activity {
     }
 
     //alert for error message
-    public  void alertForErrorMessage(String errorMessage, Context mContext) {
+    public void alertForErrorMessage(String errorMessage, Context mContext) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         Typeface VodafoneExB = Typeface.createFromAsset(mContext.getAssets(), "fonts/VodafoneExB.TTF");
         final AlertDialog alert = builder.create();

@@ -65,8 +65,9 @@ public class Utility {
             );
         }
     }
+
     //set languagae
-    public static void setLanguageIntoSharedPreferences(Context context, int id,String LanguageCode) {
+    public static void setLanguageIntoSharedPreferences(Context context, int id, String LanguageCode) {
         SharedPreferences prefs = context.getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("languageId", id);
@@ -94,7 +95,7 @@ public class Utility {
     }*/
 
     //set language into locale
-    public static void setLangRecreate(Context context,String LanguageName) {
+    public static void setLangRecreate(Context context, String LanguageName) {
         Configuration config = new Configuration();
         Locale locale = new Locale(LanguageName);
         Locale.setDefault(locale);
@@ -304,7 +305,7 @@ public class Utility {
 
     //set select folder path
     public static void setSelectFolderPathIntoSharedPreferences(Context context, String path) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("folderPath", path).commit();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("folderPath", "/dlp").commit();
     }
 
     //get selcet folder path

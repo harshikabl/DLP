@@ -20,6 +20,8 @@
 
     <dimen name="size_40px">40dp</dimen>
 
+    <dimen name="size_45px">45dp</dimen>
+
     <dimen name="size_50px">50dp</dimen>
 
     <dimen name="size_60px">60dp</dimen>

@@ -136,11 +136,11 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
         }
         if (resourcesToDownloadList.size() <= 0) {
-           // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
+            // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
             holder.downloadIcon.setText(Html.fromHtml("&#xf12c;"));
         } else {
             holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
-           // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
+            // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
         }
         //if meadia not downloaded then show download_layout
         if (data.getThumbnail_media_id() != 0) {

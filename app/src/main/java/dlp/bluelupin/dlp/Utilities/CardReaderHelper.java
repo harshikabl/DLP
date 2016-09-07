@@ -20,27 +20,23 @@ import dlp.bluelupin.dlp.Models.ServiceDate;
  */
 public class CardReaderHelper {
     Context context;
-    public CardReaderHelper(Context context)
-    {
+
+    public CardReaderHelper(Context context) {
         this.context = context;
     }
 
 
-    public Boolean readDataFromSDCard(String locationOnSdCard)
-    {
+    public Boolean readDataFromSDCard(String locationOnSdCard) {
         Boolean operationSuccess = false;
         // Determine if input data exists
         String strInputLocation = Consts.SDPath + locationOnSdCard;
         File inputLocation = new File(strInputLocation);
-        if(!inputLocation.exists() || !inputLocation.isDirectory())
-        {
+        if (!inputLocation.exists() || !inputLocation.isDirectory()) {
             if (Consts.IS_DEBUG_LOG) {
                 Log.d(Consts.LOG_TAG, "CardReaderHelper: readDataFromSDCard Path DOES NOT EXISTS!!" + inputLocation.getPath());
             }
             return false;
-        }
-        else
-        {
+        } else {
             if (Consts.IS_DEBUG_LOG) {
                 Log.d(Consts.LOG_TAG, "CardReaderHelper: readDataFromSDCard scanning path for zips" + inputLocation.getPath());
             }
@@ -48,24 +44,23 @@ public class CardReaderHelper {
         // Determine if output path exists
         String strUnzipLocation = Consts.outputDirectoryLocation;
         File unzipLocation = new File(strUnzipLocation);
-        if(!unzipLocation.exists()) {
+        if (!unzipLocation.exists()) {
             unzipLocation.mkdirs();
         }
         if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "CardReaderHelper: readDataFromSDCard: output unzip directory is at: " + unzipLocation.getPath());
         }
         // Read all .zip files in the source directory
-        String[] zipFiles =  inputLocation.list();
+        String[] zipFiles = inputLocation.list();
         if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "CardReaderHelper: readDataFromSDCard: Total Zip files: " + zipFiles.length);
         }
-        for (int i = 0; i < zipFiles.length ; i++)
-        {
+        for (int i = 0; i < zipFiles.length; i++) {
             String zipFilePath = addTrailingSlash(inputLocation.getPath()) + zipFiles[i];
             DecompressZipFile decompressZipFile = new DecompressZipFile(context);
             String strUnzipLocationOfZipFile = addTrailingSlash(unzipLocation.getPath()) + addTrailingSlash(removeExtension(zipFiles[i]));
             File unzipLocationOfZipFile = new File(strUnzipLocationOfZipFile);
-            if(!unzipLocation.exists()) {
+            if (!unzipLocation.exists()) {
                 unzipLocationOfZipFile.mkdirs();
             }
             strUnzipLocationOfZipFile = addTrailingSlash(unzipLocationOfZipFile.getPath());
@@ -80,32 +75,28 @@ public class CardReaderHelper {
 
     private void ReadAndExtractZipFileBasedOnDate(String zipFilePath, DecompressZipFile decompressZipFile, String strUnzipLocationOfZipFile) {
         // read the metadata file from zip file
-        String fileContent = decompressZipFile.getFileContentFromZip(zipFilePath,"metadata.json");
+        String fileContent = decompressZipFile.getFileContentFromZip(zipFilePath, "metadata.json");
         if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "CardReaderHelper: readDataFromSDCard: metadata.json: " + fileContent);
         }
         // determine of the date of zip is recent than the latest service calls stored in database
-        if(fileContent!= null && fileContent !="")
-        {
-            ServiceDate serviceDate =  new Gson().fromJson(fileContent, ServiceDate.class);
-            if(serviceDate!= null && serviceDate.getTimestamp() !="") {
+        if (fileContent != null && fileContent != "") {
+            ServiceDate serviceDate = new Gson().fromJson(fileContent, ServiceDate.class);
+            if (serviceDate != null && serviceDate.getTimestamp() != "") {
                 Date dataDate = Utility.parseDateFromString(serviceDate.getTimestamp());
-                if(dataDate != null)
-                {
+                if (dataDate != null) {
                     DbHelper dbhelper = new DbHelper(context);
                     CacheServiceCallData cacheSeviceCallData = dbhelper.getCacheServiceCallByUrl(Consts.URL_CONTENT_LATEST);
                     if (cacheSeviceCallData != null) {
                         Date serviceLastcalledDate = Utility.parseDateFromString(cacheSeviceCallData.getLastCalled());
                         // parse data from zip ONLY if zip data is recent than last called service
-                        if(dataDate.after(serviceLastcalledDate)) {
+                        if (dataDate.after(serviceLastcalledDate)) {
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "CardReaderHelper: Starting decompressZipFile unzip as dataDate:" + dataDate + " is after serviceLastcalledDate: " + serviceLastcalledDate);
                             }
 
                             decompressZipFile.unzip(zipFilePath, strUnzipLocationOfZipFile);
-                        }
-                        else
-                        {
+                        } else {
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "CardReaderHelper: NOT DOING decompressZipFile unzip as dataDate:" + dataDate + " is NOT after serviceLastcalledDate: " + serviceLastcalledDate);
                             }
@@ -151,20 +142,18 @@ public class CardReaderHelper {
 
         return extensionPos;
     }
-    public String addTrailingSlash(String path)
-    {
-        if (path.length()>0) {
-            if ( path.charAt(path.length() - 1) != '/') {
+
+    public String addTrailingSlash(String path) {
+        if (path.length() > 0) {
+            if (path.charAt(path.length() - 1) != '/') {
                 path += "/";
             }
         }
         return path;
     }
 
-    public String addLeadingSlash(String path)
-    {
-        if (path.charAt(0) != '/')
-        {
+    public String addLeadingSlash(String path) {
+        if (path.charAt(0) != '/') {
             path = "/" + path;
         }
         return path;

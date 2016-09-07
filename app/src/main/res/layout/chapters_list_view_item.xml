@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
+    card_view:cardPreventCornerOverlap="true"
+    card_view:cardUseCompatPadding="true"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -66,75 +69,68 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#EEEEEE"
-            android:gravity="right"
             android:orientation="horizontal"
             android:padding="@dimen/dimValue_10">
 
-            <LinearLayout
-                android:id="@+id/favorite_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/dimValue_16"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:visibility="visible">
-
-                <!-- <TextView
-                     android:id="@+id/favorite"
-                     android:layout_width="0dp"
-                     android:layout_height="match_parent"
-                     android:layout_weight="0.8"
-                     android:gravity="left|center"
-                     android:text="Mark as Favorite"
-                     android:textColor="#e60000"
-                     android:textSize="@dimen/dimTextSize_14" />-->
-
-
-                <RelativeLayout
-                    android:id="@+id/starIconlayout"
-                    android:layout_width="@dimen/size_40px"
-                    android:layout_height="@dimen/size_40px"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/starIcon"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/markedfav" />
-                </RelativeLayout>
-
-            </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_30px"
+                android:layout_weight="0.6" />
 
             <LinearLayout
-                android:id="@+id/download_layout"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.4"
                 android:orientation="horizontal">
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="@dimen/size_20px"
-                    android:layout_gravity="left|center"
-                    android:layout_marginRight="@dimen/dimValue_16"
-                    android:background="#e60000" />
-
-                <!-- <TextView
-                     android:id="@+id/download"
-                     android:layout_width="0dp"
-                     android:layout_height="match_parent"
-                     android:layout_weight="0.8"
-                     android:gravity="left|center"
-                     android:text="Download Update"
-                     android:textColor="#e60000"
-                     android:textSize="@dimen/dimTextSize_14" />
- -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_weight="0.5"
                     android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/starIconlayout"
+                        android:layout_width="@dimen/size_45px"
+                        android:layout_height="@dimen/size_45px"
+                        android:layout_marginRight="@dimen/dimValue_16"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/starIcon"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/markedfav" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/download_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="@dimen/size_30px"
+                        android:layout_gravity="left|center"
+                        android:layout_marginRight="@dimen/dimValue_16"
+                        android:background="#e60000" />
+
+                    <!-- <TextView
+                         android:id="@+id/download"
+                         android:layout_width="0dp"
+                         android:layout_height="match_parent"
+                         android:layout_weight="0.8"
+                         android:gravity="left|center"
+                         android:text="Download Update"
+                         android:textColor="#e60000"
+                         android:textSize="@dimen/dimTextSize_14" />
+     -->
 
                     <RelativeLayout
                         android:id="@+id/downloadIconlayout"

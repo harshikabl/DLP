@@ -31,6 +31,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,7 @@ import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
 import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
+import dlp.bluelupin.dlp.Fragments.WebFragment;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.LanguageData;
@@ -156,6 +158,7 @@ public class MainActivity extends AppCompatActivity
         logOut.setText(Html.fromHtml("&#xf343;"));
         TextView createBy = (TextView) findViewById(R.id.createBy);
         createBy.setTypeface(VodafoneRg);
+        LinearLayout poweredBylayout = (LinearLayout) findViewById(R.id.poweredBylayout);
 
         AccountData accountData = dbhelper.getAccountData();
         if (accountData != null && !accountData.equals("")) {
@@ -182,6 +185,19 @@ public class MainActivity extends AppCompatActivity
         }
 
         setMenuLayout();
+
+        poweredBylayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                WebFragment fragment = WebFragment.newInstance("http://bluelup.in/pwrdby", "");
+                fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right)
+                        .replace(R.id.container, fragment)
+                        .addToBackStack(null)
+                        .commit();
+                closeDrawer();//nav drawer close
+            }
+        });
     }
 
     //set slider item value
@@ -218,7 +234,7 @@ public class MainActivity extends AppCompatActivity
         CourseFragment fragment = CourseFragment.newInstance("", "");
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
-                .addToBackStack(null)
+                        //.addToBackStack(null)
                 .commit();
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
@@ -226,7 +242,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -266,7 +282,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+      /*  // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.notification) {
             //item.setIcon(R.drawable.ic_media_play);
@@ -313,7 +329,7 @@ public class MainActivity extends AppCompatActivity
             Intent mainIntent = new Intent(MainActivity.this, LanguageActivity.class);
             startActivity(mainIntent);
             finish();
-        }
+        }*/
 
 
         return true;
@@ -330,6 +346,7 @@ public class MainActivity extends AppCompatActivity
         this.setTitle(heading);
         title.setText(heading);
     }
+
 
     public void setdownloadContainer(boolean on) {
         if (on) {

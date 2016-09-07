@@ -17,6 +17,8 @@
 
     <dimen name="size_40px">50.4dp</dimen>
 
+    <dimen name="size_45px">65dp</dimen>
+
     <dimen name="size_50px">80.8dp</dimen>
 
     <dimen name="size_60px">90.16dp</dimen>

@@ -512,6 +512,7 @@ public class ServiceHelper {
 
             @Override
             public void onFailure(Call<List<LanguageData>> call, Throwable t) {
+                callback.onDone(Consts.Languages, null, null);
                 if (Consts.IS_DEBUG_LOG) {
                     Log.e(Consts.LOG_TAG, "error");
                 }

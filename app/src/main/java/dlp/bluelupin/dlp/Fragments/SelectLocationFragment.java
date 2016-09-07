@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
@@ -101,11 +102,15 @@ public class SelectLocationFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("file/*");
+                intent.setType("*/*");
 
-                startActivityForResult(Intent.createChooser(intent,"Select folder"), PICKFILE_REQUEST_CODE);
+                startActivityForResult(Intent.createChooser(intent, "Select folder"), PICKFILE_REQUEST_CODE);
             }
         });
+        String SDPath = Utility.getSelectFolderPathFromSharedPreferences(context);// get this location from sharedpreferance;
+        if (SDPath != null) {
+            path.setText(SDPath);
+        }
     }
 
     @Override
@@ -117,6 +122,7 @@ public class SelectLocationFragment extends Fragment {
                 if (Fpath != null) {
                     Utility.setSelectFolderPathIntoSharedPreferences(context, Fpath);
                     path.setText(Fpath);
+                    Toast.makeText(context, Fpath, Toast.LENGTH_LONG).show();
                 }
             }
         }
