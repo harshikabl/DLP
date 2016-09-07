@@ -150,17 +150,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                 holder.downloadIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DbHelper dbhelper = new DbHelper(context);
-                        List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId());
-                        if (Consts.IS_DEBUG_LOG) {
-                            Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
-                        }
-                        for (Data resource : resourcesToDownloadList) {
-                            //dbHelper.upsertDownloadingFileEntity(resource);
-                            Log.d(Consts.LOG_TAG, "Resource to be DL: " + resource.getId() + " downloadUrl: " + resource.getDownload_url());
-                        }
-
-
+                        if (resourcesToDownloadList.size() > 0) {
 //                        {
 //                            List<Data> resourceListToDownload = new ArrayList<Data>();
 //                            List<Data> resourceToDownload = dbhelper.getThumbnailsToDownload(data.getId(),resourceListToDownload);
@@ -172,17 +162,18 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 //                            }
 //                        }
 
-                        Gson gson = new Gson();
-                        String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
+                            Gson gson = new Gson();
+                            String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
 //
-                        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                        DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList);
-                        FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
-                        transaction.replace(R.id.container, fragment)
-                                .addToBackStack(null)
-                                .commit();
+                            FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                            DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList);
+                            FragmentTransaction transaction = fragmentManager.beginTransaction();
+                            transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                            transaction.replace(R.id.container, fragment)
+                                    .addToBackStack(null)
+                                    .commit();
 
+                        }
                     }
                 });
 

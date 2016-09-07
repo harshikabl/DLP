@@ -591,7 +591,7 @@ public class DbHelper extends SQLiteOpenHelper {
         if (children.size() != 0) {
             for (Data child : children) {
                 Data media = getMediaEntityById(child.getMedia_id());
-                if (media != null && media.getLocalFilePath()!= null) {
+                if (media != null && media.getLocalFilePath()== null) {
                     resourceListToDownload.add(media);
                     if (Consts.IS_DEBUG_LOG) {
                         Log.d(Consts.LOG_TAG, "added media: " + media.getId() + " type: " + media.getType() + " download url: " + media.getDownload_url() + " localfilePath: " + media.getLocalFilePath());
