@@ -688,7 +688,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return ob;
     }
 
-    public Data getMediaEntityByIdAndLaunguagId(int id, int languageId) {
+    public Data getMediaEntityByIdAndLaunguageId(int id, int languageId) {
         String query = "SELECT clientId , server_id , name , type ,download_url , thumbnail_url , thumbnail_file_path , url , file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path  from MediaEntity WHERE server_id = " + id + " ";
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -715,16 +715,18 @@ public class DbHelper extends SQLiteOpenHelper {
             ob.setLocalFilePath(cursor.getString(13));
 
             cursor.close();
+
+            Data mediaLanguage = getMedialanguageLatestDataEntityByMediaId(ob.getId(),languageId);
+            if(mediaLanguage!=null) {
+                ob.setUrl(mediaLanguage.getUrl());
+                ob.setDownload_url(mediaLanguage.getDownload_url());
+                ob.setLanguage_id(mediaLanguage.getLanguage_id());
+            }
         } else {
             ob = null;
         }
         db.close();
-        Data mediaLanguage = getMedialanguageLatestDataEntityByMediaId(ob.getId(),languageId);
-        if(mediaLanguage!=null)
-        {
-            mediaLanguage.setType(ob.getType());
-            ob = mediaLanguage;
-        }
+
         return ob;
     }
 

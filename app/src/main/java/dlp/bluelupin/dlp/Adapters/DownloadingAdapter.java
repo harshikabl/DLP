@@ -77,40 +77,41 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
         // starting the download service
         final DbHelper dbHelper = new DbHelper(context);
         final Data data = itemList.get(position);
-
-        final Data resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
-                Utility.getLanguageIdFromSharedPreferences(context));
-        if (data.getLang_resource_name() != null) {
-            Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
-                    Utility.getLanguageIdFromSharedPreferences(context));
-            if (titleResource != null) {
-                holder.mediaTitle.setText(titleResource.getContent());
-            }
-        }
-        if (data.getLang_resource_description() != null) {
-            Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
-                    Utility.getLanguageIdFromSharedPreferences(context));
-            if (descriptionResource != null) {
-                holder.mediaDescription.setText(descriptionResource.getContent());
-            }
-        }
-        if (data.getThumbnail_media_id() != 0) {
-            Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-            if (media != null) {
-                if (media.getLocalFilePath() == null) {
-
-                    Gson gson = new Gson();
-                    Intent intent = new Intent(context, DownloadService1.class);
-                    String strJsonmedia = gson.toJson(media);
-                    intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
-                    context.startService(intent);
-                    new DownloadImageTask(holder.mediaImage)
-                            .execute(media.getThumbnail_url());
-                }
-            }
-        }
+        holder.mediaTitle.setText(data.getFile_path());
+//        final Data resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
+//                Utility.getLanguageIdFromSharedPreferences(context));
+//        if (data.getLang_resource_name() != null) {
+//            Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
+//                    Utility.getLanguageIdFromSharedPreferences(context));
+//            if (titleResource != null) {
+//                holder.mediaTitle.setText(titleResource.getContent());
+//            }
+//        }
+//
+//        if (data.getLang_resource_description() != null) {
+//            Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
+//                    Utility.getLanguageIdFromSharedPreferences(context));
+//            if (descriptionResource != null) {
+//                holder.mediaDescription.setText(descriptionResource.getContent());
+//            }
+//        }
+//        if (data.getThumbnail_media_id() != 0) {
+//            Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
+//            if (media != null) {
+//                if (media.getLocalFilePath() == null) {
+//
+//                    Gson gson = new Gson();
+//                    Intent intent = new Intent(context, DownloadService1.class);
+//                    String strJsonmedia = gson.toJson(media);
+//                    intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+//                    context.startService(intent);
+//                    new DownloadImageTask(holder.mediaImage)
+//                            .execute(media.getThumbnail_url());
+//                }
+//            }
+//        }
         if (Consts.IS_DEBUG_LOG) {
-            Log.d(Consts.LOG_TAG, "**** settinng progress for media Id: " + data.getId() + " progress:"+ data.getProgress() + "%");
+            Log.d(Consts.LOG_TAG, "**** setting progress for media Id: " + data.getId() + " progress:"+ data.getProgress() + "%");
         }
         if (data.getProgress() != 0) {
             holder.downloadProgress.setText(data.getProgress() + "% Completed");
@@ -123,12 +124,12 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
                 broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
                 broadcastIntent.putExtra("mediaId",data.getId());
                 LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);*/
-                final ServiceHelper sh = new ServiceHelper(context);
-                Data media = dbHelper.getMediaEntityById(data.getMedia_id());
-                if (media != null) {
-                    String url = media.getUrl();
-                    sh.callDownloadDeleteRequest(url);
-                }
+//                final ServiceHelper sh = new ServiceHelper(context);
+//                Data media = dbHelper.getMediaEntityById(data.getMedia_id());
+//                if (media != null) {
+//                    String url = media.getUrl();
+//                    sh.callDownloadDeleteRequest(url);
+//                }
 
             }
         });

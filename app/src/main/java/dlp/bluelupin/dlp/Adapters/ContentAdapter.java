@@ -149,7 +149,8 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
             public void onClick(View v) {
                 if (data.getType().equalsIgnoreCase("video")) {
                     if (data.getMedia_id() != 0) {
-                        Data media = dbHelper.getMediaEntityByIdAndLaunguagId(data.getThumbnail_media_id(),
+                       // Data media = dbHelper.getMediaEntityById(data.getMedia_id());
+                        Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getMedia_id(),
                                 Utility.getLanguageIdFromSharedPreferences(context));
                         if (media != null) {
                             // get media url based on language
