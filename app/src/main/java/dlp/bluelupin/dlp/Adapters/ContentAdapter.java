@@ -112,11 +112,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         if (data.getType().equalsIgnoreCase("video")) {
             if (data.getMedia_id() != 0) {
                 Data media = dbHelper.getMediaEntityById(data.getMedia_id());
-
                 if (media != null) {
-                    if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " video Url: " + media.getUrl());
-                    }
 
                     String titleText = null;
                     if (resource != null) {
@@ -153,8 +149,24 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
             public void onClick(View v) {
                 if (data.getType().equalsIgnoreCase("video")) {
                     if (data.getMedia_id() != 0) {
-                        Data media = dbHelper.getMediaEntityById(data.getMedia_id());
+                        Data media = dbHelper.getMediaEntityByIdAndLaunguagId(data.getThumbnail_media_id(),
+                                Utility.getLanguageIdFromSharedPreferences(context));
                         if (media != null) {
+                            // get media url based on language
+                            Data mediaLanguage = dbHelper.getMedialanguageLatestDataEntityByMediaId(media.getId(),
+                                    Utility.getLanguageIdFromSharedPreferences(context));
+                            if (mediaLanguage != null) {
+                                mediaLanguage.setType(media.getType());
+                                media = mediaLanguage;
+
+                                if (Consts.IS_DEBUG_LOG) {
+                                    Log.d(Consts.LOG_TAG, "mediaLanguage id" + mediaLanguage.getId() + " video Url: " + mediaLanguage.getUrl() + "language Id" +  mediaLanguage.getLanguage_id());
+                                }
+                            }
+                            if (Consts.IS_DEBUG_LOG) {
+                                Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " video Url: " + media.getUrl());
+                            }
+
                             navigateBasedOnMediaType(media);
                         }
                     }

@@ -106,7 +106,8 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         }
 
         if (data.getThumbnail_media_id() != 0) {
-            Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
+            Data media = dbHelper.getMediaEntityByIdAndLaunguagId(data.getThumbnail_media_id(),
+                    Utility.getLanguageIdFromSharedPreferences(context));
             if (media != null && media.getDownload_url() != null) {
                 if (media.getLocalFilePath() == null) {
 
