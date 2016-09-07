@@ -48,7 +48,7 @@
         android:layout_weight="0.2"
         android:layout_height="wrap_content"
         android:text="Logo"
-        android:gravity="center"
+        android:gravity="right"
         android:textColor="#ffffff"
         android:textSize="@dimen/dimTextSize_25" />
 

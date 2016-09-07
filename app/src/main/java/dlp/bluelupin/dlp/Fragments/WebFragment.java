@@ -14,6 +14,7 @@ import android.webkit.WebViewClient;
 
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -96,13 +97,25 @@ public class WebFragment extends Fragment {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setUseWideViewPort(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
-        //webView.setBackgroundColor(Color.parseColor());
-
+        webView.setBackgroundColor(Color.parseColor("#000000"));
         //webView.getSettings().setDomStorageEnabled(true);
+        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
         webView.setHorizontalScrollBarEnabled(false);
         if (Utility.isOnline(context)) {
-            webView.loadUrl(mParam1);
+            if (webView != null) {
+                customProgressDialog.show();
+                webView.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        customProgressDialog.dismiss();
+                    }
+                });
+                webView.loadUrl(mParam1);
+            }
         } else {
+            if (customProgressDialog.isShowing()) {
+                customProgressDialog.dismiss();
+            }
             Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, context);
         }
     }

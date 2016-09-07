@@ -68,14 +68,14 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         holder.chapterTitle.setTypeface(VodafoneExB);
         holder.chapterDescription.setTypeface(VodafoneRg);
 
-       // holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
+        // holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
 //        holder.starIcon.setTypeface(materialdesignicons_font);
 //        holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
 //        holder.favorite.setTypeface(VodafoneExB);
 //        holder.download.setTypeface(VodafoneExB);
         holder.downloadIcon.setTypeface(materialdesignicons_font);
-        holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
+
 
         //show and hide favorite icon layout only in chapter layout
         /*if (type.equalsIgnoreCase(Consts.CHAPTER)) {
@@ -107,7 +107,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
         if (data.getThumbnail_media_id() != 0) {
             Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-            if (media != null && media.getDownload_url()!= null) {
+            if (media != null && media.getDownload_url() != null) {
                 if (media.getLocalFilePath() == null) {
 
                     Gson gson = new Gson();
@@ -135,7 +135,11 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
         }
         if (resourcesToDownloadList.size() <= 0) {
-            holder.downloadIcon.setTextColor(Color.parseColor("#000000"));
+           // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
+            holder.downloadIcon.setText(Html.fromHtml("&#xf12c;"));
+        } else {
+            holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
+           // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
         }
         //if meadia not downloaded then show download_layout
         if (data.getThumbnail_media_id() != 0) {
@@ -155,7 +159,6 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                             //dbHelper.upsertDownloadingFileEntity(resource);
                             Log.d(Consts.LOG_TAG, "Resource to be DL: " + resource.getId() + " downloadUrl: " + resource.getDownload_url());
                         }
-
 
 
 //                        {
@@ -184,7 +187,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                 });
 
             } else {
-               
+
                 holder.download_layout.setVisibility(View.GONE);
             }
         }

@@ -145,14 +145,15 @@ public class MainActivity extends AppCompatActivity
 
         //View header = navigationView.getHeaderView(0);
         Typeface custom_fontawesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome-webfont.ttf");
+        Typeface materialdesignicons_font = Typeface.createFromAsset(getAssets(), "fonts/materialdesignicons-webfont.otf");
         View header = findViewById(R.id.navHader);
         TextView name = (TextView) header.findViewById(R.id.name);
         TextView email = (TextView) header.findViewById(R.id.email);
         TextView logOut = (TextView) header.findViewById(R.id.logOut);
         name.setTypeface(VodafoneExB);
         email.setTypeface(VodafoneRg);
-        logOut.setTypeface(custom_fontawesome);
-        logOut.setText(Html.fromHtml("&#xf08b;"));
+        logOut.setTypeface(materialdesignicons_font);
+        logOut.setText(Html.fromHtml("&#xf343;"));
         TextView createBy = (TextView) findViewById(R.id.createBy);
         createBy.setTypeface(VodafoneRg);
 
@@ -176,8 +177,7 @@ public class MainActivity extends AppCompatActivity
         //registerReceiver();
         String localFolderPath = Consts.outputDirectoryLocation;
         File outputFolder = new File(localFolderPath);
-        if(!outputFolder.exists())
-        {
+        if (!outputFolder.exists()) {
             outputFolder.mkdirs();
         }
 
@@ -226,6 +226,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -315,8 +316,9 @@ public class MainActivity extends AppCompatActivity
         }
 
 
-          return true;
-      }
+        return true;
+    }
+
     //close drawer after item select
     public void closeDrawer() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

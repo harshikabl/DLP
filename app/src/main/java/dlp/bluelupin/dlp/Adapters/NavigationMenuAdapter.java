@@ -5,8 +5,11 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -17,12 +20,15 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.HashSet;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
 import dlp.bluelupin.dlp.Activities.NotificationsActivity;
 import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
 import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
@@ -143,6 +149,8 @@ public class NavigationMenuAdapter extends BaseAdapter {
                     transaction.replace(R.id.container, fragment)
                             .addToBackStack(null)
                             .commit();
+                }else if (menuList.get(position).toString().equalsIgnoreCase("About Us")) {
+
                 }
                 int pos = (int) v.getTag();
                 if (selectedPosition.contains(pos)) {
@@ -167,4 +175,5 @@ public class NavigationMenuAdapter extends BaseAdapter {
         public TextView menuIcon, menuSelectDot;
         public LinearLayout menuItemLayout;
     }
+
 }

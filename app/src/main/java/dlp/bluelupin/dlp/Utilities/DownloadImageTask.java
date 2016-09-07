@@ -32,12 +32,10 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     protected Bitmap doInBackground(String... urls) {
         String urlDisplay = urls[0];
         Bitmap bitmap = null;
-        if(media != null)
-        {
-            if(media.getLocalFilePath() != null)
-            {
+        if (media != null) {
+            if (media.getLocalFilePath() != null) {
                 File imgFile = new File(media.getLocalFilePath());
-                if(imgFile.exists()){
+                if (imgFile.exists()) {
                     bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                     if (Consts.IS_DEBUG_LOG) {
                         Log.d(Consts.LOG_TAG, "DownloadImageTask: localfilePath: " + media.getLocalFilePath());
@@ -55,7 +53,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
             }
         } catch (Exception e) {
             Log.d("Error", e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return bitmap;

@@ -158,21 +158,15 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
                             navigateBasedOnMediaType(media);
                         }
                     }
-                } else if (data.getType().equalsIgnoreCase("url")) {
-                    if (data.getMedia_id() != 0) {
-                        Data media = dbHelper.getMediaEntityById(data.getMedia_id());
-                        if (media != null) {
-                            String url = media.getUrl();
-                            if (url != null) {
-                                FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                                WebFragment fragment = WebFragment.newInstance(url, "");
-                                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
-                                transaction.replace(R.id.container, fragment)
-                                        .addToBackStack(null)
-                                        .commit();
-                            }
-                        }
+                } else if (data.getType().equalsIgnoreCase("Url")) {
+                    if (data.getUrl() != null) {
+                        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                        WebFragment fragment = WebFragment.newInstance(data.getUrl(), "");
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                        transaction.replace(R.id.container, fragment)
+                                .addToBackStack(null)
+                                .commit();
                     }
                 }
             }
@@ -212,9 +206,10 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         ImageView dynamicImageView = new ImageView(context);
         dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         dynamicImageView.setScaleType(ImageView.ScaleType.FIT_XY);
-
-        new DownloadImageTask(dynamicImageView)
-                .execute(url);
+        if (url != null) {
+            new DownloadImageTask(dynamicImageView)
+                    .execute(url);
+        }
 
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));

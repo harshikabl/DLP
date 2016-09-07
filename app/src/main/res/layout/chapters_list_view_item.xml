@@ -23,10 +23,10 @@
 
                 <ImageView
                     android:id="@+id/chapterImage"
-                    android:layout_width="@dimen/size_70px"
-                    android:layout_height="@dimen/size_70px"
+                    android:layout_width="@dimen/dimValue_70"
+                    android:layout_height="@dimen/dimValue_70"
                     android:layout_margin="@dimen/dimValue_5"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/imageplaceholder" />
             </LinearLayout>
 
@@ -75,6 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/dimValue_16"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="visible">
 
@@ -91,18 +92,17 @@
 
                 <RelativeLayout
                     android:id="@+id/starIconlayout"
-                    android:layout_width="@dimen/size_30px"
-                    android:layout_height="@dimen/size_30px"
-                    android:layout_centerInParent="true"
-                    android:layout_centerVertical="true"
+                    android:layout_width="@dimen/size_40px"
+                    android:layout_height="@dimen/size_40px"
                     android:gravity="center">
 
                     <ImageView
                         android:id="@+id/starIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:gravity="center" />
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/markedfav" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -131,16 +131,15 @@
                      android:textSize="@dimen/dimTextSize_14" />
  -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
                     android:gravity="center"
                     android:orientation="horizontal">
 
                     <RelativeLayout
                         android:id="@+id/downloadIconlayout"
-                        android:layout_width="@dimen/size_30px"
-                        android:layout_height="@dimen/size_30px"
+                        android:layout_width="@dimen/size_40px"
+                        android:layout_height="@dimen/size_40px"
                         android:layout_centerInParent="true"
                         android:layout_centerVertical="true"
                         android:background="@drawable/circle"
@@ -151,8 +150,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
+                            android:gravity="center"
                             android:textColor="#ffffff"
-                            android:gravity="center" />
+                            android:textSize="@dimen/dimTextSize_22" />
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
