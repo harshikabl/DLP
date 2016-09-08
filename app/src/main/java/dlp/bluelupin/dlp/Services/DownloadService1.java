@@ -42,7 +42,7 @@ public class DownloadService1 extends IntentService {
     }
 
     private NotificationCompat.Builder notificationBuilder;
-//    private NotificationManager notificationManager;
+    //    private NotificationManager notificationManager;
     private int totalFileSize;
     private String urlPropertyForDownload = Consts.DOWNLOAD_URL;
     private Data media;
@@ -71,7 +71,7 @@ public class DownloadService1 extends IntentService {
 
     }
 
-    private void initDownload(Data media){
+    private void initDownload(Data media) {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Consts.BASE_URL)
@@ -79,7 +79,7 @@ public class DownloadService1 extends IntentService {
 
         IServiceManager retrofitInterface = retrofit.create(IServiceManager.class);
         String downloadUrl = getDownloadFromMedia(media);
-        if(downloadUrl!= null) {
+        if (downloadUrl != null) {
             Call<ResponseBody> request = retrofitInterface.downloadFile(downloadUrl);
             try {
 
@@ -91,20 +91,16 @@ public class DownloadService1 extends IntentService {
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
-        }
-        else
-        {
+        } else {
             if (Consts.IS_DEBUG_LOG) {
-                Log.d(Consts.LOG_TAG, "started downloading: media Id:" + media.getId() + " downloading Url: (" + urlPropertyForDownload   + ") "+ downloadUrl);
+                Log.d(Consts.LOG_TAG, "started downloading: media Id:" + media.getId() + " downloading Url: (" + urlPropertyForDownload + ") " + downloadUrl);
             }
         }
     }
 
-    private String getDownloadFromMedia(Data media)
-    {
+    private String getDownloadFromMedia(Data media) {
         String downloadUrl = null;
-        switch (urlPropertyForDownload)
-        {
+        switch (urlPropertyForDownload) {
             case Consts.URL:
                 downloadUrl = media.getUrl();
                 break;
@@ -126,67 +122,70 @@ public class DownloadService1 extends IntentService {
 
         int count;
         byte data[] = new byte[1024 * 4];
-        long fileSize = body.contentLength();
-        InputStream bis = new BufferedInputStream(body.byteStream(), 1024 * 8);
-
-        String localFilePath = Consts.outputDirectoryLocation+ media.getFile_path();
-        File outputFile = new File(localFilePath);
-
-        OutputStream output = new FileOutputStream(outputFile);
-        long total = 0;
-        long startTime = System.currentTimeMillis();
-        int timeCount = 1;
-        DownloadData downloadData = new DownloadData();
-        while ((count = bis.read(data)) != -1) {
-
-            total += count;
-            totalFileSize = (int) (fileSize / (Math.pow(1024, 2)));
-            double current = Math.round(total / (Math.pow(1024, 2)));
-
-            int progress = (int) ((total * 100) / fileSize);
-
-            long currentTime = System.currentTimeMillis() - startTime;
+        long fileSize = 0;
+        if (body != null) {
+            fileSize = body.contentLength();
 
 
-            downloadData.setId(media.getId());
-            downloadData.setTotalFileSize(totalFileSize);
+            InputStream bis = new BufferedInputStream(body.byteStream(), 1024 * 8);
 
-            if (currentTime > 1000 * timeCount) {
+            String localFilePath = Consts.outputDirectoryLocation + media.getFile_path();
+            File outputFile = new File(localFilePath);
 
-                downloadData.setCurrentFileSize((int) current);
-                downloadData.setProgress(progress);
+            OutputStream output = new FileOutputStream(outputFile);
+            long total = 0;
+            long startTime = System.currentTimeMillis();
+            int timeCount = 1;
+            DownloadData downloadData = new DownloadData();
+            while ((count = bis.read(data)) != -1) {
 
-                sendNotification(downloadData);
+                total += count;
+                totalFileSize = (int) (fileSize / (Math.pow(1024, 2)));
+                double current = Math.round(total / (Math.pow(1024, 2)));
 
-                timeCount++;
+                int progress = (int) ((total * 100) / fileSize);
+
+                long currentTime = System.currentTimeMillis() - startTime;
+
+
+                downloadData.setId(media.getId());
+                downloadData.setTotalFileSize(totalFileSize);
+
+                if (currentTime > 1000 * timeCount) {
+
+                    downloadData.setCurrentFileSize((int) current);
+                    downloadData.setProgress(progress);
+
+                    sendNotification(downloadData);
+
+                    timeCount++;
+                }
+
+                output.write(data, 0, count);
             }
-
-            output.write(data, 0, count);
+            onDownloadComplete(downloadData);
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "successfully downloaded: media Id:" + media.getId() + " downloading Url: " + media.getDownload_url() + " at " + localFilePath);
+            }
+            UpdateMediaInDB(localFilePath);
+            output.flush();
+            output.close();
+            bis.close();
         }
-        onDownloadComplete(downloadData);
-        if (Consts.IS_DEBUG_LOG) {
-            Log.d(Consts.LOG_TAG, "successfully downloaded: media Id:" + media.getId() + " downloading Url: " + media.getDownload_url() + " at " + localFilePath);
-        }
-        UpdateMediaInDB(localFilePath);
-        output.flush();
-        output.close();
-        bis.close();
 
     }
 
-    private void UpdateMediaInDB(String localPath)
-    {
+    private void UpdateMediaInDB(String localPath) {
         DbHelper dbHelper = new DbHelper(DownloadService1.this);
         media.setLocalFilePath(localPath);
-        if(dbHelper.updateMediaLocalFilePathEntity(media))
-        {
+        if (dbHelper.updateMediaLocalFilePathEntity(media)) {
             if (Consts.IS_DEBUG_LOG) {
                 Log.d(Consts.LOG_TAG, "successfully downloaded and local file updated: media Id:" + media.getId() + " downloading Url: " + media.getDownload_url() + " at " + localPath);
             }
         }
     }
 
-    private void sendNotification(DownloadData downloadData){
+    private void sendNotification(DownloadData downloadData) {
 
         sendIntent(downloadData);
 //        notificationBuilder.setProgress(100,downloadData.getProgress(),false);
@@ -195,14 +194,14 @@ public class DownloadService1 extends IntentService {
     }
 
 
-    private void sendIntent(DownloadData downloadData){
+    private void sendIntent(DownloadData downloadData) {
 
         Intent intent = new Intent(Consts.MESSAGE_PROGRESS);
-        intent.putExtra(Consts.EXTRA_DOWNLOAD_DATA,downloadData);
+        intent.putExtra(Consts.EXTRA_DOWNLOAD_DATA, downloadData);
         LocalBroadcastManager.getInstance(DownloadService1.this).sendBroadcast(intent);
     }
 
-    private void onDownloadComplete(DownloadData downlaodData){
+    private void onDownloadComplete(DownloadData downlaodData) {
 
         //DownloadData download = new DownloadData();
         downlaodData.setProgress(100);

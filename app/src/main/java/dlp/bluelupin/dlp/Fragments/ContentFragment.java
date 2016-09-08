@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,23 +72,28 @@ public class ContentFragment extends Fragment {
 
     private Context context;
     private TextView content_title;
+    View view;
+    ViewGroup newcontainer;
+    LayoutInflater newinflater;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_content, container, false);
+        view = inflater.inflate(R.layout.fragment_content, container, false);
+        newcontainer = container;
+        newinflater = inflater;
         context = getActivity();
         if (Utility.isTablet(context)) {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        init(view);
+        init();
         return view;
     }
 
-    private void init(View view) {
+    private void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle("Contents");
 
@@ -101,17 +107,23 @@ public class ContentFragment extends Fragment {
 
         DbHelper db = new DbHelper(context);
         List<Data> dataList = db.getDataEntityByParentId(parentId);
-
-        if(Consts.IS_DEBUG_LOG) {
+        if (dataList.size() == 0) {
+            view = view.inflate(context, R.layout.no_record_found_fragment, null);
+            TextView noRecordIcon = (TextView) view.findViewById(R.id.noRecordIcon);
+            TextView back = (TextView) view.findViewById(R.id.back);
+            noRecordIcon.setTypeface(materialdesignicons_font);
+            noRecordIcon.setText(Html.fromHtml("&#xf187;"));
+        } else {
+            //ChaptersAdapter chaptersAdapter = new ChaptersAdapter(context, dataList);
+            ContentAdapter contentAdapter = new ContentAdapter(context, dataList);
+            RecyclerView contentRecyclerView = (RecyclerView) view.findViewById(R.id.contentRecyclerView);
+            contentRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+            contentRecyclerView.setHasFixedSize(true);
+            contentRecyclerView.setAdapter(contentAdapter);
+        }
+        if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "Content Fragment: data count: " + dataList.size());
         }
-
-        //ChaptersAdapter chaptersAdapter = new ChaptersAdapter(context, dataList);
-        ContentAdapter contentAdapter = new ContentAdapter(context, dataList);
-        RecyclerView contentRecyclerView = (RecyclerView) view.findViewById(R.id.contentRecyclerView);
-        contentRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        contentRecyclerView.setHasFixedSize(true);
-        contentRecyclerView.setAdapter(contentAdapter);
 
 
     }
