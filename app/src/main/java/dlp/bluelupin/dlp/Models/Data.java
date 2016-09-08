@@ -198,6 +198,25 @@ public class Data {
 
     private String localFilePath;
 
+    public String getThumbnail_url_Local_file_path() {
+        return thumbnail_url_Local_file_path;
+    }
+
+    public void setThumbnail_url_Local_file_path(String thumbnail_url_Local_file_path) {
+        this.thumbnail_url_Local_file_path = thumbnail_url_Local_file_path;
+    }
+
+    private String thumbnail_file_path;
+    public String getThumbnail_file_path() {
+        return thumbnail_file_path;
+    }
+
+    public void setThumbnail_file_path(String thumbnail_file_path) {
+        this.thumbnail_file_path = thumbnail_file_path;
+    }
+
+    private String thumbnail_url_Local_file_path;
+
     private int mediaId;
     private int progress;
 
@@ -303,15 +322,6 @@ public class Data {
 
     private String thumbnail_url;
 
-    public String getThumbnail_file_path() {
-        return thumbnail_file_path;
-    }
-
-    public void setThumbnail_file_path(String thumbnail_file_path) {
-        this.thumbnail_file_path = thumbnail_file_path;
-    }
-
-    private String thumbnail_file_path;
 
     @Override
     public String toString() {

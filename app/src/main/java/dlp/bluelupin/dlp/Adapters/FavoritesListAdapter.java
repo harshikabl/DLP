@@ -79,7 +79,8 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
         }
 
         if (data.getThumbnail_media_id() != 0) {
-            Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
+            Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getThumbnail_media_id(),
+                    Utility.getLanguageIdFromSharedPreferences(context));
             if (media != null) {
                 //holder.chapterImage.
                 new DownloadImageTask(holder.chapterImage)

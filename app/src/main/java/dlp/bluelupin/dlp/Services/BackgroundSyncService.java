@@ -159,9 +159,9 @@ public class BackgroundSyncService extends IntentService {
             @Override
             public void onDone(String workName, boolean isComplete) {
                 Log.d(Consts.LOG_TAG, "BackgroundSyncService: callMedialanguageLatestAsync success result: " + isComplete);
-                DbHelper db = new DbHelper(BackgroundSyncService.this);
-                List<Data> data = db.getAllMedialanguageLatestDataEntity();
-                Log.d(Consts.LOG_TAG, "BackgroundSyncService: data count: " + data.size());
+//                DbHelper db = new DbHelper(BackgroundSyncService.this);
+//                List<Data> data = db.getAllMedialanguageLatestDataEntity();
+//                Log.d(Consts.LOG_TAG, "BackgroundSyncService: data count: " + data.size());
             }
         });
     }

@@ -136,7 +136,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         // REMOVE ABOVE IN PROD
 
 
-        final List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId());
+        final List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId(), Utility.getLanguageIdFromSharedPreferences(context));
         if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
         }

@@ -53,7 +53,12 @@ public class DownloadService1 extends IntentService {
         Bundle extras = intent.getExtras();
         if (extras != null) {
             strJsonMedia = extras.getString(Consts.EXTRA_MEDIA);
-            //String urlPropertyForDownload = extras.getString(Consts.EXTRA_URLPropertyForDownload);
+
+            urlPropertyForDownload = extras.getString(Consts.EXTRA_URLPropertyForDownload);
+            if(urlPropertyForDownload == null)
+            {
+                urlPropertyForDownload = Consts.DOWNLOAD_URL;
+            }
             Gson gson = new Gson();
             media = gson.fromJson(strJsonMedia, Data.class);
         }
@@ -177,10 +182,21 @@ public class DownloadService1 extends IntentService {
 
     private void UpdateMediaInDB(String localPath) {
         DbHelper dbHelper = new DbHelper(DownloadService1.this);
-        media.setLocalFilePath(localPath);
-        if (dbHelper.updateMediaLocalFilePathEntity(media)) {
-            if (Consts.IS_DEBUG_LOG) {
-                Log.d(Consts.LOG_TAG, "successfully downloaded and local file updated: media Id:" + media.getId() + " downloading Url: " + media.getDownload_url() + " at " + localPath);
+        if(urlPropertyForDownload.equalsIgnoreCase(Consts.THUMBNAIL_URL))
+        {
+            media.setThumbnail_url_Local_file_path(localPath);
+            if (dbHelper.updateMediaThumbnailLocalFilePathEntity(media)) {
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "successfully downloaded and THUMBNAIL local file updated: media Id:" + media.getId() + " downloading Url: " + media.getDownload_url() + " at " + localPath);
+                }
+            }
+        }
+        else {
+            media.setLocalFilePath(localPath);
+            if (dbHelper.updateMediaLanguageLocalFilePathEntity(media)) {
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "successfully downloaded and local file updated: media Id:" + media.getId() + " downloading Url: " + media.getDownload_url() + " at " + localPath);
+                }
             }
         }
     }

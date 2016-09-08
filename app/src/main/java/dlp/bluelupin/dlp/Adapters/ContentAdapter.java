@@ -2,6 +2,8 @@ package dlp.bluelupin.dlp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -23,6 +25,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.io.File;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
@@ -33,6 +38,7 @@ import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Fragments.WebFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -96,17 +102,19 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         }
         if (data.getType().equalsIgnoreCase("Image")) {
             if (data.getMedia_id() != 0) {
-                Data media = dbHelper.getMediaEntityById(data.getMedia_id());
+                Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getMedia_id(),
+                        Utility.getLanguageIdFromSharedPreferences(context));
 
                 if (media != null) {
                     if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "Media id " + media.getId() + " Image Url: " + media.getUrl());
+                      //  Log.d(Consts.LOG_TAG, "Media id " + media.getId() + " Image Url: " + media.getUrl());
                     }
                     String titleText = null;
                     if (resource != null) {
                         titleText = resource.getContent();
                     }
-                    FrameLayout imageContainer = makeImage(media.getUrl(), titleText);
+
+                    FrameLayout imageContainer = makeImage(media, titleText);
                     holder.contentContainer.addView(imageContainer);
                 }
 
@@ -115,15 +123,17 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
 
         if (data.getType().equalsIgnoreCase("video")) {
             if (data.getMedia_id() != 0) {
-                Data media = dbHelper.getMediaEntityById(data.getMedia_id());
+                Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getMedia_id(),
+                        Utility.getLanguageIdFromSharedPreferences(context));
                 if (media != null) {
 
                     String titleText = null;
                     if (resource != null) {
                         titleText = resource.getContent();
                     }
-                    //Data videoThumbnail = dbHelper.getMediaEntityById(data.getMedia_id());
-                    FrameLayout imageContainer = makeImage(media.getThumbnail_url(), titleText);
+                    Data videoThumbnail = dbHelper.getMediaEntityById(data.getMedia_id());
+
+                    FrameLayout imageContainer = makeThumbnailImage(videoThumbnail, titleText);
                     holder.contentContainer.addView(imageContainer);
                     holder.playIcon.setText(Html.fromHtml("&#xf40d;"));
 
@@ -215,7 +225,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         }
     }
 
-    private FrameLayout makeImage(String url, String titleText) {
+    private FrameLayout makeImage(Data media, String titleText) {
         FrameLayout frameLayout = new FrameLayout(context);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
@@ -224,9 +234,29 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         ImageView dynamicImageView = new ImageView(context);
         dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         dynamicImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        if (url != null) {
-            new DownloadImageTask(dynamicImageView)
-                    .execute(url);
+//        if (url != null) {
+//            new DownloadImageTask(dynamicImageView)
+//                    .execute(url);
+//        }
+        if (media != null && media.getDownload_url() != null) {
+            if (media.getLocalFilePath() == null) {
+
+                Gson gson = new Gson();
+                Intent intent = new Intent(context, DownloadService1.class);
+                String strJsonmedia = gson.toJson(media);
+                intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
+                context.startService(intent);
+                new DownloadImageTask(dynamicImageView)
+                        .execute(media.getDownload_url());
+            } else {
+                File imgFile = new File(media.getLocalFilePath());
+                if (imgFile.exists()) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    dynamicImageView.setImageBitmap(bitmap);
+                }
+            }
+
         }
 
         LinearLayout linearLayout = new LinearLayout(context);
@@ -252,6 +282,67 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentViewHolder> {
         frameLayout.addView(linearLayout);
         return frameLayout;
     }
+
+    private FrameLayout makeThumbnailImage(Data media, String titleText) {
+        FrameLayout frameLayout = new FrameLayout(context);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
+        layoutParams.setMargins(0, 0, 0, 0);
+        frameLayout.setLayoutParams(layoutParams);
+        ImageView dynamicImageView = new ImageView(context);
+        dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        dynamicImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//        if (url != null) {
+//            new DownloadImageTask(dynamicImageView)
+//                    .execute(url);
+//        }
+
+        if (media != null && media.getThumbnail_url() != null) {
+            if (media.getThumbnail_url_Local_file_path() == null) {
+
+                Gson gson = new Gson();
+                Intent intent = new Intent(context, DownloadService1.class);
+                String strJsonmedia = gson.toJson(media);
+                intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.THUMBNAIL_URL);
+                context.startService(intent);
+                new DownloadImageTask(dynamicImageView)
+                        .execute(media.getThumbnail_url());
+            } else {
+                File imgFile = new File(media.getThumbnail_url_Local_file_path());
+                if (imgFile.exists()) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    dynamicImageView.setImageBitmap(bitmap);
+                }
+            }
+
+        }
+
+
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        linearLayout.setVerticalGravity(Gravity.BOTTOM);
+        linearLayout.setBackground(context.getResources().getDrawable(R.drawable.gradient_black));//;background="@drawable/gradient_black"
+
+        TextView dynamicTextView = new TextView(context);
+        dynamicTextView.setTextSize(18);
+        if (titleText != null) {
+            dynamicTextView.setText(Html.fromHtml(titleText));
+        }
+
+        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        textViewParams.gravity = Gravity.BOTTOM;
+        //textViewParams.setMargins(0,10,0,10);
+        dynamicTextView.setLayoutParams(textViewParams);
+
+
+        linearLayout.addView(dynamicTextView);
+
+        frameLayout.addView(dynamicImageView);
+        frameLayout.addView(linearLayout);
+        return frameLayout;
+    }
+
 
     @Override
     public int getItemCount() {

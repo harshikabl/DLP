@@ -461,10 +461,10 @@ public class MainActivity extends AppCompatActivity
                     Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync success result: " + isComplete);
                 }
                 DbHelper db = new DbHelper(MainActivity.this);
-                List<Data> data = db.getAllMedialanguageLatestDataEntity();
-                if (Consts.IS_DEBUG_LOG) {
-                    Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync data count: " + data.size());
-                }
+//                List<Data> data = db.getAllMedialanguageLatestDataEntity();
+//                if (Consts.IS_DEBUG_LOG) {
+//                    Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync data count: " + data.size());
+//                }
             }
         });
     }

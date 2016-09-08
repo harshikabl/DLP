@@ -150,7 +150,8 @@ public class ServiceHelper {
                     if (dbhelper.upsertMediaEntity(d)) {
                         // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
                         // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
-                        Data data = dbhelper.getMediaEntityById(d.getId());
+                        Data data = dbhelper.getMediaEntityByIdAndLaunguageId(d.getId(),
+                                Utility.getLanguageIdFromSharedPreferences(context));
                         if (data != null) {
                             if (data.getLocalFilePath() != null && !data.getLocalFilePath().equals("")) {
                                 if (Consts.IS_DEBUG_LOG) {
@@ -459,7 +460,7 @@ public class ServiceHelper {
                 Data fileData = new Data();
                 fileData.setLocalFilePath(localFilePath);
                 fileData.setId(mediaId);
-                dbHelper.updateMediaLocalFilePathEntity(fileData);
+                dbHelper.updateMediaLanguageLocalFilePathEntity(fileData);
                 dbHelper.updateDownloadMediaLocalFilePathEntity(fileData);
 
                 outputStream.flush();
