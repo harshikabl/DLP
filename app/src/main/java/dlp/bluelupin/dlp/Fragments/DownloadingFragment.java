@@ -212,22 +212,44 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            if(intent.getAction().equals(Consts.MESSAGE_CANCEL_DOWNLOAD)){
+                String strJsonMedia = intent.getExtras().getString(Consts.EXTRA_MEDIA);
+                Gson gson = new Gson();
+                Data selectedMedia = gson.fromJson(strJsonMedia, Data.class);
+                List<Data> listWithoutDownload = new ArrayList<Data>();
+                if(selectedMedia != null)
+                {
+                    for (Data media : uniqueResourcesToDownload) {
+                        if (media.getId() != selectedMedia.getId()) {
+                            listWithoutDownload.add(media);
+                            if (Consts.IS_DEBUG_LOG) {
+                                Log.d(Consts.LOG_TAG, "**** media Id: " + media.getId() + " dl cancelled:");
+                            }
+                        }
+                    }
+                    downloadingAdapter = new DownloadingAdapter(context, listWithoutDownload);
+                    downloadingRecyclerView.setAdapter(downloadingAdapter);
+                    downloadingAdapter.notifyDataSetChanged();
+                }
+            } // cancel download
+
             if(intent.getAction().equals(Consts.MESSAGE_PROGRESS)){
 
                 DownloadData download = intent.getParcelableExtra(Consts.EXTRA_DOWNLOAD_DATA);
-               // mProgressBar.setProgress(download.getProgress());
+                if(download !=null){
 
-                for(Data media: uniqueResourcesToDownload) {
-                    if(media.getId() == download.getId())
-                    {
-                        media.setProgress(download.getProgress());
-                        if (Consts.IS_DEBUG_LOG) {
-                            Log.d(Consts.LOG_TAG, "**** media Id: " + download.getId() + " progress:"+ download.getProgress() + "%");
+                    for (Data media : uniqueResourcesToDownload) {
+                        if (media.getId() == download.getId()) {
+                            media.setProgress(download.getProgress());
+                            if (Consts.IS_DEBUG_LOG) {
+                                Log.d(Consts.LOG_TAG, "**** media Id: " + download.getId() + " progress:" + download.getProgress() + "%");
+                            }
                         }
                     }
+                    downloadingRecyclerView.setAdapter(downloadingAdapter);
+                    downloadingAdapter.notifyDataSetChanged();
                 }
-                downloadingRecyclerView.setAdapter(downloadingAdapter);
-                downloadingAdapter.notifyDataSetChanged();
+
 //                if(download.getProgress() == 100){
 //
 //                    mProgressText.setText("File Download Complete");

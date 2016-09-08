@@ -41,6 +41,7 @@ public class Consts {
     public static final String Languages = "languages";
     public static final String EXTRA_MEDIA = "extraMedia";
     public static final String EXTRA_DOWNLOAD_DATA = "extraDownloadData";
+    public static final String MESSAGE_CANCEL_DOWNLOAD = "CANCEL_DOWNLOAD";
     public static final String EXTRA_URLPropertyForDownload = "urlPropertyForDownload";
     public static final String URL = "URL";
     public static final String THUMBNAIL_URL = "Thumbnail_URL";

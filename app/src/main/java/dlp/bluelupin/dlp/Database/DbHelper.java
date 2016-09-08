@@ -718,6 +718,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
             Data mediaLanguage = getMedialanguageLatestDataEntityByMediaId(ob.getId(),languageId);
             if(mediaLanguage!=null) {
+                //ob.setThumbnail_url();
                 ob.setUrl(mediaLanguage.getUrl());
                 ob.setDownload_url(mediaLanguage.getDownload_url());
                 ob.setLanguage_id(mediaLanguage.getLanguage_id());
@@ -797,6 +798,19 @@ public class DbHelper extends SQLiteOpenHelper {
 
         db.close();
         return i > 0;
+    }
+
+    public void setLocalPathOfAllMediaToNull() {
+        List<Data> medias = getAllMedia();
+        SQLiteDatabase db = this.getWritableDatabase();
+        for(Data ob : medias) {
+            ContentValues values = new ContentValues();
+            values.put("Local_file_path", "");
+            if (ob.getId() != 0) {
+                db.update("MediaEntity", values, " server_id = " + ob.getId() + " ", null);
+            }
+        }
+        db.close();
     }
 
     public List<Data> getAllMedia() {

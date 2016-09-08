@@ -46,14 +46,14 @@ public class DownloadService1 extends IntentService {
     private int totalFileSize;
     private String urlPropertyForDownload = Consts.DOWNLOAD_URL;
     private Data media;
-
+    private String strJsonMedia;
 
     @Override
     protected void onHandleIntent(Intent intent) {
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            String strJsonMedia = extras.getString(Consts.EXTRA_MEDIA);
-            String urlPropertyForDownload = extras.getString(Consts.EXTRA_URLPropertyForDownload);
+            strJsonMedia = extras.getString(Consts.EXTRA_MEDIA);
+            //String urlPropertyForDownload = extras.getString(Consts.EXTRA_URLPropertyForDownload);
             Gson gson = new Gson();
             media = gson.fromJson(strJsonMedia, Data.class);
         }
@@ -217,7 +217,9 @@ public class DownloadService1 extends IntentService {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-
+        Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
+        intent.putExtra(Consts.EXTRA_MEDIA,strJsonMedia);
+        LocalBroadcastManager.getInstance(DownloadService1.this).sendBroadcast(intent);
         //notificationManager.cancel(0);
     }
 

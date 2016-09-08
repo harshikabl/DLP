@@ -131,6 +131,11 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         }
 
         DbHelper dbhelper = new DbHelper(context);
+        // REMOVE BELOW IN PROD
+        //dbHelper.setLocalPathOfAllMediaToNull();
+        // REMOVE ABOVE IN PROD
+
+
         final List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId());
         if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
