@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import java.awt.font.TextAttribute;
 
-import dlp.bluelupin.dlp.Activities.DownloadService;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.R;
 

@@ -71,15 +71,12 @@ public class SplashActivity extends Activity {
                     Log.d(Consts.LOG_TAG, "handleMessage invokeServiceForBackgroundUpdate " + Calendar.getInstance().getTime());
                 Object path = message.obj;
                 if (message.arg1 == RESULT_OK) {
-                    Toast.makeText(SplashActivity.this,
-                            "Done Sync", Toast.LENGTH_LONG)
-                            .show();
+                    // Toast.makeText(SplashActivity.this, "Done Sync", Toast.LENGTH_LONG).show();
                     if (Consts.IS_DEBUG_LOG)
                         Log.d(Consts.LOG_TAG, "Sync: Messenger: handleMessage");
 
                 } else {
-                    Toast.makeText(SplashActivity.this, "sync failed.",
-                            Toast.LENGTH_LONG).show();
+                    // Toast.makeText(SplashActivity.this, "sync failed.", Toast.LENGTH_LONG).show();
                     if (Consts.IS_DEBUG_LOG)
                         Log.d(Consts.LOG_TAG, "Sync Messenger: handleMessage failed");
                 }
@@ -153,7 +150,7 @@ public class SplashActivity extends Activity {
             });
 
         } else {
-            alertForErrorMessage(Consts.OFFLINE_MESSAGE, SplashActivity.this);
+            init();
         }
     }
 
@@ -179,7 +176,6 @@ public class SplashActivity extends Activity {
             @Override
             public void onClick(View v) {
                 alert.dismiss();
-                init();
             }
         });
         alert.show();

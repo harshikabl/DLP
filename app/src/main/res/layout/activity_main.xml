@@ -73,10 +73,10 @@
                     android:padding="@dimen/dimValue_10"
                     android:text="Powered by"
                     android:textColor="#4a4d4e"
-                    android:textSize="@dimen/dimTextSize_18" />
+                    android:textSize="@dimen/dimTextSize_16" />
 
                 <ImageView
-                    android:layout_width="@dimen/size_80px"
+                    android:layout_width="@dimen/size_70px"
                     android:layout_height="wrap_content"
                     android:src="@drawable/bl_logo" />
 

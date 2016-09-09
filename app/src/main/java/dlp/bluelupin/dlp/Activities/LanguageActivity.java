@@ -137,6 +137,8 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
             LanguageAdapter languageAdapter = new LanguageAdapter(this, data);
             //languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(languageAdapter);
+            int languagePos = Utility.getLanguagePositionFromSharedPreferences(this);
+            spinner.setSelection(languagePos);//set default value
         }
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -154,11 +156,11 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
     //set select language into sharepreferences
     private void setLanguage(int langpos) {
         if (data != null) {
-            String StringCode=data.get(langpos).getCode();
+            String StringCode = data.get(langpos).getCode();
             String[] parts = StringCode.split("-");
             String code = parts[0];
             String part2 = parts[1];
-            Utility.setLanguageIntoSharedPreferences(this, data.get(langpos).getId(), code);
+            Utility.setLanguageIntoSharedPreferences(this, data.get(langpos).getId(), code, langpos);
         }
        /* switch (langpos) {
             case 0: //English

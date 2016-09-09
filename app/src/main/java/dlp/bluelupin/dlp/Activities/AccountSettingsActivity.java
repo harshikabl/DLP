@@ -132,6 +132,8 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
             LanguageAdapter languageAdapter = new LanguageAdapter(this, data);
             //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(languageAdapter);
+            int languagePos = Utility.getLanguagePositionFromSharedPreferences(this);
+            spinner.setSelection(languagePos);//set default value
         }
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -191,7 +193,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
             String[] parts = StringCode.split("-");
             String code = parts[0];
             String part2 = parts[1];
-            Utility.setLanguageIntoSharedPreferences(this, data.get(langpos).getId(), code);
+            Utility.setLanguageIntoSharedPreferences(this, data.get(langpos).getId(), code, langpos);
         }
     }
 

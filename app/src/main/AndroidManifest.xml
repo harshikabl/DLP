@@ -14,7 +14,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -39,37 +39,34 @@
             android:label="@string/title_activity_notifications"
             android:theme="@style/AppTheme"></activity>
 
-        <service android:name=".Activities.DownloadService"/>
         <service android:name=".Utilities.BindService" />
-        <service android:name=".Services.DownloadService1"/>
+        <service android:name=".Services.DownloadService1" />
 
         <!-- SMS Receiver for otp-->
-        <receiver android:name=".Utilities.SmsReceiver"
+        <receiver
+            android:name=".Utilities.SmsReceiver"
             android:enabled="true"
             android:exported="true">
-            <intent-filter  android:priority="1000">
+            <intent-filter android:priority="1000">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
         <service
             android:name=".Services.BackgroundSyncService"
-            android:enabled="true" >
-        </service>
+            android:enabled="true"></service>
 
         <!-- [START firebase_service] -->
-        <service
-            android:name=".Firebase.DlpFirebaseMessagingService">
+        <service android:name=".Firebase.DlpFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <!-- [END firebase_service] -->
         <!-- [START firebase_iid_service] -->
-        <service
-            android:name=".Firebase.DlpFirebaseInstanceIDService">
+        <service android:name=".Firebase.DlpFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!-- [END firebase_iid_service] -->

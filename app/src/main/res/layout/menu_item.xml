@@ -8,18 +8,18 @@
     <TextView
         android:id="@+id/menuIcon"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="0.2"
         android:gravity="center"
         android:padding="@dimen/dimValue_10"
         android:text="dsb"
-        android:textColor="@color/colorRad"
-        android:textSize="@dimen/dimTextSize_25" />
+        android:textColor="#e60000"
+        android:textSize="@dimen/dimTextSize_23" />
 
     <TextView
         android:id="@+id/menuTitel"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dimValue_10"
         android:layout_weight="0.7"
         android:gravity="center|left"
@@ -27,13 +27,19 @@
         android:textColor="#4a4d4e"
         android:textSize="@dimen/dimTextSize_18" />
 
-    <TextView
-        android:id="@+id/menuSelectDot"
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="0.1"
-        android:gravity="center|top"
-        android:text="."
-        android:textColor="#fff"
-        android:textSize="@dimen/dimTextSize_30" />
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/menuSelectDot"
+            android:layout_width="@dimen/dimValue_5"
+            android:layout_height="@dimen/dimValue_5"
+            android:background="@drawable/dot_circle"
+            android:gravity="center"
+            android:orientation="horizontal" />
+    </LinearLayout>
 </LinearLayout>

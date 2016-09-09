@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     card_view:cardPreventCornerOverlap="true"
     card_view:cardUseCompatPadding="true"
+    android:layout_marginTop="@dimen/dimValue_5"
     android:layout_height="wrap_content">
 
     <LinearLayout

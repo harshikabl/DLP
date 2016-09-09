@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import dlp.bluelupin.dlp.Activities.DownloadService;
 import dlp.bluelupin.dlp.Adapters.ChaptersAdapter;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
@@ -76,16 +75,12 @@ public class ChaptersFragment extends Fragment {
     }
 
     View view;
-    ViewGroup newcontainer;
-    LayoutInflater newinflater;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_chapters, container, false);
-        newcontainer = container;
-        newinflater = inflater;
         context = getActivity();
         if (Utility.isTablet(context)) {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -114,7 +109,6 @@ public class ChaptersFragment extends Fragment {
         if (dataList.size() == 0) {
             view = view.inflate(context, R.layout.no_record_found_fragment, null);
             TextView noRecordIcon = (TextView) view.findViewById(R.id.noRecordIcon);
-            TextView back = (TextView) view.findViewById(R.id.back);
             noRecordIcon.setTypeface(materialdesignicons_font);
             noRecordIcon.setText(Html.fromHtml("&#xf187;"));
         } else {

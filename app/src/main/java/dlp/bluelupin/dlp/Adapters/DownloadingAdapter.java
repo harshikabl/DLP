@@ -29,7 +29,6 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.util.List;
 
-import dlp.bluelupin.dlp.Activities.DownloadService;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;

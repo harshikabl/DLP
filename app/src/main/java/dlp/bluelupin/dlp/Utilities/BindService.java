@@ -53,7 +53,7 @@ public class BindService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // TODO Auto-generated method stub
 
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+       // Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
         new DoBackgroundTask().execute(urls);
         //downoadFile(urls[0]);
 
@@ -67,8 +67,7 @@ public class BindService extends Service {
         // TODO Auto-generated method stub
         super.onDestroy();
 
-        Toast.makeText(getBaseContext(), "Service Destroyed",
-                Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getBaseContext(), "Service Destroyed",Toast.LENGTH_SHORT).show();
     }
 
     private class DoBackgroundTask extends AsyncTask<URL, Integer, Long> {

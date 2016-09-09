@@ -29,6 +29,7 @@ import dlp.bluelupin.dlp.Activities.LanguageActivity;
 import dlp.bluelupin.dlp.Activities.NotificationsActivity;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
 import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
@@ -83,7 +84,6 @@ public class NavigationMenuAdapter extends BaseAdapter {
             holder.menuTitel = (TextView) convertView.findViewById(R.id.menuTitel);
             holder.menuIcon = (TextView) convertView.findViewById(R.id.menuIcon);
             holder.menuItemLayout = (LinearLayout) convertView.findViewById(R.id.menuItemLayout);
-            holder.menuSelectDot = (TextView) convertView.findViewById(R.id.menuSelectDot);
             Typeface materialdesignicons_font = Typeface.createFromAsset(mContext.getAssets(), "fonts/materialdesignicons-webfont.otf");
             Typeface custom_fontawesome = Typeface.createFromAsset(mContext.getAssets(), "fonts/fontawesome-webfont.ttf");
             Typeface VodafoneRgBd = Typeface.createFromAsset(mContext.getAssets(), "fonts/VodafoneRgBd.ttf");
@@ -99,15 +99,13 @@ public class NavigationMenuAdapter extends BaseAdapter {
         holder.menuIcon.setText(Html.fromHtml("&#x" + iconList.get(position).toString() + ";"));
 //----------fill selected value------
         if (selectedPosition.contains(position)) {
-            holder.menuItemLayout.setBackgroundColor(Color.RED);
+            holder.menuItemLayout.setBackgroundColor(Color.parseColor("#e60000"));
             holder.menuTitel.setTextColor(Color.WHITE);
-            holder.menuIcon.setTextColor(Color.WHITE);
-            //holder.menuSelectDot.setTextColor(Color.WHITE);
+            holder.menuIcon.setTextColor(Color.parseColor("#ffffff"));
         } else {
             holder.menuItemLayout.setBackgroundColor(Color.WHITE);
-            holder.menuIcon.setTextColor(Color.RED);
+            holder.menuIcon.setTextColor(Color.parseColor("#e60000"));
             holder.menuTitel.setTextColor(Color.parseColor("#4a4d4e"));
-            //holder.menuSelectDot.setTextColor(Color.WHITE);
         }
         holder.menuTitel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,8 +147,14 @@ public class NavigationMenuAdapter extends BaseAdapter {
                     transaction.replace(R.id.container, fragment)
                             .addToBackStack(null)
                             .commit();
-                }else if (menuList.get(position).toString().equalsIgnoreCase("About Us")) {
-
+                } else if (menuList.get(position).toString().equalsIgnoreCase("Home")) {
+                    android.support.v4.app.FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
+                    android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    CourseFragment fragment = CourseFragment.newInstance("", "");
+                    transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                    transaction.replace(R.id.container, fragment)
+                            //.addToBackStack(null)
+                            .commit();
                 }
                 int pos = (int) v.getTag();
                 if (selectedPosition.contains(pos)) {
@@ -172,7 +176,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
 
     public class ViewHolder {
         public TextView menuTitel;
-        public TextView menuIcon, menuSelectDot;
+        public TextView menuIcon;
         public LinearLayout menuItemLayout;
     }
 

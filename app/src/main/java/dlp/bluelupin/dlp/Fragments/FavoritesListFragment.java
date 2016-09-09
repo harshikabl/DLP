@@ -3,17 +3,22 @@ package dlp.bluelupin.dlp.Fragments;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
 import dlp.bluelupin.dlp.Adapters.FavoritesListAdapter;
+import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.FavoritesData;
@@ -65,35 +70,47 @@ public class FavoritesListFragment extends Fragment {
     }
 
     private Context context;
+    private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_favorites_list, container, false);
+        view = inflater.inflate(R.layout.fragment_favorites_list, container, false);
         context = getActivity();
         if (Utility.isTablet(context)) {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        init(view);
+        init();
         return view;
     }
 
-    public void init(View view) {
+    public void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle("Favorites");
 
+        Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
         //Topic
         DbHelper dbHelper = new DbHelper(context);
         List<FavoritesData> favoritesData = dbHelper.getFavoritesChaptersAndTopicListData(mParam1);
-
-        FavoritesListAdapter favoritesAdapter = new FavoritesListAdapter(context, favoritesData);
-        RecyclerView favoritesRecyclerView = (RecyclerView) view.findViewById(R.id.favoritesRecyclerView);
-        favoritesRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        favoritesRecyclerView.setHasFixedSize(true);
-        //favoritesRecyclerView.setNestedScrollingEnabled(false);
-        favoritesRecyclerView.setAdapter(favoritesAdapter);
+        if (favoritesData.size() == 0) {
+            view = view.inflate(context, R.layout.no_record_found_fragment, null);
+            TextView noRecordIcon = (TextView) view.findViewById(R.id.noRecordIcon);
+            noRecordIcon.setTypeface(materialdesignicons_font);
+            noRecordIcon.setText(Html.fromHtml("&#xf187;"));
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, " No fave ");
+            }
+        } else {
+            Log.d(Consts.LOG_TAG, " yes fave ");
+            FavoritesListAdapter favoritesAdapter = new FavoritesListAdapter(context, favoritesData);
+            RecyclerView favoritesRecyclerView = (RecyclerView) view.findViewById(R.id.favoritesRecyclerView);
+            favoritesRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+            favoritesRecyclerView.setHasFixedSize(true);
+            //favoritesRecyclerView.setNestedScrollingEnabled(false);
+            favoritesRecyclerView.setAdapter(favoritesAdapter);
+        }
     }
 }
