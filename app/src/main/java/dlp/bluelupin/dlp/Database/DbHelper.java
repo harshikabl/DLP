@@ -598,7 +598,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 if (media != null && media.getLocalFilePath()== null) {
                     resourceListToDownload.add(media);
                     if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "added media: " + media.getId() + " type: " + media.getType() + " download url: " + media.getDownload_url() + " localfilePath: " + media.getLocalFilePath());
+                       // Log.d(Consts.LOG_TAG, "added media: " + media.getId() + " type: " + media.getType() + " download url: " + media.getDownload_url() + " localfilePath: " + media.getLocalFilePath());
 
                     }
                 }
@@ -716,7 +716,17 @@ public class DbHelper extends SQLiteOpenHelper {
             }
             else
             {
-               Log.d(Consts.LOG_TAG, "****** getMediaEntityByIdAndLaunguageId: mediaLanguage is null for " + ob);
+               Log.d(Consts.LOG_TAG, "** Getting default language 1 medialanguage,/n getMediaEntityByIdAndLaunguageId: mediaLanguage is null for languageId:" + languageId + "media:" +   ob);
+                Data mediaDefualtLanguage = getMedialanguageLatestDataEntityByMediaId(ob.getId(),1);
+                if(mediaDefualtLanguage!=null) {
+                    mediaDefualtLanguage.setThumbnail_url(ob.getThumbnail_url());
+                    mediaDefualtLanguage.setThumbnail_url_Local_file_path(ob.getThumbnail_url_Local_file_path());
+                    ob=mediaDefualtLanguage;
+                }
+                else
+                {
+                    Log.d(Consts.LOG_TAG, "** THIS SHOULD NOT HAPPEN. SERVER INVALID DATA,/n getMediaEntityByIdAndLaunguageId:Even default  mediaLanguage is null for languageId:" + 1 + "media:" +   ob);
+                }
             }
         } else {
             ob = null;

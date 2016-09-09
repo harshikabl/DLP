@@ -120,10 +120,15 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
         holder.cancelIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             /*   Intent broadcastIntent = new Intent();
-                broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
-                broadcastIntent.putExtra("mediaId",data.getId());
-                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);*/
+//                Intent broadcastIntent = new Intent();
+//                broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
+//                broadcastIntent.putExtra("mediaId",data.getId());
+//                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
+                Gson gson = new Gson();
+                String strJsonmedia = gson.toJson(data);
+                Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
+                intent.putExtra(Consts.EXTRA_MEDIA,strJsonmedia);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 //                final ServiceHelper sh = new ServiceHelper(context);
 //                Data media = dbHelper.getMediaEntityById(data.getMedia_id());
 //                if (media != null) {
