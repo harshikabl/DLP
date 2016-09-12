@@ -207,6 +207,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            Log.d(Consts.LOG_TAG, "**** received message in Downloadingfragment: " + intent.getAction());
             if (intent.getAction().equals(Consts.MESSAGE_CANCEL_DOWNLOAD)) {
                 String strJsonMedia = intent.getExtras().getString(Consts.EXTRA_MEDIA);
                 Gson gson = new Gson();

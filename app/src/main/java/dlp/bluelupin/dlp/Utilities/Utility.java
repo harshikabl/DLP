@@ -21,6 +21,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -67,7 +69,12 @@ public class Utility {
     }
 
     public static String getFileExtension(String fileName) {
-        return fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+        //return fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+       return FilenameUtils.getExtension(fileName);
+    }
+
+    public static String getFileNameWithoutExtension(String fileName) {
+        return FilenameUtils.removeExtension(fileName);
     }
 
     //set languagae

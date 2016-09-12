@@ -2,7 +2,9 @@ package dlp.bluelupin.dlp.Utilities;
 
 import android.content.Context;
 import android.os.Environment;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -29,25 +31,21 @@ public class CardReaderHelper {
         this.context = context;
     }
 
-    public void ReadAppDataFolder(String folderLocation)
-    {
+    public void ReadAppDataFolder(String folderLocation) {
 
         File fileDirectory = new File(folderLocation);
         File[] dirFiles = fileDirectory.listFiles();
-        for(File file: dirFiles)
-        {
-            if(file.isDirectory())
-            {
+        for (File file : dirFiles) {
+            if (file.isDirectory()) {
                 ReadMetaDataJson(addTrailingSlash(file.getPath()));
             }
         }
     }
 
-    public void ReadMetaDataJson(String folderLocation)
-    {
+    public void ReadMetaDataJson(String folderLocation) {
 
         FileDataReaderHelper fileReaderHelper = new FileDataReaderHelper(context);
-        String fileContent = fileReaderHelper.ReadFileContentsFromFolder("metadata.json",folderLocation);
+        String fileContent = fileReaderHelper.ReadFileContentsFromFolder("metadata.json", folderLocation);
         // determine of the date of zip is recent than the latest service calls stored in database
         if (fileContent != null && fileContent != "") {
             ServiceDate serviceDate = new Gson().fromJson(fileContent, ServiceDate.class);
@@ -59,17 +57,20 @@ public class CardReaderHelper {
                     if (cacheSeviceCallData != null) {
                         Date serviceLastcalledDate = Utility.parseDateFromString(cacheSeviceCallData.getLastCalled());
                         // parse data from zip ONLY if zip data is recent than last called service
-                        if (true){//dataDate.after(serviceLastcalledDate)) {
+                        if (dataDate.after(serviceLastcalledDate)) {
                             if (Consts.IS_DEBUG_LOG) {
-                                Log.d(Consts.LOG_TAG, "CardReaderHelper: Starting reading folder " + folderLocation +" as dataDate:" + dataDate + " is after serviceLastcalledDate: " + serviceLastcalledDate);
+                                Log.d(Consts.LOG_TAG, "CardReaderHelper: Starting reading folder " + folderLocation + " as dataDate:" + dataDate + " is after serviceLastcalledDate: " + serviceLastcalledDate);
+                                Toast.makeText(context,"Updated content found in directory " + folderLocation, Toast.LENGTH_LONG);
                             }
 
-                            ReadFilesOfFolder(folderLocation);
+                            readFilesOfFolder(folderLocation);
+                            readMediaOfFolder(folderLocation);
 
 
                         } else {
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "CardReaderHelper: NOT reading folder " + folderLocation + "  as dataDate:" + dataDate + " is NOT after serviceLastcalledDate: " + serviceLastcalledDate);
+                                Toast.makeText(context,"No updated content found in directory "  + folderLocation, Toast.LENGTH_LONG);
                             }
                         }
                     }
@@ -79,7 +80,27 @@ public class CardReaderHelper {
 
     }
 
-    private void ReadFilesOfFolder(String folderLocation)
+    private void readMediaOfFolder(String folderLocation) {
+        File fileDirectory = new File(folderLocation + "media");
+        if (!fileDirectory.exists()) {
+            if (Consts.IS_DEBUG_LOG)
+                Log.d(Consts.LOG_TAG, "CardReaderHelper: readMediaOfFolder Folder does not exists: " + fileDirectory.getPath());
+        }
+        File[] dirFiles = fileDirectory.listFiles();
+
+        if (dirFiles.length != 0) {
+            for (int i = 0; i< dirFiles.length; i++) {
+                File file = new File(dirFiles[i].getPath());
+                DbHelper dbHelper = new DbHelper(context);
+                dbHelper.updateMediaLanguageLocalFilePathBasedOnFilePath(dirFiles[i].getName(), dirFiles[i].getPath());
+                dbHelper.updateMediaThumbnailLocalFilePathBasedOnName(dirFiles[i].getName(), dirFiles[i].getPath());
+            }
+        }
+    }
+
+
+
+    private void readFilesOfFolder(String folderLocation)
     {
         File fileDirectory = new File(folderLocation);
         if (!fileDirectory.exists()) {
