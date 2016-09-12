@@ -182,9 +182,9 @@ public class NavigationMenuAdapter extends BaseAdapter {
     {
         Utility.verifyStoragePermissions((Activity) mContext);
 
-
+        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(mContext, R.mipmap.syc);
         new AsyncTask<Void, Void, Boolean>() {
-            CustomProgressDialog customProgressDialog = new CustomProgressDialog(mContext, R.mipmap.syc);
+
             @Override
             protected Boolean doInBackground(Void... params) {
                 CardReaderHelper cardReaderHelper = new CardReaderHelper(mContext);

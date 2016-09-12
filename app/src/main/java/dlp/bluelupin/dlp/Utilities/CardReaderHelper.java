@@ -60,7 +60,7 @@ public class CardReaderHelper {
                         if (dataDate.after(serviceLastcalledDate)) {
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "CardReaderHelper: Starting reading folder " + folderLocation + " as dataDate:" + dataDate + " is after serviceLastcalledDate: " + serviceLastcalledDate);
-                                Toast.makeText(context,"Updated content found in directory " + folderLocation, Toast.LENGTH_LONG);
+                               // Toast.makeText(context,"Updated content found in directory " + folderLocation, Toast.LENGTH_LONG);
                             }
 
                             readFilesOfFolder(folderLocation);
@@ -70,7 +70,7 @@ public class CardReaderHelper {
                         } else {
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "CardReaderHelper: NOT reading folder " + folderLocation + "  as dataDate:" + dataDate + " is NOT after serviceLastcalledDate: " + serviceLastcalledDate);
-                                Toast.makeText(context,"No updated content found in directory "  + folderLocation, Toast.LENGTH_LONG);
+                               // Toast.makeText(context,"No updated content found in directory "  + folderLocation, Toast.LENGTH_LONG);
                             }
                         }
                     }

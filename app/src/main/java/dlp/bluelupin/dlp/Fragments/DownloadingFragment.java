@@ -199,6 +199,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(this.getActivity());
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Consts.MESSAGE_PROGRESS);
+        intentFilter.addAction(Consts.MESSAGE_CANCEL_DOWNLOAD);
         bManager.registerReceiver(broadcastReceiver, intentFilter);
 
     }
@@ -206,16 +207,18 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            Log.d(Consts.LOG_TAG, "**** received message in Downloadingfragment: " + intent.getAction());
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "**** received message in Downloadingfragment: " + intent.getAction());
+            }
             if (intent.getAction().equals(Consts.MESSAGE_CANCEL_DOWNLOAD)) {
-                String strJsonMedia = intent.getExtras().getString(Consts.EXTRA_MEDIA);
+                //String strJsonMedia = intent.getExtras().getString(Consts.EXTRA_MEDIA);
+                int mediaId = intent.getExtras().getInt(Consts.EXTRA_MEDIA,0);
                 Gson gson = new Gson();
-                Data selectedMedia = gson.fromJson(strJsonMedia, Data.class);
+                //Data selectedMedia = gson.fromJson(strJsonMedia, Data.class);
                 List<Data> listWithoutDownload = new ArrayList<Data>();
-                if (selectedMedia != null) {
+                if (mediaId != 0) {
                     for (Data media : uniqueResourcesToDownload) {
-                        if (media.getId() != selectedMedia.getId()) {
+                        if (media.getId() != mediaId) {
                             listWithoutDownload.add(media);
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "**** media Id: " + media.getId() + " dl cancelled:");

@@ -116,6 +116,10 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
             holder.downloadProgress.setText(data.getProgress() + "% Completed");
             holder.mProgress.setProgress(data.getProgress());
         }
+        if(data.getProgress() >= 100)
+        {
+            holder.cardView.setVisibility(View.INVISIBLE);
+        }
         holder.cancelIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,18 +127,15 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
 //                broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
 //                broadcastIntent.putExtra("mediaId",data.getId());
 //                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
+                holder.cardView.setVisibility(View.INVISIBLE);
                 Gson gson = new Gson();
-                String strJsonmedia = gson.toJson(data);
+                //String strJsonmedia = gson.toJson(data);
                 Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
-                intent.putExtra(Consts.EXTRA_MEDIA,strJsonmedia);
+                intent.putExtra(Consts.EXTRA_MEDIA,data.getId()); // strJsonmedia
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-//                final ServiceHelper sh = new ServiceHelper(context);
-//                Data media = dbHelper.getMediaEntityById(data.getMedia_id());
-//                if (media != null) {
-//                    String url = media.getUrl();
-//                    sh.callDownloadDeleteRequest(url);
-//                }
-
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "**** sending cancel message in DownloadingAdapter: " + intent.getAction());
+                }
             }
         });
 
