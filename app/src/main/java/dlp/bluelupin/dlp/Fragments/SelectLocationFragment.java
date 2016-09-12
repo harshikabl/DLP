@@ -128,7 +128,7 @@ public class SelectLocationFragment extends Fragment {
                 if (Fpath != null) {
                     Utility.setSelectFolderPathIntoSharedPreferences(context, Fpath);
                     path.setText(Fpath);
-                    Toast.makeText(context, Fpath, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context, Fpath, Toast.LENGTH_LONG).show();
                 }
             }
         }

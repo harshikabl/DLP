@@ -69,7 +69,6 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         title.setTypeface(VodafoneExB);
         if (initFlag) {
             noRecordIcon = (TextView) findViewById(R.id.noRecordIcon);
-            back = (TextView) findViewById(R.id.back);
             noRecordIcon.setTypeface(materialdesignicons_font);
             noRecordIcon.setText(Html.fromHtml("&#xf187;"));
         } else {

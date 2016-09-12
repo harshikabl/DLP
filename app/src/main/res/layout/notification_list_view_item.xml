@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="14-june | 04.365 PM"
-                android:textColor="#e60000"
+                android:textColor="#4a4d4e"
                 android:textSize="@dimen/dimTextSize_14" />
         </LinearLayout>
     </LinearLayout>
@@ -50,5 +50,5 @@
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
-        android:background="#929495" />
+        android:background="#cccccc" />
 </LinearLayout>

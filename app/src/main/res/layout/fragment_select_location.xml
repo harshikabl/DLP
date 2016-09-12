@@ -2,16 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     android:gravity="top|center"
     android:orientation="vertical"
-    android:background="#fff"
     tools:context="dlp.bluelupin.dlp.Fragments.SelectLocationFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimValue_16"
-        android:layout_marginRight="@dimen/dimValue_16"
+        android:layout_marginLeft="@dimen/dimValue_20"
+        android:layout_marginRight="@dimen/dimValue_20"
         android:layout_marginTop="@dimen/dimTextSize_40"
         android:background="@drawable/select_folder"
         android:orientation="vertical">
@@ -20,19 +20,19 @@
             android:id="@+id/defaultText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dimValue_10"
-            android:layout_marginTop="@dimen/dimValue_10"
+            android:layout_marginLeft="@dimen/dimValue_16"
+            android:layout_marginTop="@dimen/dimValue_16"
             android:padding="@dimen/dimValue_10"
             android:text="Default Folder"
             android:textColor="#000"
-            android:textSize="@dimen/dimTextSize_20" />
+            android:textSize="@dimen/dimTextSize_16" />
 
         <TextView
             android:id="@+id/path"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/dimValue_10"
-            android:layout_marginLeft="@dimen/dimValue_10"
+            android:layout_marginBottom="@dimen/dimValue_16"
+            android:layout_marginLeft="@dimen/dimValue_16"
             android:padding="@dimen/dimValue_10"
             android:text="/storage/sdcard/DLP/download"
             android:textColor="#4a4d4e"
@@ -40,7 +40,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="@dimen/size_250px"
+        android:layout_width="@dimen/size_200px"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimValue_20"
         android:background="@drawable/done_corner_round"
@@ -54,6 +54,6 @@
             android:padding="@dimen/dimValue_13"
             android:text="SELECT FOLDER"
             android:textColor="#fff"
-            android:textSize="@dimen/dimTextSize_22" />
+            android:textSize="@dimen/dimTextSize_18" />
     </LinearLayout>
 </LinearLayout>

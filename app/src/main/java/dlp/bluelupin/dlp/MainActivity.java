@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity
         ListView menuList = (ListView) findViewById(R.id.lst_menu_items);
         menuList.setDivider(null);
         List<String> itemList = new ArrayList<String>();
+        itemList.add("Home");
         itemList.add("Notification");
         itemList.add("Favorites");
         itemList.add("Downloads");
@@ -217,6 +218,7 @@ public class MainActivity extends AppCompatActivity
         itemList.add("About Us");
 
         List<String> menuIconList = new ArrayList<String>();
+        menuIconList.add("f2dc");
         menuIconList.add("f09c");
         menuIconList.add("f4ce");
         menuIconList.add("f1da");

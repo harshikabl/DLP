@@ -68,12 +68,14 @@ public class FavoritesFragment extends Fragment {
     private Context context;
     private ViewPager viewPager;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favotites, container, false);
         context = getActivity();
+
         if (Utility.isTablet(context)) {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
@@ -91,8 +93,6 @@ public class FavoritesFragment extends Fragment {
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
         //setUpCustomView(tabLayout);
-
-
     }
 
     private void setUpCustomView(TabLayout tabLayout) {

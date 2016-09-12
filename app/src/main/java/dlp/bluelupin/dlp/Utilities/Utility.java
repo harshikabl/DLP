@@ -71,11 +71,12 @@ public class Utility {
     }
 
     //set languagae
-    public static void setLanguageIntoSharedPreferences(Context context, int id, String LanguageCode) {
+    public static void setLanguageIntoSharedPreferences(Context context, int id, String LanguageCode, int languagepos) {
         SharedPreferences prefs = context.getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt("languageId", id);
         editor.putString("LanguageCode", LanguageCode);
+        editor.putInt("Position", languagepos);
         editor.commit();
         setLangRecreate(context, LanguageCode);
     }
@@ -107,6 +108,18 @@ public class Utility {
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 
+    //get language position for set default value in spinner
+    public static int getLanguagePositionFromSharedPreferences(Context context) {
+        int position = 0;
+        SharedPreferences prefs = context.getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE);
+        if (prefs != null) {
+            position = prefs.getInt("Position", 0);
+            if (Consts.IS_DEBUG_LOG) {
+                //Log.d(Consts.LOG_TAG, "position*********" + position);
+            }
+        }
+        return position;
+    }
   /*  private void setLanguageFromSharedPreferencesOnContext(Context context) {
         //getting language from SharedPreferences
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -372,4 +385,41 @@ public class Utility {
         }
         return device_token;
     }
+
+    //convert date for gate day month year hours min am/pm
+    public static String convertDate(Date date) {
+        StringBuilder sb = new StringBuilder();
+        String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", date);//Thursday
+        String stringMonth = (String) android.text.format.DateFormat.format("MMM", date); //Jun
+        String intMonth = (String) android.text.format.DateFormat.format("MM", date); //06
+        String year = (String) android.text.format.DateFormat.format("yyyy", date); //2013
+        String day = (String) android.text.format.DateFormat.format("dd", date); //20
+        String hours = (String) android.text.format.DateFormat.format("h", date); //20
+        String min = (String) android.text.format.DateFormat.format("mm", date); //20
+        String ampm = (String) android.text.format.DateFormat.format("aa", date); //20
+        //Log.d(Contants.LOG_TAG, "dayOfTheWeek*********" + dayOfTheWeek);
+        //Log.d(Contants.LOG_TAG, "year*********" + year);
+        //Log.d(Contants.LOG_TAG, "stringMonth*********" + stringMonth+"  "+intMonth);
+           /* Log.d(Contants.LOG_TAG, "day*********" + day);
+            Log.d(Contants.LOG_TAG, "hours*********" + hours);
+            Log.d(Contants.LOG_TAG, "min*********" + min);
+            Log.d(Contants.LOG_TAG, "ampm*********" + ampm);*/
+        List<String> list = new ArrayList<String>();
+        list.add(dayOfTheWeek);
+        list.add(day);
+        list.add(stringMonth);
+        list.add(hours);
+        list.add(min);
+        list.add(ampm);
+        list.add(year);
+        list.add(intMonth);
+        String delim = "";
+        for (String i : list) {
+            sb.append(delim).append(i);
+            delim = ",";
+        }
+        return sb.toString();
+    }
+
+
 }

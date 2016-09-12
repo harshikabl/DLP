@@ -93,7 +93,7 @@ public class DownloadService1 extends IntentService {
             } catch (IOException e) {
 
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         } else {

@@ -73,16 +73,12 @@ public class ContentFragment extends Fragment {
     private Context context;
     private TextView content_title;
     View view;
-    ViewGroup newcontainer;
-    LayoutInflater newinflater;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_content, container, false);
-        newcontainer = container;
-        newinflater = inflater;
         context = getActivity();
         if (Utility.isTablet(context)) {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -110,7 +106,6 @@ public class ContentFragment extends Fragment {
         if (dataList.size() == 0) {
             view = view.inflate(context, R.layout.no_record_found_fragment, null);
             TextView noRecordIcon = (TextView) view.findViewById(R.id.noRecordIcon);
-            TextView back = (TextView) view.findViewById(R.id.back);
             noRecordIcon.setTypeface(materialdesignicons_font);
             noRecordIcon.setText(Html.fromHtml("&#xf187;"));
         } else {
@@ -157,7 +152,7 @@ public class ContentFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
