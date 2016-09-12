@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
@@ -35,6 +36,7 @@ import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.CardReaderHelper;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -127,15 +129,17 @@ public class NavigationMenuAdapter extends BaseAdapter {
                             .addToBackStack(null)
                             .commit();
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Downloads")) {
-                    Utility.verifyStoragePermissions((Activity) mContext);
+//                    Utility.verifyStoragePermissions((Activity) mContext);
+//                    CardReaderHelper cardReaderHelper = new CardReaderHelper(mContext);
+//                    String SDPath = Utility.getSelectFolderPathFromSharedPreferences(mContext);// get this location from sharedpreferance;
+//                    if (SDPath != null && !SDPath.equals("")) {
+//                        cardReaderHelper.readDataFromSDCard(SDPath);
+//                    } else {
+//                        cardReaderHelper.readDataFromSDCard(Consts.inputDirectoryLocation);
+//                    }
 
-                    CardReaderHelper cardReaderHelper = new CardReaderHelper(mContext);
-                    String SDPath = Utility.getSelectFolderPathFromSharedPreferences(mContext);// get this location from sharedpreferance;
-                    if (SDPath != null && !SDPath.equals("")) {
-                        cardReaderHelper.readDataFromSDCard(SDPath);
-                    } else {
-                        cardReaderHelper.readDataFromSDCard(Consts.inputDirectoryLocation);
-                    }
+                    readExternalFilesAsync();
+
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Change Language")) {
                     Intent intent = new Intent(mContext, LanguageActivity.class);
                     mContext.startActivity(intent);
@@ -168,6 +172,36 @@ public class NavigationMenuAdapter extends BaseAdapter {
         });
 
         return convertView;
+    }
+
+    private void readExternalFilesAsync()
+    {
+        Utility.verifyStoragePermissions((Activity) mContext);
+
+
+        new AsyncTask<Void, Void, Boolean>() {
+            CustomProgressDialog customProgressDialog = new CustomProgressDialog(mContext, R.mipmap.syc);
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                CardReaderHelper cardReaderHelper = new CardReaderHelper(mContext);
+                String folderLocation = Consts.outputDirectoryLocation;
+                cardReaderHelper.ReadAppDataFolder(folderLocation);
+                return true;
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                customProgressDialog.show();
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                customProgressDialog.dismiss();
+            }
+        }.execute(null,null,null);
+
     }
 
     public class ViewHolder {

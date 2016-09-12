@@ -5,14 +5,18 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.ContentData;
+import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Models.ServiceDate;
 
 /**
@@ -25,6 +29,152 @@ public class CardReaderHelper {
         this.context = context;
     }
 
+    public void ReadAppDataFolder(String folderLocation)
+    {
+
+        File fileDirectory = new File(folderLocation);
+        File[] dirFiles = fileDirectory.listFiles();
+        for(File file: dirFiles)
+        {
+            if(file.isDirectory())
+            {
+                ReadMetaDataJson(addTrailingSlash(file.getPath()));
+            }
+        }
+    }
+
+    public void ReadMetaDataJson(String folderLocation)
+    {
+
+        FileDataReaderHelper fileReaderHelper = new FileDataReaderHelper(context);
+        String fileContent = fileReaderHelper.ReadFileContentsFromFolder("metadata.json",folderLocation);
+        // determine of the date of zip is recent than the latest service calls stored in database
+        if (fileContent != null && fileContent != "") {
+            ServiceDate serviceDate = new Gson().fromJson(fileContent, ServiceDate.class);
+            if (serviceDate != null && serviceDate.getTimestamp() != "") {
+                Date dataDate = Utility.parseDateFromString(serviceDate.getTimestamp());
+                if (dataDate != null) {
+                    DbHelper dbhelper = new DbHelper(context);
+                    CacheServiceCallData cacheSeviceCallData = dbhelper.getCacheServiceCallByUrl(Consts.URL_CONTENT_LATEST);
+                    if (cacheSeviceCallData != null) {
+                        Date serviceLastcalledDate = Utility.parseDateFromString(cacheSeviceCallData.getLastCalled());
+                        // parse data from zip ONLY if zip data is recent than last called service
+                        if (true){//dataDate.after(serviceLastcalledDate)) {
+                            if (Consts.IS_DEBUG_LOG) {
+                                Log.d(Consts.LOG_TAG, "CardReaderHelper: Starting reading folder " + folderLocation +" as dataDate:" + dataDate + " is after serviceLastcalledDate: " + serviceLastcalledDate);
+                            }
+
+                            ReadFilesOfFolder(folderLocation);
+
+
+                        } else {
+                            if (Consts.IS_DEBUG_LOG) {
+                                Log.d(Consts.LOG_TAG, "CardReaderHelper: NOT reading folder " + folderLocation + "  as dataDate:" + dataDate + " is NOT after serviceLastcalledDate: " + serviceLastcalledDate);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void ReadFilesOfFolder(String folderLocation)
+    {
+        File fileDirectory = new File(folderLocation);
+        if (!fileDirectory.exists()) {
+            if (Consts.IS_DEBUG_LOG)
+                Log.d(Consts.LOG_TAG, "CardReaderHelper: ReadFilesOfFolder Folder does not exists: " + fileDirectory.getPath());
+        }
+        File[] dirFiles = fileDirectory.listFiles();
+
+        if (dirFiles.length != 0) {
+            FileDataReaderHelper fileReaderHelper = new FileDataReaderHelper(context);
+            for (int i = 0; i< dirFiles.length; i++) {
+               File file = new File(dirFiles[i].getPath());
+                String fileExtension = Utility.getFileExtension(file.getName());
+                if (Consts.IS_DEBUG_LOG)
+                    Log.d(Consts.LOG_TAG, "CardReaderHelper: Reading file " + file.getName() + " fileExtension:" + fileExtension );
+               if(fileExtension.equalsIgnoreCase("json"))
+               {
+                   String fileContent = fileReaderHelper.ReadFileContentsFromFolder("",file.getPath());
+                   if(file.getName().contains("content")) {
+                       ReadAndUpdateContentDataInDb(fileContent);
+                   }
+                   else
+                   if(file.getName().contains("langresource")) {
+                       ReadAndUpdateLanguageResourceDataInDb(fileContent);
+                   }
+                   else
+                   if(file.getName().contains("media")) {
+                       ReadAndUpdateMediaInDb(fileContent);
+                   }
+                   else
+                   if(file.getName().contains("medialanguage")) {
+                       ReadAndUpdateMediaLanguageInDb(fileContent);
+                   }
+                   // also read all subfolders and images with in them
+
+
+               }
+               // File renamedFile = new File(file.getPath() + "__");
+                //file.renameTo(renamedFile);
+            }
+        }
+    }
+
+    private void ReadAndUpdateContentDataInDb(String fileContent) {
+//        ContentData contentData = new Gson().fromJson(fileContent, ContentData.class);
+        List<Data> datas = new Gson().fromJson(fileContent, new TypeToken<List<Data>>() {}.getType());
+        final DbHelper dbhelper = new DbHelper(context);
+        if (datas != null) {
+            for (Data data : datas) {
+                dbhelper.upsertDataEntity(data);
+            }
+        }
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "Success: ReadAndUpdateContentDataInDb");
+        }
+    }
+
+    private void ReadAndUpdateLanguageResourceDataInDb(String fileContent) {
+        List<Data> datas = new Gson().fromJson(fileContent, new TypeToken<List<Data>>() {}.getType());
+        final DbHelper dbhelper = new DbHelper(context);
+        if (datas != null) {
+            for (Data data : datas) {
+                dbhelper.upsertResourceEntity(data);
+            }
+        }
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "Success: ReadAndUpdateLanguageResourceDataInDb");
+        }
+    }
+
+    private void ReadAndUpdateMediaInDb(String fileContent) {
+        List<Data> datas = new Gson().fromJson(fileContent, new TypeToken<List<Data>>() {}.getType());
+        final DbHelper dbhelper = new DbHelper(context);
+        if (datas != null) {
+            for (Data data : datas) {
+                dbhelper.upsertMediaEntity(data);
+            }
+        }
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "Success: ReadAndUpdateMediaInDb");
+        }
+    }
+
+    private void ReadAndUpdateMediaLanguageInDb(String fileContent) {
+        List<Data> datas = new Gson().fromJson(fileContent, new TypeToken<List<Data>>() {}.getType());
+        final DbHelper dbhelper = new DbHelper(context);
+        if (datas != null) {
+            for (Data data : datas) {
+                dbhelper.upsertMedialanguageLatestDataEntity(data);
+            }
+        }
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "Success: ReadAndUpdateMediaLanguageInDb");
+        }
+    }
 
     public Boolean readDataFromSDCard(String locationOnSdCard) {
         Boolean operationSuccess = false;

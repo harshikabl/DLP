@@ -66,6 +66,10 @@ public class Utility {
         }
     }
 
+    public static String getFileExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+    }
+
     //set languagae
     public static void setLanguageIntoSharedPreferences(Context context, int id, String LanguageCode) {
         SharedPreferences prefs = context.getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE);

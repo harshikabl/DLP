@@ -8,12 +8,14 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -102,8 +104,8 @@ public class SelectLocationFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("*/*");
-
+                //intent.setType("*/*");
+                intent.setType("file/*");
                 startActivityForResult(Intent.createChooser(intent, "Select folder"), PICKFILE_REQUEST_CODE);
             }
         });
@@ -119,6 +121,10 @@ public class SelectLocationFragment extends Fragment {
         if (requestCode == PICKFILE_REQUEST_CODE) {
             if (data != null) {
                 String Fpath = data.getDataString();
+                if(Consts.IS_DEBUG_LOG)
+                {
+                    Log.d(Consts.LOG_TAG, "You selected path " + Fpath);
+                }
                 if (Fpath != null) {
                     Utility.setSelectFolderPathIntoSharedPreferences(context, Fpath);
                     path.setText(Fpath);
