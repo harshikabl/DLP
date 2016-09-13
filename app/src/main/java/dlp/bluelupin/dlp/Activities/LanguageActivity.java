@@ -87,6 +87,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
 //        Log.i(TAG, "InstanceID token: " + FirebaseInstanceId.getInstance().getToken());
         //get device token
         String token = FirebaseInstanceId.getInstance().getToken();
+        Utility.setDeviceIDIntoSharedPreferences(LanguageActivity.this, token);
 
         // Log and toast
         String msg = getString(R.string.msg_token_fmt, token);

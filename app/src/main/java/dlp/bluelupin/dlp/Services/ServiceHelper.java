@@ -240,16 +240,16 @@ public class ServiceHelper {
     //create account service
     public void callCreateAccountService(AccountServiceRequest request, final IServiceSuccessCallback<AccountData> callback) {
         request.setApi_token(Consts.API_KEY);
-        Log.d(Consts.LOG_TAG, "payload***" + request);
+
         Call<AccountData> ac = service.accountCreate(request);
         final DbHelper dbhelper = new DbHelper(context);
         String device_token = Utility.getDeviceIDFromSharedPreferences(context);
         if (device_token != null) {
-            //request.setDevice_token(device_token);
+            request.setDevice_token(device_token);
         }
         request.setService(Consts.SERVICE);
         request.setIs_development(Consts.IS_DEVELOPMENT);
-
+        Log.d(Consts.LOG_TAG, "payload***" + request);
         ac.enqueue(new Callback<AccountData>() {
             @Override
             public void onResponse(Call<AccountData> call, Response<AccountData> response) {

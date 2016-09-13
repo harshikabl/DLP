@@ -177,6 +177,14 @@ public class NavigationMenuAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void navigateToFragment(Fragment fragment) {
+        android.support.v4.app.FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+        transaction.replace(R.id.container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
 
 
     public class ViewHolder {
