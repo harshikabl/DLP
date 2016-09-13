@@ -49,7 +49,7 @@ public class Utility {
 
     /**
      * Checks if the app has permission to write to device storage
-     * <p/>
+     * <p>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity
@@ -70,7 +70,7 @@ public class Utility {
 
     public static String getFileExtension(String fileName) {
         //return fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
-       return FilenameUtils.getExtension(fileName);
+        return FilenameUtils.getExtension(fileName);
     }
 
     public static String getFileNameWithoutExtension(String fileName) {
@@ -219,7 +219,7 @@ public class Utility {
     public static String convertDate(String date) {
         StringBuilder sb = new StringBuilder();
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm aaa", Locale.ENGLISH);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             Date dat = sdf.parse(date);
             String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", dat);//Thursday
             String stringMonth = (String) android.text.format.DateFormat.format("MMM", dat); //Jun
@@ -228,7 +228,7 @@ public class Utility {
             String day = (String) android.text.format.DateFormat.format("dd", dat); //20
             String hours = (String) android.text.format.DateFormat.format("h", dat); //20
             String min = (String) android.text.format.DateFormat.format("mm", dat); //20
-            String ampm = (String) android.text.format.DateFormat.format("aa", dat); //20
+            String ampm = (String) android.text.format.DateFormat.format("aa", dat); //am/pm
             //Log.d(Contants.LOG_TAG, "dayOfTheWeek*********" + dayOfTheWeek);
             //Log.d(Contants.LOG_TAG, "year*********" + year);
             //Log.d(Contants.LOG_TAG, "stringMonth*********" + stringMonth+"  "+intMonth);
@@ -391,41 +391,6 @@ public class Utility {
             }
         }
         return device_token;
-    }
-
-    //convert date for gate day month year hours min am/pm
-    public static String convertDate(Date date) {
-        StringBuilder sb = new StringBuilder();
-        String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", date);//Thursday
-        String stringMonth = (String) android.text.format.DateFormat.format("MMM", date); //Jun
-        String intMonth = (String) android.text.format.DateFormat.format("MM", date); //06
-        String year = (String) android.text.format.DateFormat.format("yyyy", date); //2013
-        String day = (String) android.text.format.DateFormat.format("dd", date); //20
-        String hours = (String) android.text.format.DateFormat.format("h", date); //20
-        String min = (String) android.text.format.DateFormat.format("mm", date); //20
-        String ampm = (String) android.text.format.DateFormat.format("aa", date); //20
-        //Log.d(Contants.LOG_TAG, "dayOfTheWeek*********" + dayOfTheWeek);
-        //Log.d(Contants.LOG_TAG, "year*********" + year);
-        //Log.d(Contants.LOG_TAG, "stringMonth*********" + stringMonth+"  "+intMonth);
-           /* Log.d(Contants.LOG_TAG, "day*********" + day);
-            Log.d(Contants.LOG_TAG, "hours*********" + hours);
-            Log.d(Contants.LOG_TAG, "min*********" + min);
-            Log.d(Contants.LOG_TAG, "ampm*********" + ampm);*/
-        List<String> list = new ArrayList<String>();
-        list.add(dayOfTheWeek);
-        list.add(day);
-        list.add(stringMonth);
-        list.add(hours);
-        list.add(min);
-        list.add(ampm);
-        list.add(year);
-        list.add(intMonth);
-        String delim = "";
-        for (String i : list) {
-            sb.append(delim).append(i);
-            delim = ",";
-        }
-        return sb.toString();
     }
 
 

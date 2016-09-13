@@ -167,17 +167,20 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 //                                }
 //                            }
 //                        }
-
-                            Gson gson = new Gson();
-                            String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
+                            if (Utility.isOnline(context)) {
+                                Gson gson = new Gson();
+                                String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
 //
-                            FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                            DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList);
-                            FragmentTransaction transaction = fragmentManager.beginTransaction();
-                            transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
-                            transaction.replace(R.id.container, fragment)
-                                    .addToBackStack(null)
-                                    .commit();
+                                FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                                DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList);
+                                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                                transaction.replace(R.id.container, fragment)
+                                        .addToBackStack(null)
+                                        .commit();
+                            } else {
+                                Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, context);
+                            }
 
                         }
                     }

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -109,12 +110,10 @@ public class ContentFragment extends Fragment {
             noRecordIcon.setTypeface(materialdesignicons_font);
             noRecordIcon.setText(Html.fromHtml("&#xf187;"));
         } else {
-            //ChaptersAdapter chaptersAdapter = new ChaptersAdapter(context, dataList);
+
             ContentAdapter contentAdapter = new ContentAdapter(context, dataList);
-            RecyclerView contentRecyclerView = (RecyclerView) view.findViewById(R.id.contentRecyclerView);
-            contentRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            contentRecyclerView.setHasFixedSize(true);
-            contentRecyclerView.setAdapter(contentAdapter);
+            ListView listView = (ListView) view.findViewById(R.id.listView);
+            listView.setAdapter(contentAdapter);
         }
         if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "Content Fragment: data count: " + dataList.size());
@@ -152,7 +151,7 @@ public class ContentFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

@@ -11,7 +11,7 @@ import dlp.bluelupin.dlp.R;
  * Created by Neeraj on 7/28/2016.
  */
 public class NotificationViewHolder extends RecyclerView.ViewHolder {
-    public TextView  notificationDescription,dateTime,on;
+    public TextView notificationDescription, date, dateIcon, timeIcon, time;
     public LinearLayout cardView;
 
     public NotificationViewHolder(View itemView) {
@@ -20,7 +20,9 @@ public class NotificationViewHolder extends RecyclerView.ViewHolder {
         //cardView.setCardElevation(2);
         //cardView.setRadius(10);
         notificationDescription = (TextView) itemView.findViewById(R.id.notificationDescription);
-        dateTime= (TextView) itemView.findViewById(R.id.dateTime);
-        on= (TextView) itemView.findViewById(R.id.on);
+        date = (TextView) itemView.findViewById(R.id.date);
+        dateIcon = (TextView) itemView.findViewById(R.id.dateIcon);
+        timeIcon = (TextView) itemView.findViewById(R.id.timeIcon);
+        time = (TextView) itemView.findViewById(R.id.time);
     }
 }

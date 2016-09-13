@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 DbHelper dbhelper = new DbHelper(MainActivity.this);
                 dbhelper.deleteAccountData();
-                Toast.makeText(MainActivity.this, "You have been logged out.", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "You are successfully logged out.", Toast.LENGTH_LONG).show();
                 Intent mainIntent = new Intent(MainActivity.this, LanguageActivity.class);
                 startActivity(mainIntent);
                 finish();

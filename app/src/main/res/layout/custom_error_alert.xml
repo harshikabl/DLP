@@ -19,8 +19,7 @@
             android:gravity="center"
             android:text="Do you realy want to exit ?"
             android:textColor="#4a4d4e"
-            android:textSize="@dimen/dimTextSize_20"
-            android:textStyle="bold" />
+            android:textSize="@dimen/dimTextSize_20" />
 
         <View
             android:id="@+id/divider"
