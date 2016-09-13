@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -26,14 +27,18 @@ import java.io.FileWriter;
 import java.util.HashSet;
 import java.util.List;
 
+import dlp.bluelupin.dlp.Activities.AccountSettingsActivity;
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
 import dlp.bluelupin.dlp.Activities.NotificationsActivity;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.Fragments.AboutUsFragment;
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
 import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
+import dlp.bluelupin.dlp.Fragments.TermsOfUseFragment;
+import dlp.bluelupin.dlp.Fragments.UserProfileFragment;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.CardReaderHelper;
@@ -119,13 +124,8 @@ public class NavigationMenuAdapter extends BaseAdapter {
                     Activity activity = (Activity) mContext;
                     activity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Favorites")) {
-                    android.support.v4.app.FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
-                    android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
                     FavoritesFragment fragment = FavoritesFragment.newInstance("", "");
-                    transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
-                    transaction.replace(R.id.container, fragment)
-                            .addToBackStack(null)
-                            .commit();
+                    navigateToFragment(fragment);
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Downloads")) {
 //                    Utility.verifyStoragePermissions((Activity) mContext);
 //                    CardReaderHelper cardReaderHelper = new CardReaderHelper(mContext);
@@ -144,21 +144,20 @@ public class NavigationMenuAdapter extends BaseAdapter {
                     Activity activity = (Activity) mContext;
                     activity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Change Downloads Folder")) {
-                    android.support.v4.app.FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
-                    android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
                     SelectLocationFragment fragment = SelectLocationFragment.newInstance("", "");
-                    transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
-                    transaction.replace(R.id.container, fragment)
-                            .addToBackStack(null)
-                            .commit();
+                    navigateToFragment(fragment);
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Home")) {
-                    android.support.v4.app.FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
-                    android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
                     CourseFragment fragment = CourseFragment.newInstance("", "");
-                    transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
-                    transaction.replace(R.id.container, fragment)
-                            //.addToBackStack(null)
-                            .commit();
+                    navigateToFragment(fragment);
+                } else if (menuList.get(position).toString().equalsIgnoreCase("Profile")) {
+                    UserProfileFragment aboutUs = UserProfileFragment.newInstance("", "");
+                    navigateToFragment(aboutUs);
+                } else if (menuList.get(position).toString().equalsIgnoreCase("About Us")) {
+                    AboutUsFragment aboutUs = AboutUsFragment.newInstance("", "");
+                    navigateToFragment(aboutUs);
+                } else if (menuList.get(position).toString().equalsIgnoreCase("Terms of use")) {
+                    TermsOfUseFragment aboutUs = TermsOfUseFragment.newInstance("", "");
+                    navigateToFragment(aboutUs);
                 }
                 int pos = (int) v.getTag();
                 if (selectedPosition.contains(pos)) {

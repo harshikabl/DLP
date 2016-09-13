@@ -152,7 +152,7 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
             notificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             notificationRecyclerView.setHasFixedSize(true);
             //notificationRecyclerView.setNestedScrollingEnabled(false);
-            Log.d(Consts.LOG_TAG, "NotificationActivity: data count: " + data.size());
+            //Log.d(Consts.LOG_TAG, "NotificationActivity: data count: " + data.size());
             NotificationAdapter notificationsAdapter = new NotificationAdapter(NotificationsActivity.this, data);
             notificationRecyclerView.setAdapter(notificationsAdapter);
             //ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(notificationsAdapter);

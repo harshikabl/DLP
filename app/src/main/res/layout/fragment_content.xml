@@ -2,42 +2,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#fff"
+    android:orientation="vertical"
     tools:context="dlp.bluelupin.dlp.Fragments.ContentFragment">
 
     <!--<FrameLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
 
-        <!--<ImageView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:scaleType="fitXY"-->
-            <!--android:src="@drawable/img" />-->
+    <!--<ImageView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:scaleType="fitXY"-->
+    <!--android:src="@drawable/img" />-->
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/size_60px"-->
-            <!--android:layout_gravity="bottom"-->
-            <!--android:background="@drawable/gradient_black">-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="@dimen/size_60px"-->
+    <!--android:layout_gravity="bottom"-->
+    <!--android:background="@drawable/gradient_black">-->
 
-            <!--<TextView-->
-                <!--android:id="@+id/content_title"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="bottom"-->
-                <!--android:padding="@dimen/dimValue_10"-->
-                <!--android:text="Understanding Mobile Apps"-->
-                <!--android:textColor="#fff"-->
-                <!--android:textSize="@dimen/dimTextSize_18" />-->
-        <!--</LinearLayout>-->
+    <!--<TextView-->
+    <!--android:id="@+id/content_title"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom"-->
+    <!--android:padding="@dimen/dimValue_10"-->
+    <!--android:text="Understanding Mobile Apps"-->
+    <!--android:textColor="#fff"-->
+    <!--android:textSize="@dimen/dimTextSize_18" />-->
+    <!--</LinearLayout>-->
     <!--</FrameLayout>-->
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/contentRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <!--  <android.support.v7.widget.RecyclerView
+          android:id="@+id/contentRecyclerView"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_margin="@dimen/dimValue_10"
+          android:scrollbars="vertical" />-->
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_margin="@dimen/dimValue_10"
-        android:scrollbars="vertical" />
+        android:background="#ffffff" />
 </LinearLayout>

@@ -41,9 +41,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/chooseLanguage"
-            android:layout_marginTop="@dimen/dimValue_20"
-            android:layout_marginRight="@dimen/dimValue_20"
             android:layout_marginLeft="@dimen/dimValue_20"
+            android:layout_marginRight="@dimen/dimValue_20"
+            android:layout_marginTop="@dimen/dimValue_20"
             android:gravity="center"
             android:text="Lorem ipsum dolor sit amet, consectetur dolor sit"
             android:textColor="#4a4d4e"
@@ -55,15 +55,16 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/description"
             android:layout_marginLeft="@dimen/dimValue_20"
-            android:layout_marginRight="@dimen/dimValue_20"
+            android:layout_marginRight="@dimen/dimValue_25"
             android:layout_marginTop="@dimen/dimValue_50" />
+
         <View
             android:id="@+id/spinnerLine"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/spinner"
-            android:layout_marginLeft="@dimen/dimValue_20"
-            android:layout_marginRight="@dimen/dimValue_25"
+            android:layout_marginLeft="@dimen/dimValue_30"
+            android:layout_marginRight="@dimen/dimValue_30"
             android:background="#4a4d4e" />
 
         <LinearLayout
