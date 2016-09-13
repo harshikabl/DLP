@@ -1419,7 +1419,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //clientId , server_id  , media_id, language_id ,file_path ,url ,created_at , updated_at ,download_url ,created_by ,updated_by ,cloud_transferred
     public Data getMedialanguageLatestDataEntityById(int id) {
-        String query = "Select clientId , server_id , media_id , language_id  ,file_path , url , download_url , Local_file_path , created_by INTEGER, updated_by ,created_at , updated_at , deleted_at DATETIME, cloud_transferred, localFileName   FROM MedialanguageLatestEntity WHERE server_id = " + id + " ";
+        String query = "Select clientId , server_id , media_id , language_id  ,file_path , url , download_url , Local_file_path , created_by , updated_by ,created_at , updated_at , deleted_at , cloud_transferred, localFileName   FROM MedialanguageLatestEntity WHERE server_id = " + id + " ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -1440,7 +1440,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public Data getMedialanguageLatestDataEntityByMediaId(int media_id, int languageId) {
-        String query = "Select clientId , server_id , media_id , language_id  ,file_path , url , download_url , Local_file_path , created_by INTEGER, updated_by ,created_at , updated_at , deleted_at DATETIME, cloud_transferred,localFileName    FROM MedialanguageLatestEntity WHERE media_id = " + media_id + " and language_id = " + languageId + "" ;
+        String query = "Select clientId , server_id , media_id , language_id  ,file_path , url , download_url , Local_file_path , created_by , updated_by ,created_at , updated_at , deleted_at , cloud_transferred,localFileName    FROM MedialanguageLatestEntity WHERE media_id = " + media_id + " and language_id = " + languageId + "" ;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -1482,7 +1482,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //get all data
     public List<Data> getAllMedialanguageLatestDataEntity() {
-        String query = "Select clientId , server_id , media_id ,language_id ,file_path , url,created_at , updated_at,download_url,created_by,updated_by,cloud_transferred,localFileName  FROM MedialanguageLatestEntity ";
+        String query = "Select clientId , server_id , media_id , language_id  ,file_path , url , download_url , Local_file_path , created_by , updated_by ,created_at , updated_at , deleted_at , cloud_transferred, localFileName  FROM MedialanguageLatestEntity ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 

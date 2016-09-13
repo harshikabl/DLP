@@ -136,7 +136,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
 //                        cardReaderHelper.readDataFromSDCard(Consts.inputDirectoryLocation);
 //                    }
 
-                    readExternalFilesAsync();
+                    //readExternalFilesAsync();
 
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Change Language")) {
                     Intent intent = new Intent(mContext, LanguageActivity.class);
@@ -178,35 +178,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void readExternalFilesAsync()
-    {
-        Utility.verifyStoragePermissions((Activity) mContext);
 
-        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(mContext, R.mipmap.syc);
-        new AsyncTask<Void, Void, Boolean>() {
-
-            @Override
-            protected Boolean doInBackground(Void... params) {
-                CardReaderHelper cardReaderHelper = new CardReaderHelper(mContext);
-                String folderLocation = Consts.outputDirectoryLocation;
-                cardReaderHelper.ReadAppDataFolder(folderLocation);
-                return true;
-            }
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                customProgressDialog.show();
-            }
-
-            @Override
-            protected void onPostExecute(Boolean aBoolean) {
-                super.onPostExecute(aBoolean);
-                customProgressDialog.dismiss();
-            }
-        }.execute(null,null,null);
-
-    }
 
     public class ViewHolder {
         public TextView menuTitel;

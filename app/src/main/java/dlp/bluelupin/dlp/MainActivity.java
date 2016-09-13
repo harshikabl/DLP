@@ -2,6 +2,7 @@ package dlp.bluelupin.dlp;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -104,35 +106,7 @@ public class MainActivity extends AppCompatActivity
         downloadContainer = (FrameLayout) findViewById(R.id.downloadContainer);
         final DbHelper dbhelper = new DbHelper(this);
 
-        customProgressDialog.show();
-        if (Utility.isOnline(this)) {
-            callSync();
-        } else {
-            customProgressDialog.dismiss();
-            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, MainActivity.this);
-            setUpCourseFragment();
-        }
 
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//
-
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ContentServiceRequest request = new ContentServiceRequest();
-//                callContentAsync();
-//                callResourceAsync();
-//                callMediaAsync();
-//            }
-//
-//            ;
-//
-//
-////         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-////                        .setAction("Action", null).show();
-//
-//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -198,6 +172,48 @@ public class MainActivity extends AppCompatActivity
                 closeDrawer();//nav drawer close
             }
         });
+
+        readExternalFilesAsync();
+    }
+
+    private void readExternalFilesAsync()
+    {
+        Utility.verifyStoragePermissions((Activity) MainActivity.this);
+
+        //final CustomProgressDialog customProgressDialog = new CustomProgressDialog(MainActivity.this, R.mipmap.syc);
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                CardReaderHelper cardReaderHelper = new CardReaderHelper(MainActivity.this);
+                String folderLocation = Consts.outputDirectoryLocation;
+                cardReaderHelper.ReadAppDataFolder(folderLocation);
+                return true;
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //customProgressDialog.show();
+            }
+
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                //customProgressDialog.dismiss();
+                //customProgressDialog.show();
+
+                if (Utility.isOnline(MainActivity.this)) {
+                    callSync();
+                } else {
+                    customProgressDialog.dismiss();
+                    Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, MainActivity.this);
+                    setUpCourseFragment();
+                }
+
+            }
+        }.execute(null,null,null);
+
     }
 
     //set slider item value
@@ -210,7 +226,6 @@ public class MainActivity extends AppCompatActivity
         itemList.add("Home");
         itemList.add("Notification");
         itemList.add("Favorites");
-        itemList.add("Downloads");
         itemList.add("Profile");
         itemList.add("Change Language");
         itemList.add("Change Downloads Folder");
@@ -221,7 +236,6 @@ public class MainActivity extends AppCompatActivity
         menuIconList.add("f2dc");
         menuIconList.add("f09c");
         menuIconList.add("f4ce");
-        menuIconList.add("f1da");
         menuIconList.add("f631");
         menuIconList.add("f493");
         menuIconList.add("f1da");
@@ -463,14 +477,30 @@ public class MainActivity extends AppCompatActivity
                     Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync success result: " + isComplete);
                 }
                 DbHelper db = new DbHelper(MainActivity.this);
-//                List<Data> data = db.getAllMedialanguageLatestDataEntity();
-//                if (Consts.IS_DEBUG_LOG) {
-//                    Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync data count: " + data.size());
-//                }
+                List<Data> data = db.getAllMedialanguageLatestDataEntity();
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync data count: " + data.size());
+                }
+                sendMessageIfAllCallsDone();
             }
         });
     }
 
+
+
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ContentServiceRequest request = new ContentServiceRequest();
+//                callContentAsync();
+//                callResourceAsync();
+//                callMediaAsync();
+//            };
+////         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+////                        .setAction("Action", null).show();
+//
+//        });
 }
 
 

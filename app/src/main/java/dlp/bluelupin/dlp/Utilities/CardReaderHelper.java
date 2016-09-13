@@ -92,8 +92,10 @@ public class CardReaderHelper {
             for (int i = 0; i< dirFiles.length; i++) {
                 File file = new File(dirFiles[i].getPath());
                 DbHelper dbHelper = new DbHelper(context);
-                dbHelper.updateMediaLanguageLocalFilePathBasedOnFilePath(dirFiles[i].getName(), dirFiles[i].getPath());
-                dbHelper.updateMediaThumbnailLocalFilePathBasedOnName(dirFiles[i].getName(), dirFiles[i].getPath());
+                boolean isUpdate = dbHelper.updateMediaLanguageLocalFilePathBasedOnFilePath(dirFiles[i].getName(), dirFiles[i].getPath());
+                if(!isUpdate) {
+                    dbHelper.updateMediaThumbnailLocalFilePathBasedOnName(dirFiles[i].getName(), dirFiles[i].getPath());
+                }
             }
         }
     }
