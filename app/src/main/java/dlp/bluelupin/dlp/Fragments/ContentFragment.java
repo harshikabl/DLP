@@ -21,6 +21,7 @@ import java.util.List;
 
 import dlp.bluelupin.dlp.Adapters.ChaptersAdapter;
 import dlp.bluelupin.dlp.Adapters.ContentAdapter;
+import dlp.bluelupin.dlp.Adapters.ContentRecycleAdapter;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
@@ -111,9 +112,15 @@ public class ContentFragment extends Fragment {
             noRecordIcon.setText(Html.fromHtml("&#xf187;"));
         } else {
 
-            ContentAdapter contentAdapter = new ContentAdapter(context, dataList);
-            ListView listView = (ListView) view.findViewById(R.id.listView);
-            listView.setAdapter(contentAdapter);
+            //ContentAdapter contentAdapter = new ContentAdapter(context, dataList);
+            ContentRecycleAdapter contentAdapter = new ContentRecycleAdapter(context, dataList);
+            contentAdapter.setHasStableIds(true);
+            //ListView listView = (ListView) view.findViewById(R.id.listView);
+
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.content_recycler_view);
+            recyclerView.setAdapter(contentAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+            //listView.setAdapter(contentAdapter);
         }
         if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "Content Fragment: data count: " + dataList.size());

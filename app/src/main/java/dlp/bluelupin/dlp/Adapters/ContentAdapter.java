@@ -177,17 +177,6 @@ public class ContentAdapter extends BaseAdapter {
                             Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getMedia_id(),
                                     Utility.getLanguageIdFromSharedPreferences(context));
                             if (media != null) {
-                                // get media url based on language
-                                Data mediaLanguage = dbHelper.getMedialanguageLatestDataEntityByMediaId(media.getId(),
-                                        Utility.getLanguageIdFromSharedPreferences(context));
-                                if (mediaLanguage != null) {
-                                    mediaLanguage.setType(media.getType());
-                                    media = mediaLanguage;
-
-                                    if (Consts.IS_DEBUG_LOG) {
-                                        Log.d(Consts.LOG_TAG, "mediaLanguage id" + mediaLanguage.getId() + " video Url: " + mediaLanguage.getUrl() + "language Id" + mediaLanguage.getLanguage_id());
-                                    }
-                                }
                                 if (Consts.IS_DEBUG_LOG) {
                                     Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " video Url: " + media.getUrl());
                                 }
@@ -208,9 +197,15 @@ public class ContentAdapter extends BaseAdapter {
                     }
                 }
             });
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, " returning NEW convertview with position: " + position + ", data: " + itemList.get(position));
+            }
             //convertView.setTag(data.getId());
         } else {
             // holder = (ViewHolder) convertView.getTag();
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, " returning convertview with position: " + position + ", data: " + itemList.get(position));
+            }
             return convertView;
         }
         return convertView;
@@ -239,6 +234,10 @@ public class ContentAdapter extends BaseAdapter {
                     }
                     break;
             }
+        }
+        else
+        {
+
         }
     }
 

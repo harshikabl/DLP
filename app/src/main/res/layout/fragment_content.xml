@@ -41,10 +41,17 @@
           android:layout_margin="@dimen/dimValue_10"
           android:scrollbars="vertical" />-->
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_margin="@dimen/dimValue_10"
-        android:background="#ffffff" />
+    <!--<ListView-->
+        <!--android:id="@+id/listView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_margin="@dimen/dimValue_10"-->
+        <!--android:background="#ffffff" />-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/content_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/dimValue_10"
+        android:paddingBottom="@dimen/dimValue_30"
+        android:scrollbars="vertical" />
 </LinearLayout>
