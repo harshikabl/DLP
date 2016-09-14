@@ -49,7 +49,7 @@ public class Utility {
 
     /**
      * Checks if the app has permission to write to device storage
-     * <p>
+     * <p/>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity
@@ -342,7 +342,7 @@ public class Utility {
 
     //set select folder path
     public static void setSelectFolderPathIntoSharedPreferences(Context context, String path) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("folderPath", "/dlp").commit();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString("folderPath", path).commit();
     }
 
     //get selcet folder path

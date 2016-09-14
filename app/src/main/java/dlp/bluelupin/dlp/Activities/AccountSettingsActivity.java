@@ -183,7 +183,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
                 }
             });
         } else {
-            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, AccountSettingsActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.online_msg), AccountSettingsActivity.this);
         }
     }
 

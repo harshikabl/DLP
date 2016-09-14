@@ -18,6 +18,7 @@ import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
+import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
 
@@ -113,8 +114,8 @@ public class SmsReceiver extends BroadcastReceiver {
                 }
             });
         } else {
-            Toast.makeText(mContext, Consts.OFFLINE_MESSAGE, Toast.LENGTH_LONG).show();
-            //Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, mContext);
+            Toast.makeText(mContext, mContext.getString(R.string.online_msg), Toast.LENGTH_LONG).show();
+            //Utility.alertForErrorMessage(mContext.getString(R.string.online_msg), mContext);
         }
     }
 

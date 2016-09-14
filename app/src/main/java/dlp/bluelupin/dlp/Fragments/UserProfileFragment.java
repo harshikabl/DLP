@@ -31,6 +31,7 @@ import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.LanguageData;
+import dlp.bluelupin.dlp.Models.ProfileUpdateServiceRequest;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
@@ -198,13 +199,13 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
         int languageId = Utility.getLanguageIdFromSharedPreferences(context);
 
-        AccountServiceRequest accountServiceRequest = new AccountServiceRequest();
-        accountServiceRequest.setName(name_string);
-        accountServiceRequest.setPreferred_language_id(languageId);
+        ProfileUpdateServiceRequest ServiceRequest = new ProfileUpdateServiceRequest();
+        ServiceRequest.setName(name_string);
+        ServiceRequest.setLanguage_id(languageId);
         if (Utility.isOnline(context)) {
             customProgressDialog.show();
             ServiceCaller sc = new ServiceCaller(context);
-            sc.updateProfile(accountServiceRequest, new IAsyncWorkCompletedCallback() {
+            sc.updateProfile(ServiceRequest, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
 
@@ -222,7 +223,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                 }
             });
         } else {
-            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, context);
+            Utility.alertForErrorMessage(context.getString(R.string.online_msg), context);
         }
     }
 }

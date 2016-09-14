@@ -54,7 +54,7 @@ public class Consts {
 
 
     // 'Course','Subject','Chapter','Topic','Text','Image','Video','Url','Audio','Comment','Home','Other','DownloadFile','Folder'
-    public static final String OFFLINE_MESSAGE = "You are not online!!!!";
+    //public static final String OFFLINE_MESSAGE = "You are not online!!!!";
     public static final String APP_DIRECTORY = "/DLP" + "Directory/";
 
     public static final String MESSAGE_PROGRESS = "message_progress";

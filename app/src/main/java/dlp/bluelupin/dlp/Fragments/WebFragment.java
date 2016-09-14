@@ -121,7 +121,7 @@ public class WebFragment extends Fragment {
             if (customProgressDialog.isShowing()) {
                 // customProgressDialog.dismiss();
             }
-            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, context);
+            Utility.alertForErrorMessage(getString(R.string.online_msg), context);
         }
     }
 }

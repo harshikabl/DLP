@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity
                     callSync();
                 } else {
                     customProgressDialog.dismiss();
-                    Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, MainActivity.this);
+                    Utility.alertForErrorMessage(getString(R.string.online_msg), MainActivity.this);
                     setUpCourseFragment();
                 }
 

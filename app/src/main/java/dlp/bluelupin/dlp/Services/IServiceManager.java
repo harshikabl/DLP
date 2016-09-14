@@ -10,6 +10,7 @@ import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Models.OtpData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
+import dlp.bluelupin.dlp.Models.ProfileUpdateServiceRequest;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -56,7 +57,7 @@ public interface IServiceManager {
     Call<ResponseBody> downloadFile(@Url String fileUrl);
 
     @POST(Consts.Profile_Update)
-    Call<AccountData> profileUpdated(@Body AccountServiceRequest request);
+    Call<AccountData> profileUpdated(@Body ProfileUpdateServiceRequest request);
 
 
 }
