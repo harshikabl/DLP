@@ -124,6 +124,9 @@ public class SplashActivity extends Activity {
     }
 
     private void init() {
+        //set language
+        Utility.setLangRecreate(SplashActivity.this, Utility.getLanguageCodeFromSharedPreferences(SplashActivity.this));
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

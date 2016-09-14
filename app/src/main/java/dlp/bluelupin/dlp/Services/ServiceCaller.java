@@ -203,6 +203,25 @@ public class ServiceCaller {
         });
     }
 
+    //call profile update service
+    public void updateProfile(final AccountServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final ServiceHelper sh = new ServiceHelper(context);
+        sh.callProfileUpdateService(request, new IServiceSuccessCallback<AccountData>() {
+            @Override
+            public void onDone(final String callerUrl, final AccountData result, String error) {
+                Boolean success = false;
+                if (result != null) {
+                    success = true;
+                    workCompletedCallback.onDone("Profile updated", success);
+
+                } else {
+                    success = false;
+                    workCompletedCallback.onDone("Profile not updated", success);
+                }
+            }
+        });
+    }
+
     //call OTP verification service
     public void OtpVerification(OtpVerificationServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
         final ServiceHelper sh = new ServiceHelper(context);

@@ -93,7 +93,7 @@ public class ContentFragment extends Fragment {
 
     private void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle("Contents");
+        rootActivity.setScreenTitle(getString(R.string.contents));
 
         Typeface custom_fontawesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");

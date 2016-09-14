@@ -89,7 +89,7 @@ public class FavoritesListFragment extends Fragment {
 
     public void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle("Favorites");
+        rootActivity.setScreenTitle(context.getString(R.string.Favorites));
 
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
         //Topic

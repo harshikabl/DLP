@@ -25,6 +25,7 @@ import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Models.OtpData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
+import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.IServiceManager;
 import dlp.bluelupin.dlp.Services.IServiceSuccessCallback;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -270,8 +271,46 @@ public class ServiceHelper {
 
             @Override
             public void onFailure(Call<AccountData> call, Throwable t) {
-                Log.d(Consts.LOG_TAG, "Failure in service latestContent" + t.toString());
-                callback.onDone(Consts.URL_CONTENT_LATEST, null, t.toString());
+                Log.d(Consts.LOG_TAG, "Failure in service account create" + t.toString());
+                callback.onDone(Consts.CREATE_NEW_USER, null, t.toString());
+            }
+
+        });
+    }
+
+    //updated profile service
+    public void callProfileUpdateService(AccountServiceRequest request, final IServiceSuccessCallback<AccountData> callback) {
+
+        Call<AccountData> ac = service.profileUpdated(request);
+        final DbHelper dbhelper = new DbHelper(context);
+        AccountData accountDataApToken = dbhelper.getAccountData();
+        if (accountDataApToken != null) {
+            if (accountDataApToken.getApi_token() != null) {
+                request.setApi_token(accountDataApToken.getApi_token());
+            }
+        }
+        Log.d(Consts.LOG_TAG, "payload***" + request);
+        ac.enqueue(new Callback<AccountData>() {
+            @Override
+            public void onResponse(Call<AccountData> call, Response<AccountData> response) {
+                AccountData data = response.body();
+
+                if (data != null) {
+                    Log.d(Consts.LOG_TAG, "profile updated data:" + data.toString());
+                    if (dbhelper.upsertAccountData(data)) {
+                        Log.d(Consts.LOG_TAG, "Profile updated successfully in database ");
+                    }
+                    callback.onDone(Consts.Profile_Update, data, null);
+                } else {
+                    callback.onDone(Consts.Profile_Update, null, null);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<AccountData> call, Throwable t) {
+                Log.d(Consts.LOG_TAG, "Failure in service Profile_Update" + t.toString());
+                callback.onDone(Consts.Profile_Update, null, t.toString());
             }
 
         });
@@ -304,7 +343,7 @@ public class ServiceHelper {
                         Log.d(Consts.LOG_TAG, "response data:" + response.toString());
                         Log.d(Consts.LOG_TAG, "Otp verify data:" + data.toString());
                     }
-                    Toast.makeText(context, "You are registered successfully.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, context.getString(R.string.registered), Toast.LENGTH_LONG).show();
                     //Log.d(Consts.LOG_TAG, "Otp verify successfully ");
                     callback.onDone(Consts.VERIFY_OTP, data, null);
                 } else {
@@ -312,7 +351,7 @@ public class ServiceHelper {
                     accountData.setIsVerified(0);
                     //update account verified for check account verified or not
                     dbhelper.updateAccountDataVerified(accountData);
-                    Toast.makeText(context, "Please enter a valid OTP.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, context.getString(R.string.enter_valid_otp), Toast.LENGTH_LONG).show();
                     if (Consts.IS_DEBUG_LOG) {
                         Log.d(Consts.LOG_TAG, "response data:" + response.toString());
                         Log.d(Consts.LOG_TAG, "Otp not verify");

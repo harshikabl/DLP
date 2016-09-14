@@ -98,7 +98,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         phoneLable = (TextView) findViewById(R.id.phoneLable);
         lanLable = (TextView) findViewById(R.id.lanLable);
         genderLable = (TextView) findViewById(R.id.genderLable);
-        cancel = (TextView) findViewById(R.id.cancel);
+        // cancel = (TextView) findViewById(R.id.cancel);
         save = (TextView) findViewById(R.id.save);
         save.setOnClickListener(this);
         autoPlayCheck = (TextView) findViewById(R.id.autoPlayCheck);
@@ -112,7 +112,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         lanLable.setTypeface(VodafoneExB);
         autoPlayCheck.setTypeface(VodafoneRg);
         genderLable.setTypeface(VodafoneExB);
-        cancel.setTypeface(VodafoneRg);
+        //cancel.setTypeface(VodafoneRg);
         save.setTypeface(VodafoneRg);
         male.setTypeface(VodafoneRg);
         female.setTypeface(VodafoneRg);
@@ -173,10 +173,10 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
                         }
                         Intent intentOtp = new Intent(AccountSettingsActivity.this, VerificationActivity.class);
                         startActivity(intentOtp);
-                        Toast.makeText(AccountSettingsActivity.this, "OTP has been sent to the provided Phone Number.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(AccountSettingsActivity.this, getString(R.string.otp_sent), Toast.LENGTH_LONG).show();
                         customProgressDialog.dismiss();
                     } else {
-                        Utility.alertForErrorMessage("This account is not yet created.", AccountSettingsActivity.this);
+                        Utility.alertForErrorMessage(getString(R.string.account_not_create), AccountSettingsActivity.this);
                         customProgressDialog.dismiss();
                     }
 
@@ -231,22 +231,22 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         email_string = enterEmail.getText().toString().trim();
         pnone_no_string = enterPhone.getText().toString().trim();
         if (name_string.length() == 0) {
-            Utility.alertForErrorMessage("Enter name", this);
+            Utility.alertForErrorMessage(getString(R.string.enter_name), this);
             return false;
         } else if (email_string.length() == 0) {
-            Utility.alertForErrorMessage("Enter E-mail address", this);
+            Utility.alertForErrorMessage(getString(R.string.enter_e_mail), this);
             return false;
         } else if (!email_string.matches(emailRegex)) {
-            Utility.alertForErrorMessage("Enter valid E-mail address", this);
+            Utility.alertForErrorMessage(getString(R.string.enter_valid_mail), this);
             return false;
         } else if (pnone_no_string.length() == 0) {
-            Utility.alertForErrorMessage("Enter phone number", this);
+            Utility.alertForErrorMessage(getString(R.string.enter_phone_no), this);
             return false;
         } else if (pnone_no_string.length() != 10) {
-            Utility.alertForErrorMessage("Enter a valid phone number", this);
+            Utility.alertForErrorMessage(getString(R.string.enter_valid_phone), this);
             return false;
         } else if (!pnone_no_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Enter a valid phone number", this);
+            Utility.alertForErrorMessage(getString(R.string.enter_valid_phone), this);
             return false;
         }
 

@@ -88,7 +88,7 @@ public class SelectLocationFragment extends Fragment {
 
     private void init(View view) {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle("Select Location");
+        rootActivity.setScreenTitle(getString(R.string.select_location));
 
         Typeface VodafoneExB = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VodafoneRg.ttf");

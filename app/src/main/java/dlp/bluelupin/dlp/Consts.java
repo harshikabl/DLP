@@ -1,5 +1,6 @@
 package dlp.bluelupin.dlp;
 
+import android.content.res.Resources;
 import android.os.Environment;
 
 /**
@@ -46,6 +47,7 @@ public class Consts {
     public static final String URL = "URL";
     public static final String THUMBNAIL_URL = "Thumbnail_URL";
     public static final String DOWNLOAD_URL = "Download_URL";
+    public static final String Profile_Update = "user/profile/update";
 
     public static final String SENDER = "HP-MOBKNT";
     public static String inputDirectoryLocation = "/dlp/";
@@ -64,5 +66,5 @@ public class Consts {
     public static final String mBroadcastProgressUpdateAction = "downloadProgress";
 
     public static final String SERVICE = "gcm";//“apns”, “gcm”, “mpns”
-    public static final Boolean IS_DEVELOPMENT = true;
+    public static final Boolean IS_DEVELOPMENT = false;
 }

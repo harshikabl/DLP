@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
@@ -144,8 +145,10 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 DbHelper dbhelper = new DbHelper(MainActivity.this);
                 dbhelper.deleteAccountData();
-                Toast.makeText(MainActivity.this, "You are successfully logged out.", Toast.LENGTH_LONG).show();
+                String msg = getString(R.string.logout);
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
                 Intent mainIntent = new Intent(MainActivity.this, LanguageActivity.class);
+                mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(mainIntent);
                 finish();
             }
@@ -241,7 +244,17 @@ public class MainActivity extends AppCompatActivity
         menuIconList.add("f1da");
         menuIconList.add("f219");
         menuIconList.add("f2fd");
-        NavigationMenuAdapter navigationMenuAdapter = new NavigationMenuAdapter(MainActivity.this, itemList, menuIconList);
+
+        List<String> displayNameList = new ArrayList<String>();
+        displayNameList.add(getString(R.string.home));
+        displayNameList.add(getString(R.string.notification));
+        displayNameList.add(getString(R.string.Favorites));
+        displayNameList.add(getString(R.string.Profile));
+        displayNameList.add(getString(R.string.Change_Language));
+        displayNameList.add(getString(R.string.Change_Folder));
+        displayNameList.add(getString(R.string.Terms_of_use));
+        displayNameList.add(getString(R.string.about_us));
+        NavigationMenuAdapter navigationMenuAdapter = new NavigationMenuAdapter(MainActivity.this, itemList, menuIconList,displayNameList);
         menuList.setAdapter(navigationMenuAdapter);
     }
 

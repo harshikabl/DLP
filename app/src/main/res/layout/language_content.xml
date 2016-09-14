@@ -31,7 +31,7 @@
             android:layout_below="@+id/languageIcon"
             android:layout_marginTop="@dimen/dimValue_40"
             android:gravity="center"
-            android:text="Choose Language"
+            android:text="@string/choose_language"
             android:textColor="#000"
             android:textSize="@dimen/dimTextSize_20"
             android:textStyle="bold" />
@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="@dimen/dimValue_13"
-                    android:text="Done"
+                    android:text="@string/done"
                     android:textColor="#fff"
                     android:textSize="@dimen/dimTextSize_22" />
 

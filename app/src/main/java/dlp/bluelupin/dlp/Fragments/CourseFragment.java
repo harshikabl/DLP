@@ -99,7 +99,8 @@ public class CourseFragment extends Fragment {
 
     private void init(View view) {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle("Home");
+        String msg = getString(R.string.title);
+        rootActivity.setScreenTitle(msg);
 
         Typeface custom_fontawesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");

@@ -80,6 +80,7 @@ public class TermsOfUseFragment extends Fragment {
 
     private void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle("Terms of use");
+        String msg = getString(R.string.about_us);
+        rootActivity.setScreenTitle(msg);
     }
 }
