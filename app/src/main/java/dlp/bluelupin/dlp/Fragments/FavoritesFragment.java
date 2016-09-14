@@ -107,8 +107,8 @@ public class FavoritesFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         FavoritesPagerAdapter adapter = new FavoritesPagerAdapter(getActivity().getSupportFragmentManager());
-        adapter.addFrag(new FavoritesListFragment().newInstance(Consts.CHAPTER), "CHAPTERS");
-        adapter.addFrag(new FavoritesListFragment().newInstance(Consts.TOPIC), "TOPICS");
+        adapter.addFrag(new FavoritesListFragment().newInstance(Consts.CHAPTER), context.getString(R.string.chapters));
+        adapter.addFrag(new FavoritesListFragment().newInstance(Consts.TOPIC),context.getString(R.string.topic));
         viewPager.setAdapter(adapter);
     }
 }

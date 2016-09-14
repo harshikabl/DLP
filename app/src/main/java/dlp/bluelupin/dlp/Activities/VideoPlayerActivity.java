@@ -39,9 +39,9 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
         } else {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
-
+        String msg = getString(R.string.buffring);
         pDialog = new ProgressDialog(VideoPlayerActivity.this);
-        pDialog.setMessage("Buffering...");
+        pDialog.setMessage(msg);
         pDialog.setIndeterminate(false);
         pDialog.setCancelable(false);
         // Show progressbar
@@ -74,7 +74,6 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
             e.printStackTrace();
         }
     }
-
 
 
     @Override

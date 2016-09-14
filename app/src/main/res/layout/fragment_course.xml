@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     android:background="#fff"
+    android:fillViewport="true"
     tools:context="dlp.bluelupin.dlp.Fragments.CourseFragment">
 
 
@@ -20,7 +20,8 @@
             android:orientation="vertical"
             android:padding="@dimen/dimValue_13">
 
-            <ImageView android:id="@+id/courseImage"
+            <ImageView
+                android:id="@+id/courseImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
@@ -60,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimValue_10"
-            android:text="OUR PROGRAMS"
+            android:text="@string/our_programs"
             android:textColor="#000"
             android:textSize="@dimen/dimTextSize_20" />
 

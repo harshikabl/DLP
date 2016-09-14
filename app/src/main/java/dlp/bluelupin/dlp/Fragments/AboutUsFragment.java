@@ -80,7 +80,8 @@ public class AboutUsFragment extends Fragment {
 
     private void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle("About Us");
+        String msg = getString(R.string.about_us);
+        rootActivity.setScreenTitle(msg);
     }
 
 }

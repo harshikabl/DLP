@@ -14,43 +14,35 @@ public class AccountServiceRequest {
 
     private int preferred_language_id;
 
-    public String getPhone ()
-    {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone (String phone)
-    {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public String getEmail ()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail (String email)
-    {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getName ()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName (String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getApi_token ()
-    {
+    public String getApi_token() {
         return api_token;
     }
 
-    public void setApi_token (String api_token)
-    {
+    public void setApi_token(String api_token) {
         this.api_token = api_token;
     }
 
@@ -91,9 +83,8 @@ public class AccountServiceRequest {
     }
 
     @Override
-    public String toString()
-    {
-        return "ClassPojo [phone = "+phone+", email = "+email+", name = "+name+", api_token = "+api_token+", preferred_language_id = "+preferred_language_id+", device_token = "+device_token+"]";
+    public String toString() {
+        return "ClassPojo [phone = " + phone + ", email = " + email + ", name = " + name + ", api_token = " + api_token + ", preferred_language_id = " + preferred_language_id + ", device_token = " + device_token + ", service = " + service + ", is_development = " + is_development + "]";
     }
 }
 

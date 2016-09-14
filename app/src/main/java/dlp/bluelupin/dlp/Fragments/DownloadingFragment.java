@@ -139,7 +139,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
 
     private void init(View view) {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle("Daksh");
+        rootActivity.setScreenTitle(getString(R.string.Daksh));
 
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         TextView download = (TextView) view.findViewById(R.id.download);
@@ -212,7 +212,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
             }
             if (intent.getAction().equals(Consts.MESSAGE_CANCEL_DOWNLOAD)) {
                 //String strJsonMedia = intent.getExtras().getString(Consts.EXTRA_MEDIA);
-                int mediaId = intent.getExtras().getInt(Consts.EXTRA_MEDIA,0);
+                int mediaId = intent.getExtras().getInt(Consts.EXTRA_MEDIA, 0);
                 Gson gson = new Gson();
                 //Data selectedMedia = gson.fromJson(strJsonMedia, Data.class);
                 List<Data> listWithoutDownload = new ArrayList<Data>();
@@ -273,7 +273,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
             if (intent.getAction().equals(Consts.mBroadcastDeleteAction)) {
                 //LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
                 context.stopService(intent);
-                Toast.makeText(context, "DownloadFile cancel!", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, getString(R.string.downloading_cancel), Toast.LENGTH_LONG).show();
             }
             if (intent.getAction().equals(Consts.mBroadcastProgressUpdateAction)) {
                 int pro = intent.getIntExtra("progresss", 0);

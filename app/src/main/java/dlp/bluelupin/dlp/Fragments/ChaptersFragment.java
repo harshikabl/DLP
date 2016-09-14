@@ -1,10 +1,12 @@
 package dlp.bluelupin.dlp.Fragments;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Locale;
 
 import dlp.bluelupin.dlp.Adapters.ChaptersAdapter;
 import dlp.bluelupin.dlp.Consts;
@@ -91,9 +94,10 @@ public class ChaptersFragment extends Fragment {
         return view;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle(type);
+
 
         Typeface custom_fontawesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
@@ -101,8 +105,14 @@ public class ChaptersFragment extends Fragment {
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
         chapterTitle = (TextView) view.findViewById(R.id.chapterTitle);
         chapterTitle.setTypeface(VodafoneExB);
+        if (type.equalsIgnoreCase("Chapter")) {
+            rootActivity.setScreenTitle(context.getString(R.string.Chapters));
+            chapterTitle.setText(context.getString(R.string.Chapters));
+        } else if (type.equalsIgnoreCase("Topic")) {
+            rootActivity.setScreenTitle(context.getString(R.string.Topic));
+            chapterTitle.setText(context.getString(R.string.Topic));
+        }
 
-        chapterTitle.setText(type);
 
         DbHelper db = new DbHelper(context);
         List<Data> dataList = db.getDataEntityByParentIdAndType(parentId, type);
@@ -154,7 +164,7 @@ public class ChaptersFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

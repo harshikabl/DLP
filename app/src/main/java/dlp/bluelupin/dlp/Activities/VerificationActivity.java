@@ -117,40 +117,40 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         five_string = fiveNo.getText().toString().trim();
         six_string = sixNo.getText().toString().trim();
         if (one_string.length() == 0) {
-            Utility.alertForErrorMessage("Please enter OTP", VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.enter_otp), VerificationActivity.this);
             return false;
         } else if (!one_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.enter_valid_otp), VerificationActivity.this);
             return false;
         } else if (two_string.length() == 0) {
-            Utility.alertForErrorMessage("Please enter OTP", VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.enter_otp), VerificationActivity.this);
             return false;
         } else if (!two_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.enter_valid_otp), VerificationActivity.this);
             return false;
         } else if (three_string.length() == 0) {
-            Utility.alertForErrorMessage("Please enter OTP", VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.enter_otp), VerificationActivity.this);
             return false;
         } else if (!three_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.enter_valid_otp), VerificationActivity.this);
             return false;
         } else if (four_string.length() == 0) {
-            Utility.alertForErrorMessage("Please enter OTP", VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.enter_otp), VerificationActivity.this);
             return false;
         } else if (!four_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.enter_valid_otp), VerificationActivity.this);
             return false;
         } else if (five_string.length() == 0) {
-            Utility.alertForErrorMessage("Please enter OTP", VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.enter_otp), VerificationActivity.this);
             return false;
         } else if (!five_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.enter_valid_otp), VerificationActivity.this);
             return false;
         } else if (six_string.length() == 0) {
-            Utility.alertForErrorMessage("Please enter OTP", VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.enter_otp), VerificationActivity.this);
             return false;
         } else if (!six_string.matches(numberRegex)) {
-            Utility.alertForErrorMessage("Please enter a valid OTP.", VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.enter_valid_otp), VerificationActivity.this);
             return false;
         }
 
@@ -252,9 +252,9 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
                             Intent intentOtp = new Intent(VerificationActivity.this, VerificationActivity.class);
                             startActivity(intentOtp);
                             customProgressDialog.dismiss();
-                            Toast.makeText(VerificationActivity.this, "OTP has been sent to the provided Phone Number.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(VerificationActivity.this,  getString(R.string.otp_sent), Toast.LENGTH_LONG).show();
                         } else {
-                            Utility.alertForErrorMessage("OTP can not send", VerificationActivity.this);
+                            Utility.alertForErrorMessage(getString(R.string.account_not_create), VerificationActivity.this);
                             customProgressDialog.dismiss();
                         }
 

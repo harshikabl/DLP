@@ -2,12 +2,14 @@ package dlp.bluelupin.dlp.Fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +17,24 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
 import java.util.List;
 
+import dlp.bluelupin.dlp.Activities.VerificationActivity;
 import dlp.bluelupin.dlp.Adapters.LanguageAdapter;
+import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.AccountData;
+import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
+import dlp.bluelupin.dlp.Services.ServiceCaller;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -81,6 +90,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     private Spinner spinner;
     private EditText enterName;
     private List<LanguageData> data;
+    private String name_string;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,7 +108,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
 
     private void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle("Profile");
+        rootActivity.setScreenTitle(context.getString(R.string.Profile));
         Typeface custom_fontawesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
@@ -161,7 +171,58 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.save:
+                if (isValidate()) {
+                    callProfileUpdateService();
+                }
                 break;
+        }
+    }
+
+    // ----validation -----
+    private boolean isValidate() {
+        String numberRegex = "[0-9]+";
+        String emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
+        // String emailReg = "^[A-Za-z0-9_.]+(\\.[_A-Za-z0-9]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+        name_string = enterName.getText().toString().trim();
+        if (name_string.length() == 0) {
+            Utility.alertForErrorMessage(getString(R.string.enter_name), context);
+            return false;
+        }
+        return true;
+    }
+
+    //call create account service
+    private void callProfileUpdateService() {
+        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
+
+        int languageId = Utility.getLanguageIdFromSharedPreferences(context);
+
+        AccountServiceRequest accountServiceRequest = new AccountServiceRequest();
+        accountServiceRequest.setName(name_string);
+        accountServiceRequest.setPreferred_language_id(languageId);
+        if (Utility.isOnline(context)) {
+            customProgressDialog.show();
+            ServiceCaller sc = new ServiceCaller(context);
+            sc.updateProfile(accountServiceRequest, new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+
+                    if (isComplete) {
+                        if (Consts.IS_DEBUG_LOG) {
+                            Log.d(Consts.LOG_TAG, " callProfileUpdateService success result: " + isComplete);
+                        }
+                        Toast.makeText(context, getString(R.string.profile_update), Toast.LENGTH_LONG).show();
+                        customProgressDialog.dismiss();
+                    } else {
+                        Utility.alertForErrorMessage(getString(R.string.profile_not_updated), context);
+                        customProgressDialog.dismiss();
+                    }
+
+                }
+            });
+        } else {
+            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, context);
         }
     }
 }

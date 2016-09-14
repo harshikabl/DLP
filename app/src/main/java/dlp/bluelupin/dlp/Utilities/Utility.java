@@ -49,7 +49,7 @@ public class Utility {
 
     /**
      * Checks if the app has permission to write to device storage
-     * <p/>
+     * <p>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity
@@ -126,6 +126,19 @@ public class Utility {
             }
         }
         return position;
+    }
+
+    //get language code hi,en etc
+    public static String getLanguageCodeFromSharedPreferences(Context context) {
+        String languageCode = null;
+        SharedPreferences prefs = context.getSharedPreferences("LanguagePreferences", Context.MODE_PRIVATE);
+        if (prefs != null) {
+            languageCode = prefs.getString("LanguageCode", "en");
+            if (Consts.IS_DEBUG_LOG) {
+                //Log.d(Consts.LOG_TAG, "languageCode*********" + languageCode);
+            }
+        }
+        return languageCode;
     }
   /*  private void setLanguageFromSharedPreferencesOnContext(Context context) {
         //getting language from SharedPreferences

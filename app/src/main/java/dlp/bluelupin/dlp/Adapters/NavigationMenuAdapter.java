@@ -54,13 +54,15 @@ public class NavigationMenuAdapter extends BaseAdapter {
     private List<String> menuList = null;
     private List<String> iconList = null;
     HashSet<Integer> selectedPosition = new HashSet<>();
+    List<String> displayNameList;
 
     public NavigationMenuAdapter(Context context,
-                                 List<String> menuList, List<String> iconList) {
+                                 List<String> menuList, List<String> iconList, List<String> displayNameList) {
         mContext = context;
         inflater = LayoutInflater.from(mContext);
         this.menuList = menuList;
         this.iconList = iconList;
+        this.displayNameList = displayNameList;
     }
 
     @Override
@@ -102,7 +104,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.menuTitel.setTag(position);
-        holder.menuTitel.setText(menuList.get(position).toString());
+        holder.menuTitel.setText(displayNameList.get(position).toString());
         holder.menuIcon.setText(Html.fromHtml("&#x" + iconList.get(position).toString() + ";"));
 //----------fill selected value------
         if (selectedPosition.contains(position)) {
@@ -140,6 +142,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
 
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Change Language")) {
                     Intent intent = new Intent(mContext, LanguageActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(intent);
                     Activity activity = (Activity) mContext;
                     activity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);

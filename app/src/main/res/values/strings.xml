@@ -21,6 +21,15 @@
     <string name="enter_name">Enter name</string>
     <string name="enter_email">Enter email</string>
     <string name="enter_phone">Enter phone</string>
+    <string name="otp_sent">OTP has been sent to the provided Phone Number.</string>
+    <string name="account_not_create">This account is not yet created.</string>
+    <string name="enter_e_mail">Enter E-mail address</string>
+    <string name="enter_valid_mail">Enter valid E-mail address</string>
+    <string name="enter_phone_no">Enter phone number</string>
+    <string name="enter_valid_phone">Enter a valid phone number</string>
+    <string name="profile_update">Your profile updated successfully.</string>
+    <string name="profile_not_updated">This profile is not yet updated.</string>
+
 
     <!-- verification screen text-->
     <string name="description">OTP has been sent to your provided mobile number. We will detect it automatically within 10 seconds or you can enter OTP manually here.</string>
@@ -31,6 +40,9 @@
     <string name="try_otp">Didnt receive OTP ? TRY</string>
     <string name="resend_otp">RESEND OTP</string>
     <string name="verification_title">Verification</string>
+    <string name="enter_otp">Please enter OTP</string>
+    <string name="enter_valid_otp">Please enter a valid OTP.</string>
+    <string name="registered">You are registered successfully.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_notifications">NotificationsActivity</string>
@@ -38,6 +50,51 @@
 
     <!-- notification screen text-->
     <string name="notification">Notification</string>
+
+    <!-- language screen text-->
+    <string name="select_language">Select Language</string>
+    <string name="choose_language">Choose Language</string>
+    <string name="done">Done</string>
+
+    <!-- course screen text-->
+    <string name="title">Home</string>
+    <string name="our_programs">OUR PROGRAMS</string>
+
+    <!-- video play screen text-->
+    <string name="buffring">Buffering...</string>
+
+    <string name="about_us">About Us</string>
+    <string name="terms_of">Terms of use</string>
+
+    <string name="online_msg">You are not online!!!!</string>
+    <string name="logout">You are successfully logged out.</string>
+
+    <!-- navigaton screen text-->
+    <string name="home">Home</string>
+    <string name="Notification">Notification</string>
+    <string name="Favorites">Favorites</string>
+    <string name="Profile">Profile</string>
+    <string name="Change_Language">Change Language</string>
+    <string name="Change_Folder">Change Downloads Folder</string>
+    <string name="Terms_of_use">Terms of use</string>
+    <string name="About_Us">About Us</string>
+
+    <!-- content screen text-->
+    <string name="contents">Contents</string>
+    <string name="Daksh">Daksh</string>
+    <string name="downloading_cancel">DownloadFile cancel!</string>
+
+    <!-- favorites screen text-->
+    <string name="chapters">CHAPTERS</string>
+    <string name="topic">TOPICS</string>
+
+    <string name="select_location">Select Location</string>
+    <string name="default_folder">Default Folder</string>
+    <string name="select_folder">SELECT FOLDER</string>
+    <string name="Chapters">Chapters</string>
+    <string name="Topic">Topic</string>
+
+    <string name="no_record">No Record Found</string>
 
 
 

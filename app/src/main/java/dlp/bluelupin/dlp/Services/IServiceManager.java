@@ -55,4 +55,8 @@ public interface IServiceManager {
     @Streaming
     Call<ResponseBody> downloadFile(@Url String fileUrl);
 
+    @POST(Consts.Profile_Update)
+    Call<AccountData> profileUpdated(@Body AccountServiceRequest request);
+
+
 }
