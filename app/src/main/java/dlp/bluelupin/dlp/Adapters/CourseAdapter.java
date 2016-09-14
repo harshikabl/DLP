@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -26,6 +27,7 @@ import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
+import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -102,11 +104,13 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
             public void onClick(View v) {
                 FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
                 String type = dbHelper.getTypeOfChildren(data.getId());
-                if (Consts.IS_DEBUG_LOG)
+                if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "Navigating to  data id: " + data.getId() + " type: " + type);
+                }
+
+                logAnalytics(data);
 
                 ChaptersFragment fragment = ChaptersFragment.newInstance(data.getId(), type);
-
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
                 transaction.replace(R.id.container, fragment)
@@ -114,6 +118,24 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
                         .commit();
             }
         });
+    }
+
+    private void logAnalytics(Data data) {
+
+        if (data.getLang_resource_name() != null) {
+            DbHelper dbHelper = new DbHelper(context);
+            Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
+                    Utility.getLanguageIdFromSharedPreferences(context));
+            if (titleResource != null) {
+                LogAnalyticsHelper analyticsHelper = new LogAnalyticsHelper(context);
+                Bundle bundle = new Bundle();
+                bundle.putString("Name", titleResource.getContent());
+                bundle.putString("Language", Utility.getLanguageIdFromSharedPreferences(context) + "");
+                analyticsHelper.logEvent("Course", bundle);
+            }
+        }
+
+
     }
 
     @Override

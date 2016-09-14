@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -230,7 +231,6 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             }
         });
     }
-
 
     @Override
     public int getItemCount() {
