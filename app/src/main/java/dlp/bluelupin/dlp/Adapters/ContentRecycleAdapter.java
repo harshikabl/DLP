@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -22,8 +26,10 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.util.List;
 
+import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.Fragments.WebFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
@@ -91,7 +97,11 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (data.getType().equalsIgnoreCase("video")) {
+                    playVideoOnSelect(data);
+                } else if (data.getType().equalsIgnoreCase("Url")) {
+                    openUrlOnSelect(data);
+                }
             }
         });
 
@@ -99,6 +109,32 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 //                Log.d(Consts.LOG_TAG, " returning NEW convertview with position: " + position + ", data: " + itemList.get(position));
 //            }
         // }
+    }
+
+    private void playVideoOnSelect(Data data) {
+        if (data.getMedia_id() != 0) {
+            final DbHelper dbHelper = new DbHelper(context);
+            Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getMedia_id(),
+                    Utility.getLanguageIdFromSharedPreferences(context));
+            if (media != null) {
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " video Url: " + media.getUrl());
+                }
+                navigateBasedOnMediaType(media);
+            }
+        }
+    }
+
+    private void openUrlOnSelect(Data data) {
+        if (data.getUrl() != null) {
+            FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+            WebFragment fragment = WebFragment.newInstance(data.getUrl(), "");
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+            transaction.replace(R.id.container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     private void addDynamicUrl(ContentViewHolder holder, Data resource) {
@@ -232,6 +268,36 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 
         return frameLayout;
     }
+
+    private void navigateBasedOnMediaType(Data media) {
+        String url;
+        if (media.getType() != null) {
+            switch (media.getType()) {
+                case "Video":
+                    url = media.getUrl();
+                    if (url != null && !url.equals("")) {
+                        Intent intent = new Intent(context, VideoPlayerActivity.class);
+                        intent.putExtra("videoUrl", url);
+                        context.startActivity(intent);
+                    }
+                    break;
+                case "Youtube":
+                    url = media.getUrl();
+                    if (url != null && !url.equals("")) {
+                   /* Intent intent = new Intent(context, VideoPlayerActivity.class);
+                    intent.putExtra("videoUrl", url);
+                    context.startActivity(intent);*/
+                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    }
+                    break;
+            }
+        }
+        else
+        {
+
+        }
+    }
+
 
     private FrameLayout makeThumbnailImage(Data media, String titleText) {
 
