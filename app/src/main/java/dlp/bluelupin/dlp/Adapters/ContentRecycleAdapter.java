@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
@@ -66,11 +67,18 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
     }
 
     @Override
+    public long getItemId(int position) {
+        //return super.getItemId(position);
+        return itemList.get(position).getId();
+    }
+
+    @Override
     public void onBindViewHolder(ContentViewHolder holder, int position) {
-        //if(holder == null) {
+
         final DbHelper dbHelper = new DbHelper(context);
         final Data data = itemList.get(position);
-        Log.d(Consts.LOG_TAG, " view create********************* " + data.getId());
+        holder.contentContainer.removeAllViews();
+        boolean found = false;
 
         if (Consts.IS_DEBUG_LOG)
             Log.d(Consts.LOG_TAG, " data id: " + data.getId() + " type: " + data.getType());
@@ -80,7 +88,14 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (resource != null) {
                 if (data.getType().equalsIgnoreCase("Text")) {
-                    addDynamicTextView(holder, resource);
+                  //  if(holder.getItemId() == )
+                    View view = holder.contentContainer.findViewById(data.getId());
+                    if(view == null) {
+                        view = addDynamicTextView(holder, resource);
+                        view.setId(resource.getId());
+                        view.setTag(resource.getId());
+                        holder.contentContainer.addView(view);
+                    }
                 }
             } //resource != null
         } //data.getLang_resource_name() != null
@@ -105,9 +120,9 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
             }
         });
 
-//            if (Consts.IS_DEBUG_LOG) {
-//                Log.d(Consts.LOG_TAG, " returning NEW convertview with position: " + position + ", data: " + itemList.get(position));
-//            }
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, " returning NEW convertview with position: " + position + ", data: " + itemList.get(position));
+            }
         // }
     }
 
@@ -198,7 +213,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         }
     }
 
-    private void addDynamicTextView(ContentViewHolder holder, Data resource) {
+    private View addDynamicTextView(ContentViewHolder holder, Data resource) {
         if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, " resource text: " + resource.getContent());
         }
@@ -211,18 +226,19 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 
         layoutParams.setMargins(10, 10, 10, 10);
         dynamicTextView.setLayoutParams(layoutParams);
-        holder.contentContainer.addView(dynamicTextView);
+
+        return dynamicTextView;
     }
 
     private FrameLayout makeImage(Data media, String titleText) {
         FrameLayout frameLayout = new FrameLayout(context);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         layoutParams.setMargins(0, 0, 0, 0);
         frameLayout.setLayoutParams(layoutParams);
         ImageView dynamicImageView = new ImageView(context);
-        dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        dynamicImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT   , LinearLayout.LayoutParams.WRAP_CONTENT));
+        dynamicImageView.setScaleType(ImageView.ScaleType.FIT_XY);
 //        if (url != null) {
 //            new DownloadImageTask(dynamicImageView)
 //                    .execute(url);
@@ -248,7 +264,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         }
 
         LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        linearLayout.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         linearLayout.setVerticalGravity(Gravity.BOTTOM);
         //linearLayout.setBackground(context.getResources().getDrawable(R.drawable.gradient_black));//;background="@drawable/gradient_black"
 

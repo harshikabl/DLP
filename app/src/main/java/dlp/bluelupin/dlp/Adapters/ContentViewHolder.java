@@ -21,11 +21,13 @@ public class ContentViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         cardView = (android.support.v7.widget.CardView) itemView.findViewById(R.id.card_view);
+        cardView.setTag(this);
         cardView.setCardElevation(2);
         cardView.setRadius(10);
 //        contentTitle = (TextView) itemView.findViewById(R.id.contentTitle);
 //        contentDescription = (TextView) itemView.findViewById(R.id.contentDescription);
         contentContainer = (LinearLayout) itemView.findViewById(R.id.contentContainer);
+
         playIcon = (TextView) itemView.findViewById(R.id.playIcon);
     }
 
