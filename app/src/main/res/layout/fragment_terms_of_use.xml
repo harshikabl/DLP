@@ -10,8 +10,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Terms of use"
         android:gravity="center"
+        android:text="@string/Terms_of_use"
         android:textColor="#4a4d4e"
         android:textSize="@dimen/dimTextSize_20" />
 

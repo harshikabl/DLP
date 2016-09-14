@@ -107,10 +107,10 @@ public class ChaptersFragment extends Fragment {
         chapterTitle.setTypeface(VodafoneExB);
         if (type.equalsIgnoreCase("Chapter")) {
             rootActivity.setScreenTitle(context.getString(R.string.Chapters));
-            chapterTitle.setText(context.getString(R.string.Chapters));
+           // chapterTitle.setText(context.getString(R.string.Chapters));
         } else if (type.equalsIgnoreCase("Topic")) {
             rootActivity.setScreenTitle(context.getString(R.string.Topic));
-            chapterTitle.setText(context.getString(R.string.Topic));
+            //chapterTitle.setText(context.getString(R.string.Topic));
         }
 
 

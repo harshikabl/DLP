@@ -293,25 +293,52 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         if (media.getType() != null) {
             switch (media.getType()) {
                 case "Video":
-                    url = media.getUrl();
+                    url = media.getLocalFilePath();
                     if (url != null && !url.equals("")) {
-                        Intent intent = new Intent(context, VideoPlayerActivity.class);
-                        intent.putExtra("videoUrl", url);
-                        context.startActivity(intent);
+                        showOfflineVideo(media);
+                    } else {
+                        showOnlineVideo(media);
                     }
                     break;
                 case "Youtube":
-                    url = media.getUrl();
+                    url = media.getLocalFilePath();
                     if (url != null && !url.equals("")) {
+                        showOfflineVideo(media);
+                    } else {
+                        if (Utility.isOnline(context)) {
+                            url = media.getUrl();
+                            if (url != null && !url.equals("")) {
                    /* Intent intent = new Intent(context, VideoPlayerActivity.class);
                     intent.putExtra("videoUrl", url);
                     context.startActivity(intent);*/
-                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                            }
+                        }
                     }
                     break;
             }
         } else {
 
+        }
+    }
+
+    private void showOfflineVideo(Data media) {
+        String url;
+        url = media.getLocalFilePath();
+        Intent intent = new Intent(context, VideoPlayerActivity.class);
+        intent.putExtra("videoUrl", url);
+        context.startActivity(intent);
+    }
+
+    private void showOnlineVideo(Data media) {
+        String url;
+        if (Utility.isOnline(context)) {
+            url = media.getUrl();
+            if (url != null && !url.equals("")) {
+                Intent intent = new Intent(context, VideoPlayerActivity.class);
+                intent.putExtra("videoUrl", url);
+                context.startActivity(intent);
+            }
         }
     }
 

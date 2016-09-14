@@ -217,12 +217,14 @@ public class ContentAdapter extends BaseAdapter {
         if (media.getType() != null) {
             switch (media.getType()) {
                 case "Video":
-                    url = media.getUrl();
-                    if (url != null && !url.equals("")) {
-                        Intent intent = new Intent(context, VideoPlayerActivity.class);
-                        intent.putExtra("videoUrl", url);
-                        context.startActivity(intent);
-                    }
+
+                        url = media.getUrl();
+                        if (url != null && !url.equals("")) {
+                            Intent intent = new Intent(context, VideoPlayerActivity.class);
+                            intent.putExtra("videoUrl", url);
+                            context.startActivity(intent);
+                        }
+
                     break;
                 case "Youtube":
                     url = media.getUrl();
@@ -234,9 +236,7 @@ public class ContentAdapter extends BaseAdapter {
                     }
                     break;
             }
-        }
-        else
-        {
+        } else {
 
         }
     }
