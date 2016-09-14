@@ -1,11 +1,16 @@
 package dlp.bluelupin.dlp.Fragments;
 
 
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,9 +20,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import java.util.ArrayList;
+
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.DirectoryChooserDialog;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -70,6 +79,8 @@ public class SelectLocationFragment extends Fragment {
     private Context context;
     private int PICKFILE_REQUEST_CODE = 101;
     private TextView path;
+    private String m_chosenDir = "";
+    private boolean m_newFolderEnabled = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -100,25 +111,49 @@ public class SelectLocationFragment extends Fragment {
         selectFolder.setTypeface(VodafoneRg);
         selectFolder.setOnClickListener(new View.OnClickListener() {
 
+
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
+               /* Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                //intent.setType("*/*");
-                intent.setType("file/*");
-                startActivityForResult(Intent.createChooser(intent, "Select folder"), PICKFILE_REQUEST_CODE);
+                intent.setType("file*//*");
+                startActivityForResult(Intent.createChooser(intent, "Select folder"), PICKFILE_REQUEST_CODE);*/
+                DirectoryChooserDialog directoryChooserDialog =
+                        new DirectoryChooserDialog(context,
+                                new DirectoryChooserDialog.ChosenDirectoryListener() {
+                                    @Override
+                                    public void onChosenDir(String chosenDir) {
+                                        m_chosenDir = chosenDir;
+                                        Utility.setSelectFolderPathIntoSharedPreferences(context, chosenDir);
+                                        path.setText(chosenDir);
+                                        Toast.makeText(context, "Chosen directory: " + chosenDir, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                // Toggle new folder button enabling
+
+                //directoryChooserDialog.setNewFolderEnabled(m_newFolderEnabled);
+
+                // Load directory chooser dialog for initial 'm_chosenDir' directory.
+                // The registered callback will be called upon final directory selection.
+
+                directoryChooserDialog.chooseDirectory(m_chosenDir);
+                m_newFolderEnabled = !m_newFolderEnabled;
+
+
             }
         });
         String SDPath = Utility.getSelectFolderPathFromSharedPreferences(context);// get this location from sharedpreferance;
         if (SDPath != null) {
             path.setText(SDPath);
         }
+
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICKFILE_REQUEST_CODE) {
+        /*if (requestCode == PICKFILE_REQUEST_CODE) {
             if (data != null) {
                 String Fpath = data.getDataString();
                 if(Consts.IS_DEBUG_LOG)
@@ -131,7 +166,9 @@ public class SelectLocationFragment extends Fragment {
                     //Toast.makeText(context, Fpath, Toast.LENGTH_LONG).show();
                 }
             }
-        }
+        }*/
+
+
     }
 
 }

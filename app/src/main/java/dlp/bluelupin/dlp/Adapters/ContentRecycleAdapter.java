@@ -88,9 +88,9 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (resource != null) {
                 if (data.getType().equalsIgnoreCase("Text")) {
-                  //  if(holder.getItemId() == )
+                    //  if(holder.getItemId() == )
                     View view = holder.contentContainer.findViewById(data.getId());
-                    if(view == null) {
+                    if (view == null) {
                         view = addDynamicTextView(holder, resource);
                         view.setId(resource.getId());
                         view.setTag(resource.getId());
@@ -103,7 +103,10 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
             addDynamicImageView(holder, data, resource);
         }
         if (data.getType().equalsIgnoreCase("Video")) {
+            holder.playIcon.setVisibility(View.VISIBLE);
             addDynamicVideo(holder, data, resource);
+        } else {
+            holder.playIcon.setVisibility(View.GONE);
         }
 
         if (data.getType().equalsIgnoreCase("Url")) {
@@ -120,9 +123,9 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
             }
         });
 
-            if (Consts.IS_DEBUG_LOG) {
-                Log.d(Consts.LOG_TAG, " returning NEW convertview with position: " + position + ", data: " + itemList.get(position));
-            }
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, " returning NEW convertview with position: " + position + ", data: " + itemList.get(position));
+        }
         // }
     }
 
@@ -168,7 +171,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         holder.contentContainer.addView(dynamicTextView);
     }
 
-    private void addDynamicVideo(ContentViewHolder holder,Data data, Data resource) {
+    private void addDynamicVideo(ContentViewHolder holder, Data data, Data resource) {
         if (data.getMedia_id() != 0) {
             final DbHelper dbHelper = new DbHelper(context);
             Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getMedia_id(),
@@ -191,7 +194,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
     }
 
 
-    private void addDynamicImageView(ContentViewHolder holder,  Data data, Data resource) {
+    private void addDynamicImageView(ContentViewHolder holder, Data data, Data resource) {
 
         if (data.getMedia_id() != 0) {
             final DbHelper dbHelper = new DbHelper(context);
@@ -237,7 +240,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         layoutParams.setMargins(0, 0, 0, 0);
         frameLayout.setLayoutParams(layoutParams);
         ImageView dynamicImageView = new ImageView(context);
-        dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT   , LinearLayout.LayoutParams.WRAP_CONTENT));
+        dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         dynamicImageView.setScaleType(ImageView.ScaleType.FIT_XY);
 //        if (url != null) {
 //            new DownloadImageTask(dynamicImageView)
@@ -307,9 +310,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     }
                     break;
             }
-        }
-        else
-        {
+        } else {
 
         }
     }

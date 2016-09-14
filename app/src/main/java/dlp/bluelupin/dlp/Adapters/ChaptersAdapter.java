@@ -49,6 +49,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
     private List<Data> itemList;
     private Context context;
     private String type;
+    private String contentTitle;
 
     public ChaptersAdapter(Context context, List<Data> itemList, String type) {
         this.itemList = itemList;
@@ -180,7 +181,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                                         .addToBackStack(null)
                                         .commit();
                             } else {
-                                Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, context);
+                                Utility.alertForErrorMessage(context.getString(R.string.online_msg), context);
                             }
 
                         }
@@ -209,8 +210,15 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                             .addToBackStack(null)
                             .commit();
                 } else {
+                    if (data.getLang_resource_name() != null) {
+                        Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
+                                Utility.getLanguageIdFromSharedPreferences(context));
+                        if (titleResource != null) {
+                            contentTitle = titleResource.getContent();
+                        }
+                    }
                     FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
-                    ContentFragment fragment = ContentFragment.newInstance(data.getId(), "");
+                    ContentFragment fragment = ContentFragment.newInstance(data.getId(), contentTitle);
 
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);

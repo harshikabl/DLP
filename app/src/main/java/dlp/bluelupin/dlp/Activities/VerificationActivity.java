@@ -221,7 +221,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
                 }
             });
         } else {
-            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, VerificationActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.online_msg), VerificationActivity.this);
         }
     }
 
@@ -261,7 +261,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
                     }
                 });
             } else {
-                Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, VerificationActivity.this);
+                Utility.alertForErrorMessage(getString(R.string.online_msg), VerificationActivity.this);
             }
         }
 

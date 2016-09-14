@@ -45,7 +45,7 @@ public class ContentFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private int parentId;
-    private String type;
+    private String contentTitle;
 
     private OnFragmentInteractionListener mListener;
 
@@ -54,11 +54,11 @@ public class ContentFragment extends Fragment {
     }
 
 
-    public static ContentFragment newInstance(int parentId, String type) {
+    public static ContentFragment newInstance(int parentId, String contentTitle) {
         ContentFragment fragment = new ContentFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PARAM1, parentId);
-        args.putString(ARG_PARAM2, type);
+        args.putString(ARG_PARAM2, contentTitle);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,7 +68,7 @@ public class ContentFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             parentId = getArguments().getInt(ARG_PARAM1);
-            type = getArguments().getString(ARG_PARAM2);
+            contentTitle = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -93,7 +93,7 @@ public class ContentFragment extends Fragment {
 
     private void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle(getString(R.string.contents));
+        rootActivity.setScreenTitle(contentTitle);
 
         Typeface custom_fontawesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
@@ -158,7 +158,7 @@ public class ContentFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

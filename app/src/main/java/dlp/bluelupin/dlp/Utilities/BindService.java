@@ -21,6 +21,7 @@ import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.OtpData;
+import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.IServiceSuccessCallback;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
@@ -111,7 +112,7 @@ public class BindService extends Service {
             });
 
         } else {
-            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, BindService.this);
+            Utility.alertForErrorMessage(getString(R.string.online_msg), BindService.this);
         }
     }
 

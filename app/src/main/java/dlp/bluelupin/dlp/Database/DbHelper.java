@@ -79,7 +79,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         if (!tableAlreadyExists(db, "AccountEntity")) {
             String CREATE_AccountEntity_TABLE = "CREATE TABLE AccountEntity(clientId INTEGER PRIMARY KEY, server_id INTEGER, name TEXT, email TEXT, phone TEXT, preferred_language_id INTEGER, role TEXT, api_token TEXT, otp INTEGER, isVerified INTEGER)";
-            //clientId, server_id , name , email , phone ,preferred_language_id , role, api_token, otp
+            //clientId, server_id , name , email , phone ,preferred_language_id , role, api_token, otp, isVerified
             db.execSQL(CREATE_AccountEntity_TABLE);
         }
 
@@ -94,7 +94,6 @@ public class DbHelper extends SQLiteOpenHelper {
         String CREATE_DownloadingFileEntity_TABLE = "CREATE TABLE DownloadingFileEntity(id INTEGER PRIMARY KEY, MediaId INTEGER, progress INTEGER, FOREIGN KEY (MediaId) REFERENCES DownloadMediaEntity(clientId))";
         //id , MediaId , progress
         db.execSQL(CREATE_DownloadingFileEntity_TABLE);
-
 
 
         String CREATE_LanguageEntity_TABLE = "CREATE TABLE LanguageEntity(id INTEGER PRIMARY KEY, LanguageId INTEGER, Name TEXT, DeletedAt TEXT ,code TEXT)";
@@ -597,15 +596,15 @@ public class DbHelper extends SQLiteOpenHelper {
         if (children.size() != 0) {
             for (Data child : children) {
                 //Data media = getMediaEntityById(child.getMedia_id());
-                Data media = getMediaEntityByIdAndLaunguageId(child.getMedia_id(),languageId);
-                if (media != null && media.getLocalFilePath()== null) {
+                Data media = getMediaEntityByIdAndLaunguageId(child.getMedia_id(), languageId);
+                if (media != null && media.getLocalFilePath() == null) {
                     resourceListToDownload.add(media);
                     if (Consts.IS_DEBUG_LOG) {
-                       // Log.d(Consts.LOG_TAG, "added media: " + media.getId() + " type: " + media.getType() + " download url: " + media.getDownload_url() + " localfilePath: " + media.getLocalFilePath());
+                        // Log.d(Consts.LOG_TAG, "added media: " + media.getId() + " type: " + media.getType() + " download url: " + media.getDownload_url() + " localfilePath: " + media.getLocalFilePath());
 
                     }
                 }
-                List<Data> childContents = getResourcesToDownload(child.getId(),languageId);
+                List<Data> childContents = getResourcesToDownload(child.getId(), languageId);
                 resourceListToDownload.addAll(childContents);
 //                if (Consts.IS_DEBUG_LOG) {
 //                    Log.d(Consts.LOG_TAG, "childId: " + child.getId() + " childContents: " + childContents.size());
@@ -623,7 +622,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         for (Data child : children) {
             if (child.getThumbnail_media_id() != 0) {
-                Data media = getMediaEntityByIdAndLaunguageId(child.getThumbnail_media_id(),languageId);
+                Data media = getMediaEntityByIdAndLaunguageId(child.getThumbnail_media_id(), languageId);
                 if (media != null) {
                     resourceListToDownload.add(media);
                 }
@@ -712,26 +711,22 @@ public class DbHelper extends SQLiteOpenHelper {
             ob.setThumbnail_localFilename(cursor.getString(14));
             cursor.close();
 
-            Data mediaLanguage = getMedialanguageLatestDataEntityByMediaId(ob.getId(),languageId);
-            if(mediaLanguage!=null) {
+            Data mediaLanguage = getMedialanguageLatestDataEntityByMediaId(ob.getId(), languageId);
+            if (mediaLanguage != null) {
                 mediaLanguage.setType(ob.getType());
                 mediaLanguage.setThumbnail_url(ob.getThumbnail_url());
                 mediaLanguage.setThumbnail_url_Local_file_path(ob.getThumbnail_url_Local_file_path());
-                ob=mediaLanguage;
-            }
-            else
-            {
-               Log.d(Consts.LOG_TAG, "** Getting default language 1 medialanguage,/n getMediaEntityByIdAndLaunguageId: mediaLanguage is null for languageId:" + languageId + "media:" +   ob);
-                Data mediaDefualtLanguage = getMedialanguageLatestDataEntityByMediaId(ob.getId(),1);
-                if(mediaDefualtLanguage!=null) {
+                ob = mediaLanguage;
+            } else {
+                Log.d(Consts.LOG_TAG, "** Getting default language 1 medialanguage,/n getMediaEntityByIdAndLaunguageId: mediaLanguage is null for languageId:" + languageId + "media:" + ob);
+                Data mediaDefualtLanguage = getMedialanguageLatestDataEntityByMediaId(ob.getId(), 1);
+                if (mediaDefualtLanguage != null) {
                     mediaDefualtLanguage.setType(ob.getType());
                     mediaDefualtLanguage.setThumbnail_url(ob.getThumbnail_url());
                     mediaDefualtLanguage.setThumbnail_url_Local_file_path(ob.getThumbnail_url_Local_file_path());
-                    ob=mediaDefualtLanguage;
-                }
-                else
-                {
-                    Log.d(Consts.LOG_TAG, "** THIS SHOULD NOT HAPPEN. SERVER INVALID DATA,/n getMediaEntityByIdAndLaunguageId:Even default  mediaLanguage is null for languageId:" + 1 + "media:" +   ob);
+                    ob = mediaDefualtLanguage;
+                } else {
+                    Log.d(Consts.LOG_TAG, "** THIS SHOULD NOT HAPPEN. SERVER INVALID DATA,/n getMediaEntityByIdAndLaunguageId:Even default  mediaLanguage is null for languageId:" + 1 + "media:" + ob);
                 }
             }
         } else {
@@ -758,8 +753,8 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("created_at", ob.getCreated_at());
         values.put("updated_at", ob.getUpdated_at());
         values.put("deleted_at", ob.getDeleted_at());
-        if(ob.getFile_path() != null) {
-            values.put("thumbnail_localFilename",Utility.getFileNameWithoutExtension(ob.getFile_path()));
+        if (ob.getFile_path() != null) {
+            values.put("thumbnail_localFilename", Utility.getFileNameWithoutExtension(ob.getFile_path()));
         }
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -785,8 +780,8 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("created_at", ob.getCreated_at());
         values.put("updated_at", ob.getUpdated_at());
         values.put("deleted_at", ob.getDeleted_at());
-        if(ob.getFile_path() != null) {
-            values.put("thumbnail_localFilename",Utility.getFileNameWithoutExtension(ob.getFile_path()));
+        if (ob.getFile_path() != null) {
+            values.put("thumbnail_localFilename", Utility.getFileNameWithoutExtension(ob.getFile_path()));
         }
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -825,15 +820,11 @@ public class DbHelper extends SQLiteOpenHelper {
             i = db.update("MediaEntity", values, " thumbnail_localFilename = '" + localThumbnailFileName + "' ", null);
         }
         db.close();
-        if(Consts.IS_DEBUG_LOG)
-        {
-            if(i>0)
-            {
-                Log.d(Consts.LOG_TAG,"updateMediaThumbnailLocalFilePathBasedOnName: media with fileName updated: " + localThumbnailFileName + " with path " + localThumbnailFilePath);
-            }
-            else
-            {
-                Log.d(Consts.LOG_TAG,"updateMediaThumbnailLocalFilePathBasedOnName: media with fileName NOT found and updated: " + localThumbnailFileName + " with Path " + localThumbnailFilePath);
+        if (Consts.IS_DEBUG_LOG) {
+            if (i > 0) {
+                Log.d(Consts.LOG_TAG, "updateMediaThumbnailLocalFilePathBasedOnName: media with fileName updated: " + localThumbnailFileName + " with path " + localThumbnailFilePath);
+            } else {
+                Log.d(Consts.LOG_TAG, "updateMediaThumbnailLocalFilePathBasedOnName: media with fileName NOT found and updated: " + localThumbnailFileName + " with Path " + localThumbnailFilePath);
             }
         }
         return i > 0;
@@ -864,15 +855,11 @@ public class DbHelper extends SQLiteOpenHelper {
             i = db.update("MedialanguageLatestEntity", values, " localFileName = '" + localFileName + "' ", null);
         }
         db.close();
-        if(Consts.IS_DEBUG_LOG)
-        {
-            if(i>0)
-            {
-                Log.d(Consts.LOG_TAG,"updateMediaLanguageLocalFilePathBasedOnFilePath: media with fileName updated: " + localFileName + " with path " + localFilePath);
-            }
-            else
-            {
-                Log.d(Consts.LOG_TAG,"updateMediaLanguageLocalFilePathBasedOnFilePath: media with fileName NOT found and updated: " + localFileName + " with Path " + localFilePath);
+        if (Consts.IS_DEBUG_LOG) {
+            if (i > 0) {
+                Log.d(Consts.LOG_TAG, "updateMediaLanguageLocalFilePathBasedOnFilePath: media with fileName updated: " + localFileName + " with path " + localFilePath);
+            } else {
+                Log.d(Consts.LOG_TAG, "updateMediaLanguageLocalFilePathBasedOnFilePath: media with fileName NOT found and updated: " + localFileName + " with Path " + localFilePath);
             }
         }
         return i > 0;
@@ -881,7 +868,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void setLocalPathOfAllMediaToNull() {
         List<Data> medias = getAllMedia();
         SQLiteDatabase db = this.getWritableDatabase();
-        for(Data ob : medias) {
+        for (Data ob : medias) {
             ContentValues values = new ContentValues();
             values.put("Local_file_path", "");
             if (ob.getId() != 0) {
@@ -970,7 +957,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("role", accountData.getRole());
         values.put("api_token", accountData.getApi_token());
         values.put("otp", accountData.getOtp());
-        values.put("isVerified", accountData.getIsVerified());
+       // values.put("isVerified", accountData.getIsVerified());
 
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1442,7 +1429,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public Data getMedialanguageLatestDataEntityByMediaId(int media_id, int languageId) {
-        String query = "Select clientId , server_id , media_id , language_id  ,file_path , url , download_url , Local_file_path , created_by , updated_by ,created_at , updated_at , deleted_at , cloud_transferred,localFileName    FROM MedialanguageLatestEntity WHERE media_id = " + media_id + " and language_id = " + languageId + "" ;
+        String query = "Select clientId , server_id , media_id , language_id  ,file_path , url , download_url , Local_file_path , created_by , updated_by ,created_at , updated_at , deleted_at , cloud_transferred,localFileName    FROM MedialanguageLatestEntity WHERE media_id = " + media_id + " and language_id = " + languageId + "";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -1520,8 +1507,8 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("created_by", ob.getCreated_by());
         values.put("updated_by", ob.getUpdated_by());
         values.put("cloud_transferred", ob.getCloud_transferred());
-        if(ob.getFile_path() != null) {
-            values.put("localFileName",Utility.getFileNameWithoutExtension(ob.getFile_path()));
+        if (ob.getFile_path() != null) {
+            values.put("localFileName", Utility.getFileNameWithoutExtension(ob.getFile_path()));
         }
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1546,8 +1533,8 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("created_by", ob.getCreated_by());
         values.put("updated_by", ob.getUpdated_by());
         values.put("cloud_transferred", ob.getCloud_transferred());
-        if(ob.getFile_path() != null) {
-            values.put("localFileName",Utility.getFileNameWithoutExtension(ob.getFile_path()));
+        if (ob.getFile_path() != null) {
+            values.put("localFileName", Utility.getFileNameWithoutExtension(ob.getFile_path()));
         }
 
         SQLiteDatabase db = this.getWritableDatabase();

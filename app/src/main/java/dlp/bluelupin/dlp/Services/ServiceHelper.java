@@ -25,6 +25,7 @@ import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Models.OtpData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
+import dlp.bluelupin.dlp.Models.ProfileUpdateServiceRequest;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.IServiceManager;
 import dlp.bluelupin.dlp.Services.IServiceSuccessCallback;
@@ -279,7 +280,7 @@ public class ServiceHelper {
     }
 
     //updated profile service
-    public void callProfileUpdateService(AccountServiceRequest request, final IServiceSuccessCallback<AccountData> callback) {
+    public void callProfileUpdateService(ProfileUpdateServiceRequest request, final IServiceSuccessCallback<AccountData> callback) {
 
         Call<AccountData> ac = service.profileUpdated(request);
         final DbHelper dbhelper = new DbHelper(context);

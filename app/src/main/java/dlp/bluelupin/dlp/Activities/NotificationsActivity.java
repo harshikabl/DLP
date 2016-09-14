@@ -114,7 +114,7 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
             });
         } else {
             setNotification();
-            Utility.alertForErrorMessage(Consts.OFFLINE_MESSAGE, NotificationsActivity.this);
+            Utility.alertForErrorMessage(getString(R.string.online_msg), NotificationsActivity.this);
         }
     }
 

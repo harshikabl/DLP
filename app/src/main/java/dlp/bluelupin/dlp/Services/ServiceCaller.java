@@ -12,6 +12,7 @@ import dlp.bluelupin.dlp.Models.ContentData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.OtpData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
+import dlp.bluelupin.dlp.Models.ProfileUpdateServiceRequest;
 
 /**
  * Created by subod on 25-Jul-16.
@@ -204,7 +205,7 @@ public class ServiceCaller {
     }
 
     //call profile update service
-    public void updateProfile(final AccountServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+    public void updateProfile(final ProfileUpdateServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
         final ServiceHelper sh = new ServiceHelper(context);
         sh.callProfileUpdateService(request, new IServiceSuccessCallback<AccountData>() {
             @Override
