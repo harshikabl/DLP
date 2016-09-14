@@ -134,8 +134,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
                 analyticsHelper.logEvent("Course", bundle);
             }
         }
-
-
     }
 
     @Override

@@ -39,6 +39,7 @@ import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
+import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -198,9 +199,11 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             @Override
             public void onClick(View v) {
                 String type = dbHelper.getTypeOfChildren(data.getId());
-                if (Consts.IS_DEBUG_LOG)
+                if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "Navigating to  data id: " + data.getId() + " type: " + type);
+                }
                 if (type.equalsIgnoreCase(Consts.COURSE) || type.equalsIgnoreCase(Consts.CHAPTER) || type.equalsIgnoreCase(Consts.TOPIC)) {
+                    logAnalytics(type, data);
                     FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
                     ChaptersFragment fragment = ChaptersFragment.newInstance(data.getId(), type);
 
@@ -217,6 +220,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                             contentTitle = titleResource.getContent();
                         }
                     }
+                    logAnalytics(type, data);
                     FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
                     ContentFragment fragment = ContentFragment.newInstance(data.getId(), contentTitle);
 
@@ -238,6 +242,22 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
             }
         });
+    }
+
+    private void logAnalytics(String contentType, Data data) {
+
+        if (data.getLang_resource_name() != null) {
+            DbHelper dbHelper = new DbHelper(context);
+            Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
+                    Utility.getLanguageIdFromSharedPreferences(context));
+            if (titleResource != null) {
+                LogAnalyticsHelper analyticsHelper = new LogAnalyticsHelper(context);
+                Bundle bundle = new Bundle();
+                bundle.putString("Name", titleResource.getContent());
+                bundle.putString("Language", Utility.getLanguageIdFromSharedPreferences(context) + "");
+                analyticsHelper.logEvent(contentType, bundle);
+            }
+        }
     }
 
     @Override
