@@ -248,15 +248,16 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 //        }
         if (media != null && media.getDownload_url() != null) {
             if (media.getLocalFilePath() == null) {
-
-                Gson gson = new Gson();
-                Intent intent = new Intent(context, DownloadService1.class);
-                String strJsonmedia = gson.toJson(media);
-                intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
-                intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
-                context.startService(intent);
-                new DownloadImageTask(dynamicImageView)
-                        .execute(media.getDownload_url());
+                if(Utility.isOnline(context)) {
+                    Gson gson = new Gson();
+                    Intent intent = new Intent(context, DownloadService1.class);
+                    String strJsonmedia = gson.toJson(media);
+                    intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                    intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
+                    context.startService(intent);
+                    new DownloadImageTask(dynamicImageView)
+                            .execute(media.getDownload_url());
+                }
             } else {
                 File imgFile = new File(media.getLocalFilePath());
                 if (imgFile.exists()) {
@@ -360,15 +361,16 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 
         if (media != null && media.getThumbnail_url() != null) {
             if (media.getThumbnail_url_Local_file_path() == null) {
-
-                Gson gson = new Gson();
-                Intent intent = new Intent(context, DownloadService1.class);
-                String strJsonmedia = gson.toJson(media);
-                intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
-                intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.THUMBNAIL_URL);
-                context.startService(intent);
-                new DownloadImageTask(dynamicImageView)
-                        .execute(media.getThumbnail_url());
+                if(Utility.isOnline(context)) {
+                    Gson gson = new Gson();
+                    Intent intent = new Intent(context, DownloadService1.class);
+                    String strJsonmedia = gson.toJson(media);
+                    intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                    intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.THUMBNAIL_URL);
+                    context.startService(intent);
+                    new DownloadImageTask(dynamicImageView)
+                            .execute(media.getThumbnail_url());
+                }
             } else {
                 File imgFile = new File(media.getThumbnail_url_Local_file_path());
                 if (imgFile.exists()) {

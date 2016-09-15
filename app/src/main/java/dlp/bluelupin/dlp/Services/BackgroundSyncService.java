@@ -9,6 +9,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
 
+import java.sql.Date;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Consts;
@@ -17,6 +18,7 @@ import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.LanguageData;
+import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -146,24 +148,32 @@ public class BackgroundSyncService extends IntentService {
     }
 
     private void callMedialanguageLatestAsync(final Bundle extras) {
-        ContentServiceRequest request = new ContentServiceRequest();
-        request.setPage(1);
-        DbHelper db = new DbHelper(BackgroundSyncService.this);
-        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.MediaLanguage_Latest);
-        if (cacheSeviceCallData != null) {
-            request.setStart_date(cacheSeviceCallData.getLastCalled());
-            Log.d(Consts.LOG_TAG, "BackgroundSyncService: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
-        }
-        ServiceCaller sc = new ServiceCaller(BackgroundSyncService.this);
-        sc.getAllMedialanguageLatestContent(request, new IAsyncWorkCompletedCallback() {
-            @Override
-            public void onDone(String workName, boolean isComplete) {
-                Log.d(Consts.LOG_TAG, "BackgroundSyncService: callMedialanguageLatestAsync success result: " + isComplete);
+        if(Utility.isOnline(BackgroundSyncService.this)) {
+            ContentServiceRequest request = new ContentServiceRequest();
+            request.setPage(1);
+            DbHelper db = new DbHelper(BackgroundSyncService.this);
+            CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.MediaLanguage_Latest);
+            if (cacheSeviceCallData != null) {
+                request.setStart_date(cacheSeviceCallData.getLastCalled());
+                if(Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "BackgroundSyncService: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
+                }
+            }
+            ServiceCaller sc = new ServiceCaller(BackgroundSyncService.this);
+            sc.getAllMedialanguageLatestContent(request, new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+                    if(Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "BackgroundSyncService: callMedialanguageLatestAsync success result: " + isComplete);
+                    }
+                    LogAnalyticsHelper logAnalyticsHelper = new LogAnalyticsHelper(BackgroundSyncService.this);
+                    logAnalyticsHelper.logEvent("BackgroundSyncService",null);
 //                DbHelper db = new DbHelper(BackgroundSyncService.this);
 //                List<Data> data = db.getAllMedialanguageLatestDataEntity();
 //                Log.d(Consts.LOG_TAG, "BackgroundSyncService: data count: " + data.size());
-            }
-        });
+                }
+            });
+        }
     }
     //Language service call
     public void callGetAllLanguage(final Bundle extras) {

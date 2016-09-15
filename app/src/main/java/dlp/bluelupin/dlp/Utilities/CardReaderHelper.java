@@ -35,14 +35,15 @@ public class CardReaderHelper {
 
         File fileDirectory = new File(folderLocation);
         File[] dirFiles = fileDirectory.listFiles();
-        for (File file : dirFiles) {
-            if (file.isDirectory()) {
-                ReadMetaDataJson(addTrailingSlash(file.getPath()));
+        for (File folder : dirFiles) {
+            if (folder.isDirectory()) {
+                readMetaDataJson(addTrailingSlash(folder.getPath()));
+                //readMediaOfFolder(addTrailingSlash(folder.getPath()));
             }
         }
     }
 
-    public void ReadMetaDataJson(String folderLocation) {
+    public void readMetaDataJson(String folderLocation) {
 
         FileDataReaderHelper fileReaderHelper = new FileDataReaderHelper(context);
         String fileContent = fileReaderHelper.ReadFileContentsFromFolder("metadata.json", folderLocation);
@@ -74,6 +75,7 @@ public class CardReaderHelper {
                             }
                         }
                     }
+
                 }
             }
         }
@@ -86,15 +88,17 @@ public class CardReaderHelper {
             if (Consts.IS_DEBUG_LOG)
                 Log.d(Consts.LOG_TAG, "CardReaderHelper: readMediaOfFolder Folder does not exists: " + fileDirectory.getPath());
         }
-        File[] dirFiles = fileDirectory.listFiles();
+        else {
+            File[] dirFiles = fileDirectory.listFiles();
 
-        if (dirFiles.length != 0) {
-            for (int i = 0; i< dirFiles.length; i++) {
-                File file = new File(dirFiles[i].getPath());
-                DbHelper dbHelper = new DbHelper(context);
-                boolean isUpdate = dbHelper.updateMediaLanguageLocalFilePathBasedOnFilePath(dirFiles[i].getName(), dirFiles[i].getPath());
-                if(!isUpdate) {
-                    dbHelper.updateMediaThumbnailLocalFilePathBasedOnName(dirFiles[i].getName(), dirFiles[i].getPath());
+            if (dirFiles.length != 0) {
+                for (int i = 0; i < dirFiles.length; i++) {
+                    File file = new File(dirFiles[i].getPath());
+                    DbHelper dbHelper = new DbHelper(context);
+                    boolean isUpdate = dbHelper.updateMediaLanguageLocalFilePathBasedOnFilePath(dirFiles[i].getName(), dirFiles[i].getPath());
+                    if (!isUpdate) {
+                        dbHelper.updateMediaThumbnailLocalFilePathBasedOnName(dirFiles[i].getName(), dirFiles[i].getPath());
+                    }
                 }
             }
         }
