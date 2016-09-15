@@ -245,13 +245,13 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 
     private FrameLayout makeImage(Data media, String titleText) {
         FrameLayout frameLayout = new FrameLayout(context);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 
         layoutParams.setMargins(0, 0, 0, 0);
         frameLayout.setLayoutParams(layoutParams);
         ImageView dynamicImageView = new ImageView(context);
-        dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        dynamicImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        dynamicImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 //        if (url != null) {
 //            new DownloadImageTask(dynamicImageView)
 //                    .execute(url);
@@ -278,7 +278,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         }
 
         LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        linearLayout.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         linearLayout.setVerticalGravity(Gravity.BOTTOM);
         //linearLayout.setBackground(context.getResources().getDrawable(R.drawable.gradient_black));//;background="@drawable/gradient_black"
 

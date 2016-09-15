@@ -113,15 +113,16 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (media != null && media.getDownload_url() != null) {
                 if (media.getLocalFilePath() == null) {
-
-                    Gson gson = new Gson();
-                    Intent intent = new Intent(context, DownloadService1.class);
-                    String strJsonmedia = gson.toJson(media);
-                    intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
-                    intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
-                    context.startService(intent);
-                    new DownloadImageTask(holder.chapterImage)
-                            .execute(media.getDownload_url());
+                    if (Utility.isOnline(context)) {
+                        Gson gson = new Gson();
+                        Intent intent = new Intent(context, DownloadService1.class);
+                        String strJsonmedia = gson.toJson(media);
+                        intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                        intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
+                        context.startService(intent);
+                        new DownloadImageTask(holder.chapterImage)
+                                .execute(media.getDownload_url());
+                    }
                 } else {
                     File imgFile = new File(media.getLocalFilePath());
                     if (imgFile.exists()) {

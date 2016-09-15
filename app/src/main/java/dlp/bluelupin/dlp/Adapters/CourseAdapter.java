@@ -79,16 +79,16 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (media != null && media.getUrl() != null) {
                 if (media.getLocalFilePath() == null) {
-
-
-                    Gson gson = new Gson();
-                    Intent intent = new Intent(context, DownloadService1.class);
-                    String strJsonmedia = gson.toJson(media);
-                    intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
-                    intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.URL);
-                    context.startService(intent);
-                    new DownloadImageTask(holder.courseImage)
-                            .execute(media.getUrl());
+                    if (Utility.isOnline(context)) {
+                        Gson gson = new Gson();
+                        Intent intent = new Intent(context, DownloadService1.class);
+                        String strJsonmedia = gson.toJson(media);
+                        intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                        intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.URL);
+                        context.startService(intent);
+                        new DownloadImageTask(holder.courseImage)
+                                .execute(media.getUrl());
+                    }
                 } else {
                     File imgFile = new File(media.getLocalFilePath());
                     if (imgFile.exists()) {

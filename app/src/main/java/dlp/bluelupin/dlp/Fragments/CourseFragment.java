@@ -125,6 +125,8 @@ public class CourseFragment extends Fragment {
 //        list.add("Tamil");
 
         DbHelper db = new DbHelper(context);
+        List<Data> temList = db.getAllMedia();
+
         List<Data> dataList = db.getDataEntityByParentIdAndType(null, "Course"); // first level is course
 
         if (Consts.IS_DEBUG_LOG) {

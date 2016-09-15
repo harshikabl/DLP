@@ -29,7 +29,7 @@ import dlp.bluelupin.dlp.Utilities.Utility;
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "dlp_db.db";
 
     public DbHelper(Context context) {
@@ -753,8 +753,8 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("created_at", ob.getCreated_at());
         values.put("updated_at", ob.getUpdated_at());
         values.put("deleted_at", ob.getDeleted_at());
-        if (ob.getFile_path() != null) {
-            values.put("thumbnail_localFilename", Utility.getFileNameWithoutExtension(ob.getFile_path()));
+        if (ob.getThumbnail_file_path() != null) {
+            values.put("thumbnail_localFilename", Utility.getFileNameWithoutExtension(ob.getThumbnail_file_path()));
         }
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -780,8 +780,8 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("created_at", ob.getCreated_at());
         values.put("updated_at", ob.getUpdated_at());
         values.put("deleted_at", ob.getDeleted_at());
-        if (ob.getFile_path() != null) {
-            values.put("thumbnail_localFilename", Utility.getFileNameWithoutExtension(ob.getFile_path()));
+        if (ob.getThumbnail_file_path() != null) {
+            values.put("thumbnail_localFilename", Utility.getFileNameWithoutExtension(ob.getThumbnail_file_path()));
         }
 
         SQLiteDatabase db = this.getWritableDatabase();
