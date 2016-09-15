@@ -252,7 +252,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
                             Intent intentOtp = new Intent(VerificationActivity.this, VerificationActivity.class);
                             startActivity(intentOtp);
                             customProgressDialog.dismiss();
-                            Toast.makeText(VerificationActivity.this,  getString(R.string.otp_sent), Toast.LENGTH_LONG).show();
+                            Toast.makeText(VerificationActivity.this, getString(R.string.otp_sent), Toast.LENGTH_LONG).show();
                         } else {
                             Utility.alertForErrorMessage(getString(R.string.account_not_create), VerificationActivity.this);
                             customProgressDialog.dismiss();

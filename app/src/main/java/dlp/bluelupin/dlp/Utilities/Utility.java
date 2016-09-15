@@ -49,7 +49,7 @@ public class Utility {
 
     /**
      * Checks if the app has permission to write to device storage
-     * <p/>
+     * <p>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity
@@ -283,11 +283,12 @@ public class Utility {
     public static void alertForErrorMessage(String errorMessage, Context mContext) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         Typeface VodafoneExB = Typeface.createFromAsset(mContext.getAssets(), "fonts/VodafoneExB.TTF");
+        Typeface VodafoneRg = Typeface.createFromAsset(mContext.getAssets(), "fonts/VodafoneRg.ttf");
         final AlertDialog alert = builder.create();
         alert.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
         View view = alert.getLayoutInflater().inflate(R.layout.custom_error_alert, null);
         TextView title = (TextView) view.findViewById(R.id.title);
-        title.setTypeface(VodafoneExB);
+        title.setTypeface(VodafoneRg);
         TextView ok = (TextView) view.findViewById(R.id.Ok);
         ok.setTypeface(VodafoneExB);
         LinearLayout layout_titleBar = (LinearLayout) view.findViewById(R.id.alert_layout_titleBar);

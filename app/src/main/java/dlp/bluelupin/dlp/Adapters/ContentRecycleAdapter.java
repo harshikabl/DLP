@@ -48,6 +48,8 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
     Typeface VodafoneRg;// = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
     Typeface materialdesignicons_font;// = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
 
+    private String contentTitle;
+
     public ContentRecycleAdapter(Context context, List<Data> itemList) {
         this.itemList = itemList;
         this.context = context;
@@ -145,8 +147,16 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 
     private void openUrlOnSelect(Data data) {
         if (data.getUrl() != null) {
+            final DbHelper dbHelper = new DbHelper(context);
+            if (data.getLang_resource_name() != null) {
+                Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
+                        Utility.getLanguageIdFromSharedPreferences(context));
+                if (titleResource != null) {
+                    contentTitle = titleResource.getContent();
+                }
+            }
             FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-            WebFragment fragment = WebFragment.newInstance(data.getUrl(), "");
+            WebFragment fragment = WebFragment.newInstance(data.getUrl(), contentTitle);
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
             transaction.replace(R.id.container, fragment)
@@ -248,7 +258,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 //        }
         if (media != null && media.getDownload_url() != null) {
             if (media.getLocalFilePath() == null) {
-                if(Utility.isOnline(context)) {
+                if (Utility.isOnline(context)) {
                     Gson gson = new Gson();
                     Intent intent = new Intent(context, DownloadService1.class);
                     String strJsonmedia = gson.toJson(media);
@@ -318,8 +328,6 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     }
                     break;
             }
-        } else {
-
         }
     }
 
@@ -361,7 +369,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 
         if (media != null && media.getThumbnail_url() != null) {
             if (media.getThumbnail_url_Local_file_path() == null) {
-                if(Utility.isOnline(context)) {
+                if (Utility.isOnline(context)) {
                     Gson gson = new Gson();
                     Intent intent = new Intent(context, DownloadService1.class);
                     String strJsonmedia = gson.toJson(media);
