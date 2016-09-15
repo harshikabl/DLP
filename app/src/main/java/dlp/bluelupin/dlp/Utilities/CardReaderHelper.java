@@ -120,8 +120,9 @@ public class CardReaderHelper {
             for (int i = 0; i< dirFiles.length; i++) {
                File file = new File(dirFiles[i].getPath());
                 String fileExtension = Utility.getFileExtension(file.getName());
-                if (Consts.IS_DEBUG_LOG)
-                    Log.d(Consts.LOG_TAG, "CardReaderHelper: Reading file " + file.getName() + " fileExtension:" + fileExtension );
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "CardReaderHelper: Reading file " + file.getName() + " fileExtension:" + fileExtension);
+                }
                if(fileExtension.equalsIgnoreCase("json"))
                {
                    String fileContent = fileReaderHelper.ReadFileContentsFromFolder("",file.getPath());
@@ -144,6 +145,9 @@ public class CardReaderHelper {
 
 
                }
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "CardReaderHelper: NOT Reading file as NOT json extension" + file.getName() + " fileExtension:" + fileExtension);
+                }
                // File renamedFile = new File(file.getPath() + "__");
                 //file.renameTo(renamedFile);
             }

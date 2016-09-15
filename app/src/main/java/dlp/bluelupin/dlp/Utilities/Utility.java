@@ -73,6 +73,16 @@ public class Utility {
         return FilenameUtils.getExtension(fileName);
     }
 
+    public static String getFileName(String fileName) {
+        //return fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+        return FilenameUtils.getName(fileName);
+    }
+
+    public static String getFilePath(String fileName) {
+        //return fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length());
+        return FilenameUtils.getPath(fileName);
+    }
+
     public static String getFileNameWithoutExtension(String fileName) {
         return FilenameUtils.removeExtension(fileName);
     }

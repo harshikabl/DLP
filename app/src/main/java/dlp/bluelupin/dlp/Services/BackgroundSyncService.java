@@ -20,6 +20,7 @@ import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
+import okhttp3.internal.Util;
 
 /**
  * Created by subod on 08-Aug-16.
@@ -35,24 +36,26 @@ public class BackgroundSyncService extends IntentService {
     // Will be called asynchronously be Android
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (Consts.IS_DEBUG_LOG)
-            Log.d(Consts.LOG_TAG, "starting BackgroundSyncService onHandleIntent");
-        // Uri data = intent.getData();
-        String someData = intent.getStringExtra("appName");
-        if (Consts.IS_DEBUG_LOG)
-            Log.d(Consts.LOG_TAG, someData);
+        if(Utility.isOnline(BackgroundSyncService.this)) {
+            if (Consts.IS_DEBUG_LOG)
+                Log.d(Consts.LOG_TAG, "starting BackgroundSyncService onHandleIntent");
+            // Uri data = intent.getData();
+            String someData = intent.getStringExtra("appName");
+            if (Consts.IS_DEBUG_LOG)
+                Log.d(Consts.LOG_TAG, someData);
 
-        Bundle extras = intent.getExtras();
+            Bundle extras = intent.getExtras();
 
-        ContentServiceRequest request = new ContentServiceRequest();
-        callContentAsync(extras);
-        callResourceAsync(extras);
-        callMediaAsync(extras);
-        callMedialanguageLatestAsync(extras);
-        callGetAllLanguage(extras);
-        result = Activity.RESULT_OK; // success
+            ContentServiceRequest request = new ContentServiceRequest();
+            callContentAsync(extras);
+            callResourceAsync(extras);
+            callMediaAsync(extras);
+            callMedialanguageLatestAsync(extras);
+            callGetAllLanguage(extras);
+            result = Activity.RESULT_OK; // success
 
-        sendMessageIfAllCallsDone(extras);
+            sendMessageIfAllCallsDone(extras);
+        }
     }
 
     private Boolean contentCallDone = false, resourceCallDone = false, mediaCallDone = false;

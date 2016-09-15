@@ -36,8 +36,11 @@ public class FileDataReaderHelper {
                 if (Consts.IS_DEBUG_LOG)
                     Log.d(Consts.LOG_TAG, "FileDataReaderHelper: ReadFileContentsFromFolder File does not exists: " + filePath);
             }
-            File renamedFile = new File(inputFile.getPath() + "__");
+
+            String newFileName = Utility.getFileNameWithoutExtension(inputFile.getPath());
+            File renamedFile = new File(newFileName);
             inputFile.renameTo(renamedFile);
+
             if (Consts.IS_DEBUG_LOG)
                 Log.d(Consts.LOG_TAG, "FileDataReaderHelper: Renaming file to __: " + inputFile.getPath());
         } else {
