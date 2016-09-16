@@ -104,7 +104,7 @@ public class FavoritesListFragment extends Fragment {
                 Log.d(Consts.LOG_TAG, " No fave ");
             }
         } else {
-            Log.d(Consts.LOG_TAG, " yes fave ");
+            //Log.d(Consts.LOG_TAG, " yes fave ");
             FavoritesListAdapter favoritesAdapter = new FavoritesListAdapter(context, favoritesData);
             RecyclerView favoritesRecyclerView = (RecyclerView) view.findViewById(R.id.favoritesRecyclerView);
             favoritesRecyclerView.setLayoutManager(new LinearLayoutManager(context));

@@ -72,7 +72,7 @@
     <!-- navigaton screen text-->
     <string name="home">Home</string>
     <string name="Notification">Notification</string>
-    <string name="Favorites">Favorites</string>
+    <string name="Favorites">Favourite</string>
     <string name="Profile">Profile</string>
     <string name="Change_Language">Change Language</string>
     <string name="Change_Folder">Change Downloads Folder</string>
