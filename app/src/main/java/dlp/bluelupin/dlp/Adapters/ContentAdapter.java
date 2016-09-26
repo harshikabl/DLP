@@ -72,6 +72,7 @@ public class ContentAdapter extends BaseAdapter {
             holder.cardView = (android.support.v7.widget.CardView) convertView.findViewById(R.id.card_view);
             holder.cardView.setCardElevation(2);
             holder.cardView.setRadius(10);
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#EEEEEE"));
 
 
             Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
@@ -218,12 +219,12 @@ public class ContentAdapter extends BaseAdapter {
             switch (media.getType()) {
                 case "Video":
 
-                        url = media.getUrl();
-                        if (url != null && !url.equals("")) {
-                            Intent intent = new Intent(context, VideoPlayerActivity.class);
-                            intent.putExtra("videoUrl", url);
-                            context.startActivity(intent);
-                        }
+                    url = media.getUrl();
+                    if (url != null && !url.equals("")) {
+                        Intent intent = new Intent(context, VideoPlayerActivity.class);
+                        intent.putExtra("videoUrl", url);
+                        context.startActivity(intent);
+                    }
 
                     break;
                 case "Youtube":

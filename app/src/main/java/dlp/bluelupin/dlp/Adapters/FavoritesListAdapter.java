@@ -141,7 +141,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
 
 
         isFavorites(data, holder);//set favorites icon
-        holder.starIcon.setOnClickListener(new View.OnClickListener() {
+        holder.favorite_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setFavorites(data, position);
@@ -184,9 +184,9 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
         FavoritesData favoritesData = dbHelper.getFavoritesData(data.getId());
         if (favoritesData != null) {
             if (favoritesData.getFavoritesFlag().equals("1")) {
-                holder.starIcon.setImageResource(R.drawable.markfav);
-            } else {
                 holder.starIcon.setImageResource(R.drawable.markedfav);
+            } else {
+                holder.starIcon.setImageResource(R.drawable.markfav);
             }
         } else {
             holder.starIcon.setImageResource(R.drawable.markedfav);

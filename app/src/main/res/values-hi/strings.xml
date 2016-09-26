@@ -92,5 +92,8 @@
     <string name="Topic">विषय</string>
 
     <string name="no_record">कोई रिकॉर्ड नहीं मिला</string>
+    <string name="read">पढ़ना</string>
+    <string name="mark_as_favourite">पसंदीदा के रूप में मार्क</string>
+    <string name="download_update">अद्यतन डाउनलोड करे</string>
 
 </resources>

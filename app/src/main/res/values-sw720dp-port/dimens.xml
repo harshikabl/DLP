@@ -6,6 +6,7 @@
     <dimen name="size_20px">46.8dp</dimen>
     <dimen name="size_27px">63.18dp</dimen>
     <dimen name="size_30px">70.2dp</dimen>
+    <dimen name="size_35px">77dp</dimen>
     <dimen name="size_40px">93.6dp</dimen>
     <dimen name="size_45px">104dp</dimen>
     <dimen name="size_50px">117dp</dimen>

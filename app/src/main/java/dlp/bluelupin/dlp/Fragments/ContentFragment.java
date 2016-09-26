@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Adapters.ChaptersAdapter;
-import dlp.bluelupin.dlp.Adapters.ContentAdapter;
 import dlp.bluelupin.dlp.Adapters.ContentRecycleAdapter;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
@@ -406,8 +407,16 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 
         linearLayout.addView(dynamicTextView);
 
+        View backgroundLayer = new View(context);
+        LinearLayout.LayoutParams backgroundLayerParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        backgroundLayer.setLayoutParams(backgroundLayerParams);
+        backgroundLayer.setBackgroundColor(Color.parseColor("#000000"));
+        backgroundLayer.setAlpha(.3f);
+
+
         frameLayout.addView(dynamicImageView);
         frameLayout.addView(linearLayout);
+        frameLayout.addView(backgroundLayer);
         return frameLayout;
     }
 

@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -70,13 +71,14 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
         holder.chapterTitle.setTypeface(VodafoneExB);
         holder.chapterDescription.setTypeface(VodafoneRg);
+        holder.cardView.setCardBackgroundColor(Color.parseColor("#EEEEEE"));
 
         // holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
 //        holder.starIcon.setTypeface(materialdesignicons_font);
 //        holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
-//        holder.favorite.setTypeface(VodafoneExB);
-//        holder.download.setTypeface(VodafoneExB);
+        holder.favorite.setTypeface(VodafoneRg);
+        holder.download.setTypeface(VodafoneRg);
         holder.downloadIcon.setTypeface(materialdesignicons_font);
 
 
@@ -157,7 +159,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             if (media != null) {
                 holder.download_layout.setVisibility(View.VISIBLE);
 
-                holder.downloadIcon.setOnClickListener(new View.OnClickListener() {
+                holder.download_layout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (resourcesToDownloadList.size() > 0) {
@@ -235,7 +237,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         });
 
         isFavorites(data, holder);//set favorites icon
-        holder.starIcon.setOnClickListener(new View.OnClickListener() {
+        holder.favoriteLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setFavoritesAfterClick(data);
@@ -293,16 +295,21 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         FavoritesData favoritesData = dbHelper.getFavoritesData(data.getId());
         if (favoritesData != null) {
             if (favoritesData.getFavoritesFlag().equals("1")) {
-                //holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
-                //holder.starIcon.setTextColor(Color.parseColor("#e60000"));
-                holder.starIcon.setImageResource(R.drawable.markfav);
-            } else {
-                //holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
-                //holder.starIcon.setTextColor(Color.parseColor("#000000"));
+                // holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
+                // holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
+
                 holder.starIcon.setImageResource(R.drawable.markedfav);
+            } else {
+                // holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
+                // holder.starIcon.setTextColor(Color.parseColor("#e60000"));
+
+                holder.starIcon.setImageResource(R.drawable.markfav);
             }
         } else {
-            holder.starIcon.setImageResource(R.drawable.markedfav);
+            holder.starIcon.setImageResource(R.drawable.markfav);
+            //  holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
+            // holder.starIcon.setTextColor(Color.parseColor("#e60000"));
+
         }
     }
 }

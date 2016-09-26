@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -55,6 +56,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
         holder.courseTitle.setTypeface(VodafoneExB);
         holder.courseDescription.setTypeface(VodafoneRg);
+        holder.cardView.setCardBackgroundColor(Color.parseColor("#A7358C"));
 
         final DbHelper dbHelper = new DbHelper(context);
         final Data data = itemList.get(position);

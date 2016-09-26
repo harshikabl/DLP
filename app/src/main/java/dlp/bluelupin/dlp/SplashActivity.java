@@ -144,7 +144,7 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onDone(final String callerUrl, String d, String error) {
                     DbHelper db = new DbHelper(SplashActivity.this);
-                    List<LanguageData> data = db.getAllLanguageDataEntity();
+                    List<LanguageData> data =  db.getAllLanguageDataEntity();
                     init();
                     if (Consts.IS_DEBUG_LOG) {
                         // Log.d(Consts.LOG_TAG, "SplashActivity: callGetAllLanguage data count: " + data.size() + "  " + data);
