@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
@@ -54,6 +55,11 @@ public class SplashActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         context = SplashActivity.this;
+        if (Utility.isTablet(this)) {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         callGetAllLanguage();
 
     }
@@ -144,7 +150,7 @@ public class SplashActivity extends Activity {
                 @Override
                 public void onDone(final String callerUrl, String d, String error) {
                     DbHelper db = new DbHelper(SplashActivity.this);
-                    List<LanguageData> data =  db.getAllLanguageDataEntity();
+                    List<LanguageData> data = db.getAllLanguageDataEntity();
                     init();
                     if (Consts.IS_DEBUG_LOG) {
                         // Log.d(Consts.LOG_TAG, "SplashActivity: callGetAllLanguage data count: " + data.size() + "  " + data);

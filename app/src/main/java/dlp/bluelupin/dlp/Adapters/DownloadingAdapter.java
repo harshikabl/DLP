@@ -110,14 +110,13 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
 //            }
 //        }
         if (Consts.IS_DEBUG_LOG) {
-            Log.d(Consts.LOG_TAG, "**** setting progress for media Id: " + data.getId() + " progress:"+ data.getProgress() + "%");
+            Log.d(Consts.LOG_TAG, "**** setting progress for media Id: " + data.getId() + " progress:" + data.getProgress() + "%");
         }
         if (data.getProgress() != 0) {
             holder.downloadProgress.setText(data.getProgress() + "% Completed");
             holder.mProgress.setProgress(data.getProgress());
         }
-        if(data.getProgress() >= 100)
-        {
+        if (data.getProgress() >= 100) {
             holder.cardView.setVisibility(View.INVISIBLE);
         }
         holder.cancelIcon.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +130,7 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
                 Gson gson = new Gson();
                 //String strJsonmedia = gson.toJson(data);
                 Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
-                intent.putExtra(Consts.EXTRA_MEDIA,data.getId()); // strJsonmedia
+                intent.putExtra(Consts.EXTRA_MEDIA, data.getId()); // strJsonmedia
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "**** sending cancel message in DownloadingAdapter: " + intent.getAction());

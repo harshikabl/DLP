@@ -17,7 +17,8 @@
             android:layout_height="wrap_content"
             android:text="Downloading"
             android:textColor="#4a4d4e"
-            android:textSize="@dimen/dimTextSize_20" />
+            android:textSize="@dimen/dimTextSize_20"
+            android:visibility="gone" />
 
         <ListView
             android:id="@+id/list"
@@ -28,6 +29,7 @@
             android:id="@+id/downloadingRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/dimValue_10"
             android:scrollbars="vertical" />
     </LinearLayout>
 
