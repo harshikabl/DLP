@@ -130,7 +130,7 @@ public class ChaptersFragment extends Fragment {
             chaptersRecyclerView.setAdapter(chaptersAdapter);
         }
         if (Consts.IS_DEBUG_LOG) {
-            Log.d(Consts.LOG_TAG, "Chapter Fragment: data count: " + dataList.size());
+            Log.d(Consts.LOG_TAG, "Chapter Fragment: data_item count: " + dataList.size());
         }
     }
 

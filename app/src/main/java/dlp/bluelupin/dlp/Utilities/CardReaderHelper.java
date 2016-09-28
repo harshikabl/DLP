@@ -57,7 +57,7 @@ public class CardReaderHelper {
                     CacheServiceCallData cacheSeviceCallData = dbhelper.getCacheServiceCallByUrl(Consts.URL_CONTENT_LATEST);
                     if (cacheSeviceCallData != null) {
                         Date serviceLastcalledDate = Utility.parseDateFromString(cacheSeviceCallData.getLastCalled());
-                        // parse data from zip ONLY if zip data is recent than last called service
+                        // parse data_item from zip ONLY if zip data_item is recent than last called service
                         if (dataDate.after(serviceLastcalledDate)) {
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "CardReaderHelper: Starting reading folder " + folderLocation + " as dataDate:" + dataDate + " is after serviceLastcalledDate: " + serviceLastcalledDate);
@@ -209,7 +209,7 @@ public class CardReaderHelper {
 
     public Boolean readDataFromSDCard(String locationOnSdCard) {
         Boolean operationSuccess = false;
-        // Determine if input data exists
+        // Determine if input data_item exists
         String strInputLocation = Consts.SDPath + locationOnSdCard;
         File inputLocation = new File(strInputLocation);
         if (!inputLocation.exists() || !inputLocation.isDirectory()) {
@@ -270,7 +270,7 @@ public class CardReaderHelper {
                     CacheServiceCallData cacheSeviceCallData = dbhelper.getCacheServiceCallByUrl(Consts.URL_CONTENT_LATEST);
                     if (cacheSeviceCallData != null) {
                         Date serviceLastcalledDate = Utility.parseDateFromString(cacheSeviceCallData.getLastCalled());
-                        // parse data from zip ONLY if zip data is recent than last called service
+                        // parse data_item from zip ONLY if zip data_item is recent than last called service
                         if (dataDate.after(serviceLastcalledDate)) {
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "CardReaderHelper: Starting decompressZipFile unzip as dataDate:" + dataDate + " is after serviceLastcalledDate: " + serviceLastcalledDate);

@@ -83,7 +83,7 @@ public class ContentAdapter extends BaseAdapter {
             Log.d(Consts.LOG_TAG, " view create********************* " + data.getId());
 
             if (Consts.IS_DEBUG_LOG)
-                Log.d(Consts.LOG_TAG, " data id: " + data.getId() + " type: " + data.getType());
+                Log.d(Consts.LOG_TAG, " data_item id: " + data.getId() + " type: " + data.getType());
             Data resource = null;
             if (data.getLang_resource_name() != null) {
 
@@ -173,7 +173,7 @@ public class ContentAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     if (data.getType().equalsIgnoreCase("video")) {
                         if (data.getMedia_id() != 0) {
-                            // Data media = dbHelper.getMediaEntityById(data.getMedia_id());
+                            // Data media = dbHelper.getMediaEntityById(data_item.getMedia_id());
 
                             Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getMedia_id(),
                                     Utility.getLanguageIdFromSharedPreferences(context));
@@ -199,13 +199,13 @@ public class ContentAdapter extends BaseAdapter {
                 }
             });
             if (Consts.IS_DEBUG_LOG) {
-                Log.d(Consts.LOG_TAG, " returning NEW convertview with position: " + position + ", data: " + itemList.get(position));
+                Log.d(Consts.LOG_TAG, " returning NEW convertview with position: " + position + ", data_item: " + itemList.get(position));
             }
-            //convertView.setTag(data.getId());
+            //convertView.setTag(data_item.getId());
         } else {
             // holder = (ViewHolder) convertView.getTag();
             if (Consts.IS_DEBUG_LOG) {
-                Log.d(Consts.LOG_TAG, " returning convertview with position: " + position + ", data: " + itemList.get(position));
+                Log.d(Consts.LOG_TAG, " returning convertview with position: " + position + ", data_item: " + itemList.get(position));
             }
             return convertView;
         }

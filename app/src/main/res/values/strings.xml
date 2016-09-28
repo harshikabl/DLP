@@ -79,6 +79,7 @@
     <string name="Change_Folder">Change Downloads Folder</string>
     <string name="Terms_of_use">Terms of use</string>
     <string name="About_Us">About Us</string>
+    <string name="Downloads">Downloads</string>
 
     <!-- content screen text-->
     <string name="contents">Contents</string>

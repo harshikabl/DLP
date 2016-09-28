@@ -258,7 +258,7 @@ public class ServiceHelper {
                 AccountData data = response.body();
 
                 if (data != null) {
-                    Log.d(Consts.LOG_TAG, "account create data:" + data.toString());
+                    Log.d(Consts.LOG_TAG, "account create data_item:" + data.toString());
                     if (dbhelper.upsertAccountData(data)) {
                         Utility.setUserServerIdIntoSharedPreferences(context, data.getId());//for check verification done or not
                         Log.d(Consts.LOG_TAG, "Account successfully add in database ");
@@ -297,7 +297,7 @@ public class ServiceHelper {
                 AccountData data = response.body();
 
                 if (data != null) {
-                    Log.d(Consts.LOG_TAG, "profile updated data:" + data.toString());
+                    Log.d(Consts.LOG_TAG, "profile updated data_item:" + data.toString());
                     if (dbhelper.upsertAccountData(data)) {
                         Log.d(Consts.LOG_TAG, "Profile updated successfully in database ");
                     }
@@ -341,8 +341,8 @@ public class ServiceHelper {
                     //update account verified for check account verified or not
                     dbhelper.updateAccountDataVerified(accountData);
                     if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "response data:" + response.toString());
-                        Log.d(Consts.LOG_TAG, "Otp verify data:" + data.toString());
+                        Log.d(Consts.LOG_TAG, "response data_item:" + response.toString());
+                        Log.d(Consts.LOG_TAG, "Otp verify data_item:" + data.toString());
                     }
                     Toast.makeText(context, context.getString(R.string.registered), Toast.LENGTH_LONG).show();
                     //Log.d(Consts.LOG_TAG, "Otp verify successfully ");
@@ -354,7 +354,7 @@ public class ServiceHelper {
                     dbhelper.updateAccountDataVerified(accountData);
                     Toast.makeText(context, context.getString(R.string.enter_valid_otp), Toast.LENGTH_LONG).show();
                     if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "response data:" + response.toString());
+                        Log.d(Consts.LOG_TAG, "response data_item:" + response.toString());
                         Log.d(Consts.LOG_TAG, "Otp not verify");
                     }
                     callback.onDone(Consts.VERIFY_OTP, null, null);
@@ -533,10 +533,10 @@ public class ServiceHelper {
                     if (response.body() != null) {
                         for (LanguageData data : response.body()) {
                             if (Consts.IS_DEBUG_LOG) {
-                                Log.d(Consts.LOG_TAG, "Language data " + data);
+                                Log.d(Consts.LOG_TAG, "Language data_item " + data);
                             }
                             if (dbHelper.upsertLanguageDataEntity(data)) {
-                                // Log.d(Consts.LOG_TAG,"successfully adding Data: "+ data.getName());
+                                // Log.d(Consts.LOG_TAG,"successfully adding Data: "+ data_item.getName());
                             } else {
                                 Log.d(Consts.LOG_TAG, "failure adding Data for page: " + data.getName());
                             }
@@ -561,7 +561,7 @@ public class ServiceHelper {
         });
     }
 
-    //call notification service to get notification data
+    //call notification service to get notification data_item
     public void callNotificationService(ContentServiceRequest request, final IServiceSuccessCallback<ContentData> callback) {
         request.setApi_token(Consts.API_KEY);
 

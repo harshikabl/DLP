@@ -145,7 +145,7 @@ public class DecompressZipFile {
     }
 
 
-    //copy data into database
+    //copy data_item into database
     public void copyZipDataIntoDatabase() {
         String zipFile = Environment.getExternalStorageDirectory() + "/DlpContentUnzipped/content.json";
         String strContentData = "";
@@ -177,12 +177,12 @@ public class DecompressZipFile {
         }
         ContentData contentData = new Gson().fromJson(builder.toString(), ContentData.class);
         if (Consts.IS_DEBUG_LOG) {
-            Log.d(Consts.LOG_TAG, "data: " + contentData.toString());
+            Log.d(Consts.LOG_TAG, "data_item: " + contentData.toString());
         }
         final DbHelper dbhelper = new DbHelper(context);
         if (contentData != null) {
             for (Data data : contentData.getData()) {
-                //dbhelper.upsertDataEntity(data);
+                //dbhelper.upsertDataEntity(data_item);
             }
         }
     }

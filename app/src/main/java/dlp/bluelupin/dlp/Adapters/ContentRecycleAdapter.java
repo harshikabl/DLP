@@ -84,7 +84,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         boolean found = false;
 
         if (Consts.IS_DEBUG_LOG)
-            Log.d(Consts.LOG_TAG, " data id: " + data.getId() + " type: " + data.getType());
+            Log.d(Consts.LOG_TAG, " data_item id: " + data.getId() + " type: " + data.getType());
         Data resource = null;
         if (data.getLang_resource_name() != null) {
             resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
@@ -101,7 +101,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     }
                 }
             } //resource != null
-        } //data.getLang_resource_name() != null
+        } //data_item.getLang_resource_name() != null
         if (data.getType().equalsIgnoreCase("Image")) {
             addDynamicImageView(holder, data, resource);
         }
@@ -127,7 +127,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         });
 
         if (Consts.IS_DEBUG_LOG) {
-            Log.d(Consts.LOG_TAG, " returning NEW convertview with position: " + position + ", data: " + itemList.get(position));
+            Log.d(Consts.LOG_TAG, " returning NEW convertview with position: " + position + ", data_item: " + itemList.get(position));
         }
         // }
     }

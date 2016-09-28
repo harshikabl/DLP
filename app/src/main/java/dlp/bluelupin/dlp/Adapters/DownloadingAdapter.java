@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -17,11 +19,17 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -33,6 +41,7 @@ import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Models.DownloadMediaWithParent;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Services.ServiceHelper;
@@ -44,12 +53,12 @@ import dlp.bluelupin.dlp.Utilities.Utility;
  */
 public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHolder> {
 
-    private List<Data> itemList;
+    private List<DownloadMediaWithParent> itemList;
     private Context context;
     private Boolean favFlage = false;
     private String type;
 
-    public DownloadingAdapter(Context context, List<Data> list) {
+    public DownloadingAdapter(Context context, List<DownloadMediaWithParent> list) {
         this.itemList = list;
         this.context = context;
         this.type = type;
@@ -75,69 +84,70 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
         holder.cancelIcon.setText(Html.fromHtml("&#xf156"));
         // starting the download service
         final DbHelper dbHelper = new DbHelper(context);
-        final Data data = itemList.get(position);
-        holder.mediaTitle.setText(data.getFile_path());
-//        final Data resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
-//                Utility.getLanguageIdFromSharedPreferences(context));
-//        if (data.getLang_resource_name() != null) {
-//            Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
-//                    Utility.getLanguageIdFromSharedPreferences(context));
-//            if (titleResource != null) {
-//                holder.mediaTitle.setText(titleResource.getContent());
-//            }
+        final DownloadMediaWithParent dataWithParent = itemList.get(position);
+//        final Data data_item = dataWithParent.getStrJsonResourcesToDownloadList();
+//        holder.mediaTitle.setText(data_item.getFile_path());
+
+        for (Data data : dataWithParent.getStrJsonResourcesToDownloadList()) {
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "**** setting progress for media Id: " + data.getId() + " progress:" + data.getProgress() + "%");
+            }
+
+            //FrameLayout DyprogressBar = makeProgressBar(data.getProgress());
+            //holder.container.addView(DyprogressBar);
+        }
+        DataAdapter dataAdapter = new DataAdapter(context, dataWithParent.getStrJsonResourcesToDownloadList());
+        holder.progressList.setAdapter(dataAdapter);
+        Utility.justifyListViewHeightBasedOnChildrenForDisableScrool(holder.progressList);
+        dataAdapter.notifyDataSetChanged();
+//        if (Consts.IS_DEBUG_LOG) {
+//            Log.d(Consts.LOG_TAG, "**** setting progress for media Id: " + data_item.getId() + " progress:" + data_item.getProgress() + "%");
 //        }
-//
-//        if (data.getLang_resource_description() != null) {
-//            Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
-//                    Utility.getLanguageIdFromSharedPreferences(context));
-//            if (descriptionResource != null) {
-//                holder.mediaDescription.setText(descriptionResource.getContent());
-//            }
+//        if (data_item.getProgress() != 0) {
+//            holder.downloadProgress.setText(data_item.getProgress() + "% Completed");
+//            holder.mProgress.setProgress(data_item.getProgress());
 //        }
-//        if (data.getThumbnail_media_id() != 0) {
-//            Data media = dbHelper.getMediaEntityById(data.getThumbnail_media_id());
-//            if (media != null) {
-//                if (media.getLocalFilePath() == null) {
-//
-//                    Gson gson = new Gson();
-//                    Intent intent = new Intent(context, DownloadService1.class);
-//                    String strJsonmedia = gson.toJson(media);
-//                    intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
-//                    context.startService(intent);
-//                    new DownloadImageTask(holder.mediaImage)
-//                            .execute(media.getThumbnail_url());
+//        if (data_item.getProgress() >= 100) {
+//            holder.cardView.setVisibility(View.INVISIBLE);
+//        }
+//        holder.cancelIcon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Intent broadcastIntent = new Intent();
+////                broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
+////                broadcastIntent.putExtra("mediaId",data_item.getId());
+////                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
+//                holder.cardView.setVisibility(View.INVISIBLE);
+//                Gson gson = new Gson();
+//                //String strJsonmedia = gson.toJson(data_item);
+//                Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
+//                intent.putExtra(Consts.EXTRA_MEDIA, data_item.getId()); // strJsonmedia
+//                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+//                if (Consts.IS_DEBUG_LOG) {
+//                    Log.d(Consts.LOG_TAG, "**** sending cancel message in DownloadingAdapter: " + intent.getAction());
 //                }
 //            }
-//        }
-        if (Consts.IS_DEBUG_LOG) {
-            Log.d(Consts.LOG_TAG, "**** setting progress for media Id: " + data.getId() + " progress:" + data.getProgress() + "%");
-        }
-        if (data.getProgress() != 0) {
-            holder.downloadProgress.setText(data.getProgress() + "% Completed");
-            holder.mProgress.setProgress(data.getProgress());
-        }
-        if (data.getProgress() >= 100) {
-            holder.cardView.setVisibility(View.INVISIBLE);
-        }
-        holder.cancelIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent broadcastIntent = new Intent();
-//                broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
-//                broadcastIntent.putExtra("mediaId",data.getId());
-//                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
-                holder.cardView.setVisibility(View.INVISIBLE);
-                Gson gson = new Gson();
-                //String strJsonmedia = gson.toJson(data);
-                Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
-                intent.putExtra(Consts.EXTRA_MEDIA, data.getId()); // strJsonmedia
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                if (Consts.IS_DEBUG_LOG) {
-                    Log.d(Consts.LOG_TAG, "**** sending cancel message in DownloadingAdapter: " + intent.getAction());
-                }
-            }
-        });
+//        });
 
+    }
+
+
+    private FrameLayout makeProgressBar(int progress) {
+
+        FrameLayout frameLayout = new FrameLayout(context);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+
+        layoutParams.setMargins(0, 0, 0, 0);
+        frameLayout.setLayoutParams(layoutParams);
+        ProgressBar dynamicProgress = new ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
+        dynamicProgress.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        dynamicProgress.setProgress(progress);
+        dynamicProgress.setIndeterminate(false);
+        dynamicProgress.setVisibility(View.VISIBLE);
+        dynamicProgress.setProgressDrawable(context.getResources().getDrawable(R.drawable.custom_progressbar));
+
+        frameLayout.addView(dynamicProgress);
+        return frameLayout;
     }
 
     @Override

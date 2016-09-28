@@ -39,7 +39,7 @@ public class BackgroundSyncService extends IntentService {
         if(Utility.isOnline(BackgroundSyncService.this)) {
             if (Consts.IS_DEBUG_LOG)
                 Log.d(Consts.LOG_TAG, "starting BackgroundSyncService onHandleIntent");
-            // Uri data = intent.getData();
+            // Uri data_item = intent.getData();
             String someData = intent.getStringExtra("appName");
             if (Consts.IS_DEBUG_LOG)
                 Log.d(Consts.LOG_TAG, someData);
@@ -97,7 +97,7 @@ public class BackgroundSyncService extends IntentService {
                 Log.d(Consts.LOG_TAG, "MainActivity: callContentAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(BackgroundSyncService.this);
                 List<Data> data = db.getDataEntityByParentId(null);
-                Log.d(Consts.LOG_TAG, "MainActivity: data count: " + data.size());
+                Log.d(Consts.LOG_TAG, "MainActivity: data_item count: " + data.size());
                 contentCallDone = true;
                 sendMessageIfAllCallsDone(extras);
             }
@@ -120,7 +120,7 @@ public class BackgroundSyncService extends IntentService {
                 Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(BackgroundSyncService.this);
                 List<Data> data = db.getResources();
-                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data count: " + data.size());
+                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data_item count: " + data.size());
                 resourceCallDone = true;
                 sendMessageIfAllCallsDone(extras);
             }
@@ -143,7 +143,7 @@ public class BackgroundSyncService extends IntentService {
                 Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(BackgroundSyncService.this);
                 List<Data> data = db.getAllMedia();
-                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data count: " + data.size());
+                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data_item count: " + data.size());
                 mediaCallDone = true;
                 sendMessageIfAllCallsDone(extras);
             }
@@ -172,8 +172,8 @@ public class BackgroundSyncService extends IntentService {
                     LogAnalyticsHelper logAnalyticsHelper = new LogAnalyticsHelper(BackgroundSyncService.this);
                     logAnalyticsHelper.logEvent("BackgroundSyncService",null);
 //                DbHelper db = new DbHelper(BackgroundSyncService.this);
-//                List<Data> data = db.getAllMedialanguageLatestDataEntity();
-//                Log.d(Consts.LOG_TAG, "BackgroundSyncService: data count: " + data.size());
+//                List<Data> data_item = db.getAllMedialanguageLatestDataEntity();
+//                Log.d(Consts.LOG_TAG, "BackgroundSyncService: data_item count: " + data_item.size());
                 }
             });
         }
@@ -188,7 +188,7 @@ public class BackgroundSyncService extends IntentService {
                     DbHelper db = new DbHelper(BackgroundSyncService.this);
                     List<LanguageData> data = db.getAllLanguageDataEntity();
                     if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "MainActivity: callGetAllLanguage data count: " + data.size()+"  "+data);
+                        Log.d(Consts.LOG_TAG, "MainActivity: callGetAllLanguage data_item count: " + data.size()+"  "+data);
                     }
                 }
             });

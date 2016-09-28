@@ -128,18 +128,6 @@ public class NavigationMenuAdapter extends BaseAdapter {
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Favorites")) {
                     FavoritesFragment fragment = FavoritesFragment.newInstance("", "");
                     navigateToFragment(fragment);
-                } else if (menuList.get(position).toString().equalsIgnoreCase("Downloads")) {
-//                    Utility.verifyStoragePermissions((Activity) mContext);
-//                    CardReaderHelper cardReaderHelper = new CardReaderHelper(mContext);
-//                    String SDPath = Utility.getSelectFolderPathFromSharedPreferences(mContext);// get this location from sharedpreferance;
-//                    if (SDPath != null && !SDPath.equals("")) {
-//                        cardReaderHelper.readDataFromSDCard(SDPath);
-//                    } else {
-//                        cardReaderHelper.readDataFromSDCard(Consts.inputDirectoryLocation);
-//                    }
-
-                    //readExternalFilesAsync();
-
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Change Language")) {
                     Intent intent = new Intent(mContext, LanguageActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -160,6 +148,9 @@ public class NavigationMenuAdapter extends BaseAdapter {
                     navigateToFragment(aboutUs);
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Terms of use")) {
                     TermsOfUseFragment aboutUs = TermsOfUseFragment.newInstance("", "");
+                    navigateToFragment(aboutUs);
+                } else if (menuList.get(position).toString().equalsIgnoreCase("Downloads")) {
+                    DownloadingFragment aboutUs = DownloadingFragment.newInstance("");
                     navigateToFragment(aboutUs);
                 }
                 int pos = (int) v.getTag();

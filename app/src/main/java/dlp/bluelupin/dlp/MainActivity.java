@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity
         final DbHelper dbhelper = new DbHelper(this);
 
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -179,8 +178,7 @@ public class MainActivity extends AppCompatActivity
         readExternalFilesAsync();
     }
 
-    private void readExternalFilesAsync()
-    {
+    private void readExternalFilesAsync() {
         Utility.verifyStoragePermissions((Activity) MainActivity.this);
 
         //final CustomProgressDialog customProgressDialog = new CustomProgressDialog(MainActivity.this, R.mipmap.syc);
@@ -215,7 +213,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
             }
-        }.execute(null,null,null);
+        }.execute(null, null, null);
 
     }
 
@@ -229,6 +227,7 @@ public class MainActivity extends AppCompatActivity
         itemList.add("Home");
         itemList.add("Notification");
         itemList.add("Favorites");
+        itemList.add("Downloads");
         itemList.add("Profile");
         itemList.add("Change Language");
         itemList.add("Change Downloads Folder");
@@ -239,6 +238,7 @@ public class MainActivity extends AppCompatActivity
         menuIconList.add("f2dc");
         menuIconList.add("f09c");
         menuIconList.add("f4ce");
+        menuIconList.add("f1da");
         menuIconList.add("f631");
         menuIconList.add("f493");
         menuIconList.add("f1da");
@@ -249,12 +249,13 @@ public class MainActivity extends AppCompatActivity
         displayNameList.add(getString(R.string.home));
         displayNameList.add(getString(R.string.notification));
         displayNameList.add(getString(R.string.Favorites));
+        displayNameList.add(getString(R.string.Downloads));
         displayNameList.add(getString(R.string.Profile));
         displayNameList.add(getString(R.string.Change_Language));
         displayNameList.add(getString(R.string.Change_Folder));
         displayNameList.add(getString(R.string.Terms_of_use));
         displayNameList.add(getString(R.string.about_us));
-        NavigationMenuAdapter navigationMenuAdapter = new NavigationMenuAdapter(MainActivity.this, itemList, menuIconList,displayNameList);
+        NavigationMenuAdapter navigationMenuAdapter = new NavigationMenuAdapter(MainActivity.this, itemList, menuIconList, displayNameList);
         menuList.setAdapter(navigationMenuAdapter);
     }
 
@@ -420,7 +421,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d(Consts.LOG_TAG, "MainActivity: callContentAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(MainActivity.this);
                 List<Data> data = db.getDataEntityByParentId(null);
-                Log.d(Consts.LOG_TAG, "MainActivity: data count: " + data.size());
+                Log.d(Consts.LOG_TAG, "MainActivity: data_item count: " + data.size());
                 contentCallDone = true;
                 sendMessageIfAllCallsDone();
             }
@@ -443,7 +444,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(MainActivity.this);
                 List<Data> data = db.getResources();
-                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data count: " + data.size());
+                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data_item count: " + data.size());
                 resourceCallDone = true;
                 sendMessageIfAllCallsDone();
             }
@@ -466,7 +467,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(MainActivity.this);
                 List<Data> data = db.getAllMedia();
-                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data count: " + data.size());
+                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data_item count: " + data.size());
                 mediaCallDone = true;
                 sendMessageIfAllCallsDone();
             }
@@ -492,13 +493,12 @@ public class MainActivity extends AppCompatActivity
                 DbHelper db = new DbHelper(MainActivity.this);
                 List<Data> data = db.getAllMedialanguageLatestDataEntity();
                 if (Consts.IS_DEBUG_LOG) {
-                    Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync data count: " + data.size());
+                    Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync data_item count: " + data.size());
                 }
                 sendMessageIfAllCallsDone();
             }
         });
     }
-
 
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

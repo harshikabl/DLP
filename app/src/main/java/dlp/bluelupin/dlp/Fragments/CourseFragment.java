@@ -130,7 +130,7 @@ public class CourseFragment extends Fragment {
         List<Data> dataList = db.getDataEntityByParentIdAndType(null, "Course"); // first level is course
 
         if (Consts.IS_DEBUG_LOG) {
-            Log.d(Consts.LOG_TAG, "CourseFragment: data count: " + dataList.size());
+            Log.d(Consts.LOG_TAG, "CourseFragment: data_item count: " + dataList.size());
         }
         CourseAdapter courseAdapter = new CourseAdapter(context, dataList);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);

@@ -93,7 +93,7 @@ public class SplashActivity extends Activity {
         });
         myIntent.putExtra("MESSENGER", messenger);
         //myIntent.setData(Uri.parse("http://"));//
-        myIntent.putExtra("appName", "some data");
+        myIntent.putExtra("appName", "some data_item");
         pendingIntent = PendingIntent.getService(SplashActivity.this, 0,
                 myIntent, 0);
 
@@ -153,7 +153,7 @@ public class SplashActivity extends Activity {
                     List<LanguageData> data = db.getAllLanguageDataEntity();
                     init();
                     if (Consts.IS_DEBUG_LOG) {
-                        // Log.d(Consts.LOG_TAG, "SplashActivity: callGetAllLanguage data count: " + data.size() + "  " + data);
+                        // Log.d(Consts.LOG_TAG, "SplashActivity: callGetAllLanguage data_item count: " + data_item.size() + "  " + data_item);
                     }
                 }
             });

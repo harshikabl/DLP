@@ -18,7 +18,10 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.apache.commons.io.FilenameUtils;
@@ -49,7 +52,7 @@ public class Utility {
 
     /**
      * Checks if the app has permission to write to device storage
-     * <p>
+     * <p/>
      * If the app does not has permission then the user will be prompted to grant permissions
      *
      * @param activity
@@ -417,5 +420,26 @@ public class Utility {
         return device_token;
     }
 
+    //listview scroll disable
+    public static void justifyListViewHeightBasedOnChildrenForDisableScrool(ListView listView) {
+
+        ListAdapter adapter = listView.getAdapter();
+
+        if (adapter == null) {
+            return;
+        }
+        ViewGroup vg = listView;
+        int totalHeight = 0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            View listItem = adapter.getView(i, null, vg);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams par = listView.getLayoutParams();
+        par.height = totalHeight + (listView.getDividerHeight() * (adapter.getCount() - 1));
+        listView.setLayoutParams(par);
+        listView.requestLayout();
+    }
 
 }

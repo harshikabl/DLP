@@ -118,7 +118,7 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    //set notification data into adapter
+    //set notification data_item into adapter
     private void setNotification() {
         DbHelper db = new DbHelper(NotificationsActivity.this);
         int languageId = Utility.getLanguageIdFromSharedPreferences(NotificationsActivity.this);
@@ -152,7 +152,7 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
             notificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             notificationRecyclerView.setHasFixedSize(true);
             //notificationRecyclerView.setNestedScrollingEnabled(false);
-            //Log.d(Consts.LOG_TAG, "NotificationActivity: data count: " + data.size());
+            //Log.d(Consts.LOG_TAG, "NotificationActivity: data_item count: " + data_item.size());
             NotificationAdapter notificationsAdapter = new NotificationAdapter(NotificationsActivity.this, data);
             notificationRecyclerView.setAdapter(notificationsAdapter);
             //ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(notificationsAdapter);

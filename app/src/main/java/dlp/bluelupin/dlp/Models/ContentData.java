@@ -115,6 +115,6 @@ public class ContentData {
     @Override
     public String toString()
     {
-        return "ClassPojo [to = "+to+", next_page_url = "+next_page_url+", last_page = "+last_page+", total = "+total+", per_page = "+per_page+", data = "+data+", from = "+from+", prev_page_url = "+prev_page_url+", current_page = "+current_page+"]";
+        return "ClassPojo [to = "+to+", next_page_url = "+next_page_url+", last_page = "+last_page+", total = "+total+", per_page = "+per_page+", data_item = "+data+", from = "+from+", prev_page_url = "+prev_page_url+", current_page = "+current_page+"]";
     }
 }

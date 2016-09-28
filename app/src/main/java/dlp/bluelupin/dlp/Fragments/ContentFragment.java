@@ -122,7 +122,7 @@ public class ContentFragment extends Fragment {
             //listView.setAdapter(contentAdapter);
         }
         if (Consts.IS_DEBUG_LOG) {
-            Log.d(Consts.LOG_TAG, "Content Fragment: data count: " + dataList.size());
+            Log.d(Consts.LOG_TAG, "Content Fragment: data_item count: " + dataList.size());
         }
 
 

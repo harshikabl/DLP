@@ -154,8 +154,8 @@ public class SelectLocationFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         /*if (requestCode == PICKFILE_REQUEST_CODE) {
-            if (data != null) {
-                String Fpath = data.getDataString();
+            if (data_item != null) {
+                String Fpath = data_item.getDataString();
                 if(Consts.IS_DEBUG_LOG)
                 {
                     Log.d(Consts.LOG_TAG, "You selected path " + Fpath);

@@ -165,9 +165,9 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                         if (resourcesToDownloadList.size() > 0) {
 //                        {
 //                            List<Data> resourceListToDownload = new ArrayList<Data>();
-//                            List<Data> resourceToDownload = dbhelper.getThumbnailsToDownload(data.getId(),resourceListToDownload);
+//                            List<Data> resourceToDownload = dbhelper.getThumbnailsToDownload(data_item.getId(),resourceListToDownload);
 //                            if (Consts.IS_DEBUG_LOG) {
-//                                Log.d(Consts.LOG_TAG, "Number of thumbnailsToDownload to download for chapter: " + data.getId() + " is: " + resourceToDownload.size());
+//                                Log.d(Consts.LOG_TAG, "Number of thumbnailsToDownload to download for chapter: " + data_item.getId() + " is: " + resourceToDownload.size());
 //                                for (Data resource:resourceToDownload) {
 //                                    Log.d(Consts.LOG_TAG, "Resource to be DL: " + resource.getId() + " url: " + resource.getUrl());
 //                                }
@@ -176,9 +176,15 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                             if (Utility.isOnline(context)) {
                                 Gson gson = new Gson();
                                 String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
-//
+
+                               /* DownloadBasedOnParentId downloadBasedOnParentId = new DownloadBasedOnParentId();
+                                downloadBasedOnParentId.setStrJsonResourcesToDownloadList(strJsonResourcesToDownloadList);
+                                downloadBasedOnParentId.setParentId(media.getParent_id());
+                                Data media = dbHelper.getMediaEntityByIdAndLaunguageId(media.getParent_id(), Utility.getLanguageIdFromSharedPreferences(context));
+                               Log.d(Consts.LOG_TAG, "media.getName************** " + media.getName());*/
+
                                 FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                                DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList);
+                                DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList,data.getId());
                                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                                 transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
                                 transaction.replace(R.id.container, fragment)
@@ -203,7 +209,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             public void onClick(View v) {
                 String type = dbHelper.getTypeOfChildren(data.getId());
                 if (Consts.IS_DEBUG_LOG) {
-                    Log.d(Consts.LOG_TAG, "Navigating to  data id: " + data.getId() + " type: " + type);
+                    Log.d(Consts.LOG_TAG, "Navigating to  data_item id: " + data.getId() + " type: " + type);
                 }
                 if (type.equalsIgnoreCase(Consts.COURSE) || type.equalsIgnoreCase(Consts.CHAPTER) || type.equalsIgnoreCase(Consts.TOPIC)) {
                     logAnalytics(type, data);

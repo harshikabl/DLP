@@ -915,7 +915,7 @@ public class DbHelper extends SQLiteOpenHelper {
     // endregion MediaEntity
 
 
-    //account data save
+    //account data_item save
     public boolean upsertAccountData(AccountData data) {
         AccountData profileData = getAccountData();
         boolean done = false;
@@ -957,7 +957,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("role", accountData.getRole());
         values.put("api_token", accountData.getApi_token());
         values.put("otp", accountData.getOtp());
-       // values.put("isVerified", accountData.getIsVerified());
+        // values.put("isVerified", accountData.getIsVerified());
 
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1021,7 +1021,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    //favorites data save
+    //favorites data_item save
     public boolean upsertFavoritesData(FavoritesData favoritesData) {
         FavoritesData favData = getFavoritesData(favoritesData.getId());
         boolean done = false;
@@ -1061,7 +1061,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return i > 0;
     }
 
-    //get favorites data into FavoritesEntity
+    //get favorites data_item into FavoritesEntity
     public FavoritesData getFavoritesData(int id) {
         //clientId, Content_id , updated_at,Favorites_Flag
         //String query = "Select FavoritesEntity.clientId, FavoritesEntity.Content_id, FavoritesEntity.updated_at, FavoritesEntity.Favorites_Flag  FROM FavoritesEntity INNER JOIN DataEntity ON FavoritesEntity.Content_id=DataEntity.server_id  where FavoritesEntity.Content_id = '" + id + "'";
@@ -1126,7 +1126,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    //get chapters favorites and topic list data
+    //get chapters favorites and topic list data_item
     public List<FavoritesData> getFavoritesChaptersAndTopicListData(String type) {
         //clientId, Content_id , updated_at,Favorites_Flag
         List<FavoritesData> list = new ArrayList<FavoritesData>();
@@ -1342,12 +1342,9 @@ public class DbHelper extends SQLiteOpenHelper {
         return i > 0;
     }
 
-    //get All Downloading Media data through join into DownloadMediaEntity table and DownloadingFileEntity
+    //get All Downloading Media data
     public List<Data> getAllDownloadingMediaFile() {
-        //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at, Local_file_path
-        String query = "Select DownloadMediaEntity.clientId, DownloadMediaEntity.server_id, DownloadMediaEntity.name, DownloadMediaEntity.type, DownloadMediaEntity.url , "
-                + "DownloadMediaEntity.file_path ,  DownloadMediaEntity.language_id , DownloadMediaEntity.created_at , DownloadMediaEntity.updated_at , DownloadMediaEntity.deleted_at, DownloadMediaEntity.Local_file_path , DownloadingFileEntity.MediaId , DownloadingFileEntity.progress FROM DownloadingFileEntity " +
-                "INNER JOIN DownloadMediaEntity ON  DownloadingFileEntity.MediaId=DownloadMediaEntity.clientId ";
+        String query = "SELECT MediaId , progress from DownloadingFileEntity ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -1358,19 +1355,8 @@ public class DbHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             while (cursor.isAfterLast() == false) {
                 Data ob = new Data();
-                ob.setClientId(Integer.parseInt(cursor.getString(0)));
-                ob.setId(Integer.parseInt(cursor.getString(1))); // this represents server Id
-                ob.setName(cursor.getString(2));
-                ob.setType(cursor.getString(3));
-                ob.setUrl(cursor.getString(4));
-                ob.setFile_path(cursor.getString(5));
-                ob.setLanguage_id(cursor.getInt(6));
-                ob.setCreated_at(cursor.getString(7));
-                ob.setUpdated_at(cursor.getString(8));
-                ob.setDeleted_at(cursor.getString(9));
-                ob.setLocalFilePath(cursor.getString(10));
-                ob.setMediaId(Integer.parseInt(cursor.getString(11)));
-                ob.setProgress(Integer.parseInt(cursor.getString(12)));
+                ob.setMediaId(Integer.parseInt(cursor.getString(0)));
+                ob.setProgress(Integer.parseInt(cursor.getString(1)));
                 list.add(ob);
                 cursor.moveToNext();
             }
@@ -1379,7 +1365,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    //delete downloaded file data by media id
+    //delete downloaded file data_item by media id
     public boolean deleteFileDownloadedByMediaId(int id) {
         boolean result = false;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1469,7 +1455,7 @@ public class DbHelper extends SQLiteOpenHelper {
         ob.setLocalFileName(cursor.getString(14));
     }
 
-    //get all data
+    //get all data_item
     public List<Data> getAllMedialanguageLatestDataEntity() {
         String query = "Select clientId , server_id , media_id , language_id  ,file_path , url , download_url , Local_file_path , created_by , updated_by ,created_at , updated_at , deleted_at , cloud_transferred, localFileName  FROM MedialanguageLatestEntity ";
 
@@ -1593,7 +1579,7 @@ public class DbHelper extends SQLiteOpenHelper {
         ob.setCode(cursor.getString(3));
     }
 
-    //get all language data
+    //get all language data_item
     public List<LanguageData> getAllLanguageDataEntity() {
         String query = "Select LanguageId , Name , DeletedAt ,code FROM LanguageEntity ";
 
@@ -1691,7 +1677,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return ob;
     }
 
-    //get all notification data
+    //get all notification data_item
     public List<Data> getAllNotificationDataEntity(int languageId) {
         String query = "Select id, client_id , send_at , message ,  language_id , status , custom_data , created_by , updated_by , created_at , updated_at ,deleted_at FROM NotificationEntity " +
                 " where language_id = " + languageId;

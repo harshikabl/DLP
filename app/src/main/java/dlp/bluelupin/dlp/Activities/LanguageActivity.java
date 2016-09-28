@@ -130,7 +130,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         list.add("Telugu");
         list.add("Tamil");
         list.add("Kannada");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.language_item, data);*/
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.language_item, data_item);*/
 
         DbHelper db = new DbHelper(LanguageActivity.this);
         data = db.getAllLanguageDataEntity();

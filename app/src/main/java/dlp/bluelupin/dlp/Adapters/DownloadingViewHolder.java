@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,6 +28,8 @@ public class DownloadingViewHolder extends RecyclerView.ViewHolder {
     public ImageView mediaImage;
     public TextView cancelIcon;
     public ProgressBar mProgress;
+    public LinearLayout container;
+    public ListView progressList;
 
     public DownloadingViewHolder(View itemView) {
         super(itemView);
@@ -41,6 +44,8 @@ public class DownloadingViewHolder extends RecyclerView.ViewHolder {
         mediaImage = (ImageView) itemView.findViewById(R.id.mediaImage);
         cancelIcon = (TextView) itemView.findViewById(R.id.cancelIcon);
         mProgress = (ProgressBar) itemView.findViewById(R.id.progressBar);
+        container = (LinearLayout) itemView.findViewById(R.id.container);
+        progressList = (ListView) itemView.findViewById(R.id.progressList);
          /* holder.mProgress.setProgress(25);   // Main Progress
         holder.mProgress.setSecondaryProgress(50); // Secondary Progress
         holder.mProgress.setMax(100); // Maximum Progress*/
