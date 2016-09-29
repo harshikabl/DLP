@@ -21,7 +21,7 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder {
     public TextView chapterTitle, chapterDescription, favorite, download, downloadIcon;
     public android.support.v7.widget.CardView cardView;
     public ImageView chapterImage;
-    public ImageView starIcon;
+    public TextView starIcon;
     public RelativeLayout starIconlayout, downloadIconlayout;
     public LinearLayout download_layout, favoriteLayout;
 
@@ -34,7 +34,7 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder {
         chapterTitle = (TextView) itemView.findViewById(R.id.chapterTitle);
         chapterDescription = (TextView) itemView.findViewById(R.id.chapterDescription);
          favorite = (TextView) itemView.findViewById(R.id.favourite);
-        starIcon = (ImageView) itemView.findViewById(R.id.starIcon);
+        starIcon = (TextView) itemView.findViewById(R.id.starIcon);
         download = (TextView) itemView.findViewById(R.id.download);
         downloadIcon = (TextView) itemView.findViewById(R.id.downloadIcon);
         chapterImage = (ImageView) itemView.findViewById(R.id.chapterImage);

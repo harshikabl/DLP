@@ -170,31 +170,53 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
 
 
         Gson gson = new Gson();
-        uniqueResourcesToDownload = getResourcesToDownload(resourcesToDownloadList);
-        for (Data media : uniqueResourcesToDownload) {
-            Intent intent = new Intent(context, DownloadService1.class);
-            String strJsonmedia = gson.toJson(media);
-            intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
-            intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
-            context.startService(intent);
-            dbHelper.upsertDownloadingFileEntity(media);
+        if (resourcesToDownloadList != null) {
+            uniqueResourcesToDownload = getResourcesToDownload(resourcesToDownloadList);
+            for (Data media : uniqueResourcesToDownload) {
+                Intent intent = new Intent(context, DownloadService1.class);
+                String strJsonmedia = gson.toJson(media);
+                intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
+                context.startService(intent);
+                Data downlaodingMedia = new Data();
+                if (media.getMediaId() != 0) {
+                    downlaodingMedia.setId(media.getMediaId());
+                } else {
+                    downlaodingMedia.setId(media.getId());
+                }
+                downlaodingMedia.setParent_id(parentId);
+                dbHelper.upsertDownloadingFileEntity(downlaodingMedia);
+            }
         }
-        List<Data> dataList = dbHelper.getAllDownloadingMediaFile();
+        List<Data> dataList = dbHelper.getAllDownloadingMediaFile(Utility.getLanguageIdFromSharedPreferences(context));
         downloadMediaWithParentList = new ArrayList<DownloadMediaWithParent>();
-        downloadMediaWithParentList.add(GetDownloadMediaWithParent(uniqueResourcesToDownload));
+        downloadMediaWithParentList.addAll(GetDownloadMediaWithParent(dataList));
         downloadingAdapter = new DownloadingAdapter(context, downloadMediaWithParentList);
         downloadingRecyclerView.setAdapter(downloadingAdapter);
     }
 
-    private DownloadMediaWithParent GetDownloadMediaWithParent(List<Data> uniqueResourcesToDownload) {
-
-        DownloadMediaWithParent ob = new DownloadMediaWithParent();
-        if (parentId != 0) {
-            ob.setParentId(parentId);
+    private List<DownloadMediaWithParent> GetDownloadMediaWithParent(List<Data> dataList) {
+        List<DownloadMediaWithParent> result = new ArrayList<DownloadMediaWithParent>();
+        for (Data downloadingMedia : dataList) {
+            DownloadMediaWithParent ob = determineIfParentExistsInList(downloadingMedia.getParent_id(), result);
+            ob.setParentId(downloadingMedia.getParent_id());
+            if (ob.getStrJsonResourcesToDownloadList() == null) {
+                ob.setStrJsonResourcesToDownloadList(new ArrayList<Data>());
+            }
+            ob.setStrJsonResourcesToDownloadList(dataList);
+            result.add(ob);
         }
-        ob.setStrJsonResourcesToDownloadList(uniqueResourcesToDownload);
+        return result;
+    }
 
-        return ob;
+    private DownloadMediaWithParent determineIfParentExistsInList(int parentId, List<DownloadMediaWithParent> list) {
+
+        for (DownloadMediaWithParent downloadMediaWithParent : list) {
+            if (downloadMediaWithParent.getParentId() == parentId) {
+                return downloadMediaWithParent;
+            }
+        }
+        return new DownloadMediaWithParent();
     }
 
     private List<Data> getResourcesToDownload(List<Data> inputList) {
@@ -260,12 +282,13 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
                 DownloadData download = intent.getParcelableExtra(Consts.EXTRA_DOWNLOAD_DATA);
                 if (download != null) {
                     if (downloadMediaWithParentList != null && downloadMediaWithParentList.size() > 0) {
-                        for (Data media : downloadMediaWithParentList.get(0).getStrJsonResourcesToDownloadList()) {
-
-                            if (media.getId() == download.getId()) {
-                                media.setProgress(download.getProgress());
-                                if (Consts.IS_DEBUG_LOG) {
-                                    Log.d(Consts.LOG_TAG, "**** media Id: " + download.getId() + " progress:" + download.getProgress() + "%");
+                        for (DownloadMediaWithParent media : downloadMediaWithParentList) {
+                            for (Data data : media.getStrJsonResourcesToDownloadList()) {
+                                if (data.getId() == download.getId()) {
+                                    data.setProgress(download.getProgress());
+                                    if (Consts.IS_DEBUG_LOG) {
+                                        Log.d(Consts.LOG_TAG, "**** media Id: " + download.getId() + " progress:" + download.getProgress() + "%");
+                                    }
                                 }
                             }
                         }

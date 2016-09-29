@@ -91,7 +91,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at
         db.execSQL(CREATE_DownloadMediaEntity_TABLE);
 
-        String CREATE_DownloadingFileEntity_TABLE = "CREATE TABLE DownloadingFileEntity(id INTEGER PRIMARY KEY, MediaId INTEGER, progress INTEGER, FOREIGN KEY (MediaId) REFERENCES DownloadMediaEntity(clientId))";
+        String CREATE_DownloadingFileEntity_TABLE = "CREATE TABLE DownloadingFileEntity(id INTEGER PRIMARY KEY, MediaId INTEGER, progress INTEGER, parentId INTEGER)";
         //id , MediaId , progress
         db.execSQL(CREATE_DownloadingFileEntity_TABLE);
 
@@ -1280,8 +1280,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public boolean upsertDownloadingFileEntity(Data ob) {
         boolean done = false;
         Data data = null;
-        if (ob.getMediaId() != 0) {
-            data = getDownloadingFileEntityById(ob.getMediaId());
+        if (ob.getId() != 0) {
+            data = getDownloadingFileEntityById(ob.getId());
             if (data == null) {
                 done = insertDownloadingFileEntity(ob);
             } else {
@@ -1292,7 +1292,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public Data getDownloadingFileEntityById(int id) {
-        String query = "SELECT MediaId , progress from DownloadingFileEntity WHERE MediaId = " + id + " ";
+        String query = "SELECT MediaId , progress, parentId from DownloadingFileEntity WHERE MediaId = " + id + " ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -1304,6 +1304,7 @@ public class DbHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             ob.setMediaId(Integer.parseInt(cursor.getString(0)));
             ob.setProgress(Integer.parseInt(cursor.getString(1)));
+            ob.setParent_id(Integer.parseInt(cursor.getString(2)));
             cursor.close();
         } else {
             ob = null;
@@ -1316,8 +1317,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
 
         ContentValues values = new ContentValues();
-        values.put("MediaId", ob.getMediaId());
+        values.put("MediaId", ob.getId());
         values.put("progress", ob.getProgress());
+        values.put("parentId", ob.getParent_id());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -1329,13 +1331,14 @@ public class DbHelper extends SQLiteOpenHelper {
     public boolean updateDownloadingFileEntity(Data ob) {
 
         ContentValues values = new ContentValues();
-        values.put("MediaId", ob.getMediaId());
+        values.put("MediaId", ob.getId());
         values.put("progress", ob.getProgress());
+        values.put("parentId", ob.getParent_id());
 
         SQLiteDatabase db = this.getWritableDatabase();
         long i = 0;
-        if (ob.getMediaId() != 0) {
-            i = db.update("DownloadingFileEntity", values, " MediaId = " + ob.getMediaId() + " ", null);
+        if (ob.getId() != 0) {
+            i = db.update("DownloadingFileEntity", values, " MediaId = " + ob.getId() + " ", null);
         }
 
         db.close();
@@ -1343,8 +1346,8 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     //get All Downloading Media data
-    public List<Data> getAllDownloadingMediaFile() {
-        String query = "SELECT MediaId , progress from DownloadingFileEntity ";
+    public List<Data> getAllDownloadingMediaFile(int languageId) {
+        String query = "SELECT MediaId , progress, parentId from DownloadingFileEntity ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -1354,10 +1357,14 @@ public class DbHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             while (cursor.isAfterLast() == false) {
-                Data ob = new Data();
-                ob.setMediaId(Integer.parseInt(cursor.getString(0)));
-                ob.setProgress(Integer.parseInt(cursor.getString(1)));
-                list.add(ob);
+//                Data ob = new Data();
+//                ob.setMediaId(Integer.parseInt(cursor.getString(0)));
+//                ob.setProgress(Integer.parseInt(cursor.getString(1)));
+                Data media = getMediaEntityByIdAndLaunguageId(Integer.parseInt(cursor.getString(0)), languageId);
+                if (media != null) {
+                    media.setParent_id(Integer.parseInt(cursor.getString(2)));
+                    list.add(media);
+                }
                 cursor.moveToNext();
             }
         }

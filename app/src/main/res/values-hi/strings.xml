@@ -33,7 +33,7 @@
 
     <!-- verification screen text-->
     <string name="description">ओटीपी अपने प्रदान की मोबाइल नंबर के लिए भेज दिया गया है। हम 10 सेकंड के भीतर स्वचालित रूप से यह पता लगाने जाएगा या आप मैन्युअल यहाँ ओटीपी प्रवेश कर सकते हैं।</string>
-    <string name="daksh">दक्ष</string>
+    <string name="daksh">संवाद</string>
     <string name="otp_text">6 अंकों ओटीपी कोड आप प्राप्त दर्ज करें</string>
     <string name="otp_msg">ओटीपी केवल 5 मिनट के लिए सक्रिय रूप से है</string>
     <string name="verify">सत्यापित करना</string>

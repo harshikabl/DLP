@@ -75,7 +75,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
         // holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
-//        holder.starIcon.setTypeface(materialdesignicons_font);
+        holder.starIcon.setTypeface(materialdesignicons_font);
 //        holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
         holder.favorite.setTypeface(VodafoneRg);
         holder.download.setTypeface(VodafoneRg);
@@ -184,7 +184,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                                Log.d(Consts.LOG_TAG, "media.getName************** " + media.getName());*/
 
                                 FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                                DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList,data.getId());
+                                DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList, data.getId());
                                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                                 transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
                                 transaction.replace(R.id.container, fragment)
@@ -301,20 +301,15 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         FavoritesData favoritesData = dbHelper.getFavoritesData(data.getId());
         if (favoritesData != null) {
             if (favoritesData.getFavoritesFlag().equals("1")) {
-                // holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
-                // holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
-
-                holder.starIcon.setImageResource(R.drawable.markedfav);
+                holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
+                holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
             } else {
-                // holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
-                // holder.starIcon.setTextColor(Color.parseColor("#e60000"));
-
-                holder.starIcon.setImageResource(R.drawable.markfav);
+                holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
+                holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
             }
         } else {
-            holder.starIcon.setImageResource(R.drawable.markfav);
-            //  holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
-            // holder.starIcon.setTextColor(Color.parseColor("#e60000"));
+            holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
+            holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
 
         }
     }

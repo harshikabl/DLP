@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity
         menuIconList.add("f1da");
         menuIconList.add("f631");
         menuIconList.add("f493");
-        menuIconList.add("f1da");
+        menuIconList.add("f24d");
         menuIconList.add("f219");
         menuIconList.add("f2fd");
 

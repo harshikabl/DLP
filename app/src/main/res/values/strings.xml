@@ -31,10 +31,9 @@
     <string name="profile_not_updated">This profile is not yet updated.</string>
 
 
-
     <!-- verification screen text-->
     <string name="description">OTP has been sent to your provided mobile number. We will detect it automatically within 10 seconds or you can enter OTP manually here.</string>
-    <string name="daksh">DAKSH</string>
+    <string name="daksh">SamVad</string>
     <string name="otp_text">Enter 6 digit OTP code you recevied</string>
     <string name="otp_msg">OTP is only active for 5 minutes</string>
     <string name="verify">VERIFY</string>

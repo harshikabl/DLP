@@ -71,24 +71,28 @@
                 android:id="@+id/favoriteLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimValue_10"
-                android:layout_weight="0.4"
+                android:layout_weight="0.3"
                 android:gravity="center"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:id="@+id/starIconlayout"
-                    android:layout_width="@dimen/size_35px"
-                    android:layout_height="@dimen/size_35px"
+                    android:layout_width="@dimen/size_30px"
+                    android:layout_height="@dimen/size_30px"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/circle"
                     android:gravity="center">
 
-                    <ImageView
+                    <TextView
                         android:id="@+id/starIcon"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:gravity="center"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/markedfav" />
+                        android:textColor="#ffffff"
+                        android:textSize="@dimen/dimTextSize_16" />
+
                 </RelativeLayout>
 
 
@@ -110,8 +114,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dimValue_10"
-                android:layout_marginTop="@dimen/dimValue_2"
-                android:layout_weight="0.4"
+                android:layout_weight="0.3"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -154,6 +157,11 @@
                     android:textColor="#e60000"
                     android:textSize="@dimen/dimTextSize_14" />
             </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_weight="0.1" />
 
             <LinearLayout
                 android:layout_width="0dp"

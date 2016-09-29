@@ -160,7 +160,9 @@ public class DownloadService1 extends IntentService {
 
                     downloadData.setCurrentFileSize((int) current);
                     downloadData.setProgress(progress);
-
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "DownlaodService1: downlaodData Id:" + downloadData.getId() + " progress:" + downloadData.getProgress());
+                    }
                     sendNotification(downloadData);
 
                     timeCount++;
