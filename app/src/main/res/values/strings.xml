@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DLP</string>
+    <string name="app_name">SamVad</string>
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -33,7 +33,6 @@
 
     <!-- verification screen text-->
     <string name="description">OTP has been sent to your provided mobile number. We will detect it automatically within 10 seconds or you can enter OTP manually here.</string>
-    <string name="daksh">SamVad</string>
     <string name="otp_text">Enter 6 digit OTP code you recevied</string>
     <string name="otp_msg">OTP is only active for 5 minutes</string>
     <string name="verify">VERIFY</string>
@@ -59,6 +58,7 @@
     <!-- course screen text-->
     <string name="title">Home</string>
     <string name="our_programs">OUR PROGRAMS</string>
+    <string name="learn">Learn</string>
 
     <!-- video play screen text-->
     <string name="buffring">Buffering...</string>

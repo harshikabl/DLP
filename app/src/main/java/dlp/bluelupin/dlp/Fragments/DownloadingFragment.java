@@ -148,7 +148,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
 
     private void init(View view) {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle(getString(R.string.Daksh));
+        rootActivity.setScreenTitle(getString(R.string.app_name));
 
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         TextView download = (TextView) view.findViewById(R.id.download);
@@ -191,6 +191,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         List<Data> dataList = dbHelper.getAllDownloadingMediaFile(Utility.getLanguageIdFromSharedPreferences(context));
         downloadMediaWithParentList = new ArrayList<DownloadMediaWithParent>();
         downloadMediaWithParentList.addAll(GetDownloadMediaWithParent(dataList));
+
         downloadingAdapter = new DownloadingAdapter(context, downloadMediaWithParentList);
         downloadingRecyclerView.setAdapter(downloadingAdapter);
     }
@@ -199,24 +200,37 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         List<DownloadMediaWithParent> result = new ArrayList<DownloadMediaWithParent>();
         for (Data downloadingMedia : dataList) {
             DownloadMediaWithParent ob = determineIfParentExistsInList(downloadingMedia.getParent_id(), result);
-            ob.setParentId(downloadingMedia.getParent_id());
-            if (ob.getStrJsonResourcesToDownloadList() == null) {
-                ob.setStrJsonResourcesToDownloadList(new ArrayList<Data>());
+            Boolean isNew = false;
+            if (ob == null) {
+                ob = new DownloadMediaWithParent();
+                ob.setParentId(downloadingMedia.getParent_id());
+                isNew = true;
             }
-            ob.setStrJsonResourcesToDownloadList(dataList);
-            result.add(ob);
+
+            List<Data> temp = ob.getStrJsonResourcesToDownloadList();
+            if (temp == null) {
+                temp = new ArrayList<Data>();
+            }
+            temp.add(downloadingMedia);
+            ob.setStrJsonResourcesToDownloadList(temp);
+            if (isNew) {
+                result.add(ob);
+            }
         }
+
         return result;
     }
 
     private DownloadMediaWithParent determineIfParentExistsInList(int parentId, List<DownloadMediaWithParent> list) {
 
         for (DownloadMediaWithParent downloadMediaWithParent : list) {
+
             if (downloadMediaWithParent.getParentId() == parentId) {
+
                 return downloadMediaWithParent;
             }
         }
-        return new DownloadMediaWithParent();
+        return null;
     }
 
     private List<Data> getResourcesToDownload(List<Data> inputList) {
@@ -254,28 +268,29 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         @Override
         public void onReceive(Context context, Intent intent) {
             if (Consts.IS_DEBUG_LOG) {
-                Log.d(Consts.LOG_TAG, "**** received message in Downloadingfragment: " + intent.getAction());
+                //Log.d(Consts.LOG_TAG, "**** received message in Downloadingfragment: " + intent.getAction());
             }
-           /* if (intent.getAction().equals(Consts.MESSAGE_CANCEL_DOWNLOAD)) {
+            if (intent.getAction().equals(Consts.MESSAGE_CANCEL_DOWNLOAD)) {
                 //String strJsonMedia = intent.getExtras().getString(Consts.EXTRA_MEDIA);
                 int mediaId = intent.getExtras().getInt(Consts.EXTRA_MEDIA, 0);
                 Gson gson = new Gson();
                 //Data selectedMedia = gson.fromJson(strJsonMedia, Data.class);
-                List<Data> listWithoutDownload = new ArrayList<Data>();
+                List<DownloadMediaWithParent> listWithoutDownload = new ArrayList<DownloadMediaWithParent>();
                 if (mediaId != 0) {
-                    for (Data media : uniqueResourcesToDownload) {
-                        if (media.getId() != mediaId) {
+                    for (DownloadMediaWithParent media : downloadMediaWithParentList) {
+                        if (media.getParentId() != mediaId) {
                             listWithoutDownload.add(media);
                             if (Consts.IS_DEBUG_LOG) {
-                                Log.d(Consts.LOG_TAG, "**** media Id: " + media.getId() + " dl cancelled:");
+                                Log.d(Consts.LOG_TAG, "**** media Id: " + media.getParentId() + " dl cancelled:");
                             }
                         }
                     }
-                    downloadingAdapter = new DownloadingAdapter(context, listWithoutDownload);
+                    downloadMediaWithParentList = listWithoutDownload;
+                    downloadingAdapter = new DownloadingAdapter(context, downloadMediaWithParentList);
                     downloadingRecyclerView.setAdapter(downloadingAdapter);
                     downloadingAdapter.notifyDataSetChanged();
                 }
-            } // cancel download*/
+            } // cancel download
 
             if (intent.getAction().equals(Consts.MESSAGE_PROGRESS)) {
 
@@ -351,7 +366,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
 
     private void unregisterReceiver() {
         if (mReceiversRegistered) {
-            // LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(intentReceiver);
+            //LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(intentReceiver);
             mReceiversRegistered = false;
         }
     }

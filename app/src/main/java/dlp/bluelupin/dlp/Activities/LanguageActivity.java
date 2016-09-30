@@ -204,6 +204,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         AccountData accountData = dbhelper.getAccountData();
         if (accountData != null && !accountData.equals("")) {
             Intent mainIntent = new Intent(LanguageActivity.this, MainActivity.class);
+            mainIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(mainIntent);
             finish();
 

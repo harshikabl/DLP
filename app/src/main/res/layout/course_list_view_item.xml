@@ -52,6 +52,34 @@
                 android:textColor="#fff"
                 android:textSize="@dimen/dimTextSize_18" />
         </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#A7358C"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/dimValue_16"
+            android:paddingLeft="@dimen/dimValue_16"
+            android:paddingRight="@dimen/dimValue_16">
+
+            <TextView
+                android:id="@+id/learnIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="icon"
+                android:textColor="#fff"
+                android:textSize="@dimen/dimTextSize_20" />
+
+            <TextView
+                android:id="@+id/learnLable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimValue_10"
+                android:text="@string/learn"
+                android:textColor="#fff"
+                android:textSize="@dimen/dimTextSize_18" />
+        </LinearLayout>
     </LinearLayout>
 
 

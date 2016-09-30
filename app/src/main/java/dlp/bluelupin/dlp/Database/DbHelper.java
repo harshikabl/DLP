@@ -1364,6 +1364,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 if (media != null) {
                     media.setParent_id(Integer.parseInt(cursor.getString(2)));
                     list.add(media);
+
                 }
                 cursor.moveToNext();
             }
@@ -1372,11 +1373,11 @@ public class DbHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    //delete downloaded file data_item by media id
-    public boolean deleteFileDownloadedByMediaId(int id) {
+    //delete downloaded file  by parent id
+    public boolean deleteFileDownloadedByParentId(int id) {
         boolean result = false;
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "MediaId = '" + id + "' ";
+        String query = "parentId = '" + id + "' ";
         db.delete("DownloadingFileEntity", query, null);
         db.close();
         result = true;

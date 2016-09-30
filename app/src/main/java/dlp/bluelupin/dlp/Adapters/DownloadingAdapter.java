@@ -85,17 +85,48 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
         // starting the download service
         final DbHelper dbHelper = new DbHelper(context);
         final DownloadMediaWithParent dataWithParent = itemList.get(position);
+        Data data = dbHelper.getDataEntityById(dataWithParent.getParentId());
+        if (data != null) {
+            final Data resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
+                    Utility.getLanguageIdFromSharedPreferences(context));
+            if (data.getLang_resource_name() != null) {
+                Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
+                        Utility.getLanguageIdFromSharedPreferences(context));
+                if (titleResource != null) {
+                    holder.mediaTitle.setText(titleResource.getContent());
+                }
+            }
+        }
+
+        if (data.getThumbnail_media_id() != 0) {
+            Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getThumbnail_media_id(),
+                    Utility.getLanguageIdFromSharedPreferences(context));
+            if (media != null && media.getDownload_url() != null) {
+                if (media.getLocalFilePath() == null) {
+                    if (Utility.isOnline(context)) {
+                        Gson gson = new Gson();
+                        Intent intent = new Intent(context, DownloadService1.class);
+                        String strJsonmedia = gson.toJson(media);
+                        intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                        intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
+                        context.startService(intent);
+                        new DownloadImageTask(holder.mediaImage)
+                                .execute(media.getDownload_url());
+                    }
+                } else {
+                    File imgFile = new File(media.getLocalFilePath());
+                    if (imgFile.exists()) {
+                        Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        holder.mediaImage.setImageBitmap(bitmap);
+                    }
+                }
+
+            }
+        }
 //        final Data data_item = dataWithParent.getStrJsonResourcesToDownloadList();
 //        holder.mediaTitle.setText(data_item.getFile_path());
 
-        for (Data data : dataWithParent.getStrJsonResourcesToDownloadList()) {
-            if (Consts.IS_DEBUG_LOG) {
-                Log.d(Consts.LOG_TAG, "**** setting progress for media Id: " + data.getId() + " progress:" + data.getProgress() + "%");
-            }
 
-            //FrameLayout DyprogressBar = makeProgressBar(data.getProgress());
-            //holder.container.addView(DyprogressBar);
-        }
         DataAdapter dataAdapter = new DataAdapter(context, dataWithParent.getStrJsonResourcesToDownloadList());
         holder.progressList.setAdapter(dataAdapter);
         Utility.justifyListViewHeightBasedOnChildrenForDisableScrool(holder.progressList);
@@ -110,29 +141,31 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
 //        if (data_item.getProgress() >= 100) {
 //            holder.cardView.setVisibility(View.INVISIBLE);
 //        }
-//        holder.cancelIcon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                Intent broadcastIntent = new Intent();
-////                broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
-////                broadcastIntent.putExtra("mediaId",data_item.getId());
-////                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
-//                holder.cardView.setVisibility(View.INVISIBLE);
-//                Gson gson = new Gson();
-//                //String strJsonmedia = gson.toJson(data_item);
-//                Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
-//                intent.putExtra(Consts.EXTRA_MEDIA, data_item.getId()); // strJsonmedia
-//                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-//                if (Consts.IS_DEBUG_LOG) {
-//                    Log.d(Consts.LOG_TAG, "**** sending cancel message in DownloadingAdapter: " + intent.getAction());
-//                }
-//            }
-//        });
+        holder.cancelIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dbHelper.deleteFileDownloadedByParentId(dataWithParent.getParentId());//delete media by parent id
+                Intent broadcastIntent = new Intent();
+                broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
+                broadcastIntent.putExtra("mediaId", dataWithParent.getParentId());
+                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
+                holder.cardView.setVisibility(View.INVISIBLE);
+                Gson gson = new Gson();
+                //String strJsonmedia = gson.toJson(data_item);
+                Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
+                intent.putExtra(Consts.EXTRA_MEDIA, dataWithParent.getParentId()); // strJsonmedia
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "**** sending cancel message in DownloadingAdapter: " + intent.getAction());
+                }
+            }
+        });
 
     }
 
 
-    private FrameLayout makeProgressBar(int progress) {
+   /* private FrameLayout makeProgressBar(int progress) {
 
         FrameLayout frameLayout = new FrameLayout(context);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -148,7 +181,7 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
 
         frameLayout.addView(dynamicProgress);
         return frameLayout;
-    }
+    }*/
 
     @Override
     public int getItemCount() {

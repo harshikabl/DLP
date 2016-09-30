@@ -391,7 +391,6 @@ public class ServiceHelper {
                     boolean writtenToDisk = writeResponseBodyToDisk(response.body(), fileUrl, mediaId);
                     if (writtenToDisk) {
                         DbHelper dbHelper = new DbHelper(context);
-                        dbHelper.deleteFileDownloadedByMediaId(mediaId);
                     }
                     callback.onDone(fileUrl, response.toString(), null);
                     if (Consts.IS_DEBUG_LOG) {

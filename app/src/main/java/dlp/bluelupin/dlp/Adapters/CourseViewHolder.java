@@ -15,7 +15,7 @@ import dlp.bluelupin.dlp.R;
  * Created by Neeraj on 7/26/2016.
  */
 public class CourseViewHolder extends RecyclerView.ViewHolder {
-    public TextView courseTitle, courseDescription;
+    public TextView courseTitle, courseDescription,learnIcon,learnLable;
     public android.support.v7.widget.CardView cardView;
     public ImageView courseImage;
 
@@ -28,6 +28,8 @@ public class CourseViewHolder extends RecyclerView.ViewHolder {
         courseTitle = (TextView) itemView.findViewById(R.id.courseTitle);
         courseDescription = (TextView) itemView.findViewById(R.id.courseDescription);
         courseImage = (ImageView) itemView.findViewById(R.id.courseImage);
+        learnIcon = (TextView) itemView.findViewById(R.id.learnIcon);
+        learnLable = (TextView) itemView.findViewById(R.id.learnLable);
     }
 
 }

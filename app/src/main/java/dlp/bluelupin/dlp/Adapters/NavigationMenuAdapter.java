@@ -130,7 +130,6 @@ public class NavigationMenuAdapter extends BaseAdapter {
                     navigateToFragment(fragment);
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Change Language")) {
                     Intent intent = new Intent(mContext, LanguageActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     mContext.startActivity(intent);
                     Activity activity = (Activity) mContext;
                     activity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);

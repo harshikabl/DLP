@@ -77,7 +77,7 @@ public class DlpFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.hihlogo)
-                .setContentTitle("FCM Message")
+                .setContentTitle(getString(R.string.app_name))
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

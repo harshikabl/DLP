@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,9 +55,13 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
     public void onBindViewHolder(final CourseViewHolder holder, int position) {
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
+        Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
         holder.courseTitle.setTypeface(VodafoneExB);
         holder.courseDescription.setTypeface(VodafoneRg);
         holder.cardView.setCardBackgroundColor(Color.parseColor("#A7358C"));
+        holder.learnIcon.setTypeface(materialdesignicons_font);
+        holder.learnIcon.setText(Html.fromHtml("&#xf5da;"));
+        holder.learnLable.setTypeface(VodafoneRg);
 
         final DbHelper dbHelper = new DbHelper(context);
         final Data data = itemList.get(position);

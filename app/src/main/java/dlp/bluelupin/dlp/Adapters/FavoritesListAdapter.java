@@ -57,8 +57,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
         holder.chapterDescription.setTypeface(VodafoneRg);
 
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
-        holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
-
+        holder.starIcon.setTypeface(materialdesignicons_font);
 
         final DbHelper dbHelper = new DbHelper(context);
         final FavoritesData data = favoritesList.get(position);
@@ -184,12 +183,15 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
         FavoritesData favoritesData = dbHelper.getFavoritesData(data.getId());
         if (favoritesData != null) {
             if (favoritesData.getFavoritesFlag().equals("1")) {
-                holder.starIcon.setImageResource(R.drawable.markedfav);
+                holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
+                holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
             } else {
-                holder.starIcon.setImageResource(R.drawable.markfav);
+                holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
+                holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
             }
         } else {
-            holder.starIcon.setImageResource(R.drawable.markedfav);
+            holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
+            holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
         }
     }
 }

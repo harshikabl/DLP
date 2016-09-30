@@ -89,15 +89,19 @@
                     android:layout_height="@dimen/size_30px"
                     android:layout_centerInParent="true"
                     android:layout_centerVertical="true"
+                    android:background="@drawable/circle"
                     android:gravity="center">
 
-                    <ImageView
+                    <TextView
                         android:id="@+id/starIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true" />
-                </RelativeLayout>
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:textColor="#ffffff"
+                        android:textSize="@dimen/dimTextSize_16" />
 
+                </RelativeLayout>
 
             </LinearLayout>
 

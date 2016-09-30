@@ -48,13 +48,30 @@
 
                     <TextView
                         android:id="@+id/mediaTitle"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="0.9"
                         android:maxLines="2"
                         android:text="vdfvdvdf "
                         android:textColor="#000"
                         android:textSize="@dimen/dimTextSize_16" />
 
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.1"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/cancelIcon"
+                            android:layout_width="@dimen/size_27px"
+                            android:layout_height="@dimen/size_27px"
+                            android:gravity="center"
+                            android:text="icon"
+                            android:textColor="@color/colorRad"
+                            android:textSize="@dimen/dimTextSize_20" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -107,22 +124,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.1"
-                android:gravity="center"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/cancelIcon"
-                    android:layout_width="@dimen/size_27px"
-                    android:layout_height="@dimen/size_27px"
-                    android:gravity="center"
-                    android:text="icon"
-                    android:textColor="@color/colorRad"
-                    android:textSize="@dimen/dimTextSize_20" />
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
