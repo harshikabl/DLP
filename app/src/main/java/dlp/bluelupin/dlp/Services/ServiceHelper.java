@@ -320,7 +320,7 @@ public class ServiceHelper {
     //Otp verification service
     public void callOtpVerificationService(OtpVerificationServiceRequest request, final IServiceSuccessCallback<OtpData> callback) {
 
-        Call<OtpData> ac = service.otpVerify(request);
+
         final DbHelper dbhelper = new DbHelper(context);
         final AccountData accountData = new AccountData();
         final int serverId = Utility.getUserServerIdFromSharedPreferences(context);
@@ -331,6 +331,7 @@ public class ServiceHelper {
             }
         }
         Log.d(Consts.LOG_TAG, "payload***" + request);
+        Call<OtpData> ac = service.otpVerify(request.getApi_token(), request);
         ac.enqueue(new Callback<OtpData>() {
             @Override
             public void onResponse(Call<OtpData> call, Response<OtpData> response) {

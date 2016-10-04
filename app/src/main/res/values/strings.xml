@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SamVad</string>
+    <string name="app_name">SamVaad</string>
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

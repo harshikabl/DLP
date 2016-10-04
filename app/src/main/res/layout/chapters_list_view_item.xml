@@ -52,7 +52,7 @@
                 android:maxLines="3"
                 android:paddingBottom="@dimen/dimValue_5"
                 android:paddingTop="@dimen/dimValue_5"
-                android:text="dvfdfferfegf "
+                android:text=""
                 android:textColor="#4a4d4e"
                 android:textSize="@dimen/dimTextSize_16" />
 

@@ -102,6 +102,22 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 }
             } //resource != null
         } //data_item.getLang_resource_name() != null
+        if (data.getLang_resource_description() != null) {
+            resource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
+                    Utility.getLanguageIdFromSharedPreferences(context));
+            if (resource != null) {
+                if (data.getType().equalsIgnoreCase("Text")) {
+                    //  if(holder.getItemId() == )
+                    View view = holder.contentContainer.findViewById(resource.getId());
+                    if (view == null) {
+                        view = addDescriptionDynamicTextView(holder, resource);
+                        view.setId(resource.getId());
+                        view.setTag(resource.getId());
+                        holder.contentContainer.addView(view);
+                    }
+                }
+            } //resource != null
+        } //data_item.getLang_resource_name() != null
         if (data.getType().equalsIgnoreCase("Image")) {
             addDynamicImageView(holder, data, resource);
         }
@@ -167,9 +183,9 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
     }
 
     private void addDynamicUrl(ContentViewHolder holder, Data resource) {
-        if (Consts.IS_DEBUG_LOG) {
-            Log.d(Consts.LOG_TAG, " Url resource text: " + resource.getContent());
-        }
+//        if (Consts.IS_DEBUG_LOG) {
+//            Log.d(Consts.LOG_TAG, " Url resource text: " + resource.getContent());
+//        }
         TextView dynamicTextView = new TextView(context);
         dynamicTextView.setTextSize(18);
         dynamicTextView.setTypeface(VodafoneRg);
@@ -228,12 +244,31 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
     }
 
     private View addDynamicTextView(ContentViewHolder holder, Data resource) {
-        if (Consts.IS_DEBUG_LOG) {
-            Log.d(Consts.LOG_TAG, " resource text: " + resource.getContent());
-        }
+//        if (Consts.IS_DEBUG_LOG) {
+//            Log.d(Consts.LOG_TAG, " resource text: " + resource.getContent());
+//        }
+        TextView dynamicTextView = new TextView(context);
+        dynamicTextView.setTextSize(22);
+        dynamicTextView.setTypeface(VodafoneRg, Typeface.BOLD);
+
+        dynamicTextView.setText(Html.fromHtml(resource.getContent()));
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        layoutParams.setMargins(10, 10, 10, 10);
+        dynamicTextView.setLayoutParams(layoutParams);
+
+        return dynamicTextView;
+    }
+
+    private View addDescriptionDynamicTextView(ContentViewHolder holder, Data resource) {
+//        if (Consts.IS_DEBUG_LOG) {
+//            Log.d(Consts.LOG_TAG, " resource text: " + resource.getContent());
+//        }
         TextView dynamicTextView = new TextView(context);
         dynamicTextView.setTextSize(18);
         dynamicTextView.setTypeface(VodafoneRg);
+        dynamicTextView.setLineSpacing(1.1f,1.1f);
         dynamicTextView.setText(Html.fromHtml(resource.getContent()));
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);

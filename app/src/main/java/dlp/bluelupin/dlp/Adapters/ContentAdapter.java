@@ -95,16 +95,43 @@ public class ContentAdapter extends BaseAdapter {
                         if (Consts.IS_DEBUG_LOG) {
                             Log.d(Consts.LOG_TAG, " resource text: " + resource.getContent());
                         }
-                        TextView dynamicTextView = new TextView(context);
-                        dynamicTextView.setTextSize(18);
-                        dynamicTextView.setTypeface(VodafoneRg);
-                        dynamicTextView.setText(Html.fromHtml(resource.getContent()));
+                        {
+                            TextView dynamicTextView = new TextView(context);
+                            dynamicTextView.setTextSize(18);
+                            dynamicTextView.setTypeface(VodafoneRg);
+                            dynamicTextView.setText(Html.fromHtml(resource.getContent()));
 
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                        layoutParams.setMargins(10, 10, 10, 10);
-                        dynamicTextView.setLayoutParams(layoutParams);
-                        holder.contentContainer.addView(dynamicTextView);
+                            layoutParams.setMargins(10, 10, 10, 10);
+                            dynamicTextView.setLayoutParams(layoutParams);
+                            holder.contentContainer.addView(dynamicTextView);
+                        }
+                    }
+                }
+            }
+            if (data.getLang_resource_description() != null) {
+
+                resource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
+                        Utility.getLanguageIdFromSharedPreferences(context));
+                if (resource != null) {
+
+                    if (data.getType().equalsIgnoreCase("Text")) {
+                        if (Consts.IS_DEBUG_LOG) {
+                            Log.d(Consts.LOG_TAG, " resource text: " + resource.getContent());
+                        }
+                        {
+                            TextView dynamicTextView = new TextView(context);
+                            dynamicTextView.setTextSize(18);
+                            dynamicTextView.setTypeface(VodafoneRg);
+                            dynamicTextView.setText(Html.fromHtml(resource.getContent()));
+
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                            layoutParams.setMargins(10, 10, 10, 10);
+                            dynamicTextView.setLayoutParams(layoutParams);
+                            holder.contentContainer.addView(dynamicTextView);
+                        }
                     }
                 }
             }

@@ -17,6 +17,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
@@ -37,7 +38,7 @@ public interface IServiceManager {
     Call<AccountData> accountCreate(@Body AccountServiceRequest request);
 
     @POST(Consts.VERIFY_OTP)
-    Call<OtpData> otpVerify(@Body OtpVerificationServiceRequest request);
+    Call<OtpData> otpVerify(@Query("api_token") String api_token, @Body OtpVerificationServiceRequest request);
 
    // @Streaming
     @GET
