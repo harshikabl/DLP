@@ -45,7 +45,7 @@
             android:layout_marginRight="@dimen/dimValue_20"
             android:layout_marginTop="@dimen/dimValue_20"
             android:gravity="center"
-            android:text="Lorem ipsum dolor sit amet, consectetur dolor sit"
+            android:text="@string/select_fav_language"
             android:textColor="#4a4d4e"
             android:textSize="@dimen/dimTextSize_16" />
 

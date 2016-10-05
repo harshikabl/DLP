@@ -327,9 +327,11 @@ public class ServiceHelper {
         AccountData accountDataApToken = dbhelper.getAccountData();
         if (accountDataApToken != null) {
             if (accountDataApToken.getApi_token() != null) {
-                request.setApi_token(accountDataApToken.getApi_token());
+                 request.setApi_token(accountDataApToken.getApi_token());
             }
         }
+
+
         Log.d(Consts.LOG_TAG, "payload***" + request);
         Call<OtpData> ac = service.otpVerify(request.getApi_token(), request);
         ac.enqueue(new Callback<OtpData>() {

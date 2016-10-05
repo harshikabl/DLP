@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                //customProgressDialog.show();
+                customProgressDialog.show();
             }
 
             @Override
