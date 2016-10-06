@@ -101,6 +101,8 @@
     <string name="read">Read</string>
     <string name="mark_as_favourite">Mark as favourite</string>
     <string name="download_update">Download update</string>
+    <string name="update">Update</string>
+    <string name="favourite">Favourite</string>
 
 
 </resources>

@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,12 +130,14 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
     private boolean mReceiversRegistered;
     DownloadingAdapter downloadingAdapter;
     RecyclerView downloadingRecyclerView;
+    Typeface materialdesignicons_font;
+    View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_downloading, container, false);
+        view = inflater.inflate(R.layout.fragment_downloading, container, false);
 
         context = getActivity();
         if (Utility.isTablet(context)) {
@@ -142,14 +145,14 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         } else {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        init(view);
+        init();
         return view;
     }
 
-    private void init(View view) {
+    private void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(getString(R.string.app_name));
-
+        materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         TextView download = (TextView) view.findViewById(R.id.download);
         download.setTypeface(VodafoneExB);
@@ -192,8 +195,15 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
         downloadMediaWithParentList = new ArrayList<DownloadMediaWithParent>();
         downloadMediaWithParentList.addAll(GetDownloadMediaWithParent(dataList));
 
-        downloadingAdapter = new DownloadingAdapter(context, downloadMediaWithParentList);
-        downloadingRecyclerView.setAdapter(downloadingAdapter);
+        if (downloadMediaWithParentList != null && downloadMediaWithParentList.size() > 0) {
+            downloadingAdapter = new DownloadingAdapter(context, downloadMediaWithParentList);
+            downloadingRecyclerView.setAdapter(downloadingAdapter);
+        } else {
+            view = view.inflate(context, R.layout.no_record_found_fragment, null);
+            TextView noRecordIcon = (TextView) view.findViewById(R.id.noRecordIcon);
+            noRecordIcon.setTypeface(materialdesignicons_font);
+            noRecordIcon.setText(Html.fromHtml("&#xf187;"));
+        }
     }
 
     private List<DownloadMediaWithParent> GetDownloadMediaWithParent(List<Data> dataList) {

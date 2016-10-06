@@ -98,5 +98,7 @@
     <string name="read">पढ़ना</string>
     <string name="mark_as_favourite">पसंदीदा के रूप में मार्क</string>
     <string name="download_update">अद्यतन डाउनलोड करे</string>
+    <string name="update">अद्यतन</string>
+    <string name="favourite">पसंदीदा</string>
 
 </resources>

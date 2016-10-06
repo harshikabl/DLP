@@ -71,6 +71,8 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
         holder.chapterTitle.setTypeface(VodafoneExB);
         holder.chapterDescription.setTypeface(VodafoneRg);
+        holder.favorite.setTypeface(VodafoneRg);
+        holder.download.setTypeface(VodafoneRg);
         holder.cardView.setCardBackgroundColor(Color.parseColor("#EEEEEE"));
 
         // holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
@@ -98,16 +100,26 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (titleResource != null) {
+                holder.chapterTitle.setVisibility(View.VISIBLE);
                 holder.chapterTitle.setText(titleResource.getContent());
+            } else {
+                holder.chapterTitle.setVisibility(View.GONE);
             }
+        } else {
+            holder.chapterTitle.setVisibility(View.GONE);
         }
 
         if (data.getLang_resource_description() != null) {
             Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (descriptionResource != null) {
+                holder.chapterDescription.setVisibility(View.VISIBLE);
                 holder.chapterDescription.setText(descriptionResource.getContent());
+            } else {
+                holder.chapterDescription.setVisibility(View.GONE);
             }
+        } else {
+            holder.chapterDescription.setVisibility(View.GONE);
         }
 
         if (data.getThumbnail_media_id() != 0) {
@@ -149,9 +161,11 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         if (resourcesToDownloadList.size() <= 0) {
             // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
             holder.downloadIcon.setText(Html.fromHtml("&#xf12c;"));
+            holder.download.setText(context.getString(R.string.update));
         } else {
             holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
             // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
+            holder.download.setText(context.getString(R.string.download_update));
         }
         //if meadia not downloaded then show download_layout
         if (data.getThumbnail_media_id() != 0) {
@@ -303,14 +317,16 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             if (favoritesData.getFavoritesFlag().equals("1")) {
                 holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
                 holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
+                holder.favorite.setText(context.getString(R.string.favourite));
             } else {
                 holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
                 holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
+                holder.favorite.setText(context.getString(R.string.mark_as_favourite));
             }
         } else {
             holder.starIcon.setText(Html.fromHtml("&#xf4d2;"));
             holder.starIcon.setTextColor(Color.parseColor("#ffffff"));
-
+            holder.favorite.setText(context.getString(R.string.mark_as_favourite));
         }
     }
 }

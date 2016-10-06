@@ -21,7 +21,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -34,16 +34,17 @@
                         android:id="@+id/leftArrow"
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:text="arr"
+                        android:text=""
                         android:textColor="#fff"
-                        android:textSize="@dimen/dimTextSize_30" />
+                        android:textSize="@dimen/dimTextSize_30"
+                        android:visibility="gone" />
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dimValue_10"
+                    android:layout_marginLeft="@dimen/dimValue_16"
                     android:gravity="left|center"
                     android:text="@string/notification"
                     android:textColor="#fff"
@@ -57,7 +58,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/app_bar"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:gravity="center"
         android:orientation="vertical">
 

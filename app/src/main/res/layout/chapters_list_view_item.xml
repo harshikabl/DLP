@@ -49,9 +49,9 @@
                 android:id="@+id/chapterDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimValue_5"
+                android:layout_marginTop="@dimen/dimValue_5"
                 android:maxLines="3"
-                android:paddingBottom="@dimen/dimValue_5"
-                android:paddingTop="@dimen/dimValue_5"
                 android:text=""
                 android:textColor="#4a4d4e"
                 android:textSize="@dimen/dimTextSize_16" />
@@ -101,9 +101,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:maxLines="1"
                     android:paddingBottom="@dimen/dimValue_5"
                     android:paddingTop="@dimen/dimValue_5"
-                    android:singleLine="true"
                     android:text="@string/mark_as_favourite"
                     android:textColor="#e60000"
                     android:textSize="@dimen/dimTextSize_14" />
@@ -113,7 +113,6 @@
                 android:id="@+id/download_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dimValue_10"
                 android:layout_weight="0.3"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -150,9 +149,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:maxLines="1"
                     android:paddingBottom="@dimen/dimValue_5"
                     android:paddingTop="@dimen/dimValue_6"
-                    android:singleLine="true"
                     android:text="@string/download_update"
                     android:textColor="#e60000"
                     android:textSize="@dimen/dimTextSize_14" />
@@ -167,7 +166,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/dimValue_5"
-                android:layout_marginTop="@dimen/dimValue_20"
+                android:layout_marginTop="@dimen/dimValue_10"
                 android:layout_weight="0.2"
                 android:gravity="center"
                 android:orientation="horizontal">

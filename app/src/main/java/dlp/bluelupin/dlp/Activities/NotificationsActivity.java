@@ -44,6 +44,8 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
     private RecyclerView notificationRecyclerView;
     private Boolean initFlag = false;
     private TextView back, noRecordIcon;
+    Typeface materialdesignicons_font;
+    Typeface VodafoneExB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,18 +65,12 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         setSupportActionBar(toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
         Typeface custom_fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome-webfont.ttf");
-        Typeface materialdesignicons_font = Typeface.createFromAsset(this.getAssets(), "fonts/materialdesignicons-webfont.otf");
-        Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
+        materialdesignicons_font = Typeface.createFromAsset(this.getAssets(), "fonts/materialdesignicons-webfont.otf");
+        VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
         title.setTypeface(VodafoneExB);
-        if (initFlag) {
-            noRecordIcon = (TextView) findViewById(R.id.noRecordIcon);
-            noRecordIcon.setTypeface(materialdesignicons_font);
-            noRecordIcon.setText(Html.fromHtml("&#xf187;"));
-        } else {
-            callNotificationService();
-        }
 
+        callNotificationService();
     }
 
     @Override
@@ -123,7 +119,7 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         DbHelper db = new DbHelper(NotificationsActivity.this);
         int languageId = Utility.getLanguageIdFromSharedPreferences(NotificationsActivity.this);
         List<Data> data = db.getAllNotificationDataEntity(languageId);
-        if (data != null) {
+        if (data != null && data.size() > 0) {
             Collections.sort(data, new Comparator<Data>() {
                 //2016-07-08 12:06:30
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -159,9 +155,16 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
             //ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
             //touchHelper.attachToRecyclerView(notificationRecyclerView);
         } else {
-            initFlag = true;
+            //initFlag = true;
             setContentView(R.layout.no_record_found);
-            init();
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            title = (TextView) toolbar.findViewById(R.id.title);
+            title.setTypeface(VodafoneExB);
+            noRecordIcon = (TextView) findViewById(R.id.noRecordIcon);
+            noRecordIcon.setTypeface(materialdesignicons_font);
+            noRecordIcon.setText(Html.fromHtml("&#xf187;"));
+            //init();
 
         }
 
