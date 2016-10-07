@@ -61,7 +61,7 @@ public interface IServiceManager {
     Call<ResponseBody> downloadFile(@Url String fileUrl);
 
     @POST(Consts.Profile_Update)
-    Call<AccountData> profileUpdated(@Body ProfileUpdateServiceRequest request);
+    Call<AccountData> profileUpdated(@Query("api_token") String api_token, @Body ProfileUpdateServiceRequest request);
 
 
 }

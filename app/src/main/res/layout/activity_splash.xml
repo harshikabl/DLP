@@ -4,7 +4,7 @@
     android:id="@+id/splashContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF"
+    android:background="#a9c813"
     android:orientation="vertical"
     android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 
@@ -14,6 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/samvaad_splash" />
+        android:src="@drawable/spalsh" />
 
 </LinearLayout>

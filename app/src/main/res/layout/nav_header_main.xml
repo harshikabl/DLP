@@ -4,10 +4,10 @@
     android:layout_height="@dimen/nav_header_height"
     android:background="#e60000"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/dimValue_10"
+    android:paddingLeft="@dimen/dimValue_16"
+    android:paddingRight="@dimen/dimValue_16"
+    android:paddingTop="@dimen/dimValue_10"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 

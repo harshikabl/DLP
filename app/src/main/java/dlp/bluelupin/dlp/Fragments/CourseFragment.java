@@ -92,6 +92,7 @@ public class CourseFragment extends Fragment {
         } else {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+
         init(view);
         return view;
 

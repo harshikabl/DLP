@@ -214,6 +214,8 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
                             Log.d(Consts.LOG_TAG, " callProfileUpdateService success result: " + isComplete);
                         }
                         Toast.makeText(context, getString(R.string.profile_update), Toast.LENGTH_LONG).show();
+                        MainActivity rootActivity = (MainActivity) getActivity();
+                        rootActivity.setProfileDetails();
                         customProgressDialog.dismiss();
                     } else {
                         Utility.alertForErrorMessage(getString(R.string.profile_not_updated), context);

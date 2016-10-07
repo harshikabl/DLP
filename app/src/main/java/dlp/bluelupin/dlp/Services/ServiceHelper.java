@@ -243,7 +243,6 @@ public class ServiceHelper {
     public void callCreateAccountService(AccountServiceRequest request, final IServiceSuccessCallback<AccountData> callback) {
         request.setApi_token(Consts.API_KEY);
 
-        Call<AccountData> ac = service.accountCreate(request);
         final DbHelper dbhelper = new DbHelper(context);
         String device_token = Utility.getDeviceIDFromSharedPreferences(context);
         if (device_token != null) {
@@ -251,6 +250,7 @@ public class ServiceHelper {
         }
         request.setService(Consts.SERVICE);
         request.setIs_development(Consts.IS_DEVELOPMENT);
+        Call<AccountData> ac = service.accountCreate(request);
         Log.d(Consts.LOG_TAG, "payload***" + request);
         ac.enqueue(new Callback<AccountData>() {
             @Override
@@ -282,7 +282,6 @@ public class ServiceHelper {
     //updated profile service
     public void callProfileUpdateService(ProfileUpdateServiceRequest request, final IServiceSuccessCallback<AccountData> callback) {
 
-        Call<AccountData> ac = service.profileUpdated(request);
         final DbHelper dbhelper = new DbHelper(context);
         AccountData accountDataApToken = dbhelper.getAccountData();
         if (accountDataApToken != null) {
@@ -290,6 +289,7 @@ public class ServiceHelper {
                 request.setApi_token(accountDataApToken.getApi_token());
             }
         }
+        Call<AccountData> ac = service.profileUpdated(request.getApi_token(), request);
         Log.d(Consts.LOG_TAG, "payload***" + request);
         ac.enqueue(new Callback<AccountData>() {
             @Override
@@ -327,11 +327,9 @@ public class ServiceHelper {
         AccountData accountDataApToken = dbhelper.getAccountData();
         if (accountDataApToken != null) {
             if (accountDataApToken.getApi_token() != null) {
-                 request.setApi_token(accountDataApToken.getApi_token());
+                request.setApi_token(accountDataApToken.getApi_token());
             }
         }
-
-
         Log.d(Consts.LOG_TAG, "payload***" + request);
         Call<OtpData> ac = service.otpVerify(request.getApi_token(), request);
         ac.enqueue(new Callback<OtpData>() {

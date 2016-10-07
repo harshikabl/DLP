@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity
         return mainActivity;
     }
 
+    private TextView name, email;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,8 +125,8 @@ public class MainActivity extends AppCompatActivity
         Typeface custom_fontawesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(getAssets(), "fonts/materialdesignicons-webfont.otf");
         View header = findViewById(R.id.navHader);
-        TextView name = (TextView) header.findViewById(R.id.name);
-        TextView email = (TextView) header.findViewById(R.id.email);
+        name = (TextView) header.findViewById(R.id.name);
+        email = (TextView) header.findViewById(R.id.email);
         TextView logOut = (TextView) header.findViewById(R.id.logOut);
         name.setTypeface(VodafoneExB);
         email.setTypeface(VodafoneRg);
@@ -134,11 +136,7 @@ public class MainActivity extends AppCompatActivity
         createBy.setTypeface(VodafoneRg);
         LinearLayout poweredBylayout = (LinearLayout) findViewById(R.id.poweredBylayout);
 
-        AccountData accountData = dbhelper.getAccountData();
-        if (accountData != null && !accountData.equals("")) {
-            name.setText(accountData.getName());
-            email.setText(accountData.getEmail());
-        }
+        setProfileDetails();
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,6 +174,16 @@ public class MainActivity extends AppCompatActivity
         });
 
         readExternalFilesAsync();
+    }
+
+    //set user profile
+    public void setProfileDetails() {
+        DbHelper dbhelper = new DbHelper(MainActivity.this);
+        AccountData accountData = dbhelper.getAccountData();
+        if (accountData != null && !accountData.equals("")) {
+            name.setText(accountData.getName());
+            email.setText(accountData.getEmail());
+        }
     }
 
     private void readExternalFilesAsync() {
@@ -264,7 +272,7 @@ public class MainActivity extends AppCompatActivity
         CourseFragment fragment = CourseFragment.newInstance("", "");
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
-                        //.addToBackStack(null)
+                //.addToBackStack(null)
                 .commit();
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
@@ -386,7 +394,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void callSync() {
+    public void callSync() {
         callContentAsync();
         callResourceAsync();
         callMediaAsync();
