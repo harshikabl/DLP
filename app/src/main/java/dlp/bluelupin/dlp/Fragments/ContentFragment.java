@@ -82,7 +82,7 @@ public class ContentFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_content, container, false);
         context = getActivity();
         if (Utility.isTablet(context)) {
-            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         } else {
             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }

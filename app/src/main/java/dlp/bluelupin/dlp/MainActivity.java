@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity
     private TextView title;
     public FrameLayout downloadContainer;
     private static MainActivity mainActivity;
-    CustomProgressDialog customProgressDialog;
+    private CustomProgressDialog customProgressDialog;
 
     public static MainActivity getInstace() {
         return mainActivity;
@@ -98,13 +98,13 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
         title.setTypeface(VodafoneExB);
-        if (Utility.isTablet(this)) {
-            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
+      /*  if (Utility.isTablet(this)) {
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         } else {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
+        }*/
 
-        customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
 
         downloadContainer = (FrameLayout) findViewById(R.id.downloadContainer);
         final DbHelper dbhelper = new DbHelper(this);
@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
         Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -408,7 +409,9 @@ public class MainActivity extends AppCompatActivity
             if (Consts.IS_DEBUG_LOG) {
                 Log.d(Consts.LOG_TAG, "Sync Call done in Splash");
             }
-            customProgressDialog.dismiss();
+            if (customProgressDialog != null && customProgressDialog.isShowing()) {
+                customProgressDialog.dismiss();
+            }
             setUpCourseFragment();
         }
     }

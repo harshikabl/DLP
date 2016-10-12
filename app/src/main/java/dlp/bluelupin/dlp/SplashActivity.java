@@ -56,7 +56,7 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
         context = SplashActivity.this;
         if (Utility.isTablet(this)) {
-            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         } else {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
