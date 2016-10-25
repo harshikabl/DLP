@@ -45,6 +45,7 @@ import dlp.bluelupin.dlp.Models.DownloadMediaWithParent;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Services.ServiceHelper;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -57,12 +58,13 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
     private Context context;
     private Boolean favFlage = false;
     private String type;
+    private CustomProgressDialog customProgressDialog;
 
     public DownloadingAdapter(Context context, List<DownloadMediaWithParent> list) {
         this.itemList = list;
         this.context = context;
         this.type = type;
-
+        customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
     }
 
     @Override
@@ -110,7 +112,7 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
                         intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                         intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
                         context.startService(intent);
-                        new DownloadImageTask(holder.mediaImage)
+                        new DownloadImageTask(holder.mediaImage, customProgressDialog)
                                 .execute(media.getDownload_url());
                     }
                 } else {

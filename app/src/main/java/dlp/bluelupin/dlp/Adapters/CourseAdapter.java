@@ -28,6 +28,7 @@ import dlp.bluelupin.dlp.Fragments.ChaptersFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -39,10 +40,11 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
 
     private List<Data> itemList;
     private Context context;
-
+    private CustomProgressDialog customProgressDialog;
     public CourseAdapter(Context context, List<Data> itemList) {
         this.itemList = itemList;
         this.context = context;
+        customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
     }
 
     @Override
@@ -93,7 +95,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
                         intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                         intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.URL);
                         context.startService(intent);
-                        new DownloadImageTask(holder.courseImage)
+                        new DownloadImageTask(holder.courseImage,customProgressDialog)
                                 .execute(media.getUrl());
                     }
                 } else {

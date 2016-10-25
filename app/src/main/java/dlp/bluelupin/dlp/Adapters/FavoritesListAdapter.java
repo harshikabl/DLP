@@ -24,6 +24,7 @@ import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -36,11 +37,12 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
     private Context context;
     private Boolean favFlage = false;
     private String type;
-
+    private CustomProgressDialog customProgressDialog;
     public FavoritesListAdapter(Context context, List<FavoritesData> favoritesData) {
         this.favoritesList = favoritesData;
         this.context = context;
         this.type = type;
+        customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
     }
 
     @Override
@@ -82,8 +84,10 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (media != null) {
                 //holder.chapterImage.
-                new DownloadImageTask(holder.chapterImage)
-                        .execute(media.getUrl());
+                if (Utility.isOnline(context)) {
+                    new DownloadImageTask(holder.chapterImage,customProgressDialog)
+                            .execute(media.getUrl());
+                }
             }
         }
 

@@ -39,6 +39,7 @@ import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -52,11 +53,13 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
     private Context context;
     private String type;
     private String contentTitle;
+    private CustomProgressDialog customProgressDialog;
 
     public ChaptersAdapter(Context context, List<Data> itemList, String type) {
         this.itemList = itemList;
         this.context = context;
         this.type = type;
+        customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
     }
 
     @Override
@@ -134,7 +137,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                         intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                         intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
                         context.startService(intent);
-                        new DownloadImageTask(holder.chapterImage)
+                        new DownloadImageTask(holder.chapterImage, customProgressDialog)
                                 .execute(media.getDownload_url());
                     }
                 } else {

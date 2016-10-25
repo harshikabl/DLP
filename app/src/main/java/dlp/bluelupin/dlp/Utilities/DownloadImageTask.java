@@ -19,14 +19,28 @@ import dlp.bluelupin.dlp.R;
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     ImageView bmImage;
     Data media;
+    private CustomProgressDialog customProgressDialog;
 
     public DownloadImageTask(ImageView bmImage) {
         this.bmImage = bmImage;
     }
 
+    public DownloadImageTask(ImageView bmImage, CustomProgressDialog customProgressDialog) {
+        this.bmImage = bmImage;
+        this.customProgressDialog = customProgressDialog;
+    }
+
     public DownloadImageTask(ImageView bmImage, Data media) {
         this.bmImage = bmImage;
         this.media = media;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (customProgressDialog != null) {
+            customProgressDialog.show();
+        }
     }
 
     protected Bitmap doInBackground(String... urls) {
@@ -61,8 +75,12 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     protected void onPostExecute(Bitmap result) {
 
-
         bmImage.setImageBitmap(result);
+        if (customProgressDialog != null) {
+            if (customProgressDialog.isShowing()) {
+                customProgressDialog.dismiss();
+            }
+        }
 
     }
 }

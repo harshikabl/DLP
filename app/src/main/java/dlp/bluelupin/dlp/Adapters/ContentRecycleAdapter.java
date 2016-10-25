@@ -35,6 +35,7 @@ import dlp.bluelupin.dlp.Fragments.WebFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -48,7 +49,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
     Typeface VodafoneExB;// = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
     Typeface VodafoneRg;// = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
     Typeface materialdesignicons_font;// = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
-
+    private CustomProgressDialog customProgressDialog;
     private String contentTitle;
 
     public ContentRecycleAdapter(Context context, List<Data> itemList) {
@@ -57,6 +58,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
         materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
+        customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
     }
 
 
@@ -268,7 +270,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         TextView dynamicTextView = new TextView(context);
         dynamicTextView.setTextSize(18);
         dynamicTextView.setTypeface(VodafoneRg);
-        dynamicTextView.setLineSpacing(1.1f,1.1f);
+        dynamicTextView.setLineSpacing(1.1f, 1.1f);
         dynamicTextView.setText(Html.fromHtml(resource.getContent()));
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -301,7 +303,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                     intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
                     context.startService(intent);
-                    new DownloadImageTask(dynamicImageView)
+                    new DownloadImageTask(dynamicImageView, customProgressDialog)
                             .execute(media.getDownload_url());
                 }
             } else {
@@ -412,7 +414,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                     intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.THUMBNAIL_URL);
                     context.startService(intent);
-                    new DownloadImageTask(dynamicImageView)
+                    new DownloadImageTask(dynamicImageView,customProgressDialog)
                             .execute(media.getThumbnail_url());
                 }
             } else {
