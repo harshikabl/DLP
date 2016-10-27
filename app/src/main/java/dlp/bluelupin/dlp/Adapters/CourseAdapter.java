@@ -41,6 +41,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
     private List<Data> itemList;
     private Context context;
     private CustomProgressDialog customProgressDialog;
+
     public CourseAdapter(Context context, List<Data> itemList) {
         this.itemList = itemList;
         this.context = context;
@@ -60,10 +61,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
         holder.courseTitle.setTypeface(VodafoneExB);
         holder.courseDescription.setTypeface(VodafoneRg);
-        holder.cardView.setCardBackgroundColor(Color.parseColor("#A7358C"));
+        holder.cardView.setCardBackgroundColor(Color.parseColor("#00000000"));
         holder.learnIcon.setTypeface(materialdesignicons_font);
         holder.learnIcon.setText(Html.fromHtml("&#xf5da;"));
-        holder.learnLable.setTypeface(VodafoneRg);
+        holder.learnLable.setTypeface(VodafoneExB);
 
         final DbHelper dbHelper = new DbHelper(context);
         final Data data = itemList.get(position);
@@ -71,7 +72,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
             Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (titleResource != null) {
-                holder.courseTitle.setText(titleResource.getContent());
+                holder.courseTitle.setText(Html.fromHtml(titleResource.getContent()));
             }
         }
 
@@ -79,7 +80,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
             Data descriptionResource = dbHelper.getResourceEntityByName(data.getLang_resource_description(),
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (descriptionResource != null) {
-                holder.courseDescription.setText(descriptionResource.getContent());
+                holder.courseDescription.setText(Html.fromHtml(descriptionResource.getContent()));
             }
         }
 
@@ -95,7 +96,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
                         intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                         intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.URL);
                         context.startService(intent);
-                        new DownloadImageTask(holder.courseImage,customProgressDialog)
+                        new DownloadImageTask(holder.courseImage, customProgressDialog)
                                 .execute(media.getUrl());
                     }
                 } else {

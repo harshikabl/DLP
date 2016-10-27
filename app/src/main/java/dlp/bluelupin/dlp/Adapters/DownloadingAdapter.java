@@ -95,7 +95,7 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
                 Data titleResource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
                         Utility.getLanguageIdFromSharedPreferences(context));
                 if (titleResource != null) {
-                    holder.mediaTitle.setText(titleResource.getContent());
+                    holder.mediaTitle.setText(Html.fromHtml(titleResource.getContent()));
                 }
             }
         }

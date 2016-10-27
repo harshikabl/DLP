@@ -2,6 +2,7 @@ package dlp.bluelupin.dlp.Adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,15 @@ import dlp.bluelupin.dlp.R;
 /**
  * Created by Neeraj on 7/22/2016.
  */
-public class LanguageAdapter  extends BaseAdapter {
+public class LanguageAdapter extends BaseAdapter {
 
     LayoutInflater inflater;
     Context mContext;
     List<LanguageData> languageList;
+
     public LanguageAdapter(Context context, List<LanguageData> list) {
-        this.mContext=context;
-        this.languageList=list;
+        this.mContext = context;
+        this.languageList = list;
         inflater = LayoutInflater.from(mContext);
     }
 
@@ -60,7 +62,7 @@ public class LanguageAdapter  extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.language.setText(languageList.get(position).getName());
+        holder.language.setText(Html.fromHtml(languageList.get(position).getName()));
 
         return convertView;
     }

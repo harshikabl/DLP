@@ -11,7 +11,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#A7358C"
         android:orientation="vertical">
 
         <LinearLayout
@@ -56,28 +55,30 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#A7358C"
+            android:layout_height="match_parent"
+            android:background="#A9C813"
+            android:gravity="center"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/dimValue_16"
-            android:paddingLeft="@dimen/dimValue_16"
-            android:paddingRight="@dimen/dimValue_16">
+            android:padding="@dimen/dimValue_10">
+
 
             <TextView
                 android:id="@+id/learnIcon"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="icon"
-                android:textColor="#fff"
+                android:textColor="#000"
                 android:textSize="@dimen/dimTextSize_20" />
 
             <TextView
                 android:id="@+id/learnLable"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dimValue_10"
+                android:gravity="center"
                 android:text="@string/learn"
-                android:textColor="#fff"
+                android:textColor="#000"
                 android:textSize="@dimen/dimTextSize_18" />
         </LinearLayout>
     </LinearLayout>

@@ -57,7 +57,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHo
         holder.time.setTypeface(VodafoneRg);
         holder.dateIcon.setText(Html.fromHtml("&#xf0f5;"));
         holder.timeIcon.setText(Html.fromHtml("&#xf150;"));
-        holder.notificationDescription.setText(itemList.get(position).getMessage());
+        holder.notificationDescription.setText(Html.fromHtml(itemList.get(position).getMessage()));
         //2016-09-05 10:54:43
         String sendAtdate = Utility.convertDate(itemList.get(position).getSend_at());
         if (sendAtdate != null && !sendAtdate.equals("")) {

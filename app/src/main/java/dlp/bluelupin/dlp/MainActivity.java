@@ -33,6 +33,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private TextView name, email;
+    private ImageView splashImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity
         Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
+        splashImage = (ImageView)findViewById(R.id.splashImage);
         title.setTypeface(VodafoneExB);
         customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
       /*  if (Utility.isTablet(this)) {
@@ -269,25 +272,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setUpCourseFragment() {
+        splashImage.setVisibility(View.GONE);
         FragmentManager fragmentManager = getSupportFragmentManager();
         CourseFragment fragment = CourseFragment.newInstance("", "");
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right).replace(R.id.container, fragment)
                 //.addToBackStack(null)
                 .commit();
-        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
+        //overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
-        overridePendingTransition(R.anim.out_to_right, R.anim.in_from_right);
+
     }
 
     @Override
@@ -412,6 +415,7 @@ public class MainActivity extends AppCompatActivity
             if (customProgressDialog != null && customProgressDialog.isShowing()) {
                 customProgressDialog.dismiss();
             }
+
             setUpCourseFragment();
         }
     }
@@ -430,9 +434,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDone(String workName, boolean isComplete) {
                 Log.d(Consts.LOG_TAG, "MainActivity: callContentAsync success result: " + isComplete);
-                DbHelper db = new DbHelper(MainActivity.this);
-                List<Data> data = db.getDataEntityByParentId(null);
-                Log.d(Consts.LOG_TAG, "MainActivity: data_item count: " + data.size());
+                //DbHelper db = new DbHelper(MainActivity.this);
+                //List<Data> data = db.getDataEntityByParentId(null);
+                // Log.d(Consts.LOG_TAG, "MainActivity: data_item count: " + data.size());
                 contentCallDone = true;
                 sendMessageIfAllCallsDone();
             }
@@ -452,10 +456,10 @@ public class MainActivity extends AppCompatActivity
         sc.getAllResource(request, new IAsyncWorkCompletedCallback() {
             @Override
             public void onDone(String workName, boolean isComplete) {
-                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync success result: " + isComplete);
+               /* Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(MainActivity.this);
                 List<Data> data = db.getResources();
-                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data_item count: " + data.size());
+                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data_item count: " + data.size());*/
                 resourceCallDone = true;
                 sendMessageIfAllCallsDone();
             }
@@ -475,10 +479,10 @@ public class MainActivity extends AppCompatActivity
         sc.getAllMedia(request, new IAsyncWorkCompletedCallback() {
             @Override
             public void onDone(String workName, boolean isComplete) {
-                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync success result: " + isComplete);
+               /* Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(MainActivity.this);
                 List<Data> data = db.getAllMedia();
-                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data_item count: " + data.size());
+                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data_item count: " + data.size());*/
                 mediaCallDone = true;
                 sendMessageIfAllCallsDone();
             }
@@ -498,14 +502,14 @@ public class MainActivity extends AppCompatActivity
         sc.getAllMedialanguageLatestContent(request, new IAsyncWorkCompletedCallback() {
             @Override
             public void onDone(String workName, boolean isComplete) {
-                if (Consts.IS_DEBUG_LOG) {
+              /*  if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync success result: " + isComplete);
                 }
                 DbHelper db = new DbHelper(MainActivity.this);
                 List<Data> data = db.getAllMedialanguageLatestDataEntity();
                 if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync data_item count: " + data.size());
-                }
+                }*/
                 sendMessageIfAllCallsDone();
             }
         });

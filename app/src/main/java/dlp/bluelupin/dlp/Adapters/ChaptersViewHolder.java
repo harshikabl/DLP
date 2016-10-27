@@ -1,6 +1,8 @@
 package dlp.bluelupin.dlp.Adapters;
 
+import android.content.Context;
 import android.media.Image;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,6 +12,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.R;

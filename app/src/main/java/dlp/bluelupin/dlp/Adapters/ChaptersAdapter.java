@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -22,9 +23,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -69,7 +72,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ChaptersViewHolder holder, int position) {
+    public void onBindViewHolder(final ChaptersViewHolder holder, int position) {
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
         holder.chapterTitle.setTypeface(VodafoneExB);
@@ -85,7 +88,6 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         holder.favorite.setTypeface(VodafoneRg);
         holder.download.setTypeface(VodafoneRg);
         holder.downloadIcon.setTypeface(materialdesignicons_font);
-
 
         //show and hide favorite icon layout only in chapter layout
         /*if (type.equalsIgnoreCase(Consts.CHAPTER)) {
@@ -104,7 +106,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (titleResource != null) {
                 holder.chapterTitle.setVisibility(View.VISIBLE);
-                holder.chapterTitle.setText(titleResource.getContent());
+                holder.chapterTitle.setText(Html.fromHtml(titleResource.getContent()));
             } else {
                 holder.chapterTitle.setVisibility(View.GONE);
             }
@@ -117,7 +119,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                     Utility.getLanguageIdFromSharedPreferences(context));
             if (descriptionResource != null) {
                 holder.chapterDescription.setVisibility(View.VISIBLE);
-                holder.chapterDescription.setText(descriptionResource.getContent());
+                holder.chapterDescription.setText(Html.fromHtml(descriptionResource.getContent()));
             } else {
                 holder.chapterDescription.setVisibility(View.GONE);
             }
@@ -141,45 +143,57 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                                 .execute(media.getDownload_url());
                     }
                 } else {
-                    File imgFile = new File(media.getLocalFilePath());
+                   /* File imgFile = new File(media.getLocalFilePath());
                     if (imgFile.exists()) {
                         Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                         holder.chapterImage.setImageBitmap(bitmap);
-                    }
+                    }*/
+                    LoadImageFromDataBase imageFromDataBase = new LoadImageFromDataBase(holder.chapterImage);
+                    imageFromDataBase.execute(media.getLocalFilePath());
                 }
 
             }
         }
 
-        DbHelper dbhelper = new DbHelper(context);
+        final DbHelper dbhelper = new DbHelper(context);
         // REMOVE BELOW IN PROD
         //dbHelper.setLocalPathOfAllMediaToNull();
         // REMOVE ABOVE IN PROD
 
+        new AsyncTask<String, Void, List<Data>>() {
 
-        final List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId(), Utility.getLanguageIdFromSharedPreferences(context));
-        if (Consts.IS_DEBUG_LOG) {
-            Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
-        }
-        if (resourcesToDownloadList.size() <= 0) {
-            // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
-            holder.downloadIcon.setText(Html.fromHtml("&#xf12c;"));
-            holder.download.setText(context.getString(R.string.update));
-        } else {
-            holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
-            // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
-            holder.download.setText(context.getString(R.string.download_update));
-        }
-        //if meadia not downloaded then show download_layout
-        if (data.getThumbnail_media_id() != 0) {
-            final Data media = dbHelper.getDownloadMediaEntityById(data.getThumbnail_media_id());
-            if (media != null) {
-                holder.download_layout.setVisibility(View.VISIBLE);
+            @Override
+            protected List<Data> doInBackground(String... params) {
+                final List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId(), Utility.getLanguageIdFromSharedPreferences(context));
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
+                }
 
-                holder.download_layout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (resourcesToDownloadList.size() > 0) {
+                return resourcesToDownloadList;
+            }
+
+            @Override
+            protected void onPostExecute(final List<Data> resourcesToDownloadList) {
+                super.onPostExecute(resourcesToDownloadList);
+                if (resourcesToDownloadList.size() <= 0) {
+                    // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
+                    holder.downloadIcon.setText(Html.fromHtml("&#xf12c;"));
+                    holder.download.setText(context.getString(R.string.update));
+                } else {
+                    holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
+                    // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
+                    holder.download.setText(context.getString(R.string.download_update));
+                }
+                //if meadia not downloaded then show download_layout
+                if (data.getThumbnail_media_id() != 0) {
+                    final Data media = dbHelper.getDownloadMediaEntityById(data.getThumbnail_media_id());
+                    if (media != null) {
+                        holder.download_layout.setVisibility(View.VISIBLE);
+
+                        holder.download_layout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (resourcesToDownloadList.size() > 0) {
 //                        {
 //                            List<Data> resourceListToDownload = new ArrayList<Data>();
 //                            List<Data> resourceToDownload = dbhelper.getThumbnailsToDownload(data_item.getId(),resourceListToDownload);
@@ -190,9 +204,9 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 //                                }
 //                            }
 //                        }
-                            if (Utility.isOnline(context)) {
-                                Gson gson = new Gson();
-                                String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
+                                    if (Utility.isOnline(context)) {
+                                        Gson gson = new Gson();
+                                        String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
 
                                /* DownloadBasedOnParentId downloadBasedOnParentId = new DownloadBasedOnParentId();
                                 downloadBasedOnParentId.setStrJsonResourcesToDownloadList(strJsonResourcesToDownloadList);
@@ -200,26 +214,29 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                                 Data media = dbHelper.getMediaEntityByIdAndLaunguageId(media.getParent_id(), Utility.getLanguageIdFromSharedPreferences(context));
                                Log.d(Consts.LOG_TAG, "media.getName************** " + media.getName());*/
 
-                                FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                                DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList, data.getId());
-                                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
-                                transaction.replace(R.id.container, fragment)
-                                        .addToBackStack(null)
-                                        .commit();
-                            } else {
-                                Utility.alertForErrorMessage(context.getString(R.string.online_msg), context);
+                                        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                                        DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList, data.getId());
+                                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                        transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                                        transaction.replace(R.id.container, fragment)
+                                                .addToBackStack(null)
+                                                .commit();
+                                    } else {
+                                        Utility.alertForErrorMessage(context.getString(R.string.online_msg), context);
+                                    }
+
+                                }
                             }
+                        });
 
-                        }
+                    } else {
+
+                        holder.download_layout.setVisibility(View.GONE);
                     }
-                });
-
-            } else {
-
-                holder.download_layout.setVisibility(View.GONE);
+                }
             }
-        }
+        }.execute();
+
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -332,4 +349,44 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             holder.favorite.setText(context.getString(R.string.mark_as_favourite));
         }
     }
+
+    private class LoadImageFromDataBase extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public LoadImageFromDataBase(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            String localFilePath = params[0];
+            File imgFile = new File(localFilePath);
+            Bitmap bitmap = null;
+            if (imgFile.exists()) {
+                bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            if (result != null) {
+                bmImage.setImageBitmap(result);
+            }
+            if (customProgressDialog != null) {
+                if (customProgressDialog.isShowing()) {
+                    customProgressDialog.dismiss();
+                }
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            customProgressDialog.show();
+        }
+
+
+    }
+
+
 }

@@ -505,7 +505,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public Data getResourceEntityByName(String name, int language_id) {
 
-        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity WHERE name = '" + name + "' and language_id =" + language_id + "";
+        String query = "Select clientId, server_id , name , content , language_id ,created_at , updated_at , deleted_at FROM ResourceEntity WHERE name = '" + name + "' and language_id =" + language_id + " and deleted_at IS  NULL";
 
         SQLiteDatabase db = this.getReadableDatabase();
 

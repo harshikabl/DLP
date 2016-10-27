@@ -1,77 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="#e60000"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/dimValue_10"
-    android:paddingLeft="@dimen/dimValue_16"
-    android:paddingRight="@dimen/dimValue_16"
-    android:paddingTop="@dimen/dimValue_10"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.8"
+        android:background="#929495" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.8"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/dimValue_10"
+        android:paddingLeft="@dimen/dimValue_16"
+        android:paddingRight="@dimen/dimValue_16"
+        android:paddingTop="@dimen/dimValue_10">
+
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.2"
-            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/logoImage"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/logoImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/applogo" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/applogo" />
+                android:layout_marginLeft="@dimen/dimValue_10"
+                android:layout_marginTop="@dimen/dimValue_10"
+                android:layout_weight="0.8"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/nav_header_vertical_spacing"
+                    android:text="Android Studio"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/dimTextSize_25" />
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="android.studio@android.com"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/dimTextSize_16" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dimValue_10"
-            android:layout_marginTop="@dimen/dimValue_10"
-            android:layout_weight="0.8"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:gravity="bottom|right">
 
             <TextView
-                android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/nav_header_vertical_spacing"
-                android:text="Android Studio"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:id="@+id/logOut"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:text="Logo"
                 android:textColor="#ffffff"
                 android:textSize="@dimen/dimTextSize_25" />
-
-            <TextView
-                android:id="@+id/email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="android.studio@android.com"
-                android:textColor="#ffffff"
-                android:textSize="@dimen/dimTextSize_16" />
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.2"
-        android:gravity="bottom|right">
-
-        <TextView
-            android:id="@+id/logOut"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="bottom"
-            android:text="Logo"
-            android:textColor="#ffffff"
-            android:textSize="@dimen/dimTextSize_25" />
-    </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

@@ -117,10 +117,10 @@ public class BackgroundSyncService extends IntentService {
         sc.getAllResource(request, new IAsyncWorkCompletedCallback() {
             @Override
             public void onDone(String workName, boolean isComplete) {
-                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync success result: " + isComplete);
+              /*  Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(BackgroundSyncService.this);
                 List<Data> data = db.getResources();
-                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data_item count: " + data.size());
+                Log.d(Consts.LOG_TAG, "MainActivity: callResourceAsync data_item count: " + data.size());*/
                 resourceCallDone = true;
                 sendMessageIfAllCallsDone(extras);
             }
