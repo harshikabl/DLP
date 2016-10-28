@@ -182,7 +182,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                 } else {
                     holder.downloadIcon.setText(Html.fromHtml("&#xf1da;"));
                     // holder.downloadIcon.setTextColor(Color.parseColor("#ffffff"));
-                    holder.download.setText(context.getString(R.string.download_update));
+                    holder.download.setText(context.getString(R.string.Take_Offline));
                 }
                 //if meadia not downloaded then show download_layout
                 if (data.getThumbnail_media_id() != 0) {
@@ -213,7 +213,6 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                                 downloadBasedOnParentId.setParentId(media.getParent_id());
                                 Data media = dbHelper.getMediaEntityByIdAndLaunguageId(media.getParent_id(), Utility.getLanguageIdFromSharedPreferences(context));
                                Log.d(Consts.LOG_TAG, "media.getName************** " + media.getName());*/
-
                                         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
                                         DownloadingFragment fragment = DownloadingFragment.newInstance(strJsonResourcesToDownloadList, data.getId());
                                         FragmentTransaction transaction = fragmentManager.beginTransaction();

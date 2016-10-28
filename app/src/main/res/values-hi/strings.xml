@@ -100,5 +100,6 @@
     <string name="download_update">अद्यतन डाउनलोड करे</string>
     <string name="update">अद्यतन</string>
     <string name="favourite">पसंदीदा</string>
+    <string name="Take_Offline">ऑफलाइन ले लो</string>
 
 </resources>

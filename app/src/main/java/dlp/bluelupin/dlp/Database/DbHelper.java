@@ -29,7 +29,7 @@ import dlp.bluelupin.dlp.Utilities.Utility;
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "dlp_db.db";
 
     public DbHelper(Context context) {
@@ -91,8 +91,8 @@ public class DbHelper extends SQLiteOpenHelper {
         //clientId , server_id , name , type , url , file_path , language_id ,created_at , updated_at , deleted_at
         db.execSQL(CREATE_DownloadMediaEntity_TABLE);
 
-        String CREATE_DownloadingFileEntity_TABLE = "CREATE TABLE DownloadingFileEntity(id INTEGER PRIMARY KEY, MediaId INTEGER, progress INTEGER, parentId INTEGER)";
-        //id , MediaId , progress
+        String CREATE_DownloadingFileEntity_TABLE = "CREATE TABLE DownloadingFileEntity(id INTEGER PRIMARY KEY, MediaId INTEGER, progress INTEGER, parentId INTEGER,isDownloaded INTEGER NOT NULL DEFAULT 0)";
+        //id , MediaId , progress,isDownloaded INTEGER
         db.execSQL(CREATE_DownloadingFileEntity_TABLE);
 
 
@@ -1320,6 +1320,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("MediaId", ob.getId());
         values.put("progress", ob.getProgress());
         values.put("parentId", ob.getParent_id());
+        values.put("isDownloaded", ob.getIsDownloaded());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -1345,9 +1346,53 @@ public class DbHelper extends SQLiteOpenHelper {
         return i > 0;
     }
 
+    //update isDownloaded flag for show downloaded file
+    public boolean updateDownloadedFileFlag(int mediaId, int downloadFlag) {
+
+        ContentValues values = new ContentValues();
+        values.put("isDownloaded", downloadFlag);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (mediaId != 0) {
+            i = db.update("DownloadingFileEntity", values, " MediaId = " + mediaId + " ", null);
+        }
+
+        db.close();
+        return i > 0;
+    }
+
     //get All Downloading Media data
     public List<Data> getAllDownloadingMediaFile(int languageId) {
-        String query = "SELECT MediaId , progress, parentId from DownloadingFileEntity ";
+        String query = "SELECT MediaId , progress, parentId from DownloadingFileEntity where isDownloaded=0";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<Data> list = new ArrayList<Data>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+//                Data ob = new Data();
+//                ob.setMediaId(Integer.parseInt(cursor.getString(0)));
+//                ob.setProgress(Integer.parseInt(cursor.getString(1)));
+                Data media = getMediaEntityByIdAndLaunguageId(Integer.parseInt(cursor.getString(0)), languageId);
+                if (media != null) {
+                    media.setParent_id(Integer.parseInt(cursor.getString(2)));
+                    list.add(media);
+
+                }
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
+    //get All Downloaded Media data
+    public List<Data> getAllDownloadedMediaFile(int languageId) {
+        String query = "SELECT MediaId , progress, parentId from DownloadingFileEntity where isDownloaded=1";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -1384,6 +1429,16 @@ public class DbHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    //delete downloaded file  by MediaId
+    public boolean deleteFileDownloadedByMediaId(int id) {
+        boolean result = false;
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "MediaId = '" + id + "' ";
+        db.delete("DownloadingFileEntity", query, null);
+        db.close();
+        result = true;
+        return result;
+    }
 
     //Medialanguage Latest DataEntity
     public boolean upsertMedialanguageLatestDataEntity(Data ob) {

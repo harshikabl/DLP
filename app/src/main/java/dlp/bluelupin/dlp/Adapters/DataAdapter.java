@@ -62,6 +62,7 @@ public class DataAdapter extends BaseAdapter {
         }
         holder.progressBar.setProgress(dataList.get(position).getProgress());
 
+
         return convertView;
     }
 

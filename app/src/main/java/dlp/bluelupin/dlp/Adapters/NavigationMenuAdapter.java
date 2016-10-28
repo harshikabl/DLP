@@ -37,6 +37,7 @@ import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
 import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
+import dlp.bluelupin.dlp.Fragments.ShowDownloadedMediaFileFragment;
 import dlp.bluelupin.dlp.Fragments.TermsOfUseFragment;
 import dlp.bluelupin.dlp.Fragments.UserProfileFragment;
 import dlp.bluelupin.dlp.MainActivity;
@@ -149,8 +150,8 @@ public class NavigationMenuAdapter extends BaseAdapter {
                     TermsOfUseFragment aboutUs = TermsOfUseFragment.newInstance("", "");
                     navigateToFragment(aboutUs);
                 } else if (menuList.get(position).toString().equalsIgnoreCase("Downloads")) {
-                    DownloadingFragment aboutUs = DownloadingFragment.newInstance("");
-                    navigateToFragment(aboutUs);
+                    ShowDownloadedMediaFileFragment downloaded = ShowDownloadedMediaFileFragment.newInstance("");
+                    navigateToFragment(downloaded);
                 }
                 int pos = (int) v.getTag();
                 if (selectedPosition.contains(pos)) {

@@ -192,6 +192,9 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
             }
         }
         List<Data> dataList = dbHelper.getAllDownloadingMediaFile(Utility.getLanguageIdFromSharedPreferences(context));
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "**** media dataList: " + dataList);
+        }
         downloadMediaWithParentList = new ArrayList<DownloadMediaWithParent>();
         downloadMediaWithParentList.addAll(GetDownloadMediaWithParent(dataList));
 

@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -360,7 +361,10 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                    /* Intent intent = new Intent(context, VideoPlayerActivity.class);
                     intent.putExtra("videoUrl", url);
                     context.startActivity(intent);*/
-                                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                intent.putExtra("force_fullscreen", true);
+                                context.startActivity(intent);
+
                             }
                         }
                     }
@@ -410,11 +414,17 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 if (Utility.isOnline(context)) {
                     Gson gson = new Gson();
                     Intent intent = new Intent(context, DownloadService1.class);
-                    String strJsonmedia = gson.toJson(media);
+                    String strJsonmedia = null;
+                    try {
+                         strJsonmedia = gson.toJson(media);
+                    }catch (Exception e){
+                        Log.d(Consts.LOG_TAG, "Error Message: " + e.getMessage());
+                    }
+
                     intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                     intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.THUMBNAIL_URL);
                     context.startService(intent);
-                    new DownloadImageTask(dynamicImageView,customProgressDialog)
+                    new DownloadImageTask(dynamicImageView, customProgressDialog)
                             .execute(media.getThumbnail_url());
                 }
             } else {

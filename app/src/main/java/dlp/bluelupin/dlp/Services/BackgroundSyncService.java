@@ -94,10 +94,10 @@ public class BackgroundSyncService extends IntentService {
         sc.getAllContent(request, new IAsyncWorkCompletedCallback() {
             @Override
             public void onDone(String workName, boolean isComplete) {
-                Log.d(Consts.LOG_TAG, "MainActivity: callContentAsync success result: " + isComplete);
+               /* Log.d(Consts.LOG_TAG, "MainActivity: callContentAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(BackgroundSyncService.this);
                 List<Data> data = db.getDataEntityByParentId(null);
-                Log.d(Consts.LOG_TAG, "MainActivity: data_item count: " + data.size());
+                Log.d(Consts.LOG_TAG, "MainActivity: data_item count: " + data.size());*/
                 contentCallDone = true;
                 sendMessageIfAllCallsDone(extras);
             }
@@ -140,10 +140,10 @@ public class BackgroundSyncService extends IntentService {
         sc.getAllMedia(request, new IAsyncWorkCompletedCallback() {
             @Override
             public void onDone(String workName, boolean isComplete) {
-                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync success result: " + isComplete);
+               /* Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync success result: " + isComplete);
                 DbHelper db = new DbHelper(BackgroundSyncService.this);
                 List<Data> data = db.getAllMedia();
-                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data_item count: " + data.size());
+                Log.d(Consts.LOG_TAG, "MainActivity: callMediaAsync data_item count: " + data.size());*/
                 mediaCallDone = true;
                 sendMessageIfAllCallsDone(extras);
             }

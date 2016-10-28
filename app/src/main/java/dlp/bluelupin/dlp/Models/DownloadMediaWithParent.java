@@ -9,6 +9,16 @@ public class DownloadMediaWithParent {
     private List<Data> strJsonResourcesToDownloadList;
     private int parentId;
 
+    public int getMediaId() {
+        return mediaId;
+    }
+
+    public void setMediaId(int mediaId) {
+        this.mediaId = mediaId;
+    }
+
+    private int mediaId;
+
     public List<Data> getStrJsonResourcesToDownloadList() {
         return strJsonResourcesToDownloadList;
     }

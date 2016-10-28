@@ -3,6 +3,8 @@ package dlp.bluelupin.dlp;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,10 +15,12 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -36,6 +40,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,6 +94,7 @@ public class MainActivity extends AppCompatActivity
 
     private TextView name, email;
     private ImageView splashImage;
+    AlertDialog alert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,14 +105,16 @@ public class MainActivity extends AppCompatActivity
         Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
-        splashImage = (ImageView)findViewById(R.id.splashImage);
+        splashImage = (ImageView) findViewById(R.id.splashImage);
         title.setTypeface(VodafoneExB);
         customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
-      /*  if (Utility.isTablet(this)) {
+        if (Utility.isTablet(this)) {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         } else {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }*/
+        }
+
+        //alertForProgressBar();
 
 
         downloadContainer = (FrameLayout) findViewById(R.id.downloadContainer);
@@ -178,6 +186,17 @@ public class MainActivity extends AppCompatActivity
         });
 
         readExternalFilesAsync();
+
+    }
+
+    //alert for progress bar
+    public void alertForProgressBar() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        alert = builder.create();
+        alert.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
+        View view = alert.getLayoutInflater().inflate(R.layout.progressbar_alert, null);
+        alert.setCustomTitle(view);
+        alert.setCanceledOnTouchOutside(false);
     }
 
     //set user profile
@@ -208,13 +227,12 @@ public class MainActivity extends AppCompatActivity
             protected void onPreExecute() {
                 super.onPreExecute();
                 customProgressDialog.show();
+                //alert.show();
             }
 
             @Override
             protected void onPostExecute(Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
-                //customProgressDialog.dismiss();
-                //customProgressDialog.show();
 
                 if (Utility.isOnline(MainActivity.this)) {
                     callSync();
@@ -272,13 +290,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setUpCourseFragment() {
-        splashImage.setVisibility(View.GONE);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        CourseFragment fragment = CourseFragment.newInstance("", "");
-        fragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right).replace(R.id.container, fragment)
-                //.addToBackStack(null)
-                .commit();
+        //splashImage.setVisibility(View.GONE);
+        try {
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            CourseFragment fragment = CourseFragment.newInstance("", "");
+            fragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right).replace(R.id.container, fragment)
+                    //.addToBackStack(null)
+                    .commit();
+
+        } catch (Exception e) {
+            Log.d(Consts.LOG_TAG, "Error Message: " + e.getMessage());
+        }
         //overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
 

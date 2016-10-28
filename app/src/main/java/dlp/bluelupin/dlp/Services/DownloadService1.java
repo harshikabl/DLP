@@ -55,8 +55,7 @@ public class DownloadService1 extends IntentService {
             strJsonMedia = extras.getString(Consts.EXTRA_MEDIA);
 
             urlPropertyForDownload = extras.getString(Consts.EXTRA_URLPropertyForDownload);
-            if(urlPropertyForDownload == null)
-            {
+            if (urlPropertyForDownload == null) {
                 urlPropertyForDownload = Consts.DOWNLOAD_URL;
             }
             Gson gson = new Gson();
@@ -184,16 +183,14 @@ public class DownloadService1 extends IntentService {
 
     private void UpdateMediaInDB(String localPath) {
         DbHelper dbHelper = new DbHelper(DownloadService1.this);
-        if(urlPropertyForDownload.equalsIgnoreCase(Consts.THUMBNAIL_URL))
-        {
+        if (urlPropertyForDownload.equalsIgnoreCase(Consts.THUMBNAIL_URL)) {
             media.setThumbnail_url_Local_file_path(localPath);
             if (dbHelper.updateMediaThumbnailLocalFilePathEntity(media)) {
                 if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "successfully downloaded and THUMBNAIL local file updated: media Id:" + media.getId() + " downloading Url: " + media.getDownload_url() + " at " + localPath);
                 }
             }
-        }
-        else {
+        } else {
             media.setLocalFilePath(localPath);
             if (dbHelper.updateMediaLanguageLocalFilePathEntity(media)) {
                 if (Consts.IS_DEBUG_LOG) {
@@ -222,6 +219,8 @@ public class DownloadService1 extends IntentService {
     private void onDownloadComplete(DownloadData downlaodData) {
 
         //DownloadData download = new DownloadData();
+        DbHelper dbHelper = new DbHelper(DownloadService1.this);
+        dbHelper.updateDownloadedFileFlag(downlaodData.getId(), 1);
         downlaodData.setProgress(100);
         sendIntent(downlaodData);
 
@@ -235,7 +234,7 @@ public class DownloadService1 extends IntentService {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
-        intent.putExtra(Consts.EXTRA_MEDIA,strJsonMedia);
+        intent.putExtra(Consts.EXTRA_MEDIA, strJsonMedia);
         LocalBroadcastManager.getInstance(DownloadService1.this).sendBroadcast(intent);
         //notificationManager.cancel(0);
     }
