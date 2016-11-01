@@ -79,7 +79,7 @@
                 <TextView
                     android:id="@+id/mediaDescription"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/dimValue_10"
                     android:text=""
                     android:textColor="#4a4d4e"
