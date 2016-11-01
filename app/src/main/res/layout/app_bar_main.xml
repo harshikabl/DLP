@@ -48,6 +48,14 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/app_bar">
 
+            <ImageView
+                android:id="@+id/splashImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/homeimg"
+                android:visibility="visible" />
+
             <FrameLayout
                 android:id="@+id/downloadContainer"
                 android:layout_width="match_parent"

@@ -281,8 +281,9 @@
                         android:id="@+id/tryotp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:padding="@dimen/dimValue_10"
+                        android:paddingBottom="@dimen/dimValue_10"
+                        android:paddingRight="@dimen/dimValue_10"
+                        android:paddingTop="@dimen/dimValue_10"
                         android:text="@string/try_otp"
                         android:textColor="#4a4d4e"
                         android:textSize="@dimen/dimTextSize_16" />

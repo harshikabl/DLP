@@ -93,8 +93,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private TextView name, email;
-    private ImageView splashImage;
     AlertDialog alert;
+    private ImageView splashImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity
         Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
-        splashImage = (ImageView) findViewById(R.id.splashImage);
         title.setTypeface(VodafoneExB);
         customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
         if (Utility.isTablet(this)) {
@@ -119,6 +118,7 @@ public class MainActivity extends AppCompatActivity
 
         downloadContainer = (FrameLayout) findViewById(R.id.downloadContainer);
         final DbHelper dbhelper = new DbHelper(this);
+        splashImage = (ImageView) findViewById(R.id.splashImage);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -290,19 +290,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setUpCourseFragment() {
-        //splashImage.setVisibility(View.GONE);
-        try {
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            CourseFragment fragment = CourseFragment.newInstance("", "");
-            fragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right).replace(R.id.container, fragment)
-                    //.addToBackStack(null)
-                    .commit();
-
-        } catch (Exception e) {
+        splashImage.setVisibility(View.GONE);
+        //try {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        CourseFragment fragment = CourseFragment.newInstance("", "");
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right).replace(R.id.container, fragment)
+                //.addToBackStack(null)
+                .commitAllowingStateLoss();
+       /* } catch (Exception e) {
             Log.d(Consts.LOG_TAG, "Error Message: " + e.getMessage());
-        }
+        }*/
         //overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
     }
 
