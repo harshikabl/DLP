@@ -33,10 +33,10 @@
 
     <!-- verification screen text-->
     <string name="description">OTP has been sent to your provided mobile number. We will detect it automatically within 10 seconds or you can enter OTP manually here.</string>
-    <string name="otp_text">Enter 6 digit OTP code you recevied</string>
+    <string name="otp_text">Enter 6 digit OTP code you received</string>
     <string name="otp_msg">OTP is only active for 5 minutes</string>
     <string name="verify">VERIFY</string>
-    <string name="try_otp">Didnt receive OTP ? TRY</string>
+    <string name="try_otp">Didn\'t receive OTP? TRY</string>
     <string name="resend_otp">RESEND OTP</string>
     <string name="verification_title">Verification</string>
     <string name="enter_otp">Please enter OTP</string>
