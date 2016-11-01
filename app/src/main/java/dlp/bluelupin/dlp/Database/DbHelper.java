@@ -718,7 +718,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 mediaLanguage.setThumbnail_url_Local_file_path(ob.getThumbnail_url_Local_file_path());
                 ob = mediaLanguage;
             } else {
-                Log.d(Consts.LOG_TAG, "** Getting default language 1 medialanguage,/n getMediaEntityByIdAndLaunguageId: mediaLanguage is null for languageId:" + languageId + "media:" + ob);
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "** Getting default language 1 medialanguage,/n getMediaEntityByIdAndLaunguageId: mediaLanguage is null for languageId:" + languageId + "media:" + ob);
+                }
                 Data mediaDefualtLanguage = getMedialanguageLatestDataEntityByMediaId(ob.getId(), 1);
                 if (mediaDefualtLanguage != null) {
                     mediaDefualtLanguage.setType(ob.getType());

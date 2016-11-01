@@ -67,8 +67,9 @@ public class SplashActivity extends Activity {
     //call service at every 5 hours of intervel
     private void invokeServiceForBackgroundUpdate() {
         calendar = (GregorianCalendar) Calendar.getInstance();
-        if (Consts.IS_DEBUG_LOG)
+        if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "starting invokeServiceForBackgroundUpdate" + Calendar.getInstance().getTime());
+        }
 
         Intent myIntent = new Intent(SplashActivity.this, BackgroundSyncService.class);
         Messenger messenger = new Messenger(new Handler() {

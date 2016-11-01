@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity
 
         //alertForProgressBar();
 
-
+        Utility.setLangRecreate(MainActivity.this, Utility.getLanguageCodeFromSharedPreferences(MainActivity.this));
         downloadContainer = (FrameLayout) findViewById(R.id.downloadContainer);
         final DbHelper dbhelper = new DbHelper(this);
         splashImage = (ImageView) findViewById(R.id.splashImage);
@@ -407,8 +407,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setScreenTitle(String heading) {
-        this.setTitle(heading);
-        title.setText(heading);
+        this.setTitle(Html.fromHtml(heading));
+        title.setText(Html.fromHtml(heading));
     }
 
 
