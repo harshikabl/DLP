@@ -367,6 +367,10 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 
                             }
                         }
+                        else
+                        {
+                            Utility.alertForErrorMessage(context.getString(R.string.online_msg), context);
+                        }
                     }
                     break;
             }
@@ -433,7 +437,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                     dynamicImageView.setImageBitmap(bitmap);
                 }
-            }
+           }
         }
 
         LinearLayout linearLayout = new LinearLayout(context);

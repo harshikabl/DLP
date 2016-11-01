@@ -130,10 +130,13 @@ public class DownloadService1 extends IntentService {
         if (body != null) {
             fileSize = body.contentLength();
 
-
-            InputStream bis = new BufferedInputStream(body.byteStream(), 1024 * 8);
-
             String localFilePath = Consts.outputDirectoryLocation + media.getFile_path();
+            InputStream bis = new BufferedInputStream(body.byteStream(), 1024 * 8);
+            if (urlPropertyForDownload.equalsIgnoreCase(Consts.THUMBNAIL_URL)) {
+                if(media.getThumbnail_file_path() != null)
+                    localFilePath = Consts.outputDirectoryLocation + media.getThumbnail_file_path();
+            }
+
             File outputFile = new File(localFilePath);
 
             OutputStream output = new FileOutputStream(outputFile);
@@ -183,6 +186,12 @@ public class DownloadService1 extends IntentService {
 
     private void UpdateMediaInDB(String localPath) {
         DbHelper dbHelper = new DbHelper(DownloadService1.this);
+        if(media != null && media.getType() == "Youtube")
+        {
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "successfully downloaded and THUMBNAIL local file updated: media Id:" + media.getId() + " getThumbnail_url_Local_file_path Url: " + media.getThumbnail_url_Local_file_path() + " at " + localPath);
+            }
+        }
         if (urlPropertyForDownload.equalsIgnoreCase(Consts.THUMBNAIL_URL)) {
             media.setThumbnail_url_Local_file_path(localPath);
             if (dbHelper.updateMediaThumbnailLocalFilePathEntity(media)) {
