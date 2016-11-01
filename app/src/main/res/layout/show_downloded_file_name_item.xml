@@ -15,7 +15,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.9"
             android:maxLines="2"
-            android:padding="@dimen/dimValue_10"
+            android:paddingBottom="@dimen/dimValue_22"
+            android:paddingLeft="@dimen/dimValue_10"
+            android:paddingRight="@dimen/dimValue_10"
+            android:paddingTop="@dimen/dimValue_10"
             android:text=""
             android:textColor="#000"
             android:textSize="@dimen/dimTextSize_16" />
