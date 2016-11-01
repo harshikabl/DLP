@@ -36,6 +36,7 @@ import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
+import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -165,6 +166,8 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
             String code = parts[0];
             String part2 = parts[1];
             Utility.setLanguageIntoSharedPreferences(context, data.get(langpos).getId(), code, langpos);
+            LogAnalyticsHelper analyticsHelper = new LogAnalyticsHelper(context);
+            analyticsHelper.logSetUserProperty("Language", code);
         }
     }
 

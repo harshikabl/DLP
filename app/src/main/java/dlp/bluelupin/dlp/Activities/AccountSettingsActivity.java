@@ -42,6 +42,7 @@ import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.EnumLanguage;
+import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -194,6 +195,8 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
             String code = parts[0];
             String part2 = parts[1];
             Utility.setLanguageIntoSharedPreferences(this, data.get(langpos).getId(), code, langpos);
+            LogAnalyticsHelper analyticsHelper = new LogAnalyticsHelper(this);
+            analyticsHelper.logSetUserProperty("Language", code);
         }
     }
 

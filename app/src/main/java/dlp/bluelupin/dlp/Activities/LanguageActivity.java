@@ -40,6 +40,7 @@ import dlp.bluelupin.dlp.Services.ServiceCaller;
 import dlp.bluelupin.dlp.Services.ServiceHelper;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.EnumLanguage;
+import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -162,6 +163,8 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
             String code = parts[0];
             String part2 = parts[1];
             Utility.setLanguageIntoSharedPreferences(this, data.get(langpos).getId(), code, langpos);
+            LogAnalyticsHelper analyticsHelper = new LogAnalyticsHelper(this);
+            analyticsHelper.logSetUserProperty("Language", code);
         }
        /* switch (langpos) {
             case 0: //English

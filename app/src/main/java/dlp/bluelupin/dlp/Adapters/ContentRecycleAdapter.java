@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -38,6 +39,7 @@ import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
+import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -52,6 +54,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
     Typeface materialdesignicons_font;// = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
     private CustomProgressDialog customProgressDialog;
     private String contentTitle;
+    LogAnalyticsHelper analyticsHelper = null;
 
     public ContentRecycleAdapter(Context context, List<Data> itemList) {
         this.itemList = itemList;
@@ -81,6 +84,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
     @Override
     public void onBindViewHolder(ContentViewHolder holder, int position) {
 
+        analyticsHelper = new LogAnalyticsHelper(context);
         final DbHelper dbHelper = new DbHelper(context);
         final Data data = itemList.get(position);
         holder.contentContainer.removeAllViews();
@@ -156,6 +160,10 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
             final DbHelper dbHelper = new DbHelper(context);
             Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getMedia_id(),
                     Utility.getLanguageIdFromSharedPreferences(context));
+
+            analyticsHelper.logEvent(media.getFile_path() + " Seen", null);
+            logAnalytics("Video", media);
+
             if (media != null) {
                 if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " video Url: " + media.getUrl());
@@ -173,8 +181,11 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                         Utility.getLanguageIdFromSharedPreferences(context));
                 if (titleResource != null) {
                     contentTitle = titleResource.getContent();
+                    analyticsHelper.logEvent(titleResource.getContent() + " Visited", null);
                 }
             }
+            logAnalytics("Url", data);
+
             FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
             WebFragment fragment = WebFragment.newInstance(data.getUrl(), contentTitle);
             FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -366,9 +377,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                                 context.startActivity(intent);
 
                             }
-                        }
-                        else
-                        {
+                        } else {
                             Utility.alertForErrorMessage(context.getString(R.string.online_msg), context);
                         }
                     }
@@ -420,8 +429,8 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     Intent intent = new Intent(context, DownloadService1.class);
                     String strJsonmedia = null;
                     try {
-                         strJsonmedia = gson.toJson(media);
-                    }catch (Exception e){
+                        strJsonmedia = gson.toJson(media);
+                    } catch (Exception e) {
                         Log.d(Consts.LOG_TAG, "Error Message: " + e.getMessage());
                     }
 
@@ -437,7 +446,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                     dynamicImageView.setImageBitmap(bitmap);
                 }
-           }
+            }
         }
 
         LinearLayout linearLayout = new LinearLayout(context);
@@ -477,5 +486,15 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
             return this.itemList.size();
         }
         return 0;
+    }
+
+    private void logAnalytics(String contentType, Data data) {
+
+        if (data != null && data.getFile_path() != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString("Name", data.getFile_path());
+            bundle.putString("Language", Utility.getLanguageIdFromSharedPreferences(context) + "");
+            analyticsHelper.logEvent(contentType, bundle);
+        }
     }
 }
