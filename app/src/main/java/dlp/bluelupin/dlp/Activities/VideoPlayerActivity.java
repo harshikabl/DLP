@@ -79,7 +79,10 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        player.release();
+        if ( pDialog!=null && pDialog.isShowing() ){
+            pDialog.dismiss();
+        }
+        player.reset();
     }
 
     @Override

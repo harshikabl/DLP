@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
 
     private TextView name, email;
     AlertDialog alert;
-    private ImageView splashImage;
+    public ImageView splashImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity
 
     private void readExternalFilesAsync() {
         Utility.verifyStoragePermissions((Activity) MainActivity.this);
-
+        splashImage.setVisibility(View.VISIBLE);
         //final CustomProgressDialog customProgressDialog = new CustomProgressDialog(MainActivity.this, R.mipmap.syc);
         new AsyncTask<Void, Void, Boolean>() {
 
@@ -238,6 +238,7 @@ public class MainActivity extends AppCompatActivity
                     callSync();
                 } else {
                     customProgressDialog.dismiss();
+                    //alert.dismiss();
                     Utility.alertForErrorMessage(getString(R.string.online_msg), MainActivity.this);
                     setUpCourseFragment();
                 }
@@ -290,7 +291,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setUpCourseFragment() {
-        splashImage.setVisibility(View.GONE);
         //try {
         FragmentManager fragmentManager = getSupportFragmentManager();
         CourseFragment fragment = CourseFragment.newInstance("", "");
@@ -411,6 +411,14 @@ public class MainActivity extends AppCompatActivity
         title.setText(Html.fromHtml(heading));
     }
 
+    public void hideSplashImage(Boolean flag) {
+        if(flag){
+            splashImage.setVisibility(View.GONE);
+        }else{
+            splashImage.setVisibility(View.VISIBLE);
+        }
+
+    }
 
     public void setdownloadContainer(boolean on) {
         if (on) {
@@ -437,7 +445,7 @@ public class MainActivity extends AppCompatActivity
             if (customProgressDialog != null && customProgressDialog.isShowing()) {
                 customProgressDialog.dismiss();
             }
-
+            // alert.dismiss();
             setUpCourseFragment();
         }
     }
@@ -535,6 +543,7 @@ public class MainActivity extends AppCompatActivity
                 sendMessageIfAllCallsDone();
             }
         });
+
     }
 
 

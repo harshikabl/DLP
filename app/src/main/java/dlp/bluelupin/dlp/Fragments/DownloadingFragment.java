@@ -284,6 +284,11 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
                 //Log.d(Consts.LOG_TAG, "**** received message in Downloadingfragment: " + intent.getAction());
             }
             if (intent.getAction().equals(Consts.MESSAGE_CANCEL_DOWNLOAD)) {
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                context.stopService(intent);
+                // Toast.makeText(context, getString(R.string.downloading_cancel), Toast.LENGTH_LONG).show();
+                unregisterReceiver();
+
                 //String strJsonMedia = intent.getExtras().getString(Consts.EXTRA_MEDIA);
                 int mediaId = intent.getExtras().getInt(Consts.EXTRA_MEDIA, 0);
                 Gson gson = new Gson();
@@ -356,7 +361,8 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
                 int pro = intent.getIntExtra("progresss", 0);
 
                 DbHelper dbHelper = new DbHelper(getActivity());
-                List<Data> data_item = dbHelper.getAllDownloadingMediaFile();
+                List<Data> data_item = dbHelper.getAllDownloadingMediaFile(Utility.getLanguageIdFromSharedPreferences(context));
+
                 downloadingAdapter = new DownloadingAdapter(context, data_item);
                 downloadingRecyclerView.setAdapter(downloadingAdapter);
                 downloadingAdapter.notifyDataSetChanged();
@@ -364,24 +370,25 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
                 // Toast.makeText(context, "progress  update= " + pro, Toast.LENGTH_LONG).show();
             }
         }
-    };*/
-
-//    private void registerReceiver() {
-//        unregisterReceiver();
-//        IntentFilter intentToReceiveFilter = new IntentFilter();
-//        intentToReceiveFilter
-//                .addAction(Consts.mBroadcastProgressUpdateAction);
-//        intentToReceiveFilter
-//                .addAction(Consts.mBroadcastDeleteAction);
-//        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(intentReceiver, intentToReceiveFilter);
-//        mReceiversRegistered = true;
-//    }
+    };
+*/
+   /* private void registerReceiver() {
+        unregisterReceiver();
+        IntentFilter intentToReceiveFilter = new IntentFilter();
+        intentToReceiveFilter
+                .addAction(Consts.mBroadcastProgressUpdateAction);
+      intentToReceiveFilter
+                .addAction(Consts.mBroadcastDeleteAction);
+       LocalBroadcastManager.getInstance(getActivity()).registerReceiver(intentReceiver, intentToReceiveFilter);
+        mReceiversRegistered = true;
+  }*/
 
     private void unregisterReceiver() {
-        if (mReceiversRegistered) {
-            //LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(intentReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+       /* if (mReceiversRegistered) {
+            LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(intentReceiver);
             mReceiversRegistered = false;
-        }
+        }*/
     }
 
     @Override

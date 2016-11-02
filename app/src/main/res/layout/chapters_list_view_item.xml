@@ -19,12 +19,29 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/chapterImage"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@drawable/imageplaceholder" />
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/chapterImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/imageplaceholder" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:progressDrawable="@drawable/custom_progressbar"
+                    android:visibility="gone" />
+
+
+            </RelativeLayout>
+
+
         </LinearLayout>
 
 
@@ -76,8 +93,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 android:gravity="center"
-                android:paddingTop="@dimen/dimValue_10"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="@dimen/dimValue_10">
 
                 <RelativeLayout
                     android:id="@+id/starIconlayout"
@@ -124,8 +141,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 android:gravity="center"
-                android:paddingTop="@dimen/dimValue_10"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="@dimen/dimValue_10">
 
                 <!--  <View
                       android:layout_width="1dp"

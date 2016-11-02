@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder {
     public TextView starIcon;
     public RelativeLayout starIconlayout, downloadIconlayout;
     public LinearLayout download_layout, favoriteLayout;
+    public ProgressBar progressBar;
 
     public ChaptersViewHolder(View itemView) {
         super(itemView);
@@ -47,6 +49,7 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder {
         download_layout = (LinearLayout) itemView.findViewById(R.id.download_layout);
         starIconlayout = (RelativeLayout) itemView.findViewById(R.id.starIconlayout);
         downloadIconlayout = (RelativeLayout) itemView.findViewById(R.id.downloadIconlayout);
+        progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
     }
 
 

@@ -147,10 +147,10 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
             @Override
             public void onClick(View v) {
                 dbHelper.deleteFileDownloadedByParentId(dataWithParent.getParentId());//delete media by parent id
-                Intent broadcastIntent = new Intent();
+                /*Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
                 broadcastIntent.putExtra("mediaId", dataWithParent.getParentId());
-                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);*/
                 holder.cardView.setVisibility(View.INVISIBLE);
                 Gson gson = new Gson();
                 //String strJsonmedia = gson.toJson(data_item);

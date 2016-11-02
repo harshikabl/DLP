@@ -62,29 +62,35 @@ public class ServiceHelper {
         final DbHelper dbhelper = new DbHelper(context);
         cd.enqueue(new Callback<ContentData>() {
             @Override
-            public void onResponse(Call<ContentData> call, Response<ContentData> response) {
-                ContentData cd = response.body();
+            public void onResponse(Call<ContentData> call, final Response<ContentData> response) {
+                final ContentData cd = response.body();
                 //Log.d(Consts.LOG_TAG, cd.toString());
+                new AsyncTask<String, Void, String>() {
+                    @Override
+                    protected String doInBackground(String... params) {
+                        for (Data d : response.body().getData()) {
+                            if (dbhelper.upsertDataEntity(d)) {
+                                // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
+                                // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
+                            } else {
+                                Log.d(Consts.LOG_TAG, "failure adding Data for page: " + cd.getCurrent_page());
+                            }
+                        }
+                        String lastcalled = response.headers().get("last_request_date");
+                        Log.d(Consts.LOG_TAG, "response last_request_date: " + lastcalled);
+                        if (lastcalled != null) {
+                            DbHelper dbhelper = new DbHelper(context);
+                            CacheServiceCallData ob = new CacheServiceCallData();
+                            ob.setUrl(Consts.URL_CONTENT_LATEST);
+                            ob.setLastCalled(lastcalled);
 
-                for (Data d : response.body().getData()) {
-                    if (dbhelper.upsertDataEntity(d)) {
-                        // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
-                        // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
-                    } else {
-                        Log.d(Consts.LOG_TAG, "failure adding Data for page: " + cd.getCurrent_page());
+                            dbhelper.upsertCacheServiceCall(ob);
+                        }
+                        callback.onDone(Consts.URL_CONTENT_LATEST, cd, null);
+                        return null;
                     }
-                }
-                String lastcalled = response.headers().get("last_request_date");
-                Log.d(Consts.LOG_TAG, "response last_request_date: " + lastcalled);
-                if (lastcalled != null) {
-                    DbHelper dbhelper = new DbHelper(context);
-                    CacheServiceCallData ob = new CacheServiceCallData();
-                    ob.setUrl(Consts.URL_CONTENT_LATEST);
-                    ob.setLastCalled(lastcalled);
+                }.execute();
 
-                    dbhelper.upsertCacheServiceCall(ob);
-                }
-                callback.onDone(Consts.URL_CONTENT_LATEST, cd, null);
             }
 
             @Override
@@ -99,33 +105,41 @@ public class ServiceHelper {
     public void callResourceService(ContentServiceRequest request, final IServiceSuccessCallback<ContentData> callback) {
         request.setApi_token(Consts.API_KEY);
 
-        Call<ContentData> cd = service.latestResource(request);
+        final Call<ContentData> cd = service.latestResource(request);
         final DbHelper dbhelper = new DbHelper(context);
         cd.enqueue(new Callback<ContentData>() {
             @Override
-            public void onResponse(Call<ContentData> call, Response<ContentData> response) {
-                ContentData cd = response.body();
-                //Log.d(Consts.LOG_TAG, cd.toString());
+            public void onResponse(Call<ContentData> call, final Response<ContentData> response) {
+                final ContentData cd = response.body();
+                new AsyncTask<String, Void, String>() {
+                    @Override
+                    protected String doInBackground(String... params) {
 
-                for (Data d : cd.getData()) {
-                    if (dbhelper.upsertResourceEntity(d)) {
-                        // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
-                        //Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
-                    } else {
-                        Log.d(Consts.LOG_TAG, "failure adding resource Data for page: " + cd.getCurrent_page());
+                        //Log.d(Consts.LOG_TAG, cd.toString());
+
+                        for (Data d : cd.getData()) {
+                            if (dbhelper.upsertResourceEntity(d)) {
+                                // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
+                                //Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
+                            } else {
+                                Log.d(Consts.LOG_TAG, "failure adding resource Data for page: " + cd.getCurrent_page());
+                            }
+                        }
+                        String lastCalled = response.headers().get("last_request_date");
+                        Log.d(Consts.LOG_TAG, "response last_request_date: " + lastCalled);
+                        if (lastCalled != null) {
+                            DbHelper dbhelper = new DbHelper(context);
+                            CacheServiceCallData ob = new CacheServiceCallData();
+                            ob.setUrl(Consts.URL_LANGUAGE_RESOURCE_LATEST);
+                            ob.setLastCalled(lastCalled);
+
+                            dbhelper.upsertCacheServiceCall(ob);
+                        }
+                        callback.onDone(Consts.URL_LANGUAGE_RESOURCE_LATEST, cd, null);
+                        return null;
                     }
-                }
-                String lastCalled = response.headers().get("last_request_date");
-                Log.d(Consts.LOG_TAG, "response last_request_date: " + lastCalled);
-                if (lastCalled != null) {
-                    DbHelper dbhelper = new DbHelper(context);
-                    CacheServiceCallData ob = new CacheServiceCallData();
-                    ob.setUrl(Consts.URL_LANGUAGE_RESOURCE_LATEST);
-                    ob.setLastCalled(lastCalled);
+                }.execute();
 
-                    dbhelper.upsertCacheServiceCall(ob);
-                }
-                callback.onDone(Consts.URL_LANGUAGE_RESOURCE_LATEST, cd, null);
             }
 
             @Override
@@ -140,50 +154,56 @@ public class ServiceHelper {
     public void callMediaService(ContentServiceRequest request, final IServiceSuccessCallback<ContentData> callback) {
         request.setApi_token(Consts.API_KEY);
 
-        Call<ContentData> cd = service.latestMedia(request);
+        final Call<ContentData> cd = service.latestMedia(request);
         final DbHelper dbhelper = new DbHelper(context);
         cd.enqueue(new Callback<ContentData>() {
             @Override
-            public void onResponse(Call<ContentData> call, Response<ContentData> response) {
-                ContentData cd = response.body();
-                //Log.d(Consts.LOG_TAG, cd.toString());
-
-                for (Data d : response.body().getData()) {
-                    if (dbhelper.upsertMediaEntity(d)) {
-                        // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
-                        // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
-                        Data data = dbhelper.getMediaEntityByIdAndLaunguageId(d.getId(),
-                                Utility.getLanguageIdFromSharedPreferences(context));
-                        if (data != null) {
-                            if (data.getLocalFilePath() != null && !data.getLocalFilePath().equals("")) {
-                                if (Consts.IS_DEBUG_LOG) {
-                                    Log.d(Consts.LOG_TAG, "getLocalFilePath " + null);
+            public void onResponse(Call<ContentData> call, final Response<ContentData> response) {
+                final ContentData cd = response.body();
+                new AsyncTask<String, Void, String>() {
+                    @Override
+                    protected String doInBackground(String... params) {
+                        //Log.d(Consts.LOG_TAG, cd.toString());
+                        for (Data d : response.body().getData()) {
+                            if (dbhelper.upsertMediaEntity(d)) {
+                                // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
+                                // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
+                                Data data = dbhelper.getMediaEntityByIdAndLaunguageId(d.getId(),
+                                        Utility.getLanguageIdFromSharedPreferences(context));
+                                if (data != null) {
+                                    if (data.getLocalFilePath() != null && !data.getLocalFilePath().equals("")) {
+                                        if (Consts.IS_DEBUG_LOG) {
+                                            Log.d(Consts.LOG_TAG, "getLocalFilePath " + null);
+                                        }
+                                    } else {
+                                        //upsert media entity if not downloaded
+                                        dbhelper.upsertDownloadMediaEntity(d);
+                                        if (Consts.IS_DEBUG_LOG) {
+                                            //Log.d(Consts.LOG_TAG, " Data for page: " + d);
+                                        }
+                                    }
                                 }
                             } else {
-                                //upsert media entity if not downloaded
-                                dbhelper.upsertDownloadMediaEntity(d);
                                 if (Consts.IS_DEBUG_LOG) {
-                                    //Log.d(Consts.LOG_TAG, " Data for page: " + d);
+                                    Log.d(Consts.LOG_TAG, "failure adding Media Data for page: " + cd.getCurrent_page());
                                 }
                             }
                         }
-                    } else {
-                        if (Consts.IS_DEBUG_LOG) {
-                            Log.d(Consts.LOG_TAG, "failure adding Media Data for page: " + cd.getCurrent_page());
-                        }
-                    }
-                }
-                String lastCalled = response.headers().get("last_request_date");
-                Log.d(Consts.LOG_TAG, "response last_request_date: " + lastCalled);
-                if (lastCalled != null) {
-                    DbHelper dbhelper = new DbHelper(context);
-                    CacheServiceCallData ob = new CacheServiceCallData();
-                    ob.setUrl(Consts.URL_MEDIA_LATEST);
-                    ob.setLastCalled(lastCalled);
+                        String lastCalled = response.headers().get("last_request_date");
+                        Log.d(Consts.LOG_TAG, "response last_request_date: " + lastCalled);
+                        if (lastCalled != null) {
+                            DbHelper dbhelper = new DbHelper(context);
+                            CacheServiceCallData ob = new CacheServiceCallData();
+                            ob.setUrl(Consts.URL_MEDIA_LATEST);
+                            ob.setLastCalled(lastCalled);
 
-                    dbhelper.upsertCacheServiceCall(ob);
-                }
-                callback.onDone(Consts.URL_MEDIA_LATEST, cd, null);
+                            dbhelper.upsertCacheServiceCall(ob);
+                        }
+                        callback.onDone(Consts.URL_MEDIA_LATEST, cd, null);
+                        return null;
+                    }
+                }.execute();
+
             }
 
             @Override
@@ -199,34 +219,41 @@ public class ServiceHelper {
     public void callMedialanguageLatestContentService(ContentServiceRequest request, final IServiceSuccessCallback<ContentData> callback) {
         request.setApi_token(Consts.API_KEY);
 
-        Call<ContentData> cd = service.MedialanguageLatestContent(request);
+        final Call<ContentData> cd = service.MedialanguageLatestContent(request);
         final DbHelper dbhelper = new DbHelper(context);
         cd.enqueue(new Callback<ContentData>() {
             @Override
-            public void onResponse(Call<ContentData> call, Response<ContentData> response) {
-                ContentData cd = response.body();
-                //Log.d(Consts.LOG_TAG, cd.toString());
-                if (response.body() != null) {
-                    for (Data d : response.body().getData()) {
-                        if (dbhelper.upsertMedialanguageLatestDataEntity(d)) {
-                            // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
-                            // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
-                        } else {
-                            Log.d(Consts.LOG_TAG, "failure adding Data for page: " + cd.getCurrent_page());
+            public void onResponse(Call<ContentData> call, final Response<ContentData> response) {
+                final ContentData cd = response.body();
+                new AsyncTask<String, Void, String>() {
+                    @Override
+                    protected String doInBackground(String... params) {
+                        //Log.d(Consts.LOG_TAG, cd.toString());
+                        if (response.body() != null) {
+                            for (Data d : response.body().getData()) {
+                                if (dbhelper.upsertMedialanguageLatestDataEntity(d)) {
+                                    // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
+                                    // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
+                                } else {
+                                    Log.d(Consts.LOG_TAG, "failure adding Data for page: " + cd.getCurrent_page());
+                                }
+                            }
                         }
-                    }
-                }
-                String lastcalled = response.headers().get("last_request_date");
-                Log.d(Consts.LOG_TAG, "response last_request_date: " + lastcalled);
-                if (lastcalled != null) {
-                    DbHelper dbhelper = new DbHelper(context);
-                    CacheServiceCallData ob = new CacheServiceCallData();
-                    ob.setUrl(Consts.MediaLanguage_Latest);
-                    ob.setLastCalled(lastcalled);
+                        String lastcalled = response.headers().get("last_request_date");
+                        Log.d(Consts.LOG_TAG, "response last_request_date: " + lastcalled);
+                        if (lastcalled != null) {
+                            DbHelper dbhelper = new DbHelper(context);
+                            CacheServiceCallData ob = new CacheServiceCallData();
+                            ob.setUrl(Consts.MediaLanguage_Latest);
+                            ob.setLastCalled(lastcalled);
 
-                    dbhelper.upsertCacheServiceCall(ob);
-                }
-                callback.onDone(Consts.MediaLanguage_Latest, cd, null);
+                            dbhelper.upsertCacheServiceCall(ob);
+                        }
+                        callback.onDone(Consts.MediaLanguage_Latest, cd, null);
+                        return null;
+                    }
+                }.execute();
+
 
             }
 

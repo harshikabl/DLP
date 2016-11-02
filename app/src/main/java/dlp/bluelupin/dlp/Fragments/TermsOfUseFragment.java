@@ -3,15 +3,27 @@ package dlp.bluelupin.dlp.Fragments;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.Utility;
+
+import static android.support.v7.widget.StaggeredGridLayoutManager.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,6 +74,7 @@ public class TermsOfUseFragment extends Fragment {
 
     View view;
     private Context context;
+    private WebView webView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,5 +95,37 @@ public class TermsOfUseFragment extends Fragment {
         MainActivity rootActivity = (MainActivity) getActivity();
         String msg = getString(R.string.terms_of);
         rootActivity.setScreenTitle(msg);
+
+        webView = (WebView) view.findViewById(R.id.webView);
+
+        // webView.setInitialScale(50);
+        webView.getSettings().setDefaultTextEncodingName("utf-8");
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        //webView.addJavascriptInterface(myJavaScriptInterface, "INTERFACE");
+        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setSupportZoom(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setUseWideViewPort(true);
+        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
+        webView.setBackgroundColor(Color.parseColor("#ffffff"));
+        //webView.getSettings().setDomStorageEnabled(true);
+        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
+        webView.setHorizontalScrollBarEnabled(false);
+        if (webView != null) {
+            try {
+                AssetManager assetManager = context.getAssets();
+                InputStream stream = assetManager.open("terms.html");
+                BufferedReader r = new BufferedReader(new InputStreamReader(stream));
+                StringBuilder total = new StringBuilder();
+                String line;
+                while ((line = r.readLine()) != null) {
+                    total.append(line).append("\n");
+                }
+                webView.loadDataWithBaseURL("", total.toString(), "text/html", "UTF-8", "");
+            } catch (Exception xxx) {
+                Log.e(TAG, "Load assets/terms.html", xxx);
+            }
+        }
     }
 }

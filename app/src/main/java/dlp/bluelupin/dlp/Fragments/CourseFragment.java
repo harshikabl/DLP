@@ -102,6 +102,7 @@ public class CourseFragment extends Fragment {
         MainActivity rootActivity = (MainActivity) getActivity();
         String msg = getString(R.string.app_name);
         rootActivity.setScreenTitle(msg);
+        rootActivity.hideSplashImage(true);
 
         Typeface custom_fontawesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");

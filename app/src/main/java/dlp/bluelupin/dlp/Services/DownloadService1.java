@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.TimeUnit;
 
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
@@ -27,6 +28,7 @@ import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.DownloadData;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.Utility;
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import okhttp3.internal.Util;
 import retrofit2.Call;
@@ -76,9 +78,14 @@ public class DownloadService1 extends IntentService {
     }
 
     private void initDownload(Data media) {
-
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Consts.BASE_URL)
+                .client(okHttpClient)
                 .build();
 
         IServiceManager retrofitInterface = retrofit.create(IServiceManager.class);
@@ -133,7 +140,7 @@ public class DownloadService1 extends IntentService {
             String localFilePath = Consts.outputDirectoryLocation + media.getFile_path();
             InputStream bis = new BufferedInputStream(body.byteStream(), 1024 * 8);
             if (urlPropertyForDownload.equalsIgnoreCase(Consts.THUMBNAIL_URL)) {
-                if(media.getThumbnail_file_path() != null)
+                if (media.getThumbnail_file_path() != null)
                     localFilePath = Consts.outputDirectoryLocation + media.getThumbnail_file_path();
             }
 
@@ -186,8 +193,7 @@ public class DownloadService1 extends IntentService {
 
     private void UpdateMediaInDB(String localPath) {
         DbHelper dbHelper = new DbHelper(DownloadService1.this);
-        if(media != null && media.getType() == "Youtube")
-        {
+        if (media != null && media.getType() == "Youtube") {
             if (Consts.IS_DEBUG_LOG) {
                 Log.d(Consts.LOG_TAG, "successfully downloaded and THUMBNAIL local file updated: media Id:" + media.getId() + " getThumbnail_url_Local_file_path Url: " + media.getThumbnail_url_Local_file_path() + " at " + localPath);
             }

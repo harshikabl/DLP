@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -148,7 +149,8 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                         Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                         holder.chapterImage.setImageBitmap(bitmap);
                     }*/
-                    LoadImageFromDataBase imageFromDataBase = new LoadImageFromDataBase(holder.chapterImage);
+
+                    LoadImageFromDataBase imageFromDataBase = new LoadImageFromDataBase(holder.chapterImage, holder.progressBar);
                     imageFromDataBase.execute(media.getLocalFilePath());
                 }
 
@@ -268,7 +270,6 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                         analyticsHelper.logEvent(titleResource.getContent(), null);
                         analyticsHelper.logEvent(titleResource.getContent() + "_" + Utility.getLanguageIdFromSharedPreferences(context), null);
                     }
-
 
 
                     FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
@@ -391,9 +392,11 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
     private class LoadImageFromDataBase extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
+        ProgressBar progressBar;
 
-        public LoadImageFromDataBase(ImageView bmImage) {
+        public LoadImageFromDataBase(ImageView bmImage, ProgressBar bar) {
             this.bmImage = bmImage;
+            this.progressBar = bar;
         }
 
         @Override
@@ -412,16 +415,19 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             if (result != null) {
                 bmImage.setImageBitmap(result);
             }
-            if (customProgressDialog != null) {
+            progressBar.setVisibility(View.GONE);
+           /* if (customProgressDialog != null) {
                 if (customProgressDialog.isShowing()) {
                     customProgressDialog.dismiss();
                 }
-            }
+            }*/
+
         }
 
         @Override
         protected void onPreExecute() {
-            customProgressDialog.show();
+            //customProgressDialog.show();
+            progressBar.setVisibility(View.VISIBLE);
         }
 
 

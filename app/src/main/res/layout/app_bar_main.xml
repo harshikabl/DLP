@@ -54,7 +54,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
                 android:src="@drawable/homeimg"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <FrameLayout
                 android:id="@+id/downloadContainer"

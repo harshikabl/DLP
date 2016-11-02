@@ -1,19 +1,15 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:background="#fff"
-    android:gravity="center"
-    tools:context="dlp.bluelupin.dlp.Fragments.TermsOfUseFragment">
+    tools:context="dlp.bluelupin.dlp.Fragments.WebFragment">
 
-    <TextView
-        android:layout_width="match_parent"
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/Terms_of_use"
-        android:textColor="#4a4d4e"
-        android:textSize="@dimen/dimTextSize_20" />
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:scrollbars="none" />
 
-
-</LinearLayout>
+</FrameLayout>
