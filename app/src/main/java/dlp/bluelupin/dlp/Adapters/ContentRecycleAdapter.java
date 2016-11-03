@@ -33,7 +33,10 @@ import java.util.List;
 import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.Fragments.AboutUsFragment;
+import dlp.bluelupin.dlp.Fragments.ContentFragment;
 import dlp.bluelupin.dlp.Fragments.WebFragment;
+import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
@@ -369,13 +372,11 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                         if (Utility.isOnline(context)) {
                             url = media.getUrl();
                             if (url != null && !url.equals("")) {
-                   /* Intent intent = new Intent(context, VideoPlayerActivity.class);
-                    intent.putExtra("videoUrl", url);
-                    context.startActivity(intent);*/
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse(url));
                                 intent.putExtra("force_fullscreen", true);
                                 context.startActivity(intent);
-
+                                Consts.playYouTubeFlag = false;//after device back press MainAtivity don't reload
                             }
                         } else {
                             Utility.alertForErrorMessage(context.getString(R.string.online_msg), context);

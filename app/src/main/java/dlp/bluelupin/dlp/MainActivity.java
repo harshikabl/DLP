@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity
     private TextView name, email;
     AlertDialog alert;
     public ImageView splashImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,17 +293,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setUpCourseFragment() {
-        //try {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        CourseFragment fragment = CourseFragment.newInstance("", "");
-        fragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right).replace(R.id.container, fragment)
-                //.addToBackStack(null)
-                .commitAllowingStateLoss();
-       /* } catch (Exception e) {
-            Log.d(Consts.LOG_TAG, "Error Message: " + e.getMessage());
-        }*/
-        //overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
+        if (Consts.playYouTubeFlag) {//for play online you tube video device back press handel
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            CourseFragment fragment = CourseFragment.newInstance("", "");
+            fragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right).replace(R.id.container, fragment)
+                    //.addToBackStack(null)
+                    .commitAllowingStateLoss();
+        }
+
     }
 
     @Override
@@ -412,9 +412,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void hideSplashImage(Boolean flag) {
-        if(flag){
+        if (flag) {
             splashImage.setVisibility(View.GONE);
-        }else{
+        } else {
             splashImage.setVisibility(View.VISIBLE);
         }
 
@@ -560,6 +560,8 @@ public class MainActivity extends AppCompatActivity
 ////                        .setAction("Action", null).show();
 //
 //        });
+
+
 }
 
 

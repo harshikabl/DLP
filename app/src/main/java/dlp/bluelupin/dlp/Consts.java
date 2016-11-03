@@ -67,4 +67,5 @@ public class Consts {
 
     public static final String SERVICE = "gcm";//“apns”, “gcm”, “mpns”
     public static final Boolean IS_DEVELOPMENT = false;
+    public static Boolean playYouTubeFlag = true;//for play online you tube video device back press handel
 }
