@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -22,6 +23,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -61,8 +67,56 @@ public class SplashActivity extends Activity {
         } else {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        callGetAllLanguage();
 
+
+    }
+
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "calling start ");
+        }
+        DbHelper dbHelper = new DbHelper(context);
+        AccountData sd =  dbHelper.getAccountData();
+        if(determineFirstTimeLaunch()) {
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "firstTimeLaunch " + Utility.getAppVersion(context) + "");
+            }
+            copyDBWhenFirstRun();
+            markFirstTimeLaunch();
+        } //determineFirstTimeLaunch
+        callGetAllLanguage();
+    };
+
+    private Boolean determineFirstTimeLaunch()
+    {
+        SharedPreferences prefs = context.getSharedPreferences("appState", Context.MODE_PRIVATE);
+        if (prefs != null) {
+            String firstTimeLaunchVersion = prefs.getString("firstTimeLaunch", null);
+            if (firstTimeLaunchVersion != null) {
+                return false;
+            }
+        }
+        return true;
+//
+    }
+
+
+
+
+    private void markFirstTimeLaunch()
+    {
+        SharedPreferences prefs = context.getSharedPreferences("appState", Context.MODE_PRIVATE);
+        if (prefs != null) {
+        SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("firstTimeLaunch", Utility.getAppVersion(context) + "");
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "firstTimeLaunch " + Utility.getAppVersion(context) + "");
+            }
+            editor.commit();
+        }
     }
 
     //call service at every 5 hours of intervel
@@ -106,6 +160,7 @@ public class SplashActivity extends Activity {
 
     //check user registered or not
     private void checkRegistered() {
+
         DbHelper dbhelper = new DbHelper(SplashActivity.this);
         AccountData accountData = dbhelper.getAccountData();
         if (accountData != null && !accountData.equals("")) {
@@ -130,6 +185,54 @@ public class SplashActivity extends Activity {
             finish();
         }
     }
+
+    private void copyDBWhenFirstRun() {
+        String db_fileName = "dlp_db.db";
+        File dbFile = context.getDatabasePath(db_fileName);
+        dbFile.delete(); // because this is first time delete the DB
+        final String outFileName = dbFile.getPath();//"/data/data/dlp.bluelupin.dlp/databases/" + db_fileName;// Consts.outputDirectoryLocation + db_fileName; //DB_PATH + NAME;
+        try {
+            if (!dbFile.exists()) {
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "DB DOES NOT exists. Copying DB from asset. DB Path is " + outFileName);
+                }
+                //this.getWritableDatabase().close();
+                //Open your local db as the input stream
+
+                final InputStream myInput = context.getAssets().open(db_fileName, Context.MODE_PRIVATE);
+
+                //Open the empty db as the output stream
+                final OutputStream myOutput = new FileOutputStream(outFileName);
+                //final FileOutputStream myOutput = context.openFileOutput(outFileName, Context.MODE_PRIVATE);
+
+                //transfer bytes from the inputfile to the outputfile
+                final byte[] buffer = new byte[1024];
+                int length;
+                while ((length = myInput.read(buffer)) > 0) {
+                    myOutput.write(buffer, 0, length);
+                }
+
+                //Close the streams
+                myOutput.flush();
+                ((FileOutputStream) myOutput).getFD().sync();
+                myOutput.close();
+                myInput.close();
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "DB file copied Successfully " + outFileName);
+                }
+            }
+        } catch (IOException ex) {
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "Exception!!!. DB asset DOES  NOT exists!! " + ex.getMessage());
+            }
+        } catch (Exception ex) {
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "Exception!!!. DB asset DOES  NOT exists!! " + ex.getMessage());
+            }
+        }
+
+    }
+
 
     private void init() {
         //set language

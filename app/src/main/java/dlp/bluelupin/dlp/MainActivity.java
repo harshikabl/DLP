@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                customProgressDialog.show();
+                //customProgressDialog.show();
                 //alert.show();
             }
 
@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity
                 if (Utility.isOnline(MainActivity.this)) {
                     callSync();
                 } else {
-                    customProgressDialog.dismiss();
+                    //customProgressDialog.dismiss();
                     //alert.dismiss();
                     Utility.alertForErrorMessage(getString(R.string.online_msg), MainActivity.this);
                     setUpCourseFragment();

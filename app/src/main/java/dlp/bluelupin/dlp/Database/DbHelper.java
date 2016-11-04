@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.SyncStateContract;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -30,11 +31,13 @@ import dlp.bluelupin.dlp.Utilities.Utility;
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = "dlp_db.db";
+    public static final String DATABASE_NAME = "dlp_db.db";// Consts.outputDirectoryLocation +  "dlp_db.db";
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
+//        if (Consts.IS_DEBUG_LOG) {
+//            Log.d(Consts.LOG_TAG, "DB Path is " + DATABASE_NAME + " getDatabasePath" +  context.getDatabasePath(DATABASE_NAME));
+//        }
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
