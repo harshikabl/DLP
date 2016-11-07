@@ -17,7 +17,7 @@
             android:id="@+id/notificationDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lorem lpsum is simply dummy text of the printing and typesetting industry."
+            android:text=""
             android:textColor="#4a4d4e"
             android:textSize="@dimen/dimTextSize_18" />
 
@@ -32,7 +32,7 @@
                 android:id="@+id/dateIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dete"
+                android:text=""
                 android:textColor="#4a4d4e"
                 android:textSize="@dimen/dimTextSize_16" />
 
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimValue_5"
-                android:text="24-09-2016"
+                android:text=""
                 android:textColor="#4a4d4e"
                 android:textSize="@dimen/dimTextSize_14" />
 
@@ -58,7 +58,7 @@
                 android:id="@+id/timeIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="time"
+                android:text=""
                 android:textColor="#4a4d4e"
                 android:textSize="@dimen/dimTextSize_16" />
 
@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimValue_5"
-                android:text="04:35 AM"
+                android:text=""
                 android:textColor="#4a4d4e"
                 android:textSize="@dimen/dimTextSize_14" />
         </LinearLayout>

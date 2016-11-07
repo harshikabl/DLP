@@ -30,7 +30,6 @@
                     android:id="@+id/mediaImage"
                     android:layout_width="@dimen/size_50px"
                     android:layout_height="@dimen/size_50px"
-                    android:scaleType="centerCrop"
                     android:src="@drawable/imageplaceholder" />
             </LinearLayout>
 

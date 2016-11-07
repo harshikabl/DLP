@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">ಡೈಲಾಗ್</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <!-- Account settings screen text-->
+    <string name="account_settings">ಖಾತೆ ಸೆಟ್ಟಿಂಗ್ಗಳು</string>
+    <string name="name">ಹೆಸರು</string>
+    <string name="email">ಇಮೇಲ್</string>
+    <string name="phone">ದೂರವಾಣಿ</string>
+    <string name="app_language">ಅಪ್ಲಿಕೇಶನ್ ಭಾಷಾ</string>
+    <string name="autoplay_videos">ಸ್ವಯಂಪ್ಲೇ ವೀಡಿಯೊಗಳು</string>
+    <string name="gender">ಲಿಂಗ</string>
+    <string name="male">ಪುರುಷ</string>
+    <string name="female">ಸ್ತ್ರೀ</string>
+    <string name="cancel">ರದ್ದುಮಾಡಿ</string>
+    <string name="save">ಉಳಿಸು</string>
+    <string name="enter_name">ಹೆಸರನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="enter_email">ಇಮೇಲ್ ನಮೂದಿಸಿ</string>
+    <string name="enter_phone">ಫೋನ್ ನಮೂದಿಸಿ</string>
+    <string name="otp_sent">OTP ಒದಗಿಸಿದ ಫೋನ್ ಸಂಖ್ಯೆಗೆ ಕಳುಹಿಸಲಾಗಿದೆ.</string>
+    <string name="account_not_create">ಈ ಖಾತೆಯನ್ನು ಇನ್ನೂ ರಚಿಸಲಾಗಿಲ್ಲ.</string>
+    <string name="enter_e_mail">ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="enter_valid_mail">ಮಾನ್ಯ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ</string>
+    <string name="enter_phone_no">ಫೋನ್ ಸಂಖ್ಯೆ ಯನ್ನು</string>
+    <string name="enter_valid_phone">ಮಾನ್ಯವಾದ ಫೋನ್ ಸಂಖ್ಯೆ ಯನ್ನು</string>
+    <string name="profile_update">ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಅನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಪ್ಡೇಟ್ಗೊಳಿಸಲಾಗಿದೆ.</string>
+    <string name="profile_not_updated">ಈ ಪ್ರೊಫೈಲ್ ಇನ್ನೂ ಅಪ್ಡೇಟ್ಗೊಳಿಸಲಾಗಿದೆ ಇಲ್ಲ.</string>
+    <!-- verification screen text-->
+    <string name="description">OTP ನಿಮ್ಮ ಒದಗಿಸಿದ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಗೆ ಕಳುಹಿಸಲಾಗಿದೆ. ನಾವು 10 ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಪತ್ತೆಹಚ್ಚುತ್ತದೆ ಅಥವಾ ನೀವು ಕೈಯಾರೆ ಇಲ್ಲಿ OTP ನಮೂದಿಸಿ ಮಾಡಬಹುದು.</string>
+    <string name="otp_text">ನೀವು ಸ್ವೀಕರಿಸಿದ 6 ಅಂಕಿಯ OTP ಕೋಡ್ ನಮೂದಿಸಿ</string>
+    <string name="otp_msg">OTP 5 ನಿಮಿಷಗಳ ಕೇವಲ ಸಕ್ರಿಯ</string>
+    <string name="verify">ಪರಿಶೀಲಿಸಿ</string>
+    <string name="try_otp">OTP ಸ್ವೀಕರಿಸಲಿಲ್ಲ? ಪ್ರಯತ್ನಿಸಿ</string>
+    <string name="resend_otp">OTP ಮರುಕಳುಹಿಸಿ</string>
+    <string name="verification_title">ಪರಿಶೀಲನೆ</string>
+    <string name="enter_otp">ದಯವಿಟ್ಟು OTP ನಮೂದಿಸಿ</string>
+    <string name="enter_valid_otp">ಮಾನ್ಯ OTP ನಮೂದಿಸಿ.</string>
+    <string name="registered">ನೀವು ಯಶಸ್ವಿಯಾಗಿ ನೋಂದಣಿ.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_notifications">NotificationsActivity</string>
+    <!-- notification screen text-->
+    <string name="notification">ಅಧಿಸೂಚನೆ</string>
+    <!-- language screen text-->
+    <string name="select_language">ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="choose_language">ಭಾಷಾ ಆಯ್ಕೆ</string>
+    <string name="done">ಡನ್</string>
+    <string name="select_fav_language">ನಿಮ್ಮ ನೆಚ್ಚಿನ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆ</string>
+    <!-- course screen text-->
+    <string name="title">ಮುಖಪುಟ</string>
+    <string name="our_programs">ನಮ್ಮ ಕಾರ್ಯಕ್ರಮಗಳು</string>
+    <string name="learn">ಕಲಿ</string>
+    <string name="course_description">ಸಮರ್ಥನೀಯ ಜೀವನೋಪಾಯಕ್ಕೆ ರಚಿಸಲು ಮಹಿಳೆಯರು, ಯುವ ಮತ್ತು ರೈತರ ನಡುವಿನ ಕೌಶಲಗಳನ್ನು ಕೊರತೆ ಅಂತರವನ್ನು ತುಂಬಲಾಯಿತು.</string>
+    <!-- video play screen text-->
+    <string name="buffring">ಬಫರ್ ...</string>
+    <string name="about_us">ನಮ್ಮ ಬಗ್ಗೆ</string>
+    <string name="terms_of">ಬಳಕೆಯ ನಿಯಮಗಳು</string>
+    <string name="online_msg">ನೀವು ಅಲ್ಲ !!!!</string>
+    <string name="logout">ನೀವು ಯಶಸ್ವಿಯಾಗಿ ಲಾಗ್ ಔಟ್.</string>
+    <!-- navigaton screen text-->
+    <string name="home">ಮುಖಪುಟ</string>
+    <string name="Notification">ಅಧಿಸೂಚನೆ</string>
+    <string name="Favorites">ನೆಚ್ಚಿನ</string>
+    <string name="Profile">ಪ್ರೊಫೈಲ್</string>
+    <string name="Change_Language">ಭಾಷೆ ಬದಲಾಯಿಸಿ</string>
+    <string name="Change_Folder">ಡೌನ್ಲೋಡ್ಗಳು ಫೋಲ್ಡರ್ ಬದಲಿಸು</string>
+    <string name="Terms_of_use">ಬಳಕೆಯ ನಿಯಮಗಳು</string>
+    <string name="About_Us">ನಮ್ಮ ಬಗ್ಗೆ</string>
+    <string name="Downloads">ಡೌನ್ಲೋಡ್ಗಳು</string>
+    <!-- content screen text-->
+    <string name="contents">ಪರಿವಿಡಿ</string>
+    <string name="Daksh">ಅರಿತಿದ್ದ</string>
+    <string name="downloading_cancel">ಡೌನ್ಲೋಡ್ ಫೈಲ್ ರದ್ದು!</string>
+    <!-- favorites screen text-->
+    <string name="chapters">ಅಧ್ಯಾಯಗಳು</string>
+    <string name="topic">ವಿಷಯಗಳು</string>
+    <string name="select_location">ಆರಿಸಿರಿ</string>
+    <string name="default_folder">ಡೀಫಾಲ್ಟ್ ಫೋಲ್ಡರ್</string>
+    <string name="select_folder">ಫೋಲ್ಡರ್ ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="Chapters">ಅಧ್ಯಾಯಗಳು</string>
+    <string name="Topic">ವಿಷಯ</string>
+    <string name="no_record">ಯಾವುದೇ ದಾಖಲೆಯನ್ನು ಕಂಡು</string>
+    <string name="read">ಓದಿ</string>
+    <string name="mark_as_favourite">ಮೆಚ್ಚಿನದಾಗಿ ಗುರುತು</string>
+    <string name="download_update">ಅಪ್ಡೇಟ್ ಡೌನ್ಲೋಡ್</string>
+    <string name="update">ಅಪ್ಡೇಟ್ಗೊಳಿಸಲಾಗಿದೆ</string>
+    <string name="favourite">ನೆಚ್ಚಿನ</string>
+    <string name="Take_Offline">ಆಫ್ಲೈನ್ ಟೇಕ್</string>
+
+
+</resources>

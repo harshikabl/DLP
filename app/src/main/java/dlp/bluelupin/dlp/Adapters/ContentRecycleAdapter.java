@@ -43,6 +43,7 @@ import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
+import dlp.bluelupin.dlp.Utilities.ScaleImageView;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -302,9 +303,10 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 
         layoutParams.setMargins(0, 0, 0, 0);
         frameLayout.setLayoutParams(layoutParams);
-        ImageView dynamicImageView = new ImageView(context);
+        //ImageView dynamicImageView = new ImageView(context);
+        ScaleImageView dynamicImageView = new ScaleImageView(context);
         dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        dynamicImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        // dynamicImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 //        if (url != null) {
 //            new DownloadImageTask(dynamicImageView)
 //                    .execute(url);
@@ -415,9 +417,10 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 
         layoutParams.setMargins(0, 0, 0, 0);
         frameLayout.setLayoutParams(layoutParams);
-        ImageView dynamicImageView = new ImageView(context);
+        //ImageView dynamicImageView = new ImageView(context);
+        ScaleImageView dynamicImageView = new ScaleImageView(context);
         dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        dynamicImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //dynamicImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 //        if (url != null) {
 //            new DownloadImageTask(dynamicImageView)
 //                    .execute(url);

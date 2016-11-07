@@ -40,7 +40,7 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder {
         cardView.setRadius(10);
         chapterTitle = (TextView) itemView.findViewById(R.id.chapterTitle);
         chapterDescription = (TextView) itemView.findViewById(R.id.chapterDescription);
-         favorite = (TextView) itemView.findViewById(R.id.favourite);
+        favorite = (TextView) itemView.findViewById(R.id.favourite);
         starIcon = (TextView) itemView.findViewById(R.id.starIcon);
         download = (TextView) itemView.findViewById(R.id.download);
         downloadIcon = (TextView) itemView.findViewById(R.id.downloadIcon);

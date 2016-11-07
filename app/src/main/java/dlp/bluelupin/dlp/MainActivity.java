@@ -102,8 +102,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
         setSupportActionBar(toolbar);
+        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_right);
         Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity
         downloadContainer = (FrameLayout) findViewById(R.id.downloadContainer);
         final DbHelper dbhelper = new DbHelper(this);
         splashImage = (ImageView) findViewById(R.id.splashImage);
-
+        //splashImage.setVisibility(View.VISIBLE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity
                 closeDrawer();//nav drawer close
             }
         });
-
+        setUpCourseFragment();
         readExternalFilesAsync();
 
     }
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity
 
     private void readExternalFilesAsync() {
         Utility.verifyStoragePermissions((Activity) MainActivity.this);
-        splashImage.setVisibility(View.VISIBLE);
+        //splashImage.setVisibility(View.VISIBLE);
         //final CustomProgressDialog customProgressDialog = new CustomProgressDialog(MainActivity.this, R.mipmap.syc);
         new AsyncTask<Void, Void, Boolean>() {
 
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity
                     //customProgressDialog.dismiss();
                     //alert.dismiss();
                     Utility.alertForErrorMessage(getString(R.string.online_msg), MainActivity.this);
-                    setUpCourseFragment();
+                    //setUpCourseFragment();
                 }
 
             }
@@ -446,7 +446,7 @@ public class MainActivity extends AppCompatActivity
                 customProgressDialog.dismiss();
             }
             // alert.dismiss();
-            setUpCourseFragment();
+            // setUpCourseFragment();
         }
     }
 
@@ -562,6 +562,11 @@ public class MainActivity extends AppCompatActivity
 //        });
 
 
+    /*@Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(MainActivity.this, "Destroy call", Toast.LENGTH_LONG).show();
+    }*/
 }
 
 

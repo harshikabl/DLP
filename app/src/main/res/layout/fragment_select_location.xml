@@ -5,55 +5,63 @@
     android:background="#fff"
     android:gravity="top|center"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/dimValue_50"
-    android:paddingRight="@dimen/dimValue_50"
-    android:paddingTop="@dimen/dimValue_50"
     tools:context="dlp.bluelupin.dlp.Fragments.SelectLocationFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/select_folder"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:gravity="top|center"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dimValue_50"
+        android:paddingRight="@dimen/dimValue_50"
+        android:paddingTop="@dimen/dimValue_50">
 
-        <TextView
-            android:id="@+id/defaultText"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dimValue_16"
-            android:layout_marginTop="@dimen/dimValue_16"
-            android:padding="@dimen/dimValue_10"
-            android:text="@string/default_folder"
-            android:textColor="#000"
-            android:textSize="@dimen/dimTextSize_16" />
+            android:layout_height="wrap_content"
+            android:background="@drawable/select_folder"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/path"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/dimValue_16"
-            android:layout_marginLeft="@dimen/dimValue_16"
-            android:padding="@dimen/dimValue_10"
-            android:text="/storage/sdcard/DLP/download"
-            android:textColor="#4a4d4e"
-            android:textSize="@dimen/dimTextSize_18" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/defaultText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dimValue_16"
+                android:layout_marginTop="@dimen/dimValue_16"
+                android:padding="@dimen/dimValue_10"
+                android:text="@string/default_folder"
+                android:textColor="#000"
+                android:textSize="@dimen/dimTextSize_16" />
 
-    <LinearLayout
-        android:layout_width="@dimen/size_200px"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimValue_30"
-        android:background="@drawable/done_corner_round"
-        android:gravity="center">
+            <TextView
+                android:id="@+id/path"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/dimValue_16"
+                android:layout_marginLeft="@dimen/dimValue_16"
+                android:padding="@dimen/dimValue_10"
+                android:text="/storage/sdcard/DLP/download"
+                android:textColor="#4a4d4e"
+                android:textSize="@dimen/dimTextSize_18" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/selectFolder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:padding="@dimen/dimValue_13"
-            android:text="@string/select_folder"
-            android:textColor="#fff"
-            android:textSize="@dimen/dimTextSize_18" />
+        <LinearLayout
+            android:layout_width="@dimen/size_200px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimValue_30"
+            android:background="@drawable/done_corner_round"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/selectFolder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="@dimen/dimValue_13"
+                android:text="@string/select_folder"
+                android:textColor="#fff"
+                android:textSize="@dimen/dimTextSize_18" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

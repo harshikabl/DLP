@@ -1,0 +1,91 @@
+<resources>
+    <string name="app_name">உரையாடல்</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <!-- Account settings screen text-->
+    <string name="account_settings">கணக்கு அமைப்புகள்</string>
+    <string name="name">பெயர்</string>
+    <string name="email">மின்னஞ்சல்</string>
+    <string name="phone">தொலைபேசி</string>
+    <string name="app_language">ஆப் மொழி</string>
+    <string name="autoplay_videos">தானியக்கத்தை வீடியோக்கள் </string>
+    <string name="gender">பாலினம்</string>
+    <string name="male">ஆண்</string>
+    <string name="female">பெண்</string>
+    <string name="cancel">இரத்து</string>
+    <string name="save">சேமிக்க</string>
+    <string name="enter_name">பெயரை உள்ளிடவும்</string>
+    <string name="enter_email">மின்னஞ்சல் முகவரியை உள்ளிடுங்கள்</string>
+    <string name="enter_phone">மொபைல் எண்ணை உள்ளிடவும்</string>
+    <string name="otp_sent">சிவகாசி வழங்கிய தொலைபேசி எண்ணிற்கு அனுப்பி வைக்கப்பட்டுள்ளது.</string>
+    <string name="account_not_create">இந்த கணக்கு இன்னும் படைக்கப்படவில்லை.</string>
+    <string name="enter_e_mail">மின்னஞ்சல் முகவரியை உள்ளிடவும்</string>
+    <string name="enter_valid_mail">சரியான மின்னஞ்சல் முகவரியை உள்ளிடவும்</string>
+    <string name="enter_phone_no">தொலைபேசி எண்ணை சேர்க்கவும்</string>
+    <string name="enter_valid_phone">சரியான தொலைபேசி எண்ணை சேர்க்கவும்</string>
+    <string name="profile_update">உங்கள் சுயவிவரம் வெற்றிகரமாக புதுப்பிக்கப்பட்டது.</string>
+    <string name="profile_not_updated">இந்த விவரம், இன்னும் புதுப்பிக்கப்படவில்லை.</string>
+    <!-- verification screen text-->
+    <string name="description">சிவகாசி உங்கள் வழங்கப்படும் மொபைல் எண் அனுப்பப்படும் வருகிறது. நாம் 10 நொடிகளில் தானாக அதை கண்டறிய முடியும் அல்லது நீங்கள் கைமுறையாக இங்கே சிவகாசி நுழைய முடியும்.</string>
+    <string name="otp_text">நீங்கள் பெற்ற 6 ஐக்கிய சிவகாசி குறியீடு உள்ளிடவும்</string>
+    <string name="otp_msg">சிவகாசி 5 நிமிடங்கள் மட்டுமே செயல்பாட்டில் உள்ளது</string>
+    <string name="verify">உண்மை உறுதி செய்</string>
+    <string name="try_otp">சிவகாசி பெறவில்லையா? முயற்சி</string>
+    <string name="resend_otp">OTP மீண்டும் அனுப்பு</string>
+    <string name="verification_title">சரிபார்ப்பு</string>
+    <string name="enter_otp">தயவு செய்து சிவகாசி நுழைய</string>
+    <string name="enter_valid_otp">தயவு செய்து ஒரு செல்லுபடியான சிவகாசி உள்ளிடவும்.</string>
+    <string name="registered">நீங்கள் வெற்றிகரமாக பதிவு செய்யப்பட்டுள்ளது.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_notifications">NotificationsActivity</string>
+    <!-- notification screen text-->
+    <string name="notification">அறிவித்தல்</string>
+    <!-- language screen text-->
+    <string name="select_language">மொழி தேர்வு</string>
+    <string name="choose_language">மொழி தேர்வு</string>
+    <string name="done">முடிந்தது</string>
+    <string name="select_fav_language">உங்களுக்கு பிடித்த மொழி தேர்வு</string>
+    <!-- course screen text-->
+    <string name="title">முகப்பு</string>
+    <string name="our_programs">நமது திட்டங்கள்</string>
+    <string name="learn">அறிய</string>
+    <string name="course_description">நிலையான வாழ்வாதாரங்கள் உருவாக்கும் பெண்கள், இளைஞர்கள் மற்றும் விவசாயிகளின் மத்தியில் திறன்கள் பற்றாக்குறை இடைவெளியை நிரப்பும்.</string>
+    <!-- video play screen text-->
+    <string name="buffring">இடையகப்படுத்துகிறது ...</string>
+    <string name="about_us">எங்களை பற்றி</string>
+    <string name="terms_of">பயன்பாட்டு விதிமுறைகளை</string>
+    <string name="online_msg">நீங்கள் ஆன்லைனில் இல்லை !!!!</string>
+    <string name="logout">நீங்கள் வெற்றிகரமாக வெளியேறி இருக்கிறீர்கள்.</string>
+    <!-- navigaton screen text-->
+    <string name="home">முகப்பு</string>
+    <string name="Notification">அறிவித்தல்</string>
+    <string name="Favorites">விருப்பமான</string>
+    <string name="Profile">பதிவு செய்தது</string>
+    <string name="Change_Language">மொழியை மாற்று</string>
+    <string name="Change_Folder">மாற்றம் இறக்கம் அடைவு</string>
+    <string name="Terms_of_use">பயன்பாட்டு விதிமுறைகளை</string>
+    <string name="About_Us">எங்களை பற்றி</string>
+    <string name="Downloads">இறக்கம்</string>
+    <!-- content screen text-->
+    <string name="contents">பொருளடக்கம்</string>
+    <string name="Daksh">பரவலாக</string>
+    <string name="downloading_cancel">பதிவிறக்க கோப்பு ரத்து!</string>
+    <!-- favorites screen text-->
+    <string name="chapters">அத்தியாயங்கள்</string>
+    <string name="topic">தலைப்புகள்</string>
+    <string name="select_location">இடம் தேர்வு</string>
+    <string name="default_folder">இயல்புநிலை அடைவு</string>
+    <string name="select_folder">தேர்வு கோப்புறை</string>
+    <string name="Chapters">அத்தியாயங்கள்</string>
+    <string name="Topic">தலைப்பு</string>
+    <string name="no_record">பதிவு எதுவும் இல்லை</string>
+    <string name="read">படிக்க</string>
+    <string name="mark_as_favourite">பிடித்த மார்க்</string>
+    <string name="download_update">பதிவிறக்க மேம்படுத்தல்</string>
+    <string name="update">புதுப்பிக்கப்பட்ட</string>
+    <string name="favourite">விருப்பமான</string>
+    <string name="Take_Offline">ஆஃப்லைனாக்கலாம்</string>
+
+
+</resources>

@@ -8,7 +8,7 @@ import android.os.Environment;
  */
 public class Consts {
     public static final String LOG_TAG = "HIH";
-    public static final Boolean IS_DEBUG_LOG = true;
+    public static final Boolean IS_DEBUG_LOG = false;
     public final static boolean PROD = false; //false;
     public final static String API_KEY = "XsMwq2updd3L5MZAtgwx7PAA0wKaylFnCejD0ei9WjSuwQVmXMQxGg3ZiH5X";
 
@@ -68,4 +68,6 @@ public class Consts {
     public static final String SERVICE = "gcm";//“apns”, “gcm”, “mpns”
     public static final Boolean IS_DEVELOPMENT = false;
     public static Boolean playYouTubeFlag = true;//for play online you tube video device back press handel
+    public static String dataBaseName = "dlp_db.db";
+
 }

@@ -1,6 +1,9 @@
 package dlp.bluelupin.dlp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v4.app.FragmentActivity;
@@ -14,6 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 
+import com.google.gson.Gson;
+
+import java.io.File;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Consts;
@@ -24,6 +30,7 @@ import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -38,6 +45,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
     private Boolean favFlage = false;
     private String type;
     private CustomProgressDialog customProgressDialog;
+
     public FavoritesListAdapter(Context context, List<FavoritesData> favoritesData) {
         this.favoritesList = favoritesData;
         this.context = context;
@@ -82,11 +90,29 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
         if (data.getThumbnail_media_id() != 0) {
             Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getThumbnail_media_id(),
                     Utility.getLanguageIdFromSharedPreferences(context));
-            if (media != null) {
-                //holder.chapterImage.
-                if (Utility.isOnline(context)) {
-                    new DownloadImageTask(holder.chapterImage,customProgressDialog)
-                            .execute(media.getUrl());
+            if (media != null && media.getDownload_url() != null) {
+                if (media.getLocalFilePath() == null) {
+                    //holder.chapterImage.
+                    /*if (Utility.isOnline(context)) {
+                        new DownloadImageTask(holder.chapterImage, customProgressDialog)
+                                .execute(media.getUrl());
+                    }*/
+                    if (Utility.isOnline(context)) {
+                        Gson gson = new Gson();
+                        Intent intent = new Intent(context, DownloadService1.class);
+                        String strJsonmedia = gson.toJson(media);
+                        intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                        intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
+                        context.startService(intent);
+                        new DownloadImageTask(holder.chapterImage, customProgressDialog)
+                                .execute(media.getDownload_url());
+                    }
+                } else {
+                    File imgFile = new File(media.getLocalFilePath());
+                    if (imgFile.exists()) {
+                        Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        holder.chapterImage.setImageBitmap(bitmap);
+                    }
                 }
             }
         }

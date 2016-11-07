@@ -91,7 +91,7 @@ public class ContentFragment extends Fragment {
     private void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(contentTitle);
-        rootActivity.hideSplashImage(true);
+        //rootActivity.hideSplashImage(true);
 
         Typeface custom_fontawesome = Typeface.createFromAsset(context.getAssets(), "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");

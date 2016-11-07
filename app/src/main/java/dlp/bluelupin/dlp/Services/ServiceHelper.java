@@ -559,13 +559,12 @@ public class ServiceHelper {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         for (LanguageData data : response.body()) {
-                            if (Consts.IS_DEBUG_LOG) {
-                                Log.d(Consts.LOG_TAG, "Language data_item " + data);
-                            }
-                            if (dbHelper.upsertLanguageDataEntity(data)) {
-                                // Log.d(Consts.LOG_TAG,"successfully adding Data: "+ data_item.getName());
-                            } else {
-                                Log.d(Consts.LOG_TAG, "failure adding Data for page: " + data.getName());
+                            if (!data.getCode().equalsIgnoreCase("or-IN")) {
+                                if (dbHelper.upsertLanguageDataEntity(data)) {
+                                    // Log.d(Consts.LOG_TAG,"successfully adding Data: "+ data_item.getName());
+                                } else {
+                                    Log.d(Consts.LOG_TAG, "failure adding Data for page: " + data.getName());
+                                }
                             }
                         }
                     }

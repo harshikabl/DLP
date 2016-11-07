@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,23 +93,38 @@ public class FavoritesFragment extends Fragment {
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        //Add tabs icon with setIcon() or simple text with .setText()
+        //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.checkbox).setText(context.getString(R.string.chapters)));
+        // tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.hihlogo).setText(context.getString(R.string.topic)));
         //setUpCustomView(tabLayout);
     }
 
-    private void setUpCustomView(TabLayout tabLayout) {
-        TextView tabOne = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab, null);
-        tabOne.setText("CHAPTERS");
+   /* private void setUpCustomView(TabLayout tabLayout) {
+        View tabOne = (View) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab, null);
+        TextView one = (TextView) tabOne.findViewById(R.id.text);
+        TextView icon1 = (TextView) tabOne.findViewById(R.id.icon);
+        one.setText("CHAPTERS");
         //tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_tab_favourite, 0, 0);
-        TextView tabTwo = (TextView) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab, null);
-        tabTwo.setText("TOPICS");
+        View tabTwo = (View) LayoutInflater.from(getActivity()).inflate(R.layout.custom_tab, null);
+        TextView two = (TextView) tabTwo.findViewById(R.id.text);
+        TextView icon2 = (TextView) tabTwo.findViewById(R.id.icon);
+        two.setText("TOPICS");
+
         tabLayout.getTabAt(0).setCustomView(tabOne);
         tabLayout.getTabAt(1).setCustomView(tabTwo);
-    }
 
+      *//*  //Add fragments
+        PagerAdapter adapter = new PagerAdapter(context);
+        adapter.addFragment(new Home());
+        adapter.addFragment(new Profile());
+        adapter.addFragment(new Setting());*//*
+    }
+*/
     private void setupViewPager(ViewPager viewPager) {
         FavoritesPagerAdapter adapter = new FavoritesPagerAdapter(getActivity().getSupportFragmentManager());
         adapter.addFrag(new FavoritesListFragment().newInstance(Consts.CHAPTER), context.getString(R.string.chapters));
-        adapter.addFrag(new FavoritesListFragment().newInstance(Consts.TOPIC),context.getString(R.string.topic));
+        adapter.addFrag(new FavoritesListFragment().newInstance(Consts.TOPIC), context.getString(R.string.topic));
         viewPager.setAdapter(adapter);
     }
 }

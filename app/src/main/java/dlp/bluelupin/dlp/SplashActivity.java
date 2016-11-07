@@ -73,14 +73,14 @@ public class SplashActivity extends Activity {
 
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
         if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "calling start ");
         }
         DbHelper dbHelper = new DbHelper(context);
-        AccountData sd =  dbHelper.getAccountData();
-        if(determineFirstTimeLaunch()) {
+        AccountData sd = dbHelper.getAccountData();
+        if (determineFirstTimeLaunch()) {
             if (Consts.IS_DEBUG_LOG) {
                 Log.d(Consts.LOG_TAG, "firstTimeLaunch " + Utility.getAppVersion(context) + "");
             }
@@ -88,10 +88,11 @@ public class SplashActivity extends Activity {
             markFirstTimeLaunch();
         } //determineFirstTimeLaunch
         callGetAllLanguage();
-    };
+    }
 
-    private Boolean determineFirstTimeLaunch()
-    {
+    ;
+
+    private Boolean determineFirstTimeLaunch() {
         SharedPreferences prefs = context.getSharedPreferences("appState", Context.MODE_PRIVATE);
         if (prefs != null) {
             String firstTimeLaunchVersion = prefs.getString("firstTimeLaunch", null);
@@ -104,13 +105,10 @@ public class SplashActivity extends Activity {
     }
 
 
-
-
-    private void markFirstTimeLaunch()
-    {
+    private void markFirstTimeLaunch() {
         SharedPreferences prefs = context.getSharedPreferences("appState", Context.MODE_PRIVATE);
         if (prefs != null) {
-        SharedPreferences.Editor editor = prefs.edit();
+            SharedPreferences.Editor editor = prefs.edit();
             editor.putString("firstTimeLaunch", Utility.getAppVersion(context) + "");
             if (Consts.IS_DEBUG_LOG) {
                 Log.d(Consts.LOG_TAG, "firstTimeLaunch " + Utility.getAppVersion(context) + "");
@@ -187,7 +185,7 @@ public class SplashActivity extends Activity {
     }
 
     private void copyDBWhenFirstRun() {
-        String db_fileName = "dlp_db.db";
+        String db_fileName = Consts.dataBaseName;
         File dbFile = context.getDatabasePath(db_fileName);
         dbFile.delete(); // because this is first time delete the DB
         final String outFileName = dbFile.getPath();//"/data/data/dlp.bluelupin.dlp/databases/" + db_fileName;// Consts.outputDirectoryLocation + db_fileName; //DB_PATH + NAME;
@@ -254,8 +252,8 @@ public class SplashActivity extends Activity {
             sh.calllanguagesService(new IServiceSuccessCallback<String>() {
                 @Override
                 public void onDone(final String callerUrl, String d, String error) {
-                    DbHelper db = new DbHelper(SplashActivity.this);
-                    List<LanguageData> data = db.getAllLanguageDataEntity();
+                    //DbHelper db = new DbHelper(SplashActivity.this);
+                    //List<LanguageData> data = db.getAllLanguageDataEntity();
                     init();
                     if (Consts.IS_DEBUG_LOG) {
                         // Log.d(Consts.LOG_TAG, "SplashActivity: callGetAllLanguage data_item count: " + data_item.size() + "  " + data_item);

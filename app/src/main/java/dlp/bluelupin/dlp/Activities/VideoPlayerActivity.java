@@ -16,6 +16,7 @@ import android.view.SurfaceView;
 import android.widget.FrameLayout;
 
 import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -34,6 +35,7 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
+
         if (Utility.isTablet(this)) {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else {
@@ -79,9 +81,10 @@ public class VideoPlayerActivity extends Activity implements SurfaceHolder.Callb
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if ( pDialog!=null && pDialog.isShowing() ){
+        if (pDialog != null && pDialog.isShowing()) {
             pDialog.dismiss();
         }
+        Utility.setLangRecreate(VideoPlayerActivity.this, Utility.getLanguageCodeFromSharedPreferences(VideoPlayerActivity.this));
         player.reset();
     }
 
