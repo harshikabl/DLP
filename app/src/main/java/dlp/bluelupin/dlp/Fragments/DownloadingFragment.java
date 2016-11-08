@@ -285,24 +285,44 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
             }
             if (intent.getAction().equals(Consts.MESSAGE_CANCEL_DOWNLOAD)) {
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+//                Intent intent1 = new Intent(context, DownloadService1.class);
+//                String strJsonmedia = gson.toJson(media);
+//                intent1.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+//                intent1.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
+
                 context.stopService(intent);
                 // Toast.makeText(context, getString(R.string.downloading_cancel), Toast.LENGTH_LONG).show();
                 unregisterReceiver();
 
                 //String strJsonMedia = intent.getExtras().getString(Consts.EXTRA_MEDIA);
-                int mediaId = intent.getExtras().getInt(Consts.EXTRA_MEDIA, 0);
-                Gson gson = new Gson();
+                int parentId = intent.getExtras().getInt("parentId", 0);
+                //Gson gson = new Gson();
                 //Data selectedMedia = gson.fromJson(strJsonMedia, Data.class);
+                DbHelper dbhelper = new DbHelper(context);
+                List<Data> dataList1 = dbhelper.getAllDownloadingFileEntity();
+
                 List<DownloadMediaWithParent> listWithoutDownload = new ArrayList<DownloadMediaWithParent>();
-                if (mediaId != 0) {
+                if (parentId != 0) {
                     for (DownloadMediaWithParent media : downloadMediaWithParentList) {
-                        if (media.getParentId() != mediaId) {
+                        if (media.getParentId() != parentId) {
                             listWithoutDownload.add(media);
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "**** media Id: " + media.getParentId() + " dl cancelled:");
                             }
+                        } else {
+                            Boolean deleteFlag = dbhelper.deleteFileDownloadedByParentId(parentId);
+                            if (deleteFlag) {
+                                if (Consts.IS_DEBUG_LOG) {
+                                    Log.d(Consts.LOG_TAG, "**** Delete " + parentId);
+                                }
+                            }
+
                         }
+
                     }
+                    List<Data> dataList2 = dbhelper.getAllDownloadingFileEntity();
+
                     downloadMediaWithParentList = listWithoutDownload;
                     downloadingAdapter = new DownloadingAdapter(context, downloadMediaWithParentList);
                     downloadingRecyclerView.setAdapter(downloadingAdapter);

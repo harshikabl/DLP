@@ -87,7 +87,7 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
         // starting the download service
         final DbHelper dbHelper = new DbHelper(context);
         final DownloadMediaWithParent dataWithParent = itemList.get(position);
-        Data data = dbHelper.getDataEntityById(dataWithParent.getParentId());
+        final Data data = dbHelper.getDataEntityById(dataWithParent.getParentId());
         if (data != null) {
             final Data resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
                     Utility.getLanguageIdFromSharedPreferences(context));
@@ -146,16 +146,17 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
         holder.cancelIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHelper.deleteFileDownloadedByParentId(dataWithParent.getParentId());//delete media by parent id
+                //dbHelper.deleteFileDownloadedByParentId(dataWithParent.getParentId());//delete media by parent id
                 /*Intent broadcastIntent = new Intent();
                 broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
                 broadcastIntent.putExtra("mediaId", dataWithParent.getParentId());
                 LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);*/
                 holder.cardView.setVisibility(View.INVISIBLE);
                 Gson gson = new Gson();
-                //String strJsonmedia = gson.toJson(data_item);
+                String strJsonmedia = gson.toJson(data);
                 Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
-                intent.putExtra(Consts.EXTRA_MEDIA, dataWithParent.getParentId()); // strJsonmedia
+                intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia); // strJsonmedia
+                intent.putExtra("parentId", dataWithParent.getParentId());
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
                 if (Consts.IS_DEBUG_LOG) {

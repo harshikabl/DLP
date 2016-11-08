@@ -1296,6 +1296,28 @@ public class DbHelper extends SQLiteOpenHelper {
         return done;
     }
 
+    public List<Data> getAllDownloadingFileEntity() {
+        String query = "SELECT MediaId , progress, parentId from DownloadingFileEntity";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+        List<Data> list = new ArrayList<Data>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                Data ob = new Data();
+                ob.setMediaId(Integer.parseInt(cursor.getString(0)));
+                ob.setProgress(Integer.parseInt(cursor.getString(1)));
+                ob.setParent_id(Integer.parseInt(cursor.getString(2)));
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
     public Data getDownloadingFileEntityById(int id) {
         String query = "SELECT MediaId , progress, parentId from DownloadingFileEntity WHERE MediaId = " + id + " ";
 
@@ -1317,6 +1339,8 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return ob;
     }
+
+
 
     public boolean insertDownloadingFileEntity(Data ob) {
 
@@ -1425,24 +1449,22 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //delete downloaded file  by parent id
     public boolean deleteFileDownloadedByParentId(int id) {
-        boolean result = false;
+        long i = 0;
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "parentId = '" + id + "' ";
-        db.delete("DownloadingFileEntity", query, null);
+        i = db.delete("DownloadingFileEntity", query, null);
         db.close();
-        result = true;
-        return result;
+        return i > 0;
     }
 
     //delete downloaded file  by MediaId
     public boolean deleteFileDownloadedByMediaId(int id) {
-        boolean result = false;
+        long i = 0;
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "MediaId = '" + id + "' ";
         db.delete("DownloadingFileEntity", query, null);
         db.close();
-        result = true;
-        return result;
+        return i > 0;
     }
 
     //Medialanguage Latest DataEntity

@@ -88,7 +88,9 @@ public class DownloadService1 extends IntentService {
                 .client(okHttpClient)
                 .build();
 
+
         IServiceManager retrofitInterface = retrofit.create(IServiceManager.class);
+
         String downloadUrl = getDownloadFromMedia(media);
         if (downloadUrl != null) {
             Call<ResponseBody> request = retrofitInterface.downloadFile(downloadUrl);
@@ -248,10 +250,12 @@ public class DownloadService1 extends IntentService {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
         Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
         intent.putExtra(Consts.EXTRA_MEDIA, strJsonMedia);
         LocalBroadcastManager.getInstance(DownloadService1.this).sendBroadcast(intent);
         //notificationManager.cancel(0);
+
     }
 
 }
