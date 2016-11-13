@@ -284,6 +284,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
                 //Log.d(Consts.LOG_TAG, "**** received message in Downloadingfragment: " + intent.getAction());
             }
             if (intent.getAction().equals(Consts.MESSAGE_CANCEL_DOWNLOAD)) {
+
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
 //                Intent intent1 = new Intent(context, DownloadService1.class);
@@ -322,7 +323,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
 
                     }
                     List<Data> dataList2 = dbhelper.getAllDownloadingFileEntity();
-
+                    DownloadService1.shouldContinue = false;
                     downloadMediaWithParentList = listWithoutDownload;
                     downloadingAdapter = new DownloadingAdapter(context, downloadMediaWithParentList);
                     downloadingRecyclerView.setAdapter(downloadingAdapter);
@@ -331,22 +332,31 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
             } // cancel download
 
             if (intent.getAction().equals(Consts.MESSAGE_PROGRESS)) {
-
-                DownloadData download = intent.getParcelableExtra(Consts.EXTRA_DOWNLOAD_DATA);
-                if (download != null) {
-                    if (downloadMediaWithParentList != null && downloadMediaWithParentList.size() > 0) {
-                        for (DownloadMediaWithParent media : downloadMediaWithParentList) {
-                            for (Data data : media.getStrJsonResourcesToDownloadList()) {
-                                if (data.getId() == download.getId()) {
-                                    data.setProgress(download.getProgress());
-                                    if (Consts.IS_DEBUG_LOG) {
-                                        Log.d(Consts.LOG_TAG, "**** media Id: " + download.getId() + " progress:" + download.getProgress() + "%");
+                if(DownloadService1.shouldContinue == false)
+                {
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "Do not update % progress as DownloadService1.shouldContinue: " + DownloadService1.shouldContinue);
+                    }
+                    unregisterReceiver();
+                    return;
+                }
+                else {
+                    DownloadData download = intent.getParcelableExtra(Consts.EXTRA_DOWNLOAD_DATA);
+                    if (download != null) {
+                        if (downloadMediaWithParentList != null && downloadMediaWithParentList.size() > 0) {
+                            for (DownloadMediaWithParent media : downloadMediaWithParentList) {
+                                for (Data data : media.getStrJsonResourcesToDownloadList()) {
+                                    if (data.getId() == download.getId()) {
+                                        data.setProgress(download.getProgress());
+                                        if (Consts.IS_DEBUG_LOG) {
+                                            Log.d(Consts.LOG_TAG, "**** media Id: " + download.getId() + " progress:" + download.getProgress() + "%");
+                                        }
                                     }
                                 }
                             }
+                            downloadingRecyclerView.setAdapter(downloadingAdapter);
+                            downloadingAdapter.notifyDataSetChanged();
                         }
-                        downloadingRecyclerView.setAdapter(downloadingAdapter);
-                        downloadingAdapter.notifyDataSetChanged();
                     }
                 }
 

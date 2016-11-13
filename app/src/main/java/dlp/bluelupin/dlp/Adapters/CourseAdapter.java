@@ -105,6 +105,19 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
                         Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                         holder.courseImage.setImageBitmap(bitmap);
                     }
+                    else
+                    {
+                        if (Utility.isOnline(context)) {
+                            Gson gson = new Gson();
+                            Intent intent = new Intent(context, DownloadService1.class);
+                            String strJsonmedia = gson.toJson(media);
+                            intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                            intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.URL);
+                            context.startService(intent);
+                            new DownloadImageTask(holder.courseImage, customProgressDialog)
+                                    .execute(media.getUrl());
+                        }
+                    }
                 }
 
             }

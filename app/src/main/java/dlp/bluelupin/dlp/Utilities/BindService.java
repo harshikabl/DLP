@@ -77,7 +77,7 @@ public class BindService extends Service {
             long totalBytesDownloaded = 0;
             for (int i = 0; i < count; i++) {
                 //totalBytesDownloaded += DownloadFile(urls[i]);
-                downoadFile(urls[i]);
+//                downoadFile(urls[i]);
                 //---calculate percentage downloaded and
                 // report its progress---
                 publishProgress((int) (((i + 1) / (float) count) * 100));
@@ -101,19 +101,19 @@ public class BindService extends Service {
         }
     }
 
-    //download service call
-    public void downoadFile(URL url) {
-        if (Utility.isOnline(BindService.this)) {
-            final ServiceHelper sh = new ServiceHelper(BindService.this);
-            sh.callDownloadFileService(url.toString(),mediaId, new IServiceSuccessCallback<String>() {
-                @Override
-                public void onDone(final String callerUrl, final String result, String error) {
-                }
-            });
-
-        } else {
-            Utility.alertForErrorMessage(getString(R.string.online_msg), BindService.this);
-        }
-    }
+//    //download service call
+//    public void downoadFile(URL url) {
+//        if (Utility.isOnline(BindService.this)) {
+//            final ServiceHelper sh = new ServiceHelper(BindService.this);
+//            sh.callDownloadFileService(url.toString(),mediaId, new IServiceSuccessCallback<String>() {
+//                @Override
+//                public void onDone(final String callerUrl, final String result, String error) {
+//                }
+//            });
+//
+//        } else {
+//            Utility.alertForErrorMessage(getString(R.string.online_msg), BindService.this);
+//        }
+//    }
 
 }

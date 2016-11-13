@@ -39,6 +39,7 @@ import retrofit2.Retrofit;
  */
 public class DownloadService1 extends IntentService {
 
+    public static volatile boolean shouldContinue = true;
     public DownloadService1() {
         super("Download Service");
     }
@@ -52,6 +53,7 @@ public class DownloadService1 extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
         Bundle extras = intent.getExtras();
         if (extras != null) {
             strJsonMedia = extras.getString(Consts.EXTRA_MEDIA);
@@ -76,9 +78,9 @@ public class DownloadService1 extends IntentService {
         initDownload(media);
 
     }
-
+    OkHttpClient okHttpClient;
     private void initDownload(Data media) {
-        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+        okHttpClient = new OkHttpClient().newBuilder()
                 .connectTimeout(120, TimeUnit.SECONDS)
                 .readTimeout(120, TimeUnit.SECONDS)
                 .writeTimeout(120, TimeUnit.SECONDS)
@@ -111,6 +113,25 @@ public class DownloadService1 extends IntentService {
         }
     }
 
+    public void cancel(){//OkHttpClient client, Object tag) {
+        okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(120, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .build();
+        for (okhttp3.Call call : okHttpClient.dispatcher().queuedCalls()) {
+            //if (tag.equals(call.request().tag())) call.cancel();
+            call.cancel();
+        }
+        for (okhttp3.Call call : okHttpClient.dispatcher().runningCalls()) {
+            //if (tag.equals(call.request().tag())) call.cancel();
+            call.cancel();
+        }
+        if (Consts.IS_DEBUG_LOG) {
+            Log.d(Consts.LOG_TAG, "all call cancelled!!");
+        }
+    }
+
     private String getDownloadFromMedia(Data media) {
         String downloadUrl = null;
         switch (urlPropertyForDownload) {
@@ -131,7 +152,12 @@ public class DownloadService1 extends IntentService {
     }
 
     private void downloadFile(ResponseBody body, Data media) throws IOException {
-
+        if (shouldContinue == false) {
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "Cancelling download service in onHandleIntent " + media.getDownload_url());
+            }
+            return;
+        }
 
         int count;
         byte data[] = new byte[1024 * 4];
@@ -139,11 +165,11 @@ public class DownloadService1 extends IntentService {
         if (body != null) {
             fileSize = body.contentLength();
 
-            String localFilePath = Consts.outputDirectoryLocation + media.getFile_path();
+            String localFilePath = DownloadService1.this.getFilesDir() + media.getFile_path();// Consts.outputDirectoryLocation + media.getFile_path();
             InputStream bis = new BufferedInputStream(body.byteStream(), 1024 * 8);
             if (urlPropertyForDownload.equalsIgnoreCase(Consts.THUMBNAIL_URL)) {
                 if (media.getThumbnail_file_path() != null)
-                    localFilePath = Consts.outputDirectoryLocation + media.getThumbnail_file_path();
+                    localFilePath = DownloadService1.this.getFilesDir() + media.getThumbnail_file_path(); // Consts.outputDirectoryLocation + media.getThumbnail_file_path();
             }
 
             File outputFile = new File(localFilePath);
@@ -174,18 +200,24 @@ public class DownloadService1 extends IntentService {
                     if (Consts.IS_DEBUG_LOG) {
                         //Log.d(Consts.LOG_TAG, "DownlaodService1: downlaodData Id:" + downloadData.getId() + " progress:" + downloadData.getProgress());
                     }
-                    sendNotification(downloadData);
+                    if (shouldContinue != false) {
+                        sendNotification(downloadData);
+                    }
 
                     timeCount++;
                 }
 
                 output.write(data, 0, count);
             }
-            onDownloadComplete(downloadData);
-            if (Consts.IS_DEBUG_LOG) {
-                Log.d(Consts.LOG_TAG, "successfully downloaded: media Id:" + media.getId() + " downloading Url: " + media.getDownload_url() + " at " + localFilePath);
+            if (shouldContinue != false) {//Consts.IS_DEBUG_LOG) {
+                onDownloadComplete(downloadData);
+                UpdateMediaInDB(localFilePath);
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "successfully downloaded: media Id:" + media.getId() + " downloading Url: " + media.getDownload_url() + " at " + localFilePath);
+                }
+
             }
-            UpdateMediaInDB(localFilePath);
+
             output.flush();
             output.close();
             bis.close();
@@ -250,6 +282,7 @@ public class DownloadService1 extends IntentService {
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
+        //cancel(okHttpClient,"all");
         super.onTaskRemoved(rootIntent);
         Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
         intent.putExtra(Consts.EXTRA_MEDIA, strJsonMedia);

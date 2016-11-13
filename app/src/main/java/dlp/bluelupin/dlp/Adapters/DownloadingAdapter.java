@@ -107,10 +107,13 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
                 if (media.getLocalFilePath() == null) {
                     if (Utility.isOnline(context)) {
                         Gson gson = new Gson();
+
                         Intent intent = new Intent(context, DownloadService1.class);
                         String strJsonmedia = gson.toJson(media);
                         intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                         intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
+
+
                         context.startService(intent);
                         new DownloadImageTask(holder.mediaImage, customProgressDialog)
                                 .execute(media.getDownload_url());
@@ -151,17 +154,28 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
                 broadcastIntent.setAction(Consts.mBroadcastDeleteAction);
                 broadcastIntent.putExtra("mediaId", dataWithParent.getParentId());
                 LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);*/
-                holder.cardView.setVisibility(View.INVISIBLE);
-                Gson gson = new Gson();
-                String strJsonmedia = gson.toJson(data);
-                Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
-                intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia); // strJsonmedia
-                intent.putExtra("parentId", dataWithParent.getParentId());
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-
+                DownloadService1.shouldContinue = false;
                 if (Consts.IS_DEBUG_LOG) {
-                    Log.d(Consts.LOG_TAG, "**** sending cancel message in DownloadingAdapter: " + intent.getAction());
+                    Log.d(Consts.LOG_TAG, "**** setting DownloadService1.shouldContinue: " + DownloadService1.shouldContinue);
                 }
+
+                List<Data> dlResourceToBeCancelled =  dataWithParent.getStrJsonResourcesToDownloadList();
+                for (Data data: dlResourceToBeCancelled) {
+                    dbHelper.deleteFileDownloadedByMediaId(data.getMediaId());
+
+                }
+
+                holder.cardView.setVisibility(View.INVISIBLE);
+//                Gson gson = new Gson();
+//                String strJsonmedia = gson.toJson(data);
+//                Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);
+//                intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia); // strJsonmedia
+//                intent.putExtra("parentId", dataWithParent.getParentId());
+//                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+//
+//                if (Consts.IS_DEBUG_LOG) {
+//                    Log.d(Consts.LOG_TAG, "**** sending cancel message in DownloadingAdapter: " + intent.getAction());
+//                }
             }
         });
 

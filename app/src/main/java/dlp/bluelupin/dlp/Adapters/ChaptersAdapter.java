@@ -207,6 +207,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 //                            }
 //                        }
                                     if (Utility.isOnline(context)) {
+                                        DownloadService1.shouldContinue = true;
                                         Gson gson = new Gson();
                                         String strJsonResourcesToDownloadList = gson.toJson(resourcesToDownloadList);
 
