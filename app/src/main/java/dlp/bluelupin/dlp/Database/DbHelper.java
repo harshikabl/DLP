@@ -30,8 +30,8 @@ import dlp.bluelupin.dlp.Utilities.Utility;
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = "dlp_db.db";// Consts.outputDirectoryLocation +  "dlp_db.db"; //Consts.dataBaseName; //
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = Consts.dataBaseName;// Consts.outputDirectoryLocation +  "dlp_db.db"; //Consts.dataBaseName; //
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -1341,7 +1341,6 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
 
-
     public boolean insertDownloadingFileEntity(Data ob) {
 
 
@@ -1469,7 +1468,7 @@ public class DbHelper extends SQLiteOpenHelper {
             if (i > 0) {
                 Log.d(Consts.LOG_TAG, "deleting row from DownloadingFileEntity with mediaId: " + id);
             } else {
-               // Log.d(Consts.LOG_TAG, "Unsuccessful deleting row from DownloadingFileEntity with mediaId: " + id);
+                // Log.d(Consts.LOG_TAG, "Unsuccessful deleting row from DownloadingFileEntity with mediaId: " + id);
             }
         }
         return i > 0;
@@ -1691,7 +1690,9 @@ public class DbHelper extends SQLiteOpenHelper {
             while (cursor.isAfterLast() == false) {
                 LanguageData ob = new LanguageData();
                 populateLanguageDataEntity(cursor, ob);
-                list.add(ob);
+                if (!ob.getCode().equalsIgnoreCase("or-IN")) {//for Oriya language disable
+                    list.add(ob);
+                }
                 cursor.moveToNext();
             }
         }

@@ -1,6 +1,7 @@
 package dlp.bluelupin.dlp.Fragments;
 
 
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -287,10 +288,12 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
 
                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
-//                Intent intent1 = new Intent(context, DownloadService1.class);
-//                String strJsonmedia = gson.toJson(media);
-//                intent1.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
-//                intent1.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
+
+                /*Intent intent1 = new Intent(context, DownloadService1.class);
+                String strJsonmedia = gson.toJson(strJsonMedia);
+                intent1.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                intent1.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);*/
+
 
                 context.stopService(intent);
                 // Toast.makeText(context, getString(R.string.downloading_cancel), Toast.LENGTH_LONG).show();
@@ -301,7 +304,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
                 //Gson gson = new Gson();
                 //Data selectedMedia = gson.fromJson(strJsonMedia, Data.class);
                 DbHelper dbhelper = new DbHelper(context);
-                List<Data> dataList1 = dbhelper.getAllDownloadingFileEntity();
+                //List<Data> dataList1 = dbhelper.getAllDownloadingFileEntity();
 
                 List<DownloadMediaWithParent> listWithoutDownload = new ArrayList<DownloadMediaWithParent>();
                 if (parentId != 0) {
@@ -322,7 +325,7 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
                         }
 
                     }
-                    List<Data> dataList2 = dbhelper.getAllDownloadingFileEntity();
+                    //List<Data> dataList2 = dbhelper.getAllDownloadingFileEntity();
                     DownloadService1.shouldContinue = false;
                     downloadMediaWithParentList = listWithoutDownload;
                     downloadingAdapter = new DownloadingAdapter(context, downloadMediaWithParentList);
@@ -332,15 +335,13 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
             } // cancel download
 
             if (intent.getAction().equals(Consts.MESSAGE_PROGRESS)) {
-                if(DownloadService1.shouldContinue == false)
-                {
+                if (DownloadService1.shouldContinue == false) {
                     if (Consts.IS_DEBUG_LOG) {
                         Log.d(Consts.LOG_TAG, "Do not update % progress as DownloadService1.shouldContinue: " + DownloadService1.shouldContinue);
                     }
                     unregisterReceiver();
                     return;
-                }
-                else {
+                } else {
                     DownloadData download = intent.getParcelableExtra(Consts.EXTRA_DOWNLOAD_DATA);
                     if (download != null) {
                         if (downloadMediaWithParentList != null && downloadMediaWithParentList.size() > 0) {

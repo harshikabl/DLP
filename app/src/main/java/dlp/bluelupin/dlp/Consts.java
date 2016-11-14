@@ -8,7 +8,7 @@ import android.os.Environment;
  */
 public class Consts {
     public static final String LOG_TAG = "HIH";
-    public static final Boolean IS_DEBUG_LOG = true;
+    public static final Boolean IS_DEBUG_LOG = false;
     public final static boolean PROD = false; //false;
     public final static String API_KEY = "XsMwq2updd3L5MZAtgwx7PAA0wKaylFnCejD0ei9WjSuwQVmXMQxGg3ZiH5X";
 

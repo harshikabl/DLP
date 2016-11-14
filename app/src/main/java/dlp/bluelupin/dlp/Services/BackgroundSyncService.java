@@ -36,7 +36,7 @@ public class BackgroundSyncService extends IntentService {
     // Will be called asynchronously be Android
     @Override
     protected void onHandleIntent(Intent intent) {
-        if(Utility.isOnline(BackgroundSyncService.this)) {
+        if (Utility.isOnline(BackgroundSyncService.this)) {
             if (Consts.IS_DEBUG_LOG)
                 Log.d(Consts.LOG_TAG, "starting BackgroundSyncService onHandleIntent");
             // Uri data_item = intent.getData();
@@ -151,14 +151,14 @@ public class BackgroundSyncService extends IntentService {
     }
 
     private void callMedialanguageLatestAsync(final Bundle extras) {
-        if(Utility.isOnline(BackgroundSyncService.this)) {
+        if (Utility.isOnline(BackgroundSyncService.this)) {
             ContentServiceRequest request = new ContentServiceRequest();
             request.setPage(1);
             DbHelper db = new DbHelper(BackgroundSyncService.this);
             CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.MediaLanguage_Latest);
             if (cacheSeviceCallData != null) {
                 request.setStart_date(cacheSeviceCallData.getLastCalled());
-                if(Consts.IS_DEBUG_LOG) {
+                if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "BackgroundSyncService: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
                 }
             }
@@ -166,11 +166,11 @@ public class BackgroundSyncService extends IntentService {
             sc.getAllMedialanguageLatestContent(request, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
-                    if(Consts.IS_DEBUG_LOG) {
+                    if (Consts.IS_DEBUG_LOG) {
                         Log.d(Consts.LOG_TAG, "BackgroundSyncService: callMedialanguageLatestAsync success result: " + isComplete);
                     }
                     LogAnalyticsHelper logAnalyticsHelper = new LogAnalyticsHelper(BackgroundSyncService.this);
-                    logAnalyticsHelper.logEvent("BackgroundSyncService",null);
+                    logAnalyticsHelper.logEvent("BackgroundSyncService", null);
 //                DbHelper db = new DbHelper(BackgroundSyncService.this);
 //                List<Data> data_item = db.getAllMedialanguageLatestDataEntity();
 //                Log.d(Consts.LOG_TAG, "BackgroundSyncService: data_item count: " + data_item.size());
@@ -178,17 +178,18 @@ public class BackgroundSyncService extends IntentService {
             });
         }
     }
+
     //Language service call
     public void callGetAllLanguage(final Bundle extras) {
         if (Utility.isOnline(BackgroundSyncService.this)) {
             final ServiceHelper sh = new ServiceHelper(BackgroundSyncService.this);
-            sh.calllanguagesService( new IServiceSuccessCallback<String>() {
+            sh.calllanguagesService(new IServiceSuccessCallback<String>() {
                 @Override
                 public void onDone(final String callerUrl, String d, String error) {
-                    DbHelper db = new DbHelper(BackgroundSyncService.this);
-                    List<LanguageData> data = db.getAllLanguageDataEntity();
                     if (Consts.IS_DEBUG_LOG) {
-                        Log.d(Consts.LOG_TAG, "MainActivity: callGetAllLanguage data_item count: " + data.size()+"  "+data);
+                        DbHelper db = new DbHelper(BackgroundSyncService.this);
+                        List<LanguageData> data = db.getAllLanguageDataEntity();
+                        Log.d(Consts.LOG_TAG, "MainActivity: callGetAllLanguage data_item count: " + data.size() + "  " + data);
                     }
                 }
             });
