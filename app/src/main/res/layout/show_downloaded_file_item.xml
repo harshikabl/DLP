@@ -4,7 +4,6 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/dimValue_5"
     card_view:cardPreventCornerOverlap="true"
     card_view:cardUseCompatPadding="true">
 
@@ -28,8 +27,9 @@
 
                 <ImageView
                     android:id="@+id/mediaImage"
-                    android:layout_width="@dimen/size_50px"
-                    android:layout_height="@dimen/size_50px"
+                    android:layout_width="@dimen/size_60px"
+                    android:layout_height="@dimen/size_60px"
+                    android:scaleType="fitStart"
                     android:src="@drawable/imageplaceholder" />
             </LinearLayout>
 
@@ -38,7 +38,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
                 android:orientation="vertical"
-                android:padding="@dimen/dimValue_10">
+                android:paddingBottom="@dimen/dimValue_10"
+                android:paddingLeft="@dimen/dimValue_10"
+                android:paddingRight="@dimen/dimValue_5"
+                android:paddingTop="@dimen/dimValue_5">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -69,11 +72,21 @@
                             android:gravity="center"
                             android:text=""
                             android:textColor="@color/colorRad"
-                            android:textSize="@dimen/dimTextSize_20"
-                            android:visibility="gone" />
+                            android:textSize="@dimen/dimTextSize_25"
+                            android:visibility="visible" />
                     </LinearLayout>
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/download"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimTextSize_5"
+                    android:gravity="left|center"
+                    android:text="Downloaded..."
+                    android:textColor="#4a4d4e"
+                    android:textSize="@dimen/dimTextSize_13" />
 
                 <TextView
                     android:id="@+id/mediaDescription"
@@ -97,7 +110,8 @@
             <ListView
                 android:id="@+id/mediaList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
             </ListView>
         </LinearLayout>

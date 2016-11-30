@@ -74,7 +74,7 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
     }
 
     @Override
-    public void onBindViewHolder(final DownloadingViewHolder holder, int position) {
+    public void onBindViewHolder(final DownloadingViewHolder holder, final int position) {
         Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
         Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
@@ -132,10 +132,11 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
 //        holder.mediaTitle.setText(data_item.getFile_path());
 
 
-        DataAdapter dataAdapter = new DataAdapter(context, dataWithParent.getStrJsonResourcesToDownloadList());
+        /*DataAdapter dataAdapter = new DataAdapter(context, dataWithParent.getStrJsonResourcesToDownloadList());
         holder.progressList.setAdapter(dataAdapter);
         Utility.justifyListViewHeightBasedOnChildrenForDisableScrool(holder.progressList);
-        dataAdapter.notifyDataSetChanged();
+        dataAdapter.notifyDataSetChanged();*/
+
 //        if (Consts.IS_DEBUG_LOG) {
 //            Log.d(Consts.LOG_TAG, "**** setting progress for media Id: " + data_item.getId() + " progress:" + data_item.getProgress() + "%");
 //        }
@@ -166,6 +167,8 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
                 }
 
                 holder.cardView.setVisibility(View.INVISIBLE);
+                itemList.remove(position);
+                notifyDataSetChanged();
 //                Gson gson = new Gson();
 //                String strJsonmedia = gson.toJson(data);
 //                Intent intent = new Intent(Consts.MESSAGE_CANCEL_DOWNLOAD);

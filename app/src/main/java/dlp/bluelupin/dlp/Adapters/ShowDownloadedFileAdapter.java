@@ -103,11 +103,27 @@ public class ShowDownloadedFileAdapter extends RecyclerView.Adapter<ShowDownload
 
             }
         }
-        ShowDownloadedMediaFileNameAdapter dataAdapter = new ShowDownloadedMediaFileNameAdapter(context, dataWithParent.getStrJsonResourcesToDownloadList());
+       /* ShowDownloadedMediaFileNameAdapter dataAdapter = new ShowDownloadedMediaFileNameAdapter(context, dataWithParent.getStrJsonResourcesToDownloadList());
         holder.mediaList.setAdapter(dataAdapter);
         Utility.justifyListViewHeightBasedOnChildrenForDisableScrool(holder.mediaList);
-        dataAdapter.notifyDataSetChanged();
+        dataAdapter.notifyDataSetChanged();*/
 
+        holder.cancelIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                List<Data> dataList = dataWithParent.getStrJsonResourcesToDownloadList();
+                if (dataList != null) {
+                    for (Data data1 : dataList) {
+                        UpdateMediaInDB(position, data1);
+                        dbHelper.deleteFileDownloadedByMediaId(data1.getId());//delete media by id
+                    }
+                    itemList.remove(position);
+                    notifyDataSetChanged();
+                }
+
+            }
+        });
     }
 
     @Override
@@ -115,6 +131,28 @@ public class ShowDownloadedFileAdapter extends RecyclerView.Adapter<ShowDownload
         return itemList.size();
     }
 
+    private void UpdateMediaInDB(int position, Data data1) {
+        DbHelper dbHelper = new DbHelper(context);
+        Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data1.getId(), Utility.getLanguageIdFromSharedPreferences(context));
+        if (media != null) {
+            media.setLocalFilePath(null);
+            // media.setThumbnail_url_Local_file_path(null);
+            if (dbHelper.updateMediaLanguageLocalFilePathEntity(media)) {
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "successfully downloaded and THUMBNAIL local file updated: media Id:" + media.getId() + " downloading Url: " + media.getDownload_url() + " at " + media.getLocalFilePath());
+                }
+            }
+        } else {
+            Data mediaLanguage = dbHelper.getMedialanguageLatestDataEntityById(data1.getId());
+            mediaLanguage.setLocalFilePath(null);
+            // mediaLanguage.setThumbnail_url_Local_file_path(null);
+            if (dbHelper.updateMediaLanguageLocalFilePathEntity(mediaLanguage)) {
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "successfully downloaded and local file updated: media Id:" + mediaLanguage.getId() + " downloading Url: " + mediaLanguage.getDownload_url() + " at " + mediaLanguage.getLocalFilePath());
+                }
+            }
+        }
+    }
 
 }
 
