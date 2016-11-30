@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             protected Boolean doInBackground(Void... params) {
                 CardReaderHelper cardReaderHelper = new CardReaderHelper(MainActivity.this);
-                String folderLocation = Consts.outputDirectoryLocation;
+                String folderLocation = Utility.getSelectFolderPathFromSharedPreferences(MainActivity.this);//Consts.outputDirectoryLocation;
                 cardReaderHelper.ReadAppDataFolder(folderLocation);
                 return true;
             }
