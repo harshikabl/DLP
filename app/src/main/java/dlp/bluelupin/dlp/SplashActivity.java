@@ -90,7 +90,6 @@ public class SplashActivity extends Activity {
         callGetAllLanguage();
     }
 
-    ;
 
     private Boolean determineFirstTimeLaunch() {
         SharedPreferences prefs = context.getSharedPreferences("appState", Context.MODE_PRIVATE);

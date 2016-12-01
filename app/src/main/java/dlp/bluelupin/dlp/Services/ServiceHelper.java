@@ -349,7 +349,7 @@ public class ServiceHelper {
 
 
         final DbHelper dbhelper = new DbHelper(context);
-        final AccountData accountData = new AccountData();
+
         final int serverId = Utility.getUserServerIdFromSharedPreferences(context);
         AccountData accountDataApToken = dbhelper.getAccountData();
         if (accountDataApToken != null) {
@@ -363,6 +363,7 @@ public class ServiceHelper {
             @Override
             public void onResponse(Call<OtpData> call, Response<OtpData> response) {
                 OtpData data = response.body();
+                AccountData accountData = new AccountData();
                 if (data != null) {
                     accountData.setId(serverId);
                     accountData.setIsVerified(1);
@@ -559,10 +560,10 @@ public class ServiceHelper {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         for (LanguageData data : response.body()) {
-                                if (dbHelper.upsertLanguageDataEntity(data)) {
-                                    // Log.d(Consts.LOG_TAG,"successfully adding Data: "+ data_item.getName());
-                                } else {
-                                    Log.d(Consts.LOG_TAG, "failure adding Data for page: " + data.getName());
+                            if (dbHelper.upsertLanguageDataEntity(data)) {
+                                // Log.d(Consts.LOG_TAG,"successfully adding Data: "+ data_item.getName());
+                            } else {
+                                Log.d(Consts.LOG_TAG, "failure adding Data for page: " + data.getName());
                             }
                         }
                     }

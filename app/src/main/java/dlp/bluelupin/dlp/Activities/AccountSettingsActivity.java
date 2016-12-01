@@ -35,6 +35,8 @@ import java.util.List;
 import dlp.bluelupin.dlp.Adapters.LanguageAdapter;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.MainActivity;
+import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.R;
@@ -184,7 +186,20 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
                 }
             });
         } else {
-            Utility.alertForErrorMessage(getString(R.string.online_msg), AccountSettingsActivity.this);
+            AccountData accountData = new AccountData();
+            accountData.setName(name_string);
+            accountData.setEmail(email_string);
+            accountData.setPhone(pnone_no_string);
+            accountData.setIsVerified(1);
+            DbHelper dbhelper = new DbHelper(AccountSettingsActivity.this);
+            dbhelper.upsertAccountData(accountData);
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, " account Data insert in offline mode: " + accountData);
+            }
+            Intent intent = new Intent(AccountSettingsActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
         }
     }
 

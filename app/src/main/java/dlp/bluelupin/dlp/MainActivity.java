@@ -50,8 +50,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import dlp.bluelupin.dlp.Activities.AccountSettingsActivity;
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
 import dlp.bluelupin.dlp.Activities.NotificationsActivity;
+import dlp.bluelupin.dlp.Activities.VerificationActivity;
 import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
 import dlp.bluelupin.dlp.Adapters.NavigationMenuAdapter;
 import dlp.bluelupin.dlp.Database.DbHelper;
@@ -60,6 +62,7 @@ import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
 import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
 import dlp.bluelupin.dlp.Fragments.WebFragment;
 import dlp.bluelupin.dlp.Models.AccountData;
+import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
@@ -188,7 +191,7 @@ public class MainActivity extends AppCompatActivity
         });
         setUpCourseFragment();
         readExternalFilesAsync();
-
+        callCreateAccountService();
     }
 
     //alert for progress bar
@@ -221,7 +224,9 @@ public class MainActivity extends AppCompatActivity
             protected Boolean doInBackground(Void... params) {
                 CardReaderHelper cardReaderHelper = new CardReaderHelper(MainActivity.this);
                 String folderLocation = Utility.getSelectFolderPathFromSharedPreferences(MainActivity.this);//Consts.outputDirectoryLocation;
-                cardReaderHelper.ReadAppDataFolder(folderLocation);
+                if (folderLocation != null) {
+                    cardReaderHelper.ReadAppDataFolder(folderLocation);
+                }
                 return true;
             }
 
@@ -547,6 +552,39 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    //call create account service when user in online mode
+    private void callCreateAccountService() {
+
+        int languageId = Utility.getLanguageIdFromSharedPreferences(this);
+        final DbHelper dbhelper = new DbHelper(MainActivity.this);
+        AccountData data = dbhelper.getAccountData();
+        AccountServiceRequest accountServiceRequest = new AccountServiceRequest();
+        if (data != null) {
+            if (data.getApi_token() == null || data.getApi_token().equals("")) {
+                accountServiceRequest.setName(data.getName());
+                accountServiceRequest.setEmail(data.getEmail());
+                accountServiceRequest.setPhone(data.getPhone());
+                accountServiceRequest.setPreferred_language_id(languageId);
+                if (Utility.isOnline(this)) {
+                    ServiceCaller sc = new ServiceCaller(MainActivity.this);
+                    sc.CreateAccount(accountServiceRequest, new IAsyncWorkCompletedCallback() {
+                        @Override
+                        public void onDone(String workName, boolean isComplete) {
+
+                            if (isComplete) {
+                                if (Consts.IS_DEBUG_LOG) {
+                                    Log.d(Consts.LOG_TAG, " callCreateAccountService in offline mode success result: " + isComplete);
+                                }
+                                // Toast.makeText(MainActivity.this, getString(R.string.otp_sent), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -567,6 +605,7 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
         Toast.makeText(MainActivity.this, "Destroy call", Toast.LENGTH_LONG).show();
     }*/
+
 }
 
 

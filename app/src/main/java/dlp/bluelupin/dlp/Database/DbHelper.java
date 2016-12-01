@@ -967,7 +967,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-        long i = db.update("AccountEntity", values, "server_id = '" + accountData.getId() + "'", null);
+        long i = db.update("AccountEntity", values, "phone = '" + accountData.getPhone() + "'", null);
 
         db.close();
         return i > 0;
