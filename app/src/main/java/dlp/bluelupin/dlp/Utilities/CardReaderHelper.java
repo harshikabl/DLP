@@ -35,10 +35,12 @@ public class CardReaderHelper {
 
         File fileDirectory = new File(folderLocation);
         File[] dirFiles = fileDirectory.listFiles();
-        for (File folder : dirFiles) {
-            if (folder.isDirectory()) {
-                readMetaDataJson(addTrailingSlash(folder.getPath()));
-                //readMediaOfFolder(addTrailingSlash(folder.getPath()));
+        if (dirFiles != null) {
+            for (File folder : dirFiles) {
+                if (folder.isDirectory()) {
+                    readMetaDataJson(addTrailingSlash(folder.getPath()));
+                    //readMediaOfFolder(addTrailingSlash(folder.getPath()));
+                }
             }
         }
     }
@@ -61,7 +63,7 @@ public class CardReaderHelper {
                         if (dataDate.after(serviceLastcalledDate)) {
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "CardReaderHelper: Starting reading folder " + folderLocation + " as dataDate:" + dataDate + " is after serviceLastcalledDate: " + serviceLastcalledDate);
-                               // Toast.makeText(context,"Updated content found in directory " + folderLocation, Toast.LENGTH_LONG);
+                                // Toast.makeText(context,"Updated content found in directory " + folderLocation, Toast.LENGTH_LONG);
                             }
 
                             readFilesOfFolder(folderLocation);
@@ -71,7 +73,7 @@ public class CardReaderHelper {
                         } else {
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "CardReaderHelper: NOT reading folder " + folderLocation + "  as dataDate:" + dataDate + " is NOT after serviceLastcalledDate: " + serviceLastcalledDate);
-                               // Toast.makeText(context,"No updated content found in directory "  + folderLocation, Toast.LENGTH_LONG);
+                                // Toast.makeText(context,"No updated content found in directory "  + folderLocation, Toast.LENGTH_LONG);
                             }
                         }
                     }
@@ -87,8 +89,7 @@ public class CardReaderHelper {
         if (!fileDirectory.exists()) {
             if (Consts.IS_DEBUG_LOG)
                 Log.d(Consts.LOG_TAG, "CardReaderHelper: readMediaOfFolder Folder does not exists: " + fileDirectory.getPath());
-        }
-        else {
+        } else {
             File[] dirFiles = fileDirectory.listFiles();
 
             if (dirFiles.length != 0) {
@@ -105,9 +106,7 @@ public class CardReaderHelper {
     }
 
 
-
-    private void readFilesOfFolder(String folderLocation)
-    {
+    private void readFilesOfFolder(String folderLocation) {
         File fileDirectory = new File(folderLocation);
         if (!fileDirectory.exists()) {
             if (Consts.IS_DEBUG_LOG)
@@ -117,38 +116,31 @@ public class CardReaderHelper {
 
         if (dirFiles.length != 0) {
             FileDataReaderHelper fileReaderHelper = new FileDataReaderHelper(context);
-            for (int i = 0; i< dirFiles.length; i++) {
-               File file = new File(dirFiles[i].getPath());
+            for (int i = 0; i < dirFiles.length; i++) {
+                File file = new File(dirFiles[i].getPath());
                 String fileExtension = Utility.getFileExtension(file.getName());
                 if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "CardReaderHelper: Reading file " + file.getName() + " fileExtension:" + fileExtension);
                 }
-               if(fileExtension.equalsIgnoreCase("json"))
-               {
-                   String fileContent = fileReaderHelper.ReadFileContentsFromFolder("",file.getPath());
-                   if(file.getName().contains("content")) {
-                       ReadAndUpdateContentDataInDb(fileContent);
-                   }
-                   else
-                   if(file.getName().contains("langresource")) {
-                       ReadAndUpdateLanguageResourceDataInDb(fileContent);
-                   }
-                   else
-                   if(file.getName().contains("media")) {
-                       ReadAndUpdateMediaInDb(fileContent);
-                   }
-                   else
-                   if(file.getName().contains("medialanguage")) {
-                       ReadAndUpdateMediaLanguageInDb(fileContent);
-                   }
-                   // also read all subfolders and images with in them
+                if (fileExtension.equalsIgnoreCase("json")) {
+                    String fileContent = fileReaderHelper.ReadFileContentsFromFolder("", file.getPath());
+                    if (file.getName().contains("content")) {
+                        ReadAndUpdateContentDataInDb(fileContent);
+                    } else if (file.getName().contains("langresource")) {
+                        ReadAndUpdateLanguageResourceDataInDb(fileContent);
+                    } else if (file.getName().contains("media")) {
+                        ReadAndUpdateMediaInDb(fileContent);
+                    } else if (file.getName().contains("medialanguage")) {
+                        ReadAndUpdateMediaLanguageInDb(fileContent);
+                    }
+                    // also read all subfolders and images with in them
 
 
-               }
+                }
                 if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "CardReaderHelper: NOT Reading file as NOT json extension" + file.getName() + " fileExtension:" + fileExtension);
                 }
-               // File renamedFile = new File(file.getPath() + "__");
+                // File renamedFile = new File(file.getPath() + "__");
                 //file.renameTo(renamedFile);
             }
         }
@@ -156,7 +148,8 @@ public class CardReaderHelper {
 
     private void ReadAndUpdateContentDataInDb(String fileContent) {
 //        ContentData contentData = new Gson().fromJson(fileContent, ContentData.class);
-        List<Data> datas = new Gson().fromJson(fileContent, new TypeToken<List<Data>>() {}.getType());
+        List<Data> datas = new Gson().fromJson(fileContent, new TypeToken<List<Data>>() {
+        }.getType());
         final DbHelper dbhelper = new DbHelper(context);
         if (datas != null) {
             for (Data data : datas) {
@@ -169,7 +162,8 @@ public class CardReaderHelper {
     }
 
     private void ReadAndUpdateLanguageResourceDataInDb(String fileContent) {
-        List<Data> datas = new Gson().fromJson(fileContent, new TypeToken<List<Data>>() {}.getType());
+        List<Data> datas = new Gson().fromJson(fileContent, new TypeToken<List<Data>>() {
+        }.getType());
         final DbHelper dbhelper = new DbHelper(context);
         if (datas != null) {
             for (Data data : datas) {
@@ -182,7 +176,8 @@ public class CardReaderHelper {
     }
 
     private void ReadAndUpdateMediaInDb(String fileContent) {
-        List<Data> datas = new Gson().fromJson(fileContent, new TypeToken<List<Data>>() {}.getType());
+        List<Data> datas = new Gson().fromJson(fileContent, new TypeToken<List<Data>>() {
+        }.getType());
         final DbHelper dbhelper = new DbHelper(context);
         if (datas != null) {
             for (Data data : datas) {
@@ -195,7 +190,8 @@ public class CardReaderHelper {
     }
 
     private void ReadAndUpdateMediaLanguageInDb(String fileContent) {
-        List<Data> datas = new Gson().fromJson(fileContent, new TypeToken<List<Data>>() {}.getType());
+        List<Data> datas = new Gson().fromJson(fileContent, new TypeToken<List<Data>>() {
+        }.getType());
         final DbHelper dbhelper = new DbHelper(context);
         if (datas != null) {
             for (Data data : datas) {

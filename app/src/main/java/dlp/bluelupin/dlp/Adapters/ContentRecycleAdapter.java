@@ -92,7 +92,6 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         final DbHelper dbHelper = new DbHelper(context);
         final Data data = itemList.get(position);
         holder.contentContainer.removeAllViews();
-        boolean found = false;
 
         if (Consts.IS_DEBUG_LOG)
             Log.d(Consts.LOG_TAG, " data_item id: " + data.getId() + " type: " + data.getType());

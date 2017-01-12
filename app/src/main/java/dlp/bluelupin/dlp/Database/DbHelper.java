@@ -1693,6 +1693,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 if (!ob.getCode().equalsIgnoreCase("or-IN")) {//for Oriya language disable
                     list.add(ob);
                 }
+                //list.add(ob);
                 cursor.moveToNext();
             }
         }

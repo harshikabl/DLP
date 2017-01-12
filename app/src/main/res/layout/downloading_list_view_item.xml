@@ -120,6 +120,7 @@
         </LinearLayout>
 
 
+
         <LinearLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
@@ -134,7 +135,6 @@
 
             </ListView>
         </LinearLayout>
-
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"

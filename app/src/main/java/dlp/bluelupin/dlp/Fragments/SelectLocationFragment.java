@@ -21,6 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 
 import dlp.bluelupin.dlp.Consts;
@@ -114,11 +119,13 @@ public class SelectLocationFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-               /* Intent intent = new Intent();
+                Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("file*//*");
-                startActivityForResult(Intent.createChooser(intent, "Select folder"), PICKFILE_REQUEST_CODE);*/
-                DirectoryChooserDialog directoryChooserDialog =
+                //File file = new File(String.valueOf(Environment.getExternalStorageDirectory()));
+                //intent.setDataAndType(Uri.fromFile(file), "*/*");
+                intent.setType("*/*");
+                startActivityForResult(Intent.createChooser(intent, "Select folder"), PICKFILE_REQUEST_CODE);
+              /*  DirectoryChooserDialog directoryChooserDialog =
                         new DirectoryChooserDialog(context,
                                 new DirectoryChooserDialog.ChosenDirectoryListener() {
                                     @Override
@@ -128,15 +135,8 @@ public class SelectLocationFragment extends Fragment {
                                         path.setText(chosenDir);
                                         Toast.makeText(context, "Chosen directory: " + chosenDir, Toast.LENGTH_LONG).show();
                                     }
-                                });
-                // Toggle new folder button enabling
-
-                //directoryChooserDialog.setNewFolderEnabled(m_newFolderEnabled);
-
-                // Load directory chooser dialog for initial 'm_chosenDir' directory.
-                // The registered callback will be called upon final directory selection.
-
-                directoryChooserDialog.chooseDirectory(m_chosenDir);
+                                });*/
+                //directoryChooserDialog.chooseDirectory(m_chosenDir);
                 m_newFolderEnabled = !m_newFolderEnabled;
 
 
@@ -153,20 +153,30 @@ public class SelectLocationFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        /*if (requestCode == PICKFILE_REQUEST_CODE) {
-            if (data_item != null) {
-                String Fpath = data_item.getDataString();
-                if(Consts.IS_DEBUG_LOG)
-                {
-                    Log.d(Consts.LOG_TAG, "You selected path " + Fpath);
+        if (requestCode == PICKFILE_REQUEST_CODE) {
+            if (data != null) {
+                String Fpath = data.getDataString();
+                File fileDirectory = new File(Fpath);
+                String absolutePath = fileDirectory.getAbsolutePath();
+                // String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+                //String main = baseDir + "/samVaad";
+                String[] parts = absolutePath.split("samVaad.txt");
+                String strPart1 = parts[0];
+                String finalPath = "";
+                if (strPart1.contains("/file:")) {
+                    String[] strArray = strPart1.split("/file:");
+                    finalPath = strArray[1];
                 }
-                if (Fpath != null) {
-                    Utility.setSelectFolderPathIntoSharedPreferences(context, Fpath);
-                    path.setText(Fpath);
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "You selected path " + finalPath);
+                }
+                if (finalPath != null) {
+                    Utility.setSelectFolderPathIntoSharedPreferences(context, finalPath);
+                    path.setText(finalPath);
                     //Toast.makeText(context, Fpath, Toast.LENGTH_LONG).show();
                 }
             }
-        }*/
+        }
 
 
     }

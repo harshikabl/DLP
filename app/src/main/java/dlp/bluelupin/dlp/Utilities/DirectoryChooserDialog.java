@@ -14,6 +14,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnKeyListener;
 import android.graphics.Color;
 import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.view.Gravity;
 import android.view.KeyEvent;
