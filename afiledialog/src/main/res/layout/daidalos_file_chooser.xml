@@ -42,8 +42,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="#e60000"
             android:drawableLeft="@drawable/tick"
-            android:text="@string/daidalos_ok" />
+            android:textSize="24dp"
+            android:textAlignment="center"
+            android:text="@string/daidalos_ok"
+            android:textColor="@color/buttonOk"
+            />
 
         <Button
             android:id="@+id/buttonCancel"
