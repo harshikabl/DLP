@@ -45,6 +45,7 @@ import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
+import dlp.bluelupin.dlp.Utilities.ScaleImageView;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -149,9 +150,17 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                         Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                         holder.chapterImage.setImageBitmap(bitmap);
                     }*/
+                    holder.chapterImage.setImageBitmap(null);
+                    File imgFile = new File(media.getLocalFilePath());
+                    Bitmap bitmap = null;
+                    if (imgFile.exists()) {
+                        bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    }
+                    holder.chapterImage.setImageBitmap(bitmap);
 
-                    LoadImageFromDataBase imageFromDataBase = new LoadImageFromDataBase(holder.chapterImage, holder.progressBar);
-                    imageFromDataBase.execute(media.getLocalFilePath());
+//
+//                    LoadImageFromDataBase imageFromDataBase = new LoadImageFromDataBase(holder.chapterImage, holder.progressBar);
+//                    imageFromDataBase.execute(media.getLocalFilePath());
                 }
 
             }
@@ -392,16 +401,17 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
     }
 
     private class LoadImageFromDataBase extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
+        ScaleImageView bmImage;
         ProgressBar progressBar;
 
-        public LoadImageFromDataBase(ImageView bmImage, ProgressBar bar) {
+        public LoadImageFromDataBase(ScaleImageView bmImage, ProgressBar bar) {
             this.bmImage = bmImage;
             this.progressBar = bar;
         }
 
         @Override
         protected Bitmap doInBackground(String... params) {
+
             String localFilePath = params[0];
             File imgFile = new File(localFilePath);
             Bitmap bitmap = null;

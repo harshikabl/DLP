@@ -19,6 +19,7 @@ import java.io.File;
 
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.ScaleImageView;
 
 /**
  * Created by Neeraj on 7/26/2016.
@@ -26,7 +27,7 @@ import dlp.bluelupin.dlp.R;
 public class ChaptersViewHolder extends RecyclerView.ViewHolder {
     public TextView chapterTitle, chapterDescription, favorite, download, downloadIcon;
     public android.support.v7.widget.CardView cardView;
-    public ImageView chapterImage;
+    public ScaleImageView chapterImage;
     public TextView starIcon;
     public RelativeLayout starIconlayout, downloadIconlayout;
     public LinearLayout download_layout, favoriteLayout;
@@ -44,7 +45,7 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder {
         starIcon = (TextView) itemView.findViewById(R.id.starIcon);
         download = (TextView) itemView.findViewById(R.id.download);
         downloadIcon = (TextView) itemView.findViewById(R.id.downloadIcon);
-        chapterImage = (ImageView) itemView.findViewById(R.id.chapterImage);
+        chapterImage = (ScaleImageView) itemView.findViewById(R.id.chapterImage);
         favoriteLayout = (LinearLayout) itemView.findViewById(R.id.favoriteLayout);
         download_layout = (LinearLayout) itemView.findViewById(R.id.download_layout);
         starIconlayout = (RelativeLayout) itemView.findViewById(R.id.starIconlayout);

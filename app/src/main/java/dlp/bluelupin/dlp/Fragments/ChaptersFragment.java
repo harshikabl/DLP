@@ -125,7 +125,8 @@ public class ChaptersFragment extends Fragment {
             ChaptersAdapter chaptersAdapter = new ChaptersAdapter(context, dataList, type);
             RecyclerView chaptersRecyclerView = (RecyclerView) view.findViewById(R.id.chaptersRecyclerView);
             chaptersRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            chaptersRecyclerView.setHasFixedSize(true);
+            chaptersRecyclerView.setHasFixedSize(false);
+            chaptersRecyclerView.setNestedScrollingEnabled(false);
             //chaptersRecyclerView.setNestedScrollingEnabled(false);
             chaptersRecyclerView.setAdapter(chaptersAdapter);
         }
