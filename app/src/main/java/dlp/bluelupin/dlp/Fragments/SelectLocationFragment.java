@@ -33,6 +33,7 @@ import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.DirectoryChooserDialog;
 import dlp.bluelupin.dlp.Utilities.Utility;
+import dlp.bluelupin.filedialog.FileChooserActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -119,24 +120,29 @@ public class SelectLocationFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                //File file = new File(String.valueOf(Environment.getExternalStorageDirectory()));
-                //intent.setDataAndType(Uri.fromFile(file), "*/*");
-                intent.setType("*/*");
-                startActivityForResult(Intent.createChooser(intent, "Select folder"), PICKFILE_REQUEST_CODE);
-              /*  DirectoryChooserDialog directoryChooserDialog =
-                        new DirectoryChooserDialog(context,
-                                new DirectoryChooserDialog.ChosenDirectoryListener() {
-                                    @Override
-                                    public void onChosenDir(String chosenDir) {
-                                        m_chosenDir = chosenDir;
-                                        Utility.setSelectFolderPathIntoSharedPreferences(context, chosenDir);
-                                        path.setText(chosenDir);
-                                        Toast.makeText(context, "Chosen directory: " + chosenDir, Toast.LENGTH_LONG).show();
-                                    }
-                                });*/
-                //directoryChooserDialog.chooseDirectory(m_chosenDir);
+                Intent intent = new Intent(SelectLocationFragment.this.getActivity(), FileChooserActivity.class);
+                intent.putExtra(FileChooserActivity.INPUT_FOLDER_MODE, true);
+                startActivityForResult(intent, 0);
+
+
+//                Intent intent = new Intent();
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                //File file = new File(String.valueOf(Environment.getExternalStorageDirectory()));
+//                //intent.setDataAndType(Uri.fromFile(file), "*/*");
+//                intent.setType("*/*");
+//                startActivityForResult(Intent.createChooser(intent, "Select folder"), PICKFILE_REQUEST_CODE);
+//              /*  DirectoryChooserDialog directoryChooserDialog =
+//                        new DirectoryChooserDialog(context,
+//                                new DirectoryChooserDialog.ChosenDirectoryListener() {
+//                                    @Override
+//                                    public void onChosenDir(String chosenDir) {
+//                                        m_chosenDir = chosenDir;
+//                                        Utility.setSelectFolderPathIntoSharedPreferences(context, chosenDir);
+//                                        path.setText(chosenDir);
+//                                        Toast.makeText(context, "Chosen directory: " + chosenDir, Toast.LENGTH_LONG).show();
+//                                    }
+//                                });*/
+//                //directoryChooserDialog.chooseDirectory(m_chosenDir);
                 m_newFolderEnabled = !m_newFolderEnabled;
 
 
@@ -152,33 +158,52 @@ public class SelectLocationFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICKFILE_REQUEST_CODE) {
-            if (data != null) {
-                String Fpath = data.getDataString();
-                File fileDirectory = new File(Fpath);
-                String absolutePath = fileDirectory.getAbsolutePath();
-                // String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath();
-                //String main = baseDir + "/samVaad";
-                String[] parts = absolutePath.split("samVaad.txt");
-                String strPart1 = parts[0];
-                String finalPath = "";
-                if (strPart1.contains("/file:")) {
-                    String[] strArray = strPart1.split("/file:");
-                    finalPath = strArray[1];
-                }
-                if (Consts.IS_DEBUG_LOG) {
-                    Log.d(Consts.LOG_TAG, "You selected path " + finalPath);
-                }
-                if (finalPath != null) {
-                    Utility.setSelectFolderPathIntoSharedPreferences(context, finalPath);
-                    path.setText(finalPath);
-                    //Toast.makeText(context, Fpath, Toast.LENGTH_LONG).show();
-                }
+        if (resultCode == Activity.RESULT_OK) {
+            String filePath = "";
+
+            Bundle bundle = data.getExtras();
+            if(bundle != null)
+            {
+                File file = (File) bundle.get(FileChooserActivity.OUTPUT_FILE_OBJECT);
+                filePath = file.getAbsolutePath();
             }
+            String message = "selected: " + filePath;
+            Toast toast = Toast.makeText(this.getActivity(), message, Toast.LENGTH_LONG);
+            toast.show();
+            Utility.setSelectFolderPathIntoSharedPreferences(context, filePath);
+            path.setText(filePath);
         }
-
-
     }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == PICKFILE_REQUEST_CODE) {
+//            if (data != null) {
+//                String Fpath = data.getDataString();
+//                File fileDirectory = new File(Fpath);
+//                String absolutePath = fileDirectory.getAbsolutePath();
+//                // String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                //String main = baseDir + "/samVaad";
+//                String[] parts = absolutePath.split("samVaad.txt");
+//                String strPart1 = parts[0];
+//                String finalPath = "";
+//                if (strPart1.contains("/file:")) {
+//                    String[] strArray = strPart1.split("/file:");
+//                    finalPath = strArray[1];
+//                }
+//                if (Consts.IS_DEBUG_LOG) {
+//                    Log.d(Consts.LOG_TAG, "You selected path " + finalPath);
+//                }
+//                if (finalPath != null) {
+//                    Utility.setSelectFolderPathIntoSharedPreferences(context, finalPath);
+//                    path.setText(finalPath);
+//                    //Toast.makeText(context, Fpath, Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        }
+//
+//
+//    }
 
 }
