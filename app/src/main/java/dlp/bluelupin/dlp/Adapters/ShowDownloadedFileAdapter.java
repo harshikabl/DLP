@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.List;
@@ -94,10 +96,14 @@ public class ShowDownloadedFileAdapter extends RecyclerView.Adapter<ShowDownload
                                 .execute(media.getDownload_url());
                     }
                 } else {
-                    File imgFile = new File(media.getLocalFilePath());
+                   /* File imgFile = new File(media.getLocalFilePath());
                     if (imgFile.exists()) {
                         Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                         holder.mediaImage.setImageBitmap(bitmap);
+                    }*/
+                    Uri uri = Uri.fromFile(new File(media.getLocalFilePath()));
+                    if (uri != null) {
+                        Picasso.with(context).load(uri).placeholder(R.drawable.imageplaceholder).into(holder.mediaImage);
                     }
                 }
 

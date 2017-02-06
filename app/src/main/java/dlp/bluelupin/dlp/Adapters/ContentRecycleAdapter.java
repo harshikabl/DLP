@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -323,10 +324,14 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                             .execute(media.getDownload_url());
                 }
             } else {
-                File imgFile = new File(media.getLocalFilePath());
+                /*File imgFile = new File(media.getLocalFilePath());
                 if (imgFile.exists()) {
                     Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                     dynamicImageView.setImageBitmap(bitmap);
+                }*/
+                Uri uri = Uri.fromFile(new File(media.getLocalFilePath()));
+                if (uri != null) {
+                    Picasso.with(context).load(uri).into(dynamicImageView);
                 }
             }
         }
@@ -444,10 +449,14 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                             .execute(media.getThumbnail_url());
                 }
             } else {
-                File imgFile = new File(media.getThumbnail_url_Local_file_path());
+               /* File imgFile = new File(media.getThumbnail_url_Local_file_path());
                 if (imgFile.exists()) {
                     Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                     dynamicImageView.setImageBitmap(bitmap);
+                }*/
+                Uri uri = Uri.fromFile(new File(media.getThumbnail_url_Local_file_path()));
+                if (uri != null) {
+                    Picasso.with(context).load(uri).into(dynamicImageView);
                 }
             }
         }

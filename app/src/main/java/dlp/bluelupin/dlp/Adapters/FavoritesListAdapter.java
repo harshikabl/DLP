@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.List;
@@ -108,10 +110,14 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
                                 .execute(media.getDownload_url());
                     }
                 } else {
-                    File imgFile = new File(media.getLocalFilePath());
+                  /*  File imgFile = new File(media.getLocalFilePath());
                     if (imgFile.exists()) {
                         Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                         holder.chapterImage.setImageBitmap(bitmap);
+                    }*/
+                    Uri uri = Uri.fromFile(new File(media.getLocalFilePath()));
+                    if (uri != null) {
+                        Picasso.with(context).load(uri).placeholder(R.drawable.imageplaceholder).into(holder.chapterImage);
                     }
                 }
             }

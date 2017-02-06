@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -28,6 +29,7 @@ import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -132,6 +134,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         if (data.getThumbnail_media_id() != 0) {
             Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getThumbnail_media_id(),
                     Utility.getLanguageIdFromSharedPreferences(context));
+            holder.chapterImage.setImageBitmap(null);
             if (media != null && media.getDownload_url() != null) {
                 if (media.getLocalFilePath() == null) {
                     if (Utility.isOnline(context)) {
@@ -145,22 +148,20 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                                 .execute(media.getDownload_url());
                     }
                 } else {
-                   /* File imgFile = new File(media.getLocalFilePath());
-                    if (imgFile.exists()) {
-                        Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                        holder.chapterImage.setImageBitmap(bitmap);
-                    }*/
-                    holder.chapterImage.setImageBitmap(null);
+                   /* holder.chapterImage.setImageBitmap(null);
                     File imgFile = new File(media.getLocalFilePath());
                     Bitmap bitmap = null;
                     if (imgFile.exists()) {
                         bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        holder.chapterImage.setImageBitmap(bitmap);
+                    }*/
+                    Uri uri = Uri.fromFile(new File(media.getLocalFilePath()));
+                    if (uri != null) {
+                        Picasso.with(context).load(uri).placeholder(R.drawable.imageplaceholder).into(holder.chapterImage);
                     }
-                    holder.chapterImage.setImageBitmap(bitmap);
-
 //
-//                    LoadImageFromDataBase imageFromDataBase = new LoadImageFromDataBase(holder.chapterImage, holder.progressBar);
-//                    imageFromDataBase.execute(media.getLocalFilePath());
+                    //                   LoadImageFromDataBase imageFromDataBase = new LoadImageFromDataBase(holder.chapterImage, holder.progressBar);
+                    //                 imageFromDataBase.execute(media.getLocalFilePath());
                 }
 
             }
