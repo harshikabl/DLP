@@ -46,11 +46,13 @@ public class CardReaderHelper {
     }
 
     public void readMetaDataJson(String folderLocation) {
+        readFilesOfFolder(folderLocation);
+        readMediaOfFolder(folderLocation);
 
         FileDataReaderHelper fileReaderHelper = new FileDataReaderHelper(context);
         String fileContent = fileReaderHelper.ReadFileContentsFromFolder("metadata.json", folderLocation);
         // determine of the date of zip is recent than the latest service calls stored in database
-        if (fileContent != null && fileContent != "") {
+       /* if (fileContent != null && fileContent != "") {
             ServiceDate serviceDate = new Gson().fromJson(fileContent, ServiceDate.class);
             if (serviceDate != null && serviceDate.getTimestamp() != "") {
                 Date dataDate = Utility.parseDateFromString(serviceDate.getTimestamp());
@@ -68,8 +70,6 @@ public class CardReaderHelper {
 
                             readFilesOfFolder(folderLocation);
                             readMediaOfFolder(folderLocation);
-
-
                         } else {
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "CardReaderHelper: NOT reading folder " + folderLocation + "  as dataDate:" + dataDate + " is NOT after serviceLastcalledDate: " + serviceLastcalledDate);
@@ -80,7 +80,7 @@ public class CardReaderHelper {
 
                 }
             }
-        }
+        }*/
 
     }
 

@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity
     private void readExternalFilesAsync() {
         Utility.verifyStoragePermissions((Activity) MainActivity.this);
         //splashImage.setVisibility(View.VISIBLE);
-        //final CustomProgressDialog customProgressDialog = new CustomProgressDialog(MainActivity.this, R.mipmap.syc);
+        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(MainActivity.this, R.mipmap.syc);
         new AsyncTask<Void, Void, Boolean>() {
 
             @Override
@@ -240,11 +240,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             protected void onPostExecute(Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
-
+               // customProgressDialog.dismiss();
                 if (Utility.isOnline(MainActivity.this)) {
                     callSync();
                 } else {
-                    //customProgressDialog.dismiss();
                     //alert.dismiss();
                     Utility.alertForErrorMessage(getString(R.string.online_msg), MainActivity.this);
                     //setUpCourseFragment();
