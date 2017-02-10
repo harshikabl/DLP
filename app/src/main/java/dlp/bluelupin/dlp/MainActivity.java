@@ -184,7 +184,8 @@ public class MainActivity extends AppCompatActivity
     private void readExternalFilesAsync() {
         Utility.verifyStoragePermissions((Activity) MainActivity.this);
         //splashImage.setVisibility(View.VISIBLE);
-        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(MainActivity.this, Utility.getSelectFolderPathFromSharedPreferences(MainActivity.this), R.mipmap.syc);
+        String messageText = "Importing data from " + Utility.getSelectFolderPathFromSharedPreferences(MainActivity.this);
+        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(MainActivity.this, messageText, R.mipmap.syc);
         new AsyncTask<Void, Void, Boolean>() {
 
             @Override

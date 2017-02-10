@@ -23,7 +23,7 @@ public class CustomProgressDialog extends Dialog {
 
     public CustomProgressDialog(Context context, int resourceIdOfImage) {
         super(context, R.style.TransparentProgressDialog);
-        setLayoutAndValues(context, 0, null, resourceIdOfImage);
+        setLayoutAndValues(context, 0, "", resourceIdOfImage);
     }
 
     //dialog with message
@@ -48,7 +48,7 @@ public class CustomProgressDialog extends Dialog {
         LinearLayout layout = new LinearLayout(context);
 
         LayoutParams lParams = new LayoutParams(
-                width / 2, height / 5);
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         // layout.setBackgroundResource(R.color.white);
         layout.setLayoutParams(lParams);
         layout.setGravity(Gravity.CENTER);
@@ -62,10 +62,10 @@ public class CustomProgressDialog extends Dialog {
         LayoutParams tvParams = new LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         tv = new TextView(context);
+        tv.setGravity(Gravity.CENTER);
         if (message != null && !message.equals("")) {
-           // tv.setText(message);
+            tv.setText(message);
         }
-        tv.setText("Loading...");
         tv.setTextSize(context.getResources().getDimension(R.dimen.dimValue_16)
                 / context.getResources().getDisplayMetrics().density);
         //	tv.setTypeface(type);
