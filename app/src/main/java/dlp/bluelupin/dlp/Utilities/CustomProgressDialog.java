@@ -63,9 +63,9 @@ public class CustomProgressDialog extends Dialog {
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         tv = new TextView(context);
         if (message != null && !message.equals("")) {
-            tv.setText(message);
+           // tv.setText(message);
         }
-        //tv.setText("Loading data...");
+        tv.setText("Loading...");
         tv.setTextSize(context.getResources().getDimension(R.dimen.dimValue_16)
                 / context.getResources().getDisplayMetrics().density);
         //	tv.setTypeface(type);
