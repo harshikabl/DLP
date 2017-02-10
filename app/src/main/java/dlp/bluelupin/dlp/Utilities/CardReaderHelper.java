@@ -15,11 +15,13 @@ import java.util.List;
 
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.ContentData;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Models.ServiceDate;
+import dlp.bluelupin.dlp.R;
 
 /**
  * Created by subod on 10-Aug-16.
@@ -32,7 +34,6 @@ public class CardReaderHelper {
     }
 
     public void ReadAppDataFolder(String folderLocation) {
-
         File fileDirectory = new File(folderLocation);
         File[] dirFiles = fileDirectory.listFiles();
         if (dirFiles != null) {
@@ -46,13 +47,11 @@ public class CardReaderHelper {
     }
 
     public void readMetaDataJson(String folderLocation) {
-        readFilesOfFolder(folderLocation);
-        readMediaOfFolder(folderLocation);
 
         FileDataReaderHelper fileReaderHelper = new FileDataReaderHelper(context);
         String fileContent = fileReaderHelper.ReadFileContentsFromFolder("metadata.json", folderLocation);
         // determine of the date of zip is recent than the latest service calls stored in database
-       /* if (fileContent != null && fileContent != "") {
+        if (fileContent != null && fileContent != "") {
             ServiceDate serviceDate = new Gson().fromJson(fileContent, ServiceDate.class);
             if (serviceDate != null && serviceDate.getTimestamp() != "") {
                 Date dataDate = Utility.parseDateFromString(serviceDate.getTimestamp());
@@ -62,25 +61,23 @@ public class CardReaderHelper {
                     if (cacheSeviceCallData != null) {
                         Date serviceLastcalledDate = Utility.parseDateFromString(cacheSeviceCallData.getLastCalled());
                         // parse data_item from zip ONLY if zip data_item is recent than last called service
-                        if (dataDate.after(serviceLastcalledDate)) {
-                            if (Consts.IS_DEBUG_LOG) {
-                                Log.d(Consts.LOG_TAG, "CardReaderHelper: Starting reading folder " + folderLocation + " as dataDate:" + dataDate + " is after serviceLastcalledDate: " + serviceLastcalledDate);
-                                // Toast.makeText(context,"Updated content found in directory " + folderLocation, Toast.LENGTH_LONG);
-                            }
-
-                            readFilesOfFolder(folderLocation);
-                            readMediaOfFolder(folderLocation);
-                        } else {
+                        // if (dataDate.after(serviceLastcalledDate)) {
+                        if (Consts.IS_DEBUG_LOG) {
+                            Log.d(Consts.LOG_TAG, "CardReaderHelper: Starting reading folder " + folderLocation + " as dataDate:" + dataDate + " is after serviceLastcalledDate: " + serviceLastcalledDate);
+                            // Toast.makeText(context,"Updated content found in directory " + folderLocation, Toast.LENGTH_LONG);
+                        }
+                        readFilesOfFolder(folderLocation);
+                        readMediaOfFolder(folderLocation);
+                      /*  } else {
                             if (Consts.IS_DEBUG_LOG) {
                                 Log.d(Consts.LOG_TAG, "CardReaderHelper: NOT reading folder " + folderLocation + "  as dataDate:" + dataDate + " is NOT after serviceLastcalledDate: " + serviceLastcalledDate);
                                 // Toast.makeText(context,"No updated content found in directory "  + folderLocation, Toast.LENGTH_LONG);
                             }
-                        }
+                        }*/
                     }
-
                 }
             }
-        }*/
+        }
 
     }
 

@@ -1,6 +1,5 @@
 package dlp.bluelupin.dlp.Utilities;
 
-
 import android.app.Dialog;
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -11,29 +10,20 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import dlp.bluelupin.dlp.R;
 
+/**
+ * Created by Neeraj on 2/10/2017.
+ */
 
-public class CustomProgressDialog extends Dialog {
+public class CustomMessageDialog extends Dialog {
     private ImageView iv;
     private TextView tv;
 
-    public CustomProgressDialog(Context context, int resourceIdOfImage) {
-        super(context, R.style.TransparentProgressDialog);
-        setLayoutAndValues(context, 0, null, resourceIdOfImage);
-    }
-
-    //dialog with message
-    public CustomProgressDialog(Context context, String message, int resourceIdOfImage) {
-        super(context, R.style.TransparentProgressDialog);
-        setLayoutAndValues(context, 1, message, resourceIdOfImage);
-    }
-
-    //set layout and value
-    private void setLayoutAndValues(Context context, int orientation, String message, int resourceIdOfImage) {
+    public CustomMessageDialog(Context context, String message) {
+        super(context);
         DisplayMetrics dimension = context.getResources().getDisplayMetrics();
         int width = dimension.widthPixels;
         int height = dimension.heightPixels;
@@ -47,30 +37,28 @@ public class CustomProgressDialog extends Dialog {
         setOnCancelListener(null);
         LinearLayout layout = new LinearLayout(context);
 
-        LayoutParams lParams = new LayoutParams(
-                width / 2, height / 5);
+        LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
         // layout.setBackgroundResource(R.color.white);
         layout.setLayoutParams(lParams);
         layout.setGravity(Gravity.CENTER);
-        layout.setOrientation(orientation);
+        layout.setOrientation(LinearLayout.HORIZONTAL);
 
-        LayoutParams ivParams = new LayoutParams(
-                width / 6, height / 6);
+        LinearLayout.LayoutParams ivParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
         iv = new ImageView(context);
-        iv.setImageResource(resourceIdOfImage);
+        //iv.setImageResource(resourceIdOfImage);
 
-        LayoutParams tvParams = new LayoutParams(
-                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams tvParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         tv = new TextView(context);
-        if (message != null && !message.equals("")) {
-            tv.setText(message);
-        }
-        //tv.setText("Loading data...");
+        tv.setText(message);
         tv.setTextSize(context.getResources().getDimension(R.dimen.dimValue_16)
                 / context.getResources().getDisplayMetrics().density);
         //	tv.setTypeface(type);
-        tv.setTextColor(context.getResources().getColor(android.R.color.white));
-        layout.addView(iv, ivParams);
+        tv.setTextColor(context.getResources().getColor(android.R.color.black));
+        //layout.addView(iv, ivParams);
         layout.addView(tv, tvParams);
         addContentView(layout, lParams);
     }

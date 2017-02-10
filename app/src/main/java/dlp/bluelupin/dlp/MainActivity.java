@@ -1,31 +1,14 @@
 package dlp.bluelupin.dlp;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
-import android.content.res.ColorStateList;
-import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -41,43 +24,27 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import dlp.bluelupin.dlp.Activities.AccountSettingsActivity;
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
-import dlp.bluelupin.dlp.Activities.NotificationsActivity;
-import dlp.bluelupin.dlp.Activities.VerificationActivity;
-import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
 import dlp.bluelupin.dlp.Adapters.NavigationMenuAdapter;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
-import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
-import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
 import dlp.bluelupin.dlp.Fragments.WebFragment;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
-import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
-import dlp.bluelupin.dlp.Services.IServiceManager;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
-import dlp.bluelupin.dlp.Models.Data;
-import dlp.bluelupin.dlp.Services.IServiceSuccessCallback;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
-import dlp.bluelupin.dlp.Services.ServiceHelper;
 import dlp.bluelupin.dlp.Utilities.CardReaderHelper;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
-import dlp.bluelupin.dlp.Utilities.DecompressZipFile;
 import dlp.bluelupin.dlp.Utilities.Utility;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class MainActivity extends AppCompatActivity
@@ -217,7 +184,7 @@ public class MainActivity extends AppCompatActivity
     private void readExternalFilesAsync() {
         Utility.verifyStoragePermissions((Activity) MainActivity.this);
         //splashImage.setVisibility(View.VISIBLE);
-        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(MainActivity.this, R.mipmap.syc);
+        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(MainActivity.this, Utility.getSelectFolderPathFromSharedPreferences(MainActivity.this), R.mipmap.syc);
         new AsyncTask<Void, Void, Boolean>() {
 
             @Override
@@ -233,18 +200,18 @@ public class MainActivity extends AppCompatActivity
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                //customProgressDialog.show();
+                customProgressDialog.show();
                 //alert.show();
             }
 
             @Override
             protected void onPostExecute(Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
-               // customProgressDialog.dismiss();
+                customProgressDialog.dismiss();
+                //alert.dismiss();
                 if (Utility.isOnline(MainActivity.this)) {
                     callSync();
                 } else {
-                    //alert.dismiss();
                     Utility.alertForErrorMessage(getString(R.string.online_msg), MainActivity.this);
                     //setUpCourseFragment();
                 }
