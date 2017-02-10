@@ -56,6 +56,7 @@ public class CustomProgressDialog extends Dialog {
 
         LayoutParams ivParams = new LayoutParams(
                 width / 6, height / 6);
+        ivParams.setMargins(20,0,20,0);
         iv = new ImageView(context);
         iv.setImageResource(resourceIdOfImage);
 
