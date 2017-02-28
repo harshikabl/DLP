@@ -43,6 +43,25 @@ public class FontManager {
         }
     }
 
+    //get FontTypeface for Material Design Icons
+    public static Typeface getFontTypefaceMaterialDesignIcons(Context context, String assetPath) {
+        synchronized (cache) {
+            if (!cache.containsKey(assetPath)) {
+                try {
+                    Typeface typeface = Typeface.createFromAsset(context.getAssets(),
+                            assetPath);
+
+                    cache.put(assetPath, typeface);
+                } catch (Exception e) {
+                    Log.e(Consts.LOG_TAG, "Could not get typeface '" + assetPath
+                            + "' because " + e.getMessage());
+                    return null;
+                }
+            }
+            return cache.get(assetPath);
+        }
+    }
+
     //get odia language path if odia language selected
     private static String getTypefaceBasedOnLanguage(Context context) {
         String assetPath = null;
