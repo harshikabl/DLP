@@ -116,7 +116,7 @@ public class UserProfileFragment extends Fragment implements View.OnClickListene
         MainActivity rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(context.getString(R.string.Profile));
         Typeface custom_fontawesome = FontManager.getFontTypeface(context, "fonts/fontawesome-webfont.ttf");
-        Typeface materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+        Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
         nameLable = (TextView) view.findViewById(R.id.nameLable);

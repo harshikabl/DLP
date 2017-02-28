@@ -108,7 +108,7 @@ public class ShowDownloadedMediaFileFragment extends Fragment {
         MainActivity rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(getString(R.string.app_name));
 
-        materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+        materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
 
         downloadedRecyclerView = (RecyclerView) view.findViewById(R.id.downloadedRecyclerView);

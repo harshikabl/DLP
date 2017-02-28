@@ -68,7 +68,7 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
 
 
         Typeface custom_fontawesome = FontManager.getFontTypeface(this, "fonts/fontawesome-webfont.ttf");
-        materialdesignicons_font = FontManager.getFontTypeface(this, "fonts/materialdesignicons-webfont.otf");
+        materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(this, "fonts/materialdesignicons-webfont.otf");
         VodafoneExB = FontManager.getFontTypeface(this, "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = FontManager.getFontTypeface(this, "fonts/VodafoneRg.ttf");
 

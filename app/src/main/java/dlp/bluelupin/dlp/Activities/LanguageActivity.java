@@ -106,7 +106,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
 
 
         Typeface custom_fontawesome = FontManager.getFontTypeface(this, "fonts/fontawesome-webfont.ttf");
-        Typeface materialdesignicons_font = FontManager.getFontTypeface(this, "fonts/materialdesignicons-webfont.otf");
+        Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(this, "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = FontManager.getFontTypeface(this, "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = FontManager.getFontTypeface(this, "fonts/VodafoneRg.ttf");
 
