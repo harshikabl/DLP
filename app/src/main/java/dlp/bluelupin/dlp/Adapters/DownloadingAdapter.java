@@ -80,7 +80,7 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
     public void onBindViewHolder(final DownloadingViewHolder holder, final int position) {
         Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
-        Typeface materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+        Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         holder.mediaTitle.setTypeface(VodafoneExB);
         holder.mediaDescription.setTypeface(VodafoneRg);
         holder.downloadProgress.setTypeface(VodafoneExB);

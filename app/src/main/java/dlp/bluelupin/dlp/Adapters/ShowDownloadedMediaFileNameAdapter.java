@@ -40,7 +40,7 @@ public class ShowDownloadedMediaFileNameAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(mContext);
 
 
-       materialdesignicons_font = FontManager.getFontTypeface(mContext, "fonts/materialdesignicons-webfont.otf");
+       materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(mContext, "fonts/materialdesignicons-webfont.otf");
 
     }
 

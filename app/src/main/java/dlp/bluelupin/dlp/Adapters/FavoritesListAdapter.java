@@ -66,7 +66,7 @@ public class FavoritesListAdapter extends RecyclerView.Adapter<FavoritesViewHold
     public void onBindViewHolder(FavoritesViewHolder holder, final int position) {
         Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
-        Typeface materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+        Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         holder.chapterTitle.setTypeface(VodafoneExB);
         holder.chapterDescription.setTypeface(VodafoneRg);
         holder.starIcon.setTypeface(materialdesignicons_font);

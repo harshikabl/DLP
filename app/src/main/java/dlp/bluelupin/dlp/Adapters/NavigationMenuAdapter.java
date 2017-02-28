@@ -95,7 +95,7 @@ public class NavigationMenuAdapter extends BaseAdapter {
             holder.menuTitel = (TextView) convertView.findViewById(R.id.menuTitel);
             holder.menuIcon = (TextView) convertView.findViewById(R.id.menuIcon);
             holder.menuItemLayout = (LinearLayout) convertView.findViewById(R.id.menuItemLayout);
-            Typeface materialdesignicons_font = FontManager.getFontTypeface(mContext, "fonts/materialdesignicons-webfont.otf");
+            Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(mContext, "fonts/materialdesignicons-webfont.otf");
             Typeface custom_fontawesome = FontManager.getFontTypeface(mContext, "fonts/fontawesome-webfont.ttf");
             Typeface VodafoneRgBd =FontManager.getFontTypeface(mContext, "fonts/VodafoneRgBd.ttf");
             Typeface VodafoneRg = FontManager.getFontTypeface(mContext, "fonts/VodafoneRg.ttf");
