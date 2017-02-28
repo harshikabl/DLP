@@ -207,8 +207,9 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         TextView dynamicTextView = new TextView(context);
         dynamicTextView.setTextSize(18);
         dynamicTextView.setTypeface(VodafoneRg);
-        dynamicTextView.setText(Html.fromHtml(resource.getContent()));
-
+        if (resource != null) {
+            dynamicTextView.setText(Html.fromHtml(resource.getContent()));
+        }
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         layoutParams.setMargins(10, 10, 10, 10);

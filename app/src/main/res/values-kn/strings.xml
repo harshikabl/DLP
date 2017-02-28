@@ -86,6 +86,7 @@
     <string name="update">ಅಪ್ಡೇಟ್ಗೊಳಿಸಲಾಗಿದೆ</string>
     <string name="favourite">ನೆಚ್ಚಿನ</string>
     <string name="Take_Offline">ಆಫ್ಲೈನ್ ಟೇಕ್</string>
-
+    <string name="import_data">ಆಮದು ಡೇಟಾ</string>
+    <string name="import_data_from">ಡೇಟಾ ಆಮದು</string>
 
 </resources>

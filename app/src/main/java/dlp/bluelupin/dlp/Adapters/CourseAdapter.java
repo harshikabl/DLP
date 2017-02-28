@@ -30,8 +30,10 @@ import dlp.bluelupin.dlp.Fragments.ChaptersFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
+import dlp.bluelupin.dlp.SplashActivity;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -58,9 +60,12 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
 
     @Override
     public void onBindViewHolder(final CourseViewHolder holder, int position) {
-        Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
-        Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
-        Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
+        //Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
+        //Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
+        //Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
+        Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
+        Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
+        Typeface materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
         holder.courseTitle.setTypeface(VodafoneExB);
         holder.courseDescription.setTypeface(VodafoneRg);
         holder.cardView.setCardBackgroundColor(Color.parseColor("#00000000"));
@@ -110,9 +115,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
                     Uri uri = Uri.fromFile(new File(media.getLocalFilePath()));
                     if (uri != null) {
                         Picasso.with(context).load(uri).into(holder.courseImage);
-                    }
-                    else
-                    {
+                    } else {
                         if (Utility.isOnline(context)) {
                             Gson gson = new Gson();
                             Intent intent = new Intent(context, DownloadService1.class);

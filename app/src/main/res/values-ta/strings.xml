@@ -86,6 +86,7 @@
     <string name="update">புதுப்பிக்கப்பட்ட</string>
     <string name="favourite">விருப்பமான</string>
     <string name="Take_Offline">ஆஃப்லைனாக்கலாம்</string>
-
+    <string name="import_data">இறக்குமதி தரவு</string>
+    <string name="import_data_from">இருந்து தரவு இறக்குமதி</string>
 
 </resources>

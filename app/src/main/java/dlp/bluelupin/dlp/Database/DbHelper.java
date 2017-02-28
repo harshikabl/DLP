@@ -31,7 +31,7 @@ import dlp.bluelupin.dlp.Utilities.Utility;
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = Consts.dataBaseName; //Consts.outputDirectoryLocation +  "dlp_db.db";// Consts.outputDirectoryLocation +  "dlp_db.db"; //Consts.dataBaseName; //
+    public static final String DATABASE_NAME = Consts.outputDirectoryLocation + "dlp_db.db"; //Consts.outputDirectoryLocation +  "dlp_db.db";// Consts.outputDirectoryLocation +  "dlp_db.db"; //Consts.dataBaseName; //
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -1691,10 +1691,10 @@ public class DbHelper extends SQLiteOpenHelper {
             while (cursor.isAfterLast() == false) {
                 LanguageData ob = new LanguageData();
                 populateLanguageDataEntity(cursor, ob);
-                if (!ob.getCode().equalsIgnoreCase("or-IN")) {//for Oriya language disable
+              /*  if (!ob.getCode().equalsIgnoreCase("or-IN")) {//for Oriya language disable
                     list.add(ob);
-                }
-                //list.add(ob);
+                }*/
+                list.add(ob);
                 cursor.moveToNext();
             }
         }

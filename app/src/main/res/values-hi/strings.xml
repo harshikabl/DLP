@@ -102,4 +102,7 @@
     <string name="favourite">पसंदीदा</string>
     <string name="Take_Offline">ऑफलाइन ले लो</string>
 
+    <string name="import_data">आयात डेटा</string>
+    <string name="import_data_from">से डेटा आयात</string>
+
 </resources>

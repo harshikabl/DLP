@@ -105,6 +105,9 @@
     <string name="favourite">Favourite</string>
     <string name="Take_Offline">Take Offline</string>
 
+    <string name="import_data">Importing data</string>
+    <string name="import_data_from">Importing data from</string>
+
 
 
 
