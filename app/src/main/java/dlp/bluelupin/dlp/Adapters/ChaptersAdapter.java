@@ -79,7 +79,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
     @Override
     public void onBindViewHolder(final ChaptersViewHolder holder, int position) {
 
-        Typeface materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+        Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
         holder.chapterTitle.setTypeface(VodafoneExB);

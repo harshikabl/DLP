@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity
 
         //View header = navigationView.getHeaderView(0);
         Typeface custom_fontawesome =FontManager.getFontTypeface(this, "fonts/fontawesome-webfont.ttf");
-        Typeface materialdesignicons_font = FontManager.getFontTypeface(this, "fonts/materialdesignicons-webfont.otf");
+        Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(this, "fonts/materialdesignicons-webfont.otf");
         View header = findViewById(R.id.navHader);
         name = (TextView) header.findViewById(R.id.name);
         email = (TextView) header.findViewById(R.id.email);

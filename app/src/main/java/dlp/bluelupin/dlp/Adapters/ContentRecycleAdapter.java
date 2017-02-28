@@ -67,7 +67,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         this.context = context;
          VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
          VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
-         materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
     }
 

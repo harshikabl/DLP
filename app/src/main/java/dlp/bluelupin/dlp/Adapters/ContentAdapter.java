@@ -68,7 +68,7 @@ public class ContentAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.content_list_view_item, null);
             holder.contentContainer = (LinearLayout) convertView.findViewById(R.id.contentContainer);
             holder.playIcon = (TextView) convertView.findViewById(R.id.playIcon);
-            Typeface materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+            Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
             holder.playIcon.setTypeface(materialdesignicons_font);
             holder.cardView = (android.support.v7.widget.CardView) convertView.findViewById(R.id.card_view);
             holder.cardView.setCardElevation(2);
