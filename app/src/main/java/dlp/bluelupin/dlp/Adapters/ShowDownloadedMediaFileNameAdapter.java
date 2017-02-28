@@ -18,6 +18,7 @@ import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 import static android.R.attr.data;
@@ -37,7 +38,10 @@ public class ShowDownloadedMediaFileNameAdapter extends BaseAdapter {
         this.mContext = context;
         this.dataList = list;
         inflater = LayoutInflater.from(mContext);
-        materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
+
+
+       materialdesignicons_font = FontManager.getFontTypeface(mContext, "fonts/materialdesignicons-webfont.otf");
+
     }
 
     @Override

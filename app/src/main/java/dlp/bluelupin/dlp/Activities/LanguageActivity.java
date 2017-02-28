@@ -40,6 +40,7 @@ import dlp.bluelupin.dlp.Services.ServiceCaller;
 import dlp.bluelupin.dlp.Services.ServiceHelper;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.EnumLanguage;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
 import okhttp3.ResponseBody;
@@ -102,10 +103,12 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
-        Typeface custom_fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome-webfont.ttf");
-        Typeface materialdesignicons_font = Typeface.createFromAsset(this.getAssets(), "fonts/materialdesignicons-webfont.otf");
-        Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
-        Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
+
+
+        Typeface custom_fontawesome = FontManager.getFontTypeface(this, "fonts/fontawesome-webfont.ttf");
+        Typeface materialdesignicons_font = FontManager.getFontTypeface(this, "fonts/materialdesignicons-webfont.otf");
+        Typeface VodafoneExB = FontManager.getFontTypeface(this, "fonts/VodafoneExB.TTF");
+        Typeface VodafoneRg = FontManager.getFontTypeface(this, "fonts/VodafoneRg.ttf");
 
         languageIcon = (TextView) findViewById(R.id.languageIcon);
         chooseLanguage = (TextView) findViewById(R.id.chooseLanguage);

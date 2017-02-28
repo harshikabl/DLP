@@ -20,6 +20,7 @@ import java.util.List;
 import dlp.bluelupin.dlp.Fragments.ItemTouchHelperInterface;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -47,9 +48,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHo
         // Set the selected state of the row depending on the position
         holder.cardView.setSelected(selectedItems.get(position, false));
 
-        Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
-        Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
-        Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
+
+
+        Typeface materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+        Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
+        Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
         holder.notificationDescription.setTypeface(VodafoneRg);
         holder.date.setTypeface(VodafoneRg);
         holder.dateIcon.setTypeface(materialdesignicons_font);

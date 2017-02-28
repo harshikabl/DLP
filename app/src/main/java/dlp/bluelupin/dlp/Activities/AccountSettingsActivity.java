@@ -44,6 +44,7 @@ import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.EnumLanguage;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -84,11 +85,11 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         setSupportActionBar(toolbar);
         leftArrow = (TextView) toolbar.findViewById(R.id.leftArrow);
         title = (TextView) toolbar.findViewById(R.id.title);
-        Typeface custom_fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome-webfont.ttf");
-        Typeface materialdesignicons_font = Typeface.createFromAsset(this.getAssets(), "fonts/materialdesignicons-webfont.otf");
-        Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
-        Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
 
+        Typeface custom_fontawesome = FontManager.getFontTypeface(this, "fonts/fontawesome-webfont.ttf");
+        Typeface materialdesignicons_font = FontManager.getFontTypeface(this, "fonts/materialdesignicons-webfont.otf");
+        Typeface VodafoneExB = FontManager.getFontTypeface(this, "fonts/VodafoneExB.TTF");
+        Typeface VodafoneRg = FontManager.getFontTypeface(this, "fonts/VodafoneRg.ttf");
 
         leftArrow.setTypeface(materialdesignicons_font);
         leftArrow.setOnClickListener(this);

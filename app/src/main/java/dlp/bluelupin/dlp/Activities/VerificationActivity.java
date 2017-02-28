@@ -33,6 +33,7 @@ import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.IAsyncWorkCompletedCallback;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -64,12 +65,14 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
         setSupportActionBar(toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
         leftArrow = (TextView) toolbar.findViewById(R.id.leftArrow);
-        Typeface custom_fontawesome = Typeface.createFromAsset(this.getAssets(), "fonts/fontawesome-webfont.ttf");
-        Typeface materialdesignicons_font = Typeface.createFromAsset(this.getAssets(), "fonts/materialdesignicons-webfont.otf");
-        Typeface VodafoneExB = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneExB.TTF");
-        Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
-        Typeface VodafoneLt = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneLt.ttf");
-        Typeface VodafoneRgBd = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRgBd.ttf");
+
+
+        Typeface custom_fontawesome = FontManager.getFontTypeface(this, "fonts/fontawesome-webfont.ttf");
+        Typeface materialdesignicons_font = FontManager.getFontTypeface(this, "fonts/materialdesignicons-webfont.otf");
+        Typeface VodafoneExB = FontManager.getFontTypeface(this, "fonts/VodafoneExB.TTF");
+        Typeface VodafoneRg = FontManager.getFontTypeface(this, "fonts/VodafoneRg.ttf");
+        Typeface VodafoneLt = FontManager.getFontTypeface(this, "fonts/VodafoneLt.ttf");
+        Typeface VodafoneRgBd = FontManager.getFontTypeface(this, "fonts/VodafoneRgBd.ttf");
 
 
         leftArrow.setTypeface(materialdesignicons_font);

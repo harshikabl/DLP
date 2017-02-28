@@ -29,6 +29,7 @@ import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -55,9 +56,13 @@ public class ShowDownloadedFileAdapter extends RecyclerView.Adapter<ShowDownload
     @Override
     public void onBindViewHolder(final ShowDownloadedFileViewHolder holder, final int position) {
 
-        Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
-        Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
-        Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
+
+
+
+        Typeface materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+        Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
+        Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
+
         holder.mediaTitle.setTypeface(VodafoneExB);
         holder.mediaDescription.setTypeface(VodafoneRg);
         holder.cancelIcon.setTypeface(materialdesignicons_font);
