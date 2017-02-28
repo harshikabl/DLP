@@ -32,6 +32,7 @@ import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.DirectoryChooserDialog;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
 import dlp.bluelupin.filedialog.FileChooserActivity;
 
@@ -107,8 +108,8 @@ public class SelectLocationFragment extends Fragment {
         MainActivity rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(getString(R.string.select_location));
 
-        Typeface VodafoneExB = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VodafoneExB.TTF");
-        Typeface VodafoneRg = Typeface.createFromAsset(getActivity().getAssets(), "fonts/VodafoneRg.ttf");
+        Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
+        Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
         TextView defaultText = (TextView) view.findViewById(R.id.defaultText);
         path = (TextView) view.findViewById(R.id.path);
         TextView selectFolder = (TextView) view.findViewById(R.id.selectFolder);

@@ -42,6 +42,7 @@ import dlp.bluelupin.dlp.Models.DownloadMediaWithParent;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.BindService;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -153,8 +154,9 @@ public class DownloadingFragment extends Fragment implements View.OnClickListene
     private void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(getString(R.string.app_name));
-        materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
-        Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
+        materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+        Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
+
         TextView download = (TextView) view.findViewById(R.id.download);
         download.setTypeface(VodafoneExB);
 

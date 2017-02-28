@@ -23,6 +23,7 @@ import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -91,8 +92,8 @@ public class FavoritesListFragment extends Fragment {
         MainActivity rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(context.getString(R.string.Favorites));
 
-        Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
-        //Topic
+        Typeface materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+
         DbHelper dbHelper = new DbHelper(context);
         List<FavoritesData> favoritesData = dbHelper.getFavoritesChaptersAndTopicListData(mParam1);
         if (favoritesData.size() == 0) {
