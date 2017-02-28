@@ -44,6 +44,7 @@ import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Services.ServiceCaller;
 import dlp.bluelupin.dlp.Utilities.CardReaderHelper;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 
@@ -99,15 +100,15 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        Typeface VodafoneRg = Typeface.createFromAsset(this.getAssets(), "fonts/VodafoneRg.ttf");
+        Typeface VodafoneRg = FontManager.getFontTypeface(this, "fonts/VodafoneRg.ttf");
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         //navigationView.setNavigationItemSelectedListener(this);
         //navigationView.setItemIconTintList(null);
 
         //View header = navigationView.getHeaderView(0);
-        Typeface custom_fontawesome = Typeface.createFromAsset(getAssets(), "fonts/fontawesome-webfont.ttf");
-        Typeface materialdesignicons_font = Typeface.createFromAsset(getAssets(), "fonts/materialdesignicons-webfont.otf");
+        Typeface custom_fontawesome =FontManager.getFontTypeface(this, "fonts/fontawesome-webfont.ttf");
+        Typeface materialdesignicons_font = FontManager.getFontTypeface(this, "fonts/materialdesignicons-webfont.otf");
         View header = findViewById(R.id.navHader);
         name = (TextView) header.findViewById(R.id.name);
         email = (TextView) header.findViewById(R.id.email);

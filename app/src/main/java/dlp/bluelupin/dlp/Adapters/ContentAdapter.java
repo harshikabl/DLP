@@ -42,6 +42,7 @@ import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -67,16 +68,15 @@ public class ContentAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.content_list_view_item, null);
             holder.contentContainer = (LinearLayout) convertView.findViewById(R.id.contentContainer);
             holder.playIcon = (TextView) convertView.findViewById(R.id.playIcon);
-            Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
+            Typeface materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
             holder.playIcon.setTypeface(materialdesignicons_font);
             holder.cardView = (android.support.v7.widget.CardView) convertView.findViewById(R.id.card_view);
             holder.cardView.setCardElevation(2);
             holder.cardView.setRadius(10);
             holder.cardView.setCardBackgroundColor(Color.parseColor("#EEEEEE"));
 
-
-            Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
-            Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
+            Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
+            Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
 
             final DbHelper dbHelper = new DbHelper(context);
             final Data data = itemList.get(position);

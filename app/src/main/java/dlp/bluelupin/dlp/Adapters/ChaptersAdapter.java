@@ -46,6 +46,7 @@ import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.ScaleImageView;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -77,8 +78,10 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
     @Override
     public void onBindViewHolder(final ChaptersViewHolder holder, int position) {
-        Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
-        Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
+
+        Typeface materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+        Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
+        Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
         holder.chapterTitle.setTypeface(VodafoneExB);
         holder.chapterDescription.setTypeface(VodafoneRg);
         holder.favorite.setTypeface(VodafoneRg);
@@ -86,7 +89,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         holder.cardView.setCardBackgroundColor(Color.parseColor("#EEEEEE"));
 
         // holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
-        Typeface materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
+
         holder.starIcon.setTypeface(materialdesignicons_font);
 //        holder.starIcon.setText(Html.fromHtml("&#xf4ce;"));
         holder.favorite.setTypeface(VodafoneRg);
@@ -176,7 +179,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
             @Override
             protected List<Data> doInBackground(String... params) {
-                final List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId(), Utility.getLanguageIdFromSharedPreferences(context));
+                 final List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId(), Utility.getLanguageIdFromSharedPreferences(context));
                 if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
                 }

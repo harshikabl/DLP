@@ -43,6 +43,7 @@ import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
 import dlp.bluelupin.dlp.Utilities.ScaleImageView;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -64,9 +65,9 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
     public ContentRecycleAdapter(Context context, List<Data> itemList) {
         this.itemList = itemList;
         this.context = context;
-        VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
-        VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
-        materialdesignicons_font = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
+         VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
+         VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
+         materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
         customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
     }
 

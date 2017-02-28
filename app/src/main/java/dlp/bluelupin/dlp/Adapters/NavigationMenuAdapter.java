@@ -44,6 +44,7 @@ import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.CardReaderHelper;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
+import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
 /**
@@ -94,10 +95,13 @@ public class NavigationMenuAdapter extends BaseAdapter {
             holder.menuTitel = (TextView) convertView.findViewById(R.id.menuTitel);
             holder.menuIcon = (TextView) convertView.findViewById(R.id.menuIcon);
             holder.menuItemLayout = (LinearLayout) convertView.findViewById(R.id.menuItemLayout);
-            Typeface materialdesignicons_font = Typeface.createFromAsset(mContext.getAssets(), "fonts/materialdesignicons-webfont.otf");
-            Typeface custom_fontawesome = Typeface.createFromAsset(mContext.getAssets(), "fonts/fontawesome-webfont.ttf");
-            Typeface VodafoneRgBd = Typeface.createFromAsset(mContext.getAssets(), "fonts/VodafoneRgBd.ttf");
-            Typeface VodafoneRg = Typeface.createFromAsset(mContext.getAssets(), "fonts/VodafoneRg.ttf");
+            Typeface materialdesignicons_font = FontManager.getFontTypeface(mContext, "fonts/materialdesignicons-webfont.otf");
+            Typeface custom_fontawesome = FontManager.getFontTypeface(mContext, "fonts/fontawesome-webfont.ttf");
+            Typeface VodafoneRgBd =FontManager.getFontTypeface(mContext, "fonts/VodafoneRgBd.ttf");
+            Typeface VodafoneRg = FontManager.getFontTypeface(mContext, "fonts/VodafoneRg.ttf");
+
+
+
            // Typeface OdiaFont = Typeface.createFromAsset(mContext.getAssets(), "fonts/ODIA-OT-V2.TTF");
           //  holder.menuTitel.setTypeface(OdiaFont);
 
