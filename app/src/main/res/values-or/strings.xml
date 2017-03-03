@@ -7,103 +7,103 @@
 
     <!-- Account settings screen text-->
     <string name="account_settings">ଅccଓଉନ୍ଟ୍ ସେଟ୍ଟିଙ୍ସ୍</string>
-    <string name="name">ନମେ</string>
-    <string name="email">ଏମୈଲ୍</string>
+    <string name="name">ନାମେ</string>
+    <string name="email">ଏ-ମାଇଲ</string>
     <string name="phone">ଫୋନେ</string>
-    <string name="app_language">ଅପ୍ପ୍ ଲଙୁଅଗେ</string>
-    <string name="autoplay_videos">ଔଟୋପ୍ଲଯ୍ ବିଡେଓସ୍</string>
-    <string name="gender">ଗେନ୍ଡେର୍</string>
-    <string name="male">ମଲେ</string>
-    <string name="female">Female</string>
-    <string name="cancel">CANCEL</string>
-    <string name="save">SAVE</string>
-    <string name="enter_name">Enter name</string>
-    <string name="enter_email">Enter email</string>
-    <string name="enter_phone">Enter phone</string>
-    <string name="otp_sent">OTP has been sent to the provided Phone Number.</string>
-    <string name="account_not_create">This account is not yet created.</string>
-    <string name="enter_e_mail">Enter E-mail address</string>
-    <string name="enter_valid_mail">Enter valid E-mail address</string>
-    <string name="enter_phone_no">Enter phone number</string>
-    <string name="enter_valid_phone">Enter a valid phone number</string>
-    <string name="profile_update">Your profile updated successfully.</string>
-    <string name="profile_not_updated">This profile is not yet updated.</string>
+    <string name="app_language">ଆପ୍ପ_ଲାଙ୍ଗୁଏଜ</string>
+    <string name="autoplay_videos">ଆଉଟପିଲା_ଭିଡିଓ</string>
+    <string name="gender">ଲିଂଗ</string>
+    <string name="male">ନର</string>
+    <string name="female">ମହିଲା</string>
+    <string name="cancel">କ୍ୟାନ୍ସଲ</string>
+    <string name="save">ସେଭ୍</string>
+    <string name="enter_name">ଏଣ୍ଟର ନାମେ</string>
+    <string name="enter_email">ଏଣ୍ଟର ଏ-ମାଇଲ</string>
+    <string name="enter_phone">ଏଣ୍ଟର ଫୋନେ</string>
+    <string name="otp_sent">ଆପଣଙ୍କର ପଂଜୀକୃତ ମୋବାଇଲ ନମ୍ବରରେ ଆପଣ ଓଟିପି ପାଇପାରିବେ ।</string>
+    <string name="account_not_create">ଏଇଟା ଆସିକୋଡ ନୁହେଁ ସୃଷ୍ଟି</string>
+    <string name="enter_e_mail">ଏଣ୍ଟର ଏ-ମାଇଲ ଆଡ୍ରେସ୍ </string>
+    <string name="enter_valid_mail">ଏଣ୍ଟର ବୈଧ ଏ-ମାଇଲ ଆଡ୍ରେସ୍ </string>
+    <string name="enter_phone_no">ଏଣ୍ଟର ଫୋନ୍ ନମ୍ବରକୁ</string>
+    <string name="enter_valid_phone">ଏଣ୍ଟର ବୈଧ ଫୋନ୍ ନମ୍ବରକୁ</string>
+    <string name="profile_update">ଆପଣଙ୍କର ପ୍ରୋଫାଇଲ୍ ଅପଡେଟ୍ ସଫଳତା</string>
+    <string name="profile_not_updated">ଏଇଟା ପ୍ରୋଫାଇଲେ ଅଦ୍ୟତିତ ନାହିଁ</string>
 
 
     <!-- verification screen text-->
-    <string name="description">OTP has been sent to your provided mobile number. We will detect it automatically within 10 seconds or you can enter OTP manually here.</string>
-    <string name="otp_text">Enter 6 digit OTP code you received</string>
-    <string name="otp_msg">OTP is only active for 5 minutes</string>
-    <string name="verify">VERIFY</string>
-    <string name="try_otp">Didn\'t receive OTP? TRY</string>
-    <string name="resend_otp">RESEND OTP</string>
-    <string name="verification_title">Verification</string>
-    <string name="enter_otp">Please enter OTP</string>
-    <string name="enter_valid_otp">Please enter a valid OTP.</string>
-    <string name="registered">You are registered successfully.</string>
+    <string name="description">ଓଟିପି ସହିତ ଆପଣ ଏକ ଏସ୍ଏମ୍ଏସ୍ ପାଇବେ ଓ ଏହା ଆପଣଙ୍କୁ ଏକ ସ୍କ୍ରିନ୍କୁ ନେଇଯିବ  </string>
+    <string name="otp_text">ଯେଉଁଠାରେ ଆପଣଙ୍କୁ ଓଟିପି ପ୍ରଦାନ କରିବାକୁ ହେବ ।</string>
+    <string name="otp_msg">ଓଟପ କେବଳ ୫ ମିନିଟ୍ ବୈଧ ହେବ</string>
+    <string name="verify">ସତ୍ଯାପନ</string>
+    <string name="try_otp">ଓଟୀପୀ ପ୍ରାପ୍ତ ନହୀଂ ହୁଆ?</string>
+    <string name="resend_otp">ପୁନ: ଭେଜେଂ ଓଟୀପୀ</string>
+    <string name="verification_title">ସତ୍ଯାପନ</string>
+    <string name="enter_otp">ଓଟିପିର ପ୍ରଦାନ କରନ୍ତୁ </string>
+    <string name="enter_valid_otp">ଓଟିପିର ପ୍ରଦାନ କରନ୍ତୁ </string>
+    <string name="registered">ସଫଲତାପୂର୍ୱକ ପଂଜୀକୃତ</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="title_activity_notifications">NotificationsActivity</string>
+    <string name="title_activity_notifications">କାର୍ଯ୍ୟକାରୀତା ନୋଟିଫିକେସନକୁ</string>
 
 
     <!-- notification screen text-->
-    <string name="notification">Notification</string>
+    <string name="notification">ନୋଟିଫିକେସନକୁ</string>
 
     <!-- language screen text-->
-    <string name="select_language">Select Language</string>
-    <string name="choose_language">Choose Language</string>
-    <string name="done">Done</string>
-    <string name="select_fav_language">Select your favorite language</string>
+    <string name="select_language">ସିଲେକ୍ଟ କରନ୍ତୁ ଭାଷା</string>
+    <string name="choose_language">ଭାଷା ଅପ୍ସନ ସିଲେକ୍ଟ କରିବା</string>
+    <string name="done">ହୋଇଯିବ</string>
+    <string name="select_fav_language">ଭାଷା ଅପ୍ସନ ସିଲେକ୍ଟ କରିବା</string>
 
     <!-- course screen text-->
-    <string name="title">Home</string>
-    <string name="our_programs">OUR PROGRAMS</string>
-    <string name="learn">Learn</string>
+    <string name="title">ହୋମ୍</string>
+    <string name="our_programs">କାର୍ଯ୍ୟକ୍ରମର</string>
+    <string name="learn">ଜାଣିପାରିବେ</string>
     <string name="course_description">Bridging the skills deficit gap among women, youth and farmers for creating sustainable livelihoods.</string>
 
     <!-- video play screen text-->
-    <string name="buffring">Buffering...</string>
+    <string name="buffring">ବୁଫାଫେରିଙ୍ଗ</string>
 
-    <string name="about_us">About Us</string>
-    <string name="terms_of">Terms of use</string>
+    <string name="about_us">ଆବୋଉଟା ଉତ୍ସ</string>
+    <string name="terms_of">ଟର୍ମ ଅଫ୍ ସର୍ଭିସକୁ</string>
 
-    <string name="online_msg">You are not online!!!!</string>
-    <string name="logout">You are successfully logged out.</string>
+    <string name="online_msg">ତମେ ଅଁଳିନେ ନାହିଁ</string>
+    <string name="logout">ଲୋଗ ଓଟ ସୁସିସିଏସସଫୁଲ </string>
 
     <!-- navigaton screen text-->
-    <string name="home">Home</string>
-    <string name="Notification">Notification</string>
-    <string name="Favorites">Favourite</string>
-    <string name="Profile">Profile</string>
-    <string name="Change_Language">Change Language</string>
-    <string name="Change_Folder">Change Downloads Folder</string>
-    <string name="Terms_of_use">Terms of use</string>
-    <string name="About_Us">About Us</string>
-    <string name="Downloads">Downloads</string>
+    <string name="home">ହୋମ</string>
+    <string name="Notification">ନୋଟିଫିକେସନକୁ</string>
+    <string name="Favorites">ସେହି</string>
+    <string name="Profile">ପ୍ରୋଫାଇଲ୍</string>
+    <string name="Change_Language">ଭାଷା ପରିବର୍ତ୍ତନ କରନ୍ତୁ</string>
+    <string name="Change_Folder">ଡାଉନ୍ଲୋଡ୍ ଫୋଲ୍ଡର ପରିବର୍ତ୍ତନ କରନ୍ତୁ</string>
+    <string name="Terms_of_use">ଟର୍ମ ଅଫ୍ ସର୍ଭିସକୁ</string>
+    <string name="About_Us">ଆବୋଉଟା ଉତ୍ସ</string>
+    <string name="Downloads">ଡାଉନ୍ଲୋଡ୍</string>
 
     <!-- content screen text-->
-    <string name="contents">Contents</string>
+    <string name="contents">ବିଷୟକୁ</string>
     <string name="Daksh">Daksh</string>
-    <string name="downloading_cancel">DownloadFile cancel!</string>
+    <string name="downloading_cancel">ଫାଇଲେ ଦଉନ୍ଲୋଡ କ୍ୟାନ୍ସଲଲେଡ଼</string>
 
     <!-- favorites screen text-->
-    <string name="chapters">CHAPTERS</string>
-    <string name="topic">TOPICS</string>
+    <string name="chapters">ଅଧ୍ୟାୟରେ</string>
+    <string name="topic">ବିଷୟସମୂହ</string>
 
-    <string name="select_location">Select Location</string>
-    <string name="default_folder">Default Folder</string>
-    <string name="select_folder">SELECT FOLDER</string>
-    <string name="Chapters">Chapters</string>
-    <string name="Topic">Topic</string>
+    <string name="select_location">ସେଲେସତ ଲୋକେସନ</string>
+    <string name="default_folder">ଡିଫଲ୍ଟ ଫୋଲ୍ଡର</string>
+    <string name="select_folder">ଫୋଲ୍ଡର ସିଲେକ୍ଟ କରନ୍ତୁ </string>
+    <string name="Chapters">ଅଧ୍ୟାୟରେ</string>
+    <string name="Topic">ବିଷୟ</string>
 
-    <string name="no_record">No Record Found</string>
-    <string name="read">Read</string>
-    <string name="mark_as_favourite">Mark as favourite</string>
-    <string name="download_update">Download update</string>
-    <string name="update">Updated</string>
-    <string name="favourite">Favourite</string>
-    <string name="Take_Offline">Take Offline</string>
-    <string name="import_data">Importing data</string>
-    <string name="import_data_from">Importing data from</string>
+    <string name="no_record">ନ ରେକର୍ଡସ ଫୋୖଣ୍ଡ</string>
+    <string name="read">ପଢ଼ନ୍ତୁ</string>
+    <string name="mark_as_favourite">ସେହି କରନ୍ତୁ</string>
+    <string name="download_update">ଅପ୍ଡେଟ୍ ଡାଉନ୍ଲୋଡ୍ କରନ୍ତୁ </string>
+    <string name="update">ଡାଉନ୍ଲୋଡ୍ </string>
+    <string name="favourite">ସେହି</string>
+    <string name="Take_Offline">ଅଫ୍ଲାଇନ୍ ପେଇଁ</string>
+    <string name="import_data">ଇମ୍ପୋର୍ଟିଂ ଡାଟା</string>
+    <string name="import_data_from">ଇମ୍ପୋର୍ଟିଂ ଡାଟା ଫାର୍ମ</string>
 
 </resources>
