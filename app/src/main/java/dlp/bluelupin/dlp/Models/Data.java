@@ -5,6 +5,24 @@ package dlp.bluelupin.dlp.Models;
  */
 
 public class Data {
+    public String getOption() {
+        return option;
+    }
+
+    public void setOption(String option) {
+        this.option = option;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    private String option;
+    private String answer;
     private int id; // this represents server id
 
     private String updated_at;

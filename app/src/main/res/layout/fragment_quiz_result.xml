@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical"
+    tools:context="dlp.bluelupin.dlp.Fragments.QuizResultFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+       >
+
+        <ProgressBar
+            android:id="@+id/circularProgressbar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminate="false"
+            android:max="50"
+            android:progress="25"
+            android:layout_centerInParent="true"
+            android:progressDrawable="@drawable/progress_bar_circle"
+            android:secondaryProgress="50"
+            />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="100dp"
+            android:layout_height="250dp"
+            android:gravity="center"
+            android:text="25%"
+            android:layout_centerInParent="true"
+            android:textColor="#cc0000"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>
