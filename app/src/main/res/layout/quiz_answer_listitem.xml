@@ -13,13 +13,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_margin="@dimen/dimValue_10"
             android:weightSum="1">
 
-            <RadioButton
+            <TextView
                 android:id="@+id/radio_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
+                android:text="radio"
+                android:textSize="@dimen/dimTextSize_16"
                 android:textColor="@color/colorRad" />
 
             <TextView
@@ -27,6 +30,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
+                android:layout_marginLeft="@dimen/dimValue_5"
+                android:textSize="@dimen/dimTextSize_16"
                 android:text="A)"
                 android:textColor="@color/colorBlack" />
 
@@ -35,6 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
+                android:layout_marginLeft="@dimen/dimValue_5"
+                android:textSize="@dimen/dimTextSize_16"
                 android:text="dfsdgfsgfgsfgdgsdgfgsdgsgsd"
                 android:textColor="@color/colorBlack" />
 

@@ -66,15 +66,14 @@ public class QuizAnswerAdapter extends RecyclerView.Adapter<QuizAnswerAdapter.Vi
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView option, answer;
-        public RadioButton radio_button;
+        public TextView option, answer,radio_button;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
             option = (TextView) itemView.findViewById(R.id.option);
             answer = (TextView) itemView.findViewById(R.id.answer);
-            radio_button = (RadioButton) itemView.findViewById(R.id.radio_button);
+            radio_button = (TextView) itemView.findViewById(R.id.radio_button);
 
 
         }

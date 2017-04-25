@@ -65,9 +65,9 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
     public ContentRecycleAdapter(Context context, List<Data> itemList) {
         this.itemList = itemList;
         this.context = context;
-         VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
-         VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
-         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
+        VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
+        VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
+        materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
     }
 
@@ -166,10 +166,9 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
             Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getMedia_id(),
                     Utility.getLanguageIdFromSharedPreferences(context));
 
-            analyticsHelper.logEvent(media.getFile_path() + " Seen", null);
-            logAnalytics("Video", media);
-
             if (media != null) {
+                analyticsHelper.logEvent(media.getFile_path() + " Seen", null);
+                logAnalytics("Video", media);
                 if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "Media id" + media.getId() + " video Url: " + media.getUrl());
                 }
