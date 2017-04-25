@@ -44,7 +44,8 @@ public class QuizAnswerAdapter extends RecyclerView.Adapter<QuizAnswerAdapter.Vi
 
     @Override
     public void onBindViewHolder(final QuizAnswerAdapter.ViewHolder holder, final int position) {
-
+        holder.radio_button.setTypeface(materialdesignicons_font);
+        holder.radio_button.setText(Html.fromHtml("&#xf43d;"));
         holder.option.setTypeface(VodafoneRg);
         holder.answer.setTypeface(VodafoneRg);
         holder.option.setText(answer_List.get(position).getOption());
