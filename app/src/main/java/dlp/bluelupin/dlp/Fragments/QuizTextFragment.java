@@ -143,11 +143,11 @@ public class QuizTextFragment extends Fragment {
         listen_icon.setText(Html.fromHtml("&#xf57e;"));
         submit_Icon.setTypeface(materialdesignicons_font);
         submit_Icon.setText(Html.fromHtml("&#xf054;"));
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.quizRecyclerView);
+        /*RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.quizRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         QuizAnswerAdapter adapter = new QuizAnswerAdapter(getActivity(), answer_list);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);*/
 
     }
 
