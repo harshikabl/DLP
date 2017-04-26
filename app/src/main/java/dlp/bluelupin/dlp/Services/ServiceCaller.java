@@ -9,6 +9,7 @@ import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.ContentData;
+import dlp.bluelupin.dlp.Models.ContentQuizData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.OtpData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
@@ -185,6 +186,123 @@ public class ServiceCaller {
         });
     }
 
+    //get all Quizzes Content
+    public void getAllQuizzes(final ContentServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final ServiceHelper sh = new ServiceHelper(context);
+        sh.callQuizzesService(request, new IServiceSuccessCallback<ContentData>() {
+            @Override
+            public void onDone(final String callerUrl, final ContentData result, String error) {
+                Boolean success = false;
+                if (result != null) {
+                    if (request.getPage() <= result.getLast_page()) {
+                        Log.d(Consts.LOG_TAG, "Recursively calling next Quizzes content page: " + result.getCurrent_page());
+                        final ContentServiceRequest nextRequest = new ContentServiceRequest();
+                        nextRequest.setPage(result.getCurrent_page() + 1);
+                        getAllMedialanguageLatestContent(nextRequest, new IAsyncWorkCompletedCallback() {
+                            @Override
+                            public void onDone(String workName, boolean isComplete) {
+                                if (nextRequest.getPage() > result.getLast_page()) {
+                                    Log.d(Consts.LOG_TAG, "Quizzes Content Parsed successfully till page: " + result.getCurrent_page());
+                                    workCompletedCallback.onDone("getAllQuizzes", true);
+                                } else {
+                                    // all parsed successfully; recursion complete
+                                    workCompletedCallback.onDone("getAllQuizzes", true);
+                                }
+                            }
+                        });
+
+                    } else {
+                        // all parsed successfully; recursion complete
+                        // Log.d(Consts.LOG_TAG, "Content Parsed successfully till page: " + result.getCurrent_page());
+                        success = true;
+                        workCompletedCallback.onDone("getAllQuizzes", success);
+                    }
+
+                } else {
+                    success = false;
+                }
+            }
+        });
+    }
+
+    //get all Quizzes Questions Content
+    public void getAllQuizzesQuestions(final ContentServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final ServiceHelper sh = new ServiceHelper(context);
+        sh.callQuizzesQuestionsService(request, new IServiceSuccessCallback<ContentData>() {
+            @Override
+            public void onDone(final String callerUrl, final ContentData result, String error) {
+                Boolean success = false;
+                if (result != null) {
+                    if (request.getPage() <= result.getLast_page()) {
+                        Log.d(Consts.LOG_TAG, "Recursively calling next Quizzes Questions content page: " + result.getCurrent_page());
+                        final ContentServiceRequest nextRequest = new ContentServiceRequest();
+                        nextRequest.setPage(result.getCurrent_page() + 1);
+                        getAllMedialanguageLatestContent(nextRequest, new IAsyncWorkCompletedCallback() {
+                            @Override
+                            public void onDone(String workName, boolean isComplete) {
+                                if (nextRequest.getPage() > result.getLast_page()) {
+                                    Log.d(Consts.LOG_TAG, "Quizzes Questions Content Parsed successfully till page: " + result.getCurrent_page());
+                                    workCompletedCallback.onDone("getAllQuizzesQuestions", true);
+                                } else {
+                                    // all parsed successfully; recursion complete
+                                    workCompletedCallback.onDone("getAllQuizzesQuestions", true);
+                                }
+                            }
+                        });
+
+                    } else {
+                        // all parsed successfully; recursion complete
+                        // Log.d(Consts.LOG_TAG, "Content Parsed successfully till page: " + result.getCurrent_page());
+                        success = true;
+                        workCompletedCallback.onDone("getAllQuizzesQuestions", success);
+                    }
+
+                } else {
+                    success = false;
+                }
+            }
+        });
+    }
+
+    //get all Quizzes Questions Options Content
+    public void getAllQuizzesQuestionsOptions(final ContentServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final ServiceHelper sh = new ServiceHelper(context);
+        sh.callQuizzesQuestionsOptionsService(request, new IServiceSuccessCallback<ContentData>() {
+            @Override
+            public void onDone(final String callerUrl, final ContentData result, String error) {
+                Boolean success = false;
+                if (result != null) {
+                    if (request.getPage() <= result.getLast_page()) {
+                        Log.d(Consts.LOG_TAG, "Recursively calling next Quizzes Options content page: " + result.getCurrent_page());
+                        final ContentServiceRequest nextRequest = new ContentServiceRequest();
+                        nextRequest.setPage(result.getCurrent_page() + 1);
+                        getAllMedialanguageLatestContent(nextRequest, new IAsyncWorkCompletedCallback() {
+                            @Override
+                            public void onDone(String workName, boolean isComplete) {
+                                if (nextRequest.getPage() > result.getLast_page()) {
+                                    Log.d(Consts.LOG_TAG, "Quizzes Options Content Parsed successfully till page: " + result.getCurrent_page());
+                                    workCompletedCallback.onDone("getAllQuizzesQuestionsOptions", true);
+                                } else {
+                                    // all parsed successfully; recursion complete
+                                    workCompletedCallback.onDone("getAllQuizzesQuestionsOptions", true);
+                                }
+                            }
+                        });
+
+                    } else {
+                        // all parsed successfully; recursion complete
+                        // Log.d(Consts.LOG_TAG, "Content Parsed successfully till page: " + result.getCurrent_page());
+                        success = true;
+                        workCompletedCallback.onDone("getAllQuizzesQuestionsOptions", success);
+                    }
+
+                } else {
+                    success = false;
+                }
+            }
+        });
+    }
+
     //call create account service
     public void CreateAccount(final AccountServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
         final ServiceHelper sh = new ServiceHelper(context);
@@ -278,6 +396,25 @@ public class ServiceCaller {
 
                 } else {
                     success = false;
+                }
+            }
+        });
+    }
+
+    //call Content Quiz service
+    public void ContentQuiz(final ContentServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final ServiceHelper sh = new ServiceHelper(context);
+        sh.callContentQuizService(request, new IServiceSuccessCallback<ContentQuizData>() {
+            @Override
+            public void onDone(final String callerUrl, final ContentQuizData result, String error) {
+                Boolean success = false;
+                if (result != null) {
+                    success = true;
+                    workCompletedCallback.onDone("ContentQuizData", success);
+
+                } else {
+                    success = false;
+                    workCompletedCallback.onDone("ContentQuiz no data", success);
                 }
             }
         });

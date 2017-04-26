@@ -359,7 +359,7 @@ public class Data {
 
     private String thumbnail_localFilename;
     private String localFileName;
-    private int isDownloaded=0;
+    private int isDownloaded = 0;
 
     public int getIsDownloaded() {
         return isDownloaded;
@@ -367,6 +367,76 @@ public class Data {
 
     public void setIsDownloaded(int isDownloaded) {
         this.isDownloaded = isDownloaded;
+    }
+
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
+    private int audio_media_id;
+    private int answer_audio_media_id;
+    private String lang_resource_correct_answer;
+
+
+    public int getAudio_media_id() {
+        return audio_media_id;
+    }
+
+    public void setAudio_media_id(int audio_media_id) {
+        this.audio_media_id = audio_media_id;
+    }
+
+    public int getAnswer_audio_media_id() {
+        return answer_audio_media_id;
+    }
+
+    public void setAnswer_audio_media_id(int answer_audio_media_id) {
+        this.answer_audio_media_id = answer_audio_media_id;
+    }
+
+    public String getLang_resource_correct_answer() {
+        return lang_resource_correct_answer;
+    }
+
+    public void setLang_resource_correct_answer(String lang_resource_correct_answer) {
+        this.lang_resource_correct_answer = lang_resource_correct_answer;
+    }
+
+
+    private int question_id;
+    private Boolean is_correct;
+
+    public int getQuestion_id() {
+        return question_id;
+    }
+
+    public void setQuestion_id(int question_id) {
+        this.question_id = question_id;
+    }
+
+    public Boolean getIs_correct() {
+        return is_correct;
+    }
+
+    public void setIs_correct(Boolean is_correct) {
+        this.is_correct = is_correct;
+    }
+
+
+    private int quiz_id;
+    public int getQuiz_id() {
+        return quiz_id;
+    }
+
+    public void setQuiz_id(int quiz_id) {
+        this.quiz_id = quiz_id;
     }
 
     @Override

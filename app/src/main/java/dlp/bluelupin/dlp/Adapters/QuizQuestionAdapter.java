@@ -1,6 +1,7 @@
 package dlp.bluelupin.dlp.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -8,12 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.util.List;
 
+import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Models.QuizAnswer;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.FontManager;
 
@@ -22,14 +26,21 @@ import dlp.bluelupin.dlp.Utilities.FontManager;
  */
 
 public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapter.ViewHolder> {
-    private List<Data> question_List;
+    private List<Data> optionList;
     Typeface VodafoneRg;
     Typeface materialdesignicons_font;
     private Context context;
+    private List<String> OptionAtoZList;
+    private int selectedItemPosition = -1;
+    private int quizId;
+    private int questionId;
 
-    public QuizQuestionAdapter(Context context, List<Data> questionList) {
-        this.question_List = questionList;
+    public QuizQuestionAdapter(Context context, List<Data> optionList, List<String> OptionAtoZList, int quizId, int questionId) {
+        this.optionList = optionList;
+        this.OptionAtoZList = OptionAtoZList;
         this.context = context;
+        this.quizId = quizId;
+        this.questionId = questionId;
         VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
         materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
     }
@@ -38,7 +49,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.quiz_question_listitem, parent, false);
+                .inflate(R.layout.quiz_text_item, parent, false);
         QuizQuestionAdapter.ViewHolder viewHolder = new QuizQuestionAdapter.ViewHolder(v);
         return viewHolder;
     }
@@ -46,44 +57,49 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     @Override
     public void onBindViewHolder(final QuizQuestionAdapter.ViewHolder holder, final int position) {
 
-        holder.radio_option.setTypeface(materialdesignicons_font);
-        holder.radio_option.setText(Html.fromHtml("&#xf43d;"));
-        holder.view_icon.setTypeface(materialdesignicons_font);
-        holder.view_icon.setText(Html.fromHtml("&#xf43e;"));
-        holder.view_text.setTypeface(VodafoneRg);
-        holder.question_option.setTypeface(VodafoneRg);
-        holder.question_option.setText(question_List.get(position).getOption());
-        holder.radio_option.setOnClickListener(new View.OnClickListener() {
+        holder.option.setText(OptionAtoZList.get(position).toString() + ")");
+        if (optionList.get(position).getLang_resource_name() != null) {
+            holder.answer.setText(optionList.get(position).getLang_resource_name());
+        }
+        if (selectedItemPosition == position) {
+            holder.radio.setChecked(true);
+        } else {
+            holder.radio.setChecked(false);
+        }
+        holder.radio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.radio_option.setTypeface(materialdesignicons_font);
-                holder.radio_option.setText(Html.fromHtml("&#xf43e;"));
+                selectedItemPosition = position;
+                SharedPreferences prefs = context.getSharedPreferences("OptionPreferences", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putInt("optionId", optionList.get(position).getId());
+                editor.commit();
+                notifyDataSetChanged();
             }
         });
-
 
 
     }
 
     @Override
     public int getItemCount() {
-        return question_List.size();
+        return optionList.size();
     }
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView view_icon, question_option, view_text,radio_option;
-        public ImageView question_image;
+        public TextView option, answer;
+        public RadioButton radio;
+        public LinearLayout mainlayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            question_image = (ImageView) itemView.findViewById(R.id.question_image);
-            view_text = (TextView) itemView.findViewById(R.id.view_text);
-            view_icon = (TextView) itemView.findViewById(R.id.view_icon);
-            question_option = (TextView) itemView.findViewById(R.id.question_option);
-            radio_option = (TextView) itemView.findViewById(R.id.radio_option);
-
-
+            option = (TextView) itemView.findViewById(R.id.option);
+            answer = (TextView) itemView.findViewById(R.id.answer);
+            radio = (RadioButton) itemView.findViewById(R.id.radio);
+            option.setTypeface(VodafoneRg);
+            answer.setTypeface(VodafoneRg);
+            mainlayout = (LinearLayout) itemView.findViewById(R.id.mainlayout);
         }
     }
 

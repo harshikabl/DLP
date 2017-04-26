@@ -26,7 +26,7 @@ import dlp.bluelupin.dlp.Utilities.Utility;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
-
+ * {@link QuizResultFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link QuizResultFragment#newInstance} factory method to
  * create an instance of this fragment.

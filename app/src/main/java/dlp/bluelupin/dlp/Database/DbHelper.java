@@ -10,6 +10,8 @@ import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import org.apache.commons.io.FilenameUtils;
 
 import java.sql.Date;
@@ -19,9 +21,12 @@ import java.util.List;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
+import dlp.bluelupin.dlp.Models.ContentQuizData;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.Models.LanguageData;
+import dlp.bluelupin.dlp.Models.Pivot;
+import dlp.bluelupin.dlp.Models.QuizAnswer;
 import dlp.bluelupin.dlp.Utilities.Utility;
 //import org.apache.commons.io.FilenameUtils;
 
@@ -30,8 +35,8 @@ import dlp.bluelupin.dlp.Utilities.Utility;
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = Consts.outputDirectoryLocation +  "dlp_db.db";//Consts.outputDirectoryLocation +  "dlp_db.db";// Consts.outputDirectoryLocation +  "dlp_db.db"; //Consts.dataBaseName; //
+    public static final int DATABASE_VERSION = 2;
+    public static final String DATABASE_NAME = Consts.dataBaseName;// Consts.outputDirectoryLocation +  "dlp_db.db"; //Consts.dataBaseName; //
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -52,6 +57,12 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS MedialanguageLatestEntity");
         db.execSQL("DROP TABLE IF EXISTS LanguageEntity");
         db.execSQL("DROP TABLE IF EXISTS NotificationEntity");
+        db.execSQL("DROP TABLE IF EXISTS QuizzesEntity");
+        db.execSQL("DROP TABLE IF EXISTS QuizzesQuestionsEntity");
+        db.execSQL("DROP TABLE IF EXISTS QuestionsOptionsEntity");
+        db.execSQL("DROP TABLE IF EXISTS ContentQuizEntity");
+        db.execSQL("DROP TABLE IF EXISTS QuizAnswerEntity");
+
         onCreate(db);
     }
 
@@ -108,6 +119,25 @@ public class DbHelper extends SQLiteOpenHelper {
         //id , client_id , send_at ,  message , language_id , status , custom_data ,created_by ,updated_by , created_at , updated_at , deleted_at
         db.execSQL(CREATE_NotificationDataEntity_TABLE);
 
+        String CREATE_QuizzesDataEntity_TABLE = "CREATE TABLE QuizzesEntity(id INTEGER PRIMARY KEY, client_id INTEGER, name TEXT,  description TEXT, created_by INTEGER, updated_by INTEGER, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
+        //id , client_id , name, description, created_by,updated_by,created_at,updated_at,deleted_at
+        db.execSQL(CREATE_QuizzesDataEntity_TABLE);
+
+        String CREATE_QuizzesQuestionsDataEntity_TABLE = "CREATE TABLE QuizzesQuestionsEntity(id INTEGER PRIMARY KEY, quiz_id INTEGER, sequence INTEGER, lang_resource_description TEXT, media_id INTEGER, audio_media_id INTEGER,answer_audio_media_id INTEGER,type TEXT,lang_resource_correct_answer TEXT, created_by INTEGER, updated_by INTEGER, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
+        //id , quiz_id , sequence, lang_resource_description,media_id,audio_media_id,answer_audio_media_id,type,lang_resource_correct_answer, created_by,updated_by,created_at,updated_at,deleted_at
+        db.execSQL(CREATE_QuizzesQuestionsDataEntity_TABLE);
+
+        String CREATE_QuestionsOptionsDataEntity_TABLE = "CREATE TABLE QuestionsOptionsEntity(id INTEGER PRIMARY KEY, question_id INTEGER, sequence INTEGER, lang_resource_name TEXT, media_id INTEGER, is_correct TEXT, created_by INTEGER, updated_by INTEGER, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
+        //id , question_id , sequence, lang_resource_name,media_id,is_correct,created_by,updated_by,created_at,updated_at,deleted_at
+        db.execSQL(CREATE_QuestionsOptionsDataEntity_TABLE);
+
+        String CREATE_ContentQuizDataEntity_TABLE = "CREATE TABLE ContentQuizEntity(id INTEGER PRIMARY KEY, client_id INTEGER, name TEXT, description TEXT, created_by INTEGER, updated_by INTEGER, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME, pivot TEXT)";
+        //id , client_id , name, description,created_by,updated_by,created_at,updated_at,deleted_at,pivot
+        db.execSQL(CREATE_ContentQuizDataEntity_TABLE);
+
+        String CREATE_QuizAnswerEntity_TABLE = "CREATE TABLE QuizAnswerEntity(id INTEGER PRIMARY KEY, quiz_id INTEGER, question_id INTEGER, option_id INTEGER, answer INTEGER)";
+        //id,quiz_id , question_id , option_id ,answer  QuizAnswerEntity
+        db.execSQL(CREATE_QuizAnswerEntity_TABLE);
     }
 
     private Boolean tableAlreadyExists(SQLiteDatabase db, String tableName) {
@@ -1866,6 +1896,594 @@ public class DbHelper extends SQLiteOpenHelper {
             i = db.update("NotificationEntity", values, " id = " + ob.getId() + " ", null);
         }
         //Log.d(Consts.LOG_TAG, "NotificationEntity called with" + " id = '" + ob.getId());
+
+        db.close();
+        return i > 0;
+    }
+
+    //------------------Quizzes Entity--------------------------
+    public boolean upsertQuizzesDataEntity(Data ob) {
+        boolean done = false;
+        Data data = null;
+        if (ob.getId() != 0) {
+            data = getQuizzesDataEntityById(ob.getId());
+            if (data == null) {
+                done = insertQuizzesDataEntity(ob);
+            } else {
+                done = updateQuizzesDataEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    public Data getQuizzesDataEntityById(int id) {
+        String query = "Select * FROM QuizzesEntity WHERE id = '" + id + "' ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            populateQuizzesDataEntity(cursor, ob);
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    //get all Quizzes data_item
+    public List<Data> getAllQuizzesDataEntity(int languageId) {
+        String query = "Select * FROM QuizzesEntity where language_id = '" + languageId + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<Data> list = new ArrayList<Data>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                Data ob = new Data();
+                populateQuizzesDataEntity(cursor, ob);
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
+    //id , client_id , name, description, created_by,updated_by,created_at,updated_at,deleted_at
+    private void populateQuizzesDataEntity(Cursor cursor, Data ob) {
+        ob.setId(cursor.getInt(0));
+        ob.setClientId(cursor.getInt(1));
+        ob.setName(cursor.getString(2));
+        ob.setDescription(cursor.getString(3));
+        ob.setCreated_by(cursor.getInt(4));
+        ob.setUpdated_by(cursor.getInt(5));
+        ob.setCreated_at(cursor.getString(6));
+        ob.setUpdated_at(cursor.getString(7));
+        ob.setDeleted_at(cursor.getString(8));
+    }
+
+    //insert Quizzes
+    public boolean insertQuizzesDataEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        populateQuizzesValues(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("QuizzesEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    //id , client_id , name, description, created_by,updated_by,created_at,updated_at,deleted_at
+    private void populateQuizzesValues(ContentValues values, Data ob) {
+        values.put("id", ob.getId());
+        values.put("client_id", ob.getClient_id());
+        values.put("name", ob.getName());
+        values.put("description", ob.getDescription());
+        values.put("created_by", ob.getCreated_by());
+        values.put("updated_by", ob.getUpdated_by());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getUpdated_at());
+    }
+
+    //update Quizzes
+    public boolean updateQuizzesDataEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        populateQuizzesValues(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() != 0) {
+            i = db.update("QuizzesEntity", values, " id = '" + ob.getId() + "' ", null);
+        }
+
+        db.close();
+        return i > 0;
+    }
+
+    //-----------Quizzes QuestionsEntity------------------
+    public boolean upsertQuizzesQuestionsDataEntity(Data ob) {
+        boolean done = false;
+        Data data = null;
+        if (ob.getId() != 0) {
+            data = getQuizzesQuestionsDataEntityById(ob.getId());
+            if (data == null) {
+                done = insertQuizzesQuestionsDataEntity(ob);
+            } else {
+                done = updateQuizzesQuestionsDataEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    public Data getQuizzesQuestionsDataEntityById(int id) {
+        String query = "Select * FROM QuizzesQuestionsEntity WHERE id = '" + id + "' ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            populateQuizzesQuestionsDataEntity(cursor, ob);
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    //get all Quizzes Questions data_item
+    public List<Data> getAllQuizzesQuestionsDataEntity(int quizId) {
+        String query = "Select * FROM QuizzesQuestionsEntity where quiz_id = '" + quizId + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<Data> list = new ArrayList<Data>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                Data ob = new Data();
+                populateQuizzesQuestionsDataEntity(cursor, ob);
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
+    //get Question details with quizId and questionid
+    public Data getQuestionDetailsData(int quizId, int questionNo) {
+        String query = "Select * FROM QuizzesQuestionsEntity where quiz_id = '" + quizId + "' and id = '" + questionNo + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            populateQuizzesQuestionsDataEntity(cursor, ob);
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    private void populateQuizzesQuestionsDataEntity(Cursor cursor, Data ob) {
+        ob.setId(cursor.getInt(0));
+        ob.setQuiz_id(cursor.getInt(1));
+        ob.setSequence(cursor.getInt(2));
+        ob.setLang_resource_description(cursor.getString(3));
+        ob.setMedia_id(cursor.getInt(4));
+        ob.setAudio_media_id(cursor.getInt(5));
+        ob.setAnswer_audio_media_id(cursor.getInt(6));
+        ob.setType(cursor.getString(7));
+        ob.setLang_resource_correct_answer(cursor.getString(8));
+        ob.setCreated_by(cursor.getInt(9));
+        ob.setUpdated_by(cursor.getInt(10));
+        ob.setCreated_at(cursor.getString(11));
+        ob.setUpdated_at(cursor.getString(12));
+        ob.setDeleted_at(cursor.getString(13));
+    }
+
+    //insert Quizzes Questions
+    public boolean insertQuizzesQuestionsDataEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        populateQuizzesQuestionsValues(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("QuizzesQuestionsEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    private void populateQuizzesQuestionsValues(ContentValues values, Data ob) {
+        values.put("id", ob.getId());
+        values.put("quiz_id", ob.getQuiz_id());
+        values.put("sequence", ob.getSequence());
+        values.put("lang_resource_description", ob.getLang_resource_description());
+        values.put("media_id", ob.getMedia_id());
+        values.put("audio_media_id", ob.getAudio_media_id());
+        values.put("answer_audio_media_id", ob.getAnswer_audio_media_id());
+        values.put("type", ob.getType());
+        values.put("lang_resource_correct_answer", ob.getLang_resource_correct_answer());
+        values.put("created_by", ob.getCreated_by());
+        values.put("updated_by", ob.getUpdated_by());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getDeleted_at());
+    }
+
+    //update Quizzes Questions
+    public boolean updateQuizzesQuestionsDataEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        populateQuizzesQuestionsValues(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() != 0) {
+            i = db.update("QuizzesQuestionsEntity", values, " id = '" + ob.getId() + "' ", null);
+        }
+
+        db.close();
+        return i > 0;
+    }
+
+    //--------------------Questions Options Entity---------------------
+    public boolean upsertQuestionsOptionsDataEntity(Data ob) {
+        boolean done = false;
+        Data data = null;
+        if (ob.getId() != 0) {
+            data = getQuestionsOptionsDataEntityById(ob.getId());
+            if (data == null) {
+                done = insertQuestionsOptionsDataEntity(ob);
+            } else {
+                done = updateQuestionsOptionsDataEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    public Data getQuestionsOptionsDataEntityById(int id) {
+        String query = "Select * FROM QuestionsOptionsEntity WHERE id = '" + id + "' ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            populateQuestionsOptionsDataEntity(cursor, ob);
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    //get all Quizzes Questions Options data_item
+    public List<Data> getAllQuestionsOptionsDataEntity(int id) {
+        String query = "Select * FROM QuestionsOptionsEntity where question_id = '" + id + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<Data> list = new ArrayList<Data>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                Data ob = new Data();
+                populateQuestionsOptionsDataEntity(cursor, ob);
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
+    private void populateQuestionsOptionsDataEntity(Cursor cursor, Data ob) {
+        ob.setId(cursor.getInt(0));
+        ob.setQuestion_id(cursor.getInt(1));
+        ob.setSequence(cursor.getInt(2));
+        ob.setLang_resource_name(cursor.getString(3));
+        ob.setMedia_id(cursor.getInt(4));
+        ob.setIs_correct(Boolean.parseBoolean(cursor.getString(5)));
+        ob.setCreated_by(cursor.getInt(6));
+        ob.setUpdated_by(cursor.getInt(7));
+        ob.setCreated_at(cursor.getString(8));
+        ob.setUpdated_at(cursor.getString(9));
+        ob.setDeleted_at(cursor.getString(10));
+    }
+
+    //insert Quizzes Questions Options
+    public boolean insertQuestionsOptionsDataEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        populateQuestionsOptionsValues(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("QuestionsOptionsEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    private void populateQuestionsOptionsValues(ContentValues values, Data ob) {
+        values.put("id", ob.getId());
+        values.put("question_id", ob.getQuestion_id());
+        values.put("sequence", ob.getSequence());
+        values.put("lang_resource_name", ob.getLang_resource_name());
+        values.put("media_id", ob.getMedia_id());
+        values.put("is_correct", ob.getIs_correct());
+        values.put("created_by", ob.getCreated_by());
+        values.put("updated_by", ob.getUpdated_by());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getDeleted_at());
+    }
+
+    //update Quizzes Questions Options
+    public boolean updateQuestionsOptionsDataEntity(Data ob) {
+
+        ContentValues values = new ContentValues();
+        populateQuestionsOptionsValues(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() != 0) {
+            i = db.update("QuestionsOptionsEntity", values, " id = '" + ob.getId() + "' ", null);
+        }
+
+        db.close();
+        return i > 0;
+    }
+
+    //------------------Content Quiz Entity-------------
+    public boolean upsertContentQuizEntity(ContentQuizData ob) {
+        boolean done = false;
+        ContentQuizData data = null;
+        if (ob.getId() != 0) {
+            data = getContentQuizEntityById(ob.getId());
+            if (data == null) {
+                done = insertContentQuizEntity(ob);
+            } else {
+                done = updateContentQuizEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    public ContentQuizData getContentQuizEntityById(int id) {
+        String query = "Select * FROM ContentQuizEntity WHERE id = '" + id + "' ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        ContentQuizData ob = new ContentQuizData();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            populateContentQuizEntity(cursor, ob);
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    //get all Content Quiz data_item
+    public List<ContentQuizData> getAllContentQuizEntity() {
+        String query = "Select * FROM ContentQuizEntity";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<ContentQuizData> list = new ArrayList<ContentQuizData>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                ContentQuizData ob = new ContentQuizData();
+                populateContentQuizEntity(cursor, ob);
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
+    private void populateContentQuizEntity(Cursor cursor, ContentQuizData ob) {
+        ob.setId(cursor.getInt(0));
+        ob.setClient_id(cursor.getInt(1));
+        ob.setName(cursor.getString(2));
+        ob.setDescription(cursor.getString(3));
+        ob.setCreated_by(cursor.getInt(4));
+        ob.setUpdated_by(cursor.getInt(5));
+        ob.setCreated_at(cursor.getString(6));
+        ob.setUpdated_at(cursor.getString(7));
+        ob.setDeleted_at(cursor.getString(8));
+        Pivot pivot = new Gson().fromJson(cursor.getString(9), Pivot.class);
+        ob.setPivot(pivot);
+    }
+
+    //insert Content Quiz
+    public boolean insertContentQuizEntity(ContentQuizData ob) {
+
+        ContentValues values = new ContentValues();
+        populateContentQuizValues(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("ContentQuizEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    private void populateContentQuizValues(ContentValues values, ContentQuizData ob) {
+        values.put("id", ob.getId());
+        values.put("client_id", ob.getClient_id());
+        values.put("name", ob.getName());
+        values.put("description", ob.getDescription());
+        values.put("created_by", ob.getCreated_by());
+        values.put("updated_by", ob.getUpdated_by());
+        values.put("created_at", ob.getCreated_at());
+        values.put("updated_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getDeleted_at());
+        String pivotString = new Gson().toJson(ob.getPivot());
+        values.put("pivot", pivotString);
+    }
+
+    //id , client_id , name, description,created_by,updated_by,created_at,updated_at,deleted_at,pivot     ContentQuizEntity
+    //update Content Quiz
+    public boolean updateContentQuizEntity(ContentQuizData ob) {
+
+        ContentValues values = new ContentValues();
+        populateContentQuizValues(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() != 0) {
+            i = db.update("ContentQuizEntity", values, " id = '" + ob.getId() + "' ", null);
+        }
+
+        db.close();
+        return i > 0;
+    }
+
+    //-----------------Quiz Answer Entity--------------------
+    public boolean upsertQuizAnswerEntity(QuizAnswer ob) {
+        boolean done = false;
+        QuizAnswer data = null;
+        if (ob.getQuizId() != 0) {
+            data = getQuizAnswerEntityById(ob.getQuizId(), ob.getQuestionId());
+            if (data == null) {
+                done = insertQuizAnswerEntity(ob);
+            } else {
+                done = updateQuizAnswerEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    public QuizAnswer getQuizAnswerEntityById(int quizId, int questionId) {
+        String query = "Select * FROM QuizAnswerEntity WHERE quiz_id = '" + quizId + "' and question_id='" + questionId + "' ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        QuizAnswer ob = new QuizAnswer();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            populateQuizAnswerEntity(cursor, ob);
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    //get all Quiz Answer Entity data_item
+    public List<QuizAnswer> getAllQuizAnswerEntity() {
+        String query = "Select * FROM QuizAnswerEntity";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<QuizAnswer> list = new ArrayList<QuizAnswer>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                QuizAnswer ob = new QuizAnswer();
+                populateQuizAnswerEntity(cursor, ob);
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
+    private void populateQuizAnswerEntity(Cursor cursor, QuizAnswer ob) {
+        ob.setQuizId(cursor.getInt(0));
+        ob.setQuestionId(cursor.getInt(1));
+        ob.setOptionId(cursor.getInt(2));
+        ob.setAnswer(cursor.getInt(3));
+    }
+
+    //insert Quiz Answer Entity
+    public boolean insertQuizAnswerEntity(QuizAnswer ob) {
+
+        ContentValues values = new ContentValues();
+        populateQuizAnswerEntityValues(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("QuizAnswerEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    private void populateQuizAnswerEntityValues(ContentValues values, QuizAnswer ob) {
+        values.put("quiz_id", ob.getQuizId());
+        values.put("question_id", ob.getQuestionId());
+        values.put("option_id", ob.getOptionId());
+        values.put("answer", ob.getAnswer());
+    }
+
+    //quiz_id , question_id , option_id ,answer  QuizAnswerEntity
+    //update Quiz Answer Entity
+    public boolean updateQuizAnswerEntity(QuizAnswer ob) {
+
+        ContentValues values = new ContentValues();
+        populateQuizAnswerEntityValues(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getQuizId() != 0) {
+            i = db.update("QuizAnswerEntity", values, " quiz_id = '" + ob.getQuizId() + "' and question_id='" + ob.getQuestionId() + "' ", null);
+        }
 
         db.close();
         return i > 0;

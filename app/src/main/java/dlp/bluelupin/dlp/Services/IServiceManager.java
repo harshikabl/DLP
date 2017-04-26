@@ -6,6 +6,7 @@ import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.ContentData;
+import dlp.bluelupin.dlp.Models.ContentQuizData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Models.OtpData;
@@ -63,5 +64,15 @@ public interface IServiceManager {
     @POST(Consts.Profile_Update)
     Call<AccountData> profileUpdated(@Query("api_token") String api_token, @Body ProfileUpdateServiceRequest request);
 
+    @POST(Consts.Quizzes)
+    Call<ContentData> QuizzesContent(@Body ContentServiceRequest request);
 
+    @POST(Consts.QuizzesQuestions)
+    Call<ContentData> QuizzesQuestionsContent(@Body ContentServiceRequest request);
+
+    @POST(Consts.QuizzesOptions)
+    Call<ContentData> QuizzesOptionsContent(@Body ContentServiceRequest request);
+
+    @POST(Consts.ContentQuiz)
+    Call<ContentQuizData> ContentQuiz(@Body ContentServiceRequest request);
 }

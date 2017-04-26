@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity
         //navigationView.setItemIconTintList(null);
 
         //View header = navigationView.getHeaderView(0);
-        Typeface custom_fontawesome =FontManager.getFontTypeface(this, "fonts/fontawesome-webfont.ttf");
+        Typeface custom_fontawesome = FontManager.getFontTypeface(this, "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(this, "fonts/materialdesignicons-webfont.otf");
         View header = findViewById(R.id.navHader);
         name = (TextView) header.findViewById(R.id.name);
@@ -408,6 +408,10 @@ public class MainActivity extends AppCompatActivity
         callContentAsync();
         callResourceAsync();
         callMediaAsync();
+        callQuizzesAsync();
+        callQuizzesQuestionsAsync();
+        callQuizzesQuestionsOptionsAsync();
+        callContentQuizAsync();
         callMedialanguageLatestAsync();
     }
 
@@ -522,6 +526,81 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    //get all Quizzes
+    private void callQuizzesAsync() {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(MainActivity.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.Quizzes);
+        if (cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(MainActivity.this);
+        sc.getAllQuizzes(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+              /*  if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync success result: " + isComplete);
+                }
+                DbHelper db = new DbHelper(MainActivity.this);
+                List<Data> data = db.getAllMedialanguageLatestDataEntity();
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "MainActivity: callMedialanguageLatestAsync data_item count: " + data.size());
+                }*/
+            }
+        });
+    }
+
+    //get all Quizzes Questions
+    private void callQuizzesQuestionsAsync() {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(MainActivity.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.QuizzesQuestions);
+        if (cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(MainActivity.this);
+        sc.getAllQuizzesQuestions(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+
+            }
+        });
+    }
+
+    //get all Quizzes Options
+    private void callQuizzesQuestionsOptionsAsync() {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(MainActivity.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.QuizzesOptions);
+        if (cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(MainActivity.this);
+        sc.getAllQuizzesQuestionsOptions(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+
+            }
+        });
+    }
+
+    //get all Content Quiz
+    private void callContentQuizAsync() {
+        ContentServiceRequest request = new ContentServiceRequest();
+        ServiceCaller sc = new ServiceCaller(MainActivity.this);
+        sc.ContentQuiz(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+
+            }
+        });
+    }
 
     //call create account service when user in online mode
     private void callCreateAccountService() {

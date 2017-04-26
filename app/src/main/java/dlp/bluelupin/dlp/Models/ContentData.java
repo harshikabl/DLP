@@ -112,6 +112,9 @@ public class ContentData {
         this.current_page = current_page;
     }
 
+
+    private Pivot pivot;
+
     @Override
     public String toString()
     {
