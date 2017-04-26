@@ -73,6 +73,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
                 SharedPreferences prefs = context.getSharedPreferences("OptionPreferences", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putInt("optionId", optionList.get(position).getId());
+                editor.putBoolean("selectCheck", true);
                 editor.commit();
                 notifyDataSetChanged();
             }

@@ -35,8 +35,8 @@ import dlp.bluelupin.dlp.Utilities.Utility;
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = Consts.dataBaseName;// Consts.outputDirectoryLocation +  "dlp_db.db"; //Consts.dataBaseName; //
+    public static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = Consts.dataBaseName;//Consts.dataBaseName;// Consts.outputDirectoryLocation +  "dlp_db.db"; //Consts.dataBaseName; //
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -2424,8 +2424,8 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     //get all Quiz Answer Entity data_item
-    public List<QuizAnswer> getAllQuizAnswerEntity() {
-        String query = "Select * FROM QuizAnswerEntity";
+    public List<QuizAnswer> getAllQuizAnswerEntity(int quizId) {
+        String query = "Select * FROM QuizAnswerEntity WHERE quiz_id = '" + quizId + "' and answer='" + 1 + "' ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -2446,10 +2446,11 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     private void populateQuizAnswerEntity(Cursor cursor, QuizAnswer ob) {
-        ob.setQuizId(cursor.getInt(0));
-        ob.setQuestionId(cursor.getInt(1));
-        ob.setOptionId(cursor.getInt(2));
-        ob.setAnswer(cursor.getInt(3));
+        //ob.setId(cursor.getInt(0));
+        ob.setQuizId(cursor.getInt(1));
+        ob.setQuestionId(cursor.getInt(2));
+        ob.setOptionId(cursor.getInt(3));
+        ob.setAnswer(cursor.getInt(4));
     }
 
     //insert Quiz Answer Entity

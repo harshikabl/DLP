@@ -21,7 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.2"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/dimValue_5">
 
                 <TextView
                     android:id="@+id/quit_text"

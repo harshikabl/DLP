@@ -72,6 +72,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     Typeface materialdesignicons_font, VodafoneRg;
     private int questionNo = 1;
     private int questionId;
+    private List<Data> questionList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -141,6 +142,12 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         recyclerView = (RecyclerView) view.findViewById(R.id.quizRecyclerView);
         LinearLayout submitLayout = (LinearLayout) view.findViewById(R.id.submitLayout);
         submitLayout.setOnClickListener(this);
+        DbHelper dbHelper = new DbHelper(context);
+        Data quizData = dbHelper.getQuizzesDataEntityById(quizId);
+        if (quizData != null) {
+            questionList = dbHelper.getAllQuizzesQuestionsDataEntity(quizData.getId());
+            totalQuestion.setText("/" + String.valueOf(questionList.size()));
+        }
         setValue();
     }
 
@@ -156,26 +163,20 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         OptionAtoZList.add("G");
         OptionAtoZList.add("H");
 
-
         DbHelper dbHelper = new DbHelper(context);
-        Data quizData = dbHelper.getQuizzesDataEntityById(quizId);
-        if (quizData != null) {
-            List<Data> questionList = dbHelper.getAllQuizzesQuestionsDataEntity(quizData.getId());
-            totalQuestion.setText("/" + String.valueOf(questionList.size()));
-            question_no.setText(String.valueOf(questionNo));
-            Data questionData = dbHelper.getQuestionDetailsData(quizId, questionNo);
-            if (questionData != null) {
-                questionId = questionData.getId();
-                question_title.setText(questionData.getLang_resource_description());
-                List<Data> optionList = dbHelper.getAllQuestionsOptionsDataEntity(questionData.getId());
-                if (optionList != null) {
-                    // recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-                    recyclerView.setLayoutManager(linearLayoutManager);
-                    QuizQuestionAdapter adapter = new QuizQuestionAdapter(getActivity(), optionList, OptionAtoZList, quizId, questionData.getId());
-                    recyclerView.setAdapter(adapter);// set adapter on recyclerview
-                    adapter.notifyDataSetChanged();// Notify the adapter
-                }
+        question_no.setText(String.valueOf(questionNo));
+        Data questionData = dbHelper.getQuestionDetailsData(quizId, questionNo);
+        if (questionData != null) {
+            questionId = questionData.getId();
+            question_title.setText(questionData.getLang_resource_description());
+            List<Data> optionList = dbHelper.getAllQuestionsOptionsDataEntity(questionData.getId());
+            if (optionList != null) {
+                // recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                recyclerView.setLayoutManager(linearLayoutManager);
+                QuizQuestionAdapter adapter = new QuizQuestionAdapter(getActivity(), optionList, OptionAtoZList, quizId, questionData.getId());
+                recyclerView.setAdapter(adapter);// set adapter on recyclerview
+                adapter.notifyDataSetChanged();// Notify the adapter
             }
         }
     }
@@ -185,20 +186,38 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submitLayout:
-                questionNo = questionNo + 1;
-                DbHelper dbhelper = new DbHelper(context);
-                QuizAnswer answer = new QuizAnswer();
-                answer.setQuizId(quizId);
-                answer.setQuestionId(questionId);
                 SharedPreferences prefs = context.getSharedPreferences("OptionPreferences", Context.MODE_PRIVATE);
+                Boolean selectCheck = false;
                 if (prefs != null) {
-                    int optionId = prefs.getInt("optionId", 0);
-                    answer.setOptionId(optionId);
+                    selectCheck = prefs.getBoolean("selectCheck", false);
                 }
-                answer.setAnswer(1);
-                boolean flage = dbhelper.upsertQuizAnswerEntity(answer);
-                if (flage) {
-                    setValue();
+                if (selectCheck) {
+                    if (questionList.size() == questionNo) {
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        QuizResultFragment fragment = QuizResultFragment.newInstance(quizId, questionList.size());
+                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right)
+                                .replace(R.id.container, fragment)
+                                //.addToBackStack(null)
+                                .commit();
+                    } else {
+                        questionNo = questionNo + 1;
+                        DbHelper dbhelper = new DbHelper(context);
+                        QuizAnswer answer = new QuizAnswer();
+                        answer.setQuizId(quizId);
+                        answer.setQuestionId(questionId);
+                        if (prefs != null) {
+                            int optionId = prefs.getInt("optionId", 0);
+                            answer.setOptionId(optionId);
+                        }
+                        answer.setAnswer(1);
+                        boolean flage = dbhelper.upsertQuizAnswerEntity(answer);
+                        if (flage) {
+                            prefs.edit().clear().commit();//clear select OptionPreferences
+                            setValue();
+                        }
+                    }
+                } else {
+                    Utility.alertForErrorMessage("Please select option", context);
                 }
                 break;
             case R.id.skip_text:

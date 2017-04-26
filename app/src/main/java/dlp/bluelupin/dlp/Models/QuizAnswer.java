@@ -5,6 +5,7 @@ package dlp.bluelupin.dlp.Models;
  */
 
 public class QuizAnswer {
+    private int id;
     private int quizId;
     private int questionId;
     private int optionId;
@@ -40,5 +41,13 @@ public class QuizAnswer {
 
     public void setAnswer(int answer) {
         this.answer = answer;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
