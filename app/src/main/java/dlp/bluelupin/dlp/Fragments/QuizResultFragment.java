@@ -63,12 +63,13 @@ public class QuizResultFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-    private TextView trophyIcon, score_text, out, restart_icon, restart_text, quit_text, quit_icon;
+    private TextView trophyIcon, score_text, restart_icon, restart_text, quit_text, quit_icon;
     private Context context;
     Typeface materialdesignicons_font;
     int pStatus = 0;
     private Handler handler = new Handler();
-    TextView tv;
+    TextView out;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +100,7 @@ public class QuizResultFragment extends Fragment {
                         public void run() {
                             // TODO Auto-generated method stub
                             mProgress.setProgress(pStatus);
-                            tv.setText(pStatus + " OUT OF 50");
+                            out.setText(pStatus + " OUT OF 50");
 
                         }
                     });
