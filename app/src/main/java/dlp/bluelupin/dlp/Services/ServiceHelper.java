@@ -7,6 +7,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,6 +22,7 @@ import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.ContentData;
+import dlp.bluelupin.dlp.Models.ContentQuizData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.LanguageData;
@@ -263,6 +266,141 @@ public class ServiceHelper {
                 callback.onDone(Consts.MediaLanguage_Latest, null, t.toString());
             }
 
+        });
+    }
+
+    //call Quizzes Service
+    public void callQuizzesService(ContentServiceRequest request, final IServiceSuccessCallback<ContentData> callback) {
+        request.setApi_token(Consts.API_KEY);
+
+        final Call<ContentData> cd = service.QuizzesContent(request);
+        final DbHelper dbhelper = new DbHelper(context);
+        cd.enqueue(new Callback<ContentData>() {
+            @Override
+            public void onResponse(Call<ContentData> call, final Response<ContentData> response) {
+                final ContentData cd = response.body();
+                new AsyncTask<String, Void, String>() {
+                    @Override
+                    protected String doInBackground(String... params) {
+                        if (response.body() != null) {
+                            for (Data d : response.body().getData()) {
+                                if (dbhelper.upsertQuizzesDataEntity(d)) {
+                                } else {
+                                    Log.d(Consts.LOG_TAG, "failure adding Data for page: " + cd.getCurrent_page());
+                                }
+                            }
+                        }
+                        String lastcalled = response.headers().get("last_request_date");
+                        Log.d(Consts.LOG_TAG, "response last_request_date: " + lastcalled);
+                        if (lastcalled != null) {
+                            DbHelper dbhelper = new DbHelper(context);
+                            CacheServiceCallData ob = new CacheServiceCallData();
+                            ob.setUrl(Consts.Quizzes);
+                            ob.setLastCalled(lastcalled);
+
+                            dbhelper.upsertCacheServiceCall(ob);
+                        }
+                        callback.onDone(Consts.Quizzes, cd, null);
+                        return null;
+                    }
+                }.execute();
+            }
+
+            @Override
+            public void onFailure(Call<ContentData> call, Throwable t) {
+                Log.d(Consts.LOG_TAG, "Failure in service callQuizzesServiceAsync" + t.toString());
+                callback.onDone(Consts.Quizzes, null, t.toString());
+            }
+        });
+    }
+
+    //call Quizzes Questions Service
+    public void callQuizzesQuestionsService(ContentServiceRequest request, final IServiceSuccessCallback<ContentData> callback) {
+        request.setApi_token(Consts.API_KEY);
+
+        final Call<ContentData> cd = service.QuizzesQuestionsContent(request);
+        final DbHelper dbhelper = new DbHelper(context);
+        cd.enqueue(new Callback<ContentData>() {
+            @Override
+            public void onResponse(Call<ContentData> call, final Response<ContentData> response) {
+                final ContentData cd = response.body();
+                new AsyncTask<String, Void, String>() {
+                    @Override
+                    protected String doInBackground(String... params) {
+                        if (response.body() != null) {
+                            for (Data d : response.body().getData()) {
+                                if (dbhelper.upsertQuizzesQuestionsDataEntity(d)) {
+                                } else {
+                                    Log.d(Consts.LOG_TAG, "failure adding Data for page: " + cd.getCurrent_page());
+                                }
+                            }
+                        }
+                        String lastcalled = response.headers().get("last_request_date");
+                        Log.d(Consts.LOG_TAG, "response last_request_date: " + lastcalled);
+                        if (lastcalled != null) {
+                            DbHelper dbhelper = new DbHelper(context);
+                            CacheServiceCallData ob = new CacheServiceCallData();
+                            ob.setUrl(Consts.QuizzesQuestions);
+                            ob.setLastCalled(lastcalled);
+
+                            dbhelper.upsertCacheServiceCall(ob);
+                        }
+                        callback.onDone(Consts.QuizzesQuestions, cd, null);
+                        return null;
+                    }
+                }.execute();
+            }
+
+            @Override
+            public void onFailure(Call<ContentData> call, Throwable t) {
+                Log.d(Consts.LOG_TAG, "Failure in service callQuizzesServiceAsync" + t.toString());
+                callback.onDone(Consts.QuizzesQuestions, null, t.toString());
+            }
+        });
+    }
+
+    //call Quizzes Questions Options Service
+    public void callQuizzesQuestionsOptionsService(ContentServiceRequest request, final IServiceSuccessCallback<ContentData> callback) {
+        request.setApi_token(Consts.API_KEY);
+
+        final Call<ContentData> cd = service.QuizzesOptionsContent(request);
+        final DbHelper dbhelper = new DbHelper(context);
+        cd.enqueue(new Callback<ContentData>() {
+            @Override
+            public void onResponse(Call<ContentData> call, final Response<ContentData> response) {
+                final ContentData cd = response.body();
+                new AsyncTask<String, Void, String>() {
+                    @Override
+                    protected String doInBackground(String... params) {
+                        if (response.body() != null) {
+                            for (Data d : response.body().getData()) {
+                                if (dbhelper.upsertQuestionsOptionsDataEntity(d)) {
+                                } else {
+                                    Log.d(Consts.LOG_TAG, "failure adding Data for page: " + cd.getCurrent_page());
+                                }
+                            }
+                        }
+                        String lastcalled = response.headers().get("last_request_date");
+                        Log.d(Consts.LOG_TAG, "response last_request_date: " + lastcalled);
+                        if (lastcalled != null) {
+                            DbHelper dbhelper = new DbHelper(context);
+                            CacheServiceCallData ob = new CacheServiceCallData();
+                            ob.setUrl(Consts.QuizzesOptions);
+                            ob.setLastCalled(lastcalled);
+
+                            dbhelper.upsertCacheServiceCall(ob);
+                        }
+                        callback.onDone(Consts.QuizzesOptions, cd, null);
+                        return null;
+                    }
+                }.execute();
+            }
+
+            @Override
+            public void onFailure(Call<ContentData> call, Throwable t) {
+                Log.d(Consts.LOG_TAG, "Failure in service callQuizzesServiceAsync" + t.toString());
+                callback.onDone(Consts.QuizzesOptions, null, t.toString());
+            }
         });
     }
 
@@ -629,6 +767,57 @@ public class ServiceHelper {
             }
 
         });
+    }
+
+
+    // Content Quiz service
+    public void callContentQuizService(ContentServiceRequest request, final IServiceSuccessCallback<ContentQuizData> callback) {
+        request.setApi_token(Consts.API_KEY);
+        Call<ContentQuizData> ac = service.ContentQuiz(request);
+        Log.d(Consts.LOG_TAG, "payload***" + request);
+        ac.enqueue(new Callback<ContentQuizData>() {
+            @Override
+            public void onResponse(Call<ContentQuizData> call, Response<ContentQuizData> response) {
+                ContentQuizData data = response.body();
+
+                if (data != null) {
+                    parseAndSaveContentQuizData(data, callback);
+                } else {
+                    callback.onDone(Consts.ContentQuiz, null, null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ContentQuizData> call, Throwable t) {
+                Log.d(Consts.LOG_TAG, "Failure in service Content Quiz Data" + t.toString());
+                callback.onDone(Consts.ContentQuiz, null, t.toString());
+            }
+
+        });
+    }
+
+    //parse and save ContentQuiz data
+    public void parseAndSaveContentQuizData(final ContentQuizData data, final IServiceSuccessCallback<ContentQuizData> callback) {
+        new AsyncTask<Void, Void, Boolean>() {
+
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                Boolean flag = false;
+                DbHelper dbhelper = new DbHelper(context);
+                flag = dbhelper.upsertContentQuizEntity(data);
+                return flag;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean flag) {
+                super.onPostExecute(flag);
+                if (flag) {
+                    callback.onDone(Consts.ContentQuiz, data, null);
+                } else {
+                    callback.onDone(Consts.ContentQuiz, null, null);
+                }
+            }
+        }.execute();
     }
 
 }

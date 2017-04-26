@@ -155,7 +155,6 @@
                             android:inputType="number"
                             android:maxLength="1"
                             android:padding="@dimen/dimValue_10"
-                            android:singleLine="true"
                             android:textCursorDrawable="@drawable/edit_cursor" />
 
                         <EditText

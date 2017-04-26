@@ -12,7 +12,7 @@ public class Consts {
     public final static boolean PROD = false; //false;
     public final static String API_KEY = "XsMwq2updd3L5MZAtgwx7PAA0wKaylFnCejD0ei9WjSuwQVmXMQxGg3ZiH5X";
 
-    public static String BASE_URL = "http://dlp-qa.bluelup.in/api/v1/";//https://dlpdev.bluelup.in/api/v1/"; // http://dlp-qa.bluelup.in/api/v1/ //"http://180.151.10.60:8080/classkonnect/api/";
+    public static String BASE_URL = "https://dlpdev.bluelup.in/api/v1/";//"https://cms.samvaad.me/api/v1/";//https://dlpdev.bluelup.in/api/v1/"; // http://dlp-qa.bluelup.in/api/v1/ //"http://180.151.10.60:8080/classkonnect/api/";
 
     public static String getBaseUrl() {
         if (PROD) {
@@ -48,6 +48,10 @@ public class Consts {
     public static final String THUMBNAIL_URL = "Thumbnail_URL";
     public static final String DOWNLOAD_URL = "Download_URL";
     public static final String Profile_Update = "user/profile/update";
+    public static final String Quizzes = "quizzes";
+    public static final String QuizzesQuestions = "quizzes/questions";
+    public static final String QuizzesOptions = "quizzes/options";
+    public static final String ContentQuiz = "content/quiz";
 
     public static final String SENDER = "HP-MOBKNT";
     public static String inputDirectoryLocation = "/dlp/";

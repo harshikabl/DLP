@@ -1,0 +1,231 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/dimValue_10"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/quit_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="QUIT"
+                    android:textColor="@color/colorRad"
+                    android:textSize="@dimen/dimTextSize_16" />
+
+                <TextView
+                    android:id="@+id/quit_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimValue_10"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/colorRad"
+                    android:textSize="@dimen/dimTextSize_16" />
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/dimValue_10"
+                    android:layout_marginLeft="@dimen/dimValue_10"
+                    android:layout_marginTop="@dimen/dimValue_10"
+                    android:background="@color/colorLightGrey" />
+
+                <TextView
+                    android:id="@+id/skip_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimValue_10"
+                    android:gravity="center"
+                    android:text="SKIP"
+                    android:textColor="@color/colorRad"
+                    android:textSize="@dimen/dimTextSize_16" />
+
+                <TextView
+                    android:id="@+id/skip_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimValue_10"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/colorRad"
+                    android:textSize="@dimen/dimTextSize_16" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/multiple_text"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:text="Multiple Choice type questions!"
+                android:textColor="@color/colorLightGrey"
+                android:textSize="@dimen/dimTextSize_24" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:gravity="left"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/question"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Question"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/dimTextSize_16" />
+
+                    <TextView
+                        android:id="@+id/question_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dimValue_10"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/dimTextSize_16" />
+
+                    <TextView
+                        android:id="@+id/totalQuestion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="/50"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/dimTextSize_16"
+                        android:textStyle="italic" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/dimValue_10"
+                    android:layout_weight="0.5"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/listen_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="right|center"
+                        android:text="Listen"
+                        android:textColor="@color/colorRad"
+                        android:textSize="@dimen/dimTextSize_16" />
+
+                    <TextView
+                        android:id="@+id/listen_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dimValue_10"
+                        android:gravity="right|center"
+                        android:text="OK"
+                        android:textColor="@color/colorRad"
+                        android:textSize="@dimen/dimTextSize_16" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/question_title"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:text="dsfsfs"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/dimTextSize_18" />
+
+            <TextView
+                android:id="@+id/select"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:text="Select any 1 answer from following options"
+                android:textColor="@color/colorLightGrey"
+                android:textSize="@dimen/dimTextSize_16" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/quizRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+
+        <LinearLayout
+            android:id="@+id/submitLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/dimValue_10"
+            android:layout_weight="0.1"
+            android:gravity="center|bottom">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorRad"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/submit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.8"
+                    android:gravity="left"
+                    android:padding="@dimen/dimValue_10"
+                    android:text="SUBMIT"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/dimTextSize_22" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2"
+                    android:background="@color/colorDrakRed"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/submit_Icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorDrakRed"
+                        android:gravity="center"
+                        android:text="icon"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/dimTextSize_24" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+
