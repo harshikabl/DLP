@@ -4,19 +4,23 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -40,7 +44,7 @@ import dlp.bluelupin.dlp.Utilities.Utility;
  * Use the {@link ChaptersFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChaptersFragment extends Fragment {
+public class ChaptersFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -80,6 +84,7 @@ public class ChaptersFragment extends Fragment {
     }
 
     View view;
+    private List<Data> quizList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,6 +111,7 @@ public class ChaptersFragment extends Fragment {
         Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
         //chapterTitle = (TextView) view.findViewById(R.id.chapterTitle);
         //chapterTitle.setTypeface(VodafoneExB);
+        DbHelper db = new DbHelper(context);
         if (type.equalsIgnoreCase("Chapter")) {
             rootActivity.setScreenTitle(context.getString(R.string.Chapters));
             // chapterTitle.setText(context.getString(R.string.Chapters));
@@ -115,7 +121,8 @@ public class ChaptersFragment extends Fragment {
         }
 
 
-        DbHelper db = new DbHelper(context);
+
+
         List<Data> dataList = db.getDataEntityByParentIdAndType(parentId, type);
         if (dataList.size() == 0) {
             view = view.inflate(context, R.layout.no_record_found_fragment, null);
@@ -123,12 +130,25 @@ public class ChaptersFragment extends Fragment {
             noRecordIcon.setTypeface(materialdesignicons_font);
             noRecordIcon.setText(Html.fromHtml("&#xf187;"));
         } else {
+            TextView quiz = (TextView) view.findViewById(R.id.quiz);
+            LinearLayout quizStartLayout = (LinearLayout) view.findViewById(R.id.quizStartLayout);
+            quiz.setTypeface(VodafoneExB);
+            quizStartLayout.setOnClickListener(this);
+            if (type.equalsIgnoreCase("Topic")) {//Quiz show only in Topic
+                quizList = db.getDataEntityByParentIdAndType(parentId, "Quiz");
+                if (quizList != null && quizList.size() > 0) {
+                    quizStartLayout.setVisibility(View.VISIBLE);
+                } else {
+                    quizStartLayout.setVisibility(View.GONE);
+                }
+            }
+
             ChaptersAdapter chaptersAdapter = new ChaptersAdapter(context, dataList, type);
             RecyclerView chaptersRecyclerView = (RecyclerView) view.findViewById(R.id.chaptersRecyclerView);
             chaptersRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+            //chaptersRecyclerView.setLayoutManager(new LinearLayoutManagerWithSmoothScroller(context));
             chaptersRecyclerView.setHasFixedSize(false);
             chaptersRecyclerView.setNestedScrollingEnabled(false);
-            //chaptersRecyclerView.setNestedScrollingEnabled(false);
             chaptersRecyclerView.setAdapter(chaptersAdapter);
         }
         if (Consts.IS_DEBUG_LOG) {
@@ -159,6 +179,23 @@ public class ChaptersFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.quizStartLayout:
+                int quizeId = quizList.get(0).getQuiz_id();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                QuizQuestionFragment fragment = QuizQuestionFragment.newInstance(1, "");
+                fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right)
+                        .replace(R.id.container, fragment)
+                        .addToBackStack(null)
+                        .commit();
+
+                break;
+        }
     }
 
     /**
@@ -175,6 +212,5 @@ public class ChaptersFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
 
 }
