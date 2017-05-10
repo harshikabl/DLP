@@ -14,6 +14,7 @@ import java.util.List;
 
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.Data;
@@ -52,6 +53,10 @@ public class BackgroundSyncService extends IntentService {
             callMediaAsync(extras);
             callMedialanguageLatestAsync(extras);
             callGetAllLanguage(extras);
+            callQuizzesAsync();
+            callQuizzesQuestionsAsync();
+            callQuizzesQuestionsOptionsAsync();
+            callContentQuizAsync();
             result = Activity.RESULT_OK; // success
 
             sendMessageIfAllCallsDone(extras);
@@ -88,7 +93,7 @@ public class BackgroundSyncService extends IntentService {
         CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_CONTENT_LATEST);
         if (cacheSeviceCallData != null) {
             request.setStart_date(cacheSeviceCallData.getLastCalled());
-            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "BackgroundSyncService: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
         }
         ServiceCaller sc = new ServiceCaller(BackgroundSyncService.this);
         sc.getAllContent(request, new IAsyncWorkCompletedCallback() {
@@ -111,7 +116,7 @@ public class BackgroundSyncService extends IntentService {
         CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_LANGUAGE_RESOURCE_LATEST);
         if (cacheSeviceCallData != null) {
             request.setStart_date(cacheSeviceCallData.getLastCalled());
-            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData for URL_LANGUAGE_RESOURCE_LATEST: " + cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "BackgroundSyncService: cacheSeviceCallData for URL_LANGUAGE_RESOURCE_LATEST: " + cacheSeviceCallData.getLastCalled());
         }
         ServiceCaller sc = new ServiceCaller(BackgroundSyncService.this);
         sc.getAllResource(request, new IAsyncWorkCompletedCallback() {
@@ -134,7 +139,7 @@ public class BackgroundSyncService extends IntentService {
         CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.URL_MEDIA_LATEST);
         if (cacheSeviceCallData != null) {
             request.setStart_date(cacheSeviceCallData.getLastCalled());
-            Log.d(Consts.LOG_TAG, "MainActivity: cacheSeviceCallData for URL_MEDIA_LATEST: " + cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "BackgroundSyncService: cacheSeviceCallData for URL_MEDIA_LATEST: " + cacheSeviceCallData.getLastCalled());
         }
         ServiceCaller sc = new ServiceCaller(BackgroundSyncService.this);
         sc.getAllMedia(request, new IAsyncWorkCompletedCallback() {
@@ -189,10 +194,86 @@ public class BackgroundSyncService extends IntentService {
                     if (Consts.IS_DEBUG_LOG) {
                         DbHelper db = new DbHelper(BackgroundSyncService.this);
                         List<LanguageData> data = db.getAllLanguageDataEntity();
-                        Log.d(Consts.LOG_TAG, "MainActivity: callGetAllLanguage data_item count: " + data.size() + "  " + data);
+                        Log.d(Consts.LOG_TAG, "BackgroundSyncService: callGetAllLanguage data_item count: " + data.size() + "  " + data);
                     }
                 }
             });
         }
+    }
+
+    //get all Quizzes
+    private void callQuizzesAsync() {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(BackgroundSyncService.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.Quizzes);
+        if (cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "BackgroundSyncService: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(BackgroundSyncService.this);
+        sc.getAllQuizzes(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+              /*  if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "BackgroundSyncService: callMedialanguageLatestAsync success result: " + isComplete);
+                }
+                DbHelper db = new DbHelper(MainActivity.this);
+                List<Data> data = db.getAllMedialanguageLatestDataEntity();
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "BackgroundSyncService: callMedialanguageLatestAsync data_item count: " + data.size());
+                }*/
+            }
+        });
+    }
+
+    //get all Quizzes Questions
+    private void callQuizzesQuestionsAsync() {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(BackgroundSyncService.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.QuizzesQuestions);
+        if (cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "BackgroundSyncService: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(BackgroundSyncService.this);
+        sc.getAllQuizzesQuestions(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+
+            }
+        });
+    }
+
+    //get all Quizzes Options
+    private void callQuizzesQuestionsOptionsAsync() {
+        ContentServiceRequest request = new ContentServiceRequest();
+        request.setPage(1);
+        DbHelper db = new DbHelper(BackgroundSyncService.this);
+        CacheServiceCallData cacheSeviceCallData = db.getCacheServiceCallByUrl(Consts.QuizzesOptions);
+        if (cacheSeviceCallData != null) {
+            request.setStart_date(cacheSeviceCallData.getLastCalled());
+            Log.d(Consts.LOG_TAG, "BackgroundSyncService: cacheSeviceCallData : " + cacheSeviceCallData.getLastCalled());
+        }
+        ServiceCaller sc = new ServiceCaller(BackgroundSyncService.this);
+        sc.getAllQuizzesQuestionsOptions(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+
+            }
+        });
+    }
+
+    //get all Content Quiz
+    private void callContentQuizAsync() {
+        ContentServiceRequest request = new ContentServiceRequest();
+        ServiceCaller sc = new ServiceCaller(BackgroundSyncService.this);
+        sc.ContentQuiz(request, new IAsyncWorkCompletedCallback() {
+            @Override
+            public void onDone(String workName, boolean isComplete) {
+
+            }
+        });
     }
 }

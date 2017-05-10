@@ -32,6 +32,7 @@ import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Models.QuizAnswer;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -84,7 +85,6 @@ public class ChaptersFragment extends Fragment implements View.OnClickListener {
     }
 
     View view;
-    private List<Data> quizList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -121,8 +121,6 @@ public class ChaptersFragment extends Fragment implements View.OnClickListener {
         }
 
 
-
-
         List<Data> dataList = db.getDataEntityByParentIdAndType(parentId, type);
         if (dataList.size() == 0) {
             view = view.inflate(context, R.layout.no_record_found_fragment, null);
@@ -134,12 +132,14 @@ public class ChaptersFragment extends Fragment implements View.OnClickListener {
             LinearLayout quizStartLayout = (LinearLayout) view.findViewById(R.id.quizStartLayout);
             quiz.setTypeface(VodafoneExB);
             quizStartLayout.setOnClickListener(this);
-            if (type.equalsIgnoreCase("Topic")) {//Quiz show only in Topic
-                quizList = db.getDataEntityByParentIdAndType(parentId, "Quiz");
-                if (quizList != null && quizList.size() > 0) {
-                    quizStartLayout.setVisibility(View.VISIBLE);
-                } else {
-                    quizStartLayout.setVisibility(View.GONE);
+
+            //get quiz exits in this chapter or not
+            if (type.equalsIgnoreCase("Topic")) {
+                Data contentData = db.getContentQuizEntityByContentId(parentId);
+                if (contentData != null) {
+                    contentData.setQuizAvailable(true);
+                    contentData.setContent_id(parentId);
+                    dataList.add(contentData);
                 }
             }
 
@@ -179,35 +179,18 @@ public class ChaptersFragment extends Fragment implements View.OnClickListener {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.quizStartLayout:
-                int quizeId = quizList.get(0).getQuiz_id();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                QuizQuestionFragment fragment = QuizQuestionFragment.newInstance(1, "");
-                fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right)
-                        .replace(R.id.container, fragment)
-                        .addToBackStack(null)
-                        .commit();
 
                 break;
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

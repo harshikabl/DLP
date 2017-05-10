@@ -42,7 +42,7 @@ public class QuizResultFragment extends Fragment implements View.OnClickListener
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private int quizId;
+    private int quizId, contentId;
     private int totalQuestion;
 
 
@@ -52,11 +52,12 @@ public class QuizResultFragment extends Fragment implements View.OnClickListener
 
 
     // TODO: Rename and change types and number of parameters
-    public static QuizResultFragment newInstance(int quizId, int totalQuestion) {
+    public static QuizResultFragment newInstance(int quizId, int totalQuestion, int contentId) {
         QuizResultFragment fragment = new QuizResultFragment();
         Bundle args = new Bundle();
         args.putInt("quizId", quizId);
         args.putInt("totalQuestion", totalQuestion);
+        args.putInt("contentId", contentId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,6 +74,7 @@ public class QuizResultFragment extends Fragment implements View.OnClickListener
         if (getArguments() != null) {
             totalQuestion = getArguments().getInt("totalQuestion");
             quizId = getArguments().getInt("quizId");
+            contentId = getArguments().getInt("contentId");
         }
     }
 
@@ -121,7 +123,7 @@ public class QuizResultFragment extends Fragment implements View.OnClickListener
         LinearLayout restart_layout = (LinearLayout) view.findViewById(R.id.restart_layout);
         restart_layout.setOnClickListener(this);
         DbHelper dbhelper = new DbHelper(context);
-        correctAnsList = dbhelper.getAllQuizAnswerEntity(quizId);
+        correctAnsList = dbhelper.getAllQuizAnswerEntity(quizId, contentId);
 
         Resources res = getResources();
         Drawable drawable = res.getDrawable(R.drawable.progress_bar_circle);
@@ -167,7 +169,7 @@ public class QuizResultFragment extends Fragment implements View.OnClickListener
             case R.id.restart_layout:
 
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                QuizQuestionFragment fragment = QuizQuestionFragment.newInstance(1, "");
+                QuizQuestionFragment fragment = QuizQuestionFragment.newInstance(quizId, contentId);
                 fragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right).replace(R.id.container, fragment)
                         //.addToBackStack(null)

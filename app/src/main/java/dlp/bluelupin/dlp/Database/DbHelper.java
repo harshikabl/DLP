@@ -5,27 +5,20 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.SyncStateContract;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
 
-import org.apache.commons.io.FilenameUtils;
-
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
-import dlp.bluelupin.dlp.Models.ContentQuizData;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.Models.LanguageData;
-import dlp.bluelupin.dlp.Models.Pivot;
 import dlp.bluelupin.dlp.Models.QuizAnswer;
 import dlp.bluelupin.dlp.Utilities.Utility;
 //import org.apache.commons.io.FilenameUtils;
@@ -36,7 +29,7 @@ import dlp.bluelupin.dlp.Utilities.Utility;
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = Consts.dataBaseName;//Consts.dataBaseName;// Consts.outputDirectoryLocation +  "dlp_db.db"; //Consts.dataBaseName; //
+    public static final String DATABASE_NAME = Consts.dataBaseName;// Consts.outputDirectoryLocation +  "dlp_db.db"; //Consts.dataBaseName; //
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -127,16 +120,16 @@ public class DbHelper extends SQLiteOpenHelper {
         //id , quiz_id , sequence, lang_resource_description,media_id,audio_media_id,answer_audio_media_id,type,lang_resource_correct_answer, created_by,updated_by,created_at,updated_at,deleted_at
         db.execSQL(CREATE_QuizzesQuestionsDataEntity_TABLE);
 
-        String CREATE_QuestionsOptionsDataEntity_TABLE = "CREATE TABLE QuestionsOptionsEntity(id INTEGER PRIMARY KEY, question_id INTEGER, sequence INTEGER, lang_resource_name TEXT, media_id INTEGER, is_correct TEXT, created_by INTEGER, updated_by INTEGER, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
+        String CREATE_QuestionsOptionsDataEntity_TABLE = "CREATE TABLE QuestionsOptionsEntity(id INTEGER PRIMARY KEY, question_id INTEGER, sequence INTEGER, lang_resource_name TEXT, media_id INTEGER, is_correct INTEGER, created_by INTEGER, updated_by INTEGER, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
         //id , question_id , sequence, lang_resource_name,media_id,is_correct,created_by,updated_by,created_at,updated_at,deleted_at
         db.execSQL(CREATE_QuestionsOptionsDataEntity_TABLE);
 
-        String CREATE_ContentQuizDataEntity_TABLE = "CREATE TABLE ContentQuizEntity(id INTEGER PRIMARY KEY, client_id INTEGER, name TEXT, description TEXT, created_by INTEGER, updated_by INTEGER, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME, pivot TEXT)";
-        //id , client_id , name, description,created_by,updated_by,created_at,updated_at,deleted_at,pivot
+        String CREATE_ContentQuizDataEntity_TABLE = "CREATE TABLE ContentQuizEntity(id INTEGER PRIMARY KEY, content_id INTEGER, quiz_id INTEGER,created_by INTEGER, updated_by INTEGER, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
+        //id , content_id , quiz_id,created_by,updated_by,created_at,updated_at,deleted_at
         db.execSQL(CREATE_ContentQuizDataEntity_TABLE);
 
-        String CREATE_QuizAnswerEntity_TABLE = "CREATE TABLE QuizAnswerEntity(id INTEGER PRIMARY KEY, quiz_id INTEGER, question_id INTEGER, option_id INTEGER, answer INTEGER)";
-        //id,quiz_id , question_id , option_id ,answer  QuizAnswerEntity
+        String CREATE_QuizAnswerEntity_TABLE = "CREATE TABLE QuizAnswerEntity(id INTEGER PRIMARY KEY, quiz_id INTEGER, question_id INTEGER, option_id INTEGER, answer INTEGER, contentId INTEGER)";
+        //id,quiz_id , question_id , option_id ,answer,contentId
         db.execSQL(CREATE_QuizAnswerEntity_TABLE);
     }
 
@@ -2073,8 +2066,8 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     //get Question details with quizId and questionid
-    public Data getQuestionDetailsData(int quizId, int questionNo) {
-        String query = "Select * FROM QuizzesQuestionsEntity where quiz_id = '" + quizId + "' and id = '" + questionNo + "'";
+    public Data getQuestionDetailsData(int quizId, int questionId) {
+        String query = "Select * FROM QuizzesQuestionsEntity where quiz_id = '" + quizId + "' and id = '" + questionId + "'";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -2220,7 +2213,7 @@ public class DbHelper extends SQLiteOpenHelper {
         ob.setSequence(cursor.getInt(2));
         ob.setLang_resource_name(cursor.getString(3));
         ob.setMedia_id(cursor.getInt(4));
-        ob.setIs_correct(Boolean.parseBoolean(cursor.getString(5)));
+        ob.setIs_correct(cursor.getInt(5));
         ob.setCreated_by(cursor.getInt(6));
         ob.setUpdated_by(cursor.getInt(7));
         ob.setCreated_at(cursor.getString(8));
@@ -2272,9 +2265,9 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     //------------------Content Quiz Entity-------------
-    public boolean upsertContentQuizEntity(ContentQuizData ob) {
+    public boolean upsertContentQuizEntity(Data ob) {
         boolean done = false;
-        ContentQuizData data = null;
+        Data data = null;
         if (ob.getId() != 0) {
             data = getContentQuizEntityById(ob.getId());
             if (data == null) {
@@ -2286,14 +2279,35 @@ public class DbHelper extends SQLiteOpenHelper {
         return done;
     }
 
-    public ContentQuizData getContentQuizEntityById(int id) {
+    public Data getContentQuizEntityById(int id) {
         String query = "Select * FROM ContentQuizEntity WHERE id = '" + id + "' ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
-        ContentQuizData ob = new ContentQuizData();
+        Data ob = new Data();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            populateContentQuizEntity(cursor, ob);
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    public Data getContentQuizEntityByContentId(int contentId) {
+        String query = "Select * FROM ContentQuizEntity WHERE content_id = '" + contentId + "' ";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        Data ob = new Data();
 
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
@@ -2308,18 +2322,18 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     //get all Content Quiz data_item
-    public List<ContentQuizData> getAllContentQuizEntity() {
+    public List<Data> getAllContentQuizEntity() {
         String query = "Select * FROM ContentQuizEntity";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
-        List<ContentQuizData> list = new ArrayList<ContentQuizData>();
+        List<Data> list = new ArrayList<Data>();
 
         if (cursor.moveToFirst()) {
             while (cursor.isAfterLast() == false) {
-                ContentQuizData ob = new ContentQuizData();
+                Data ob = new Data();
                 populateContentQuizEntity(cursor, ob);
                 list.add(ob);
                 cursor.moveToNext();
@@ -2329,22 +2343,19 @@ public class DbHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    private void populateContentQuizEntity(Cursor cursor, ContentQuizData ob) {
+    private void populateContentQuizEntity(Cursor cursor, Data ob) {
         ob.setId(cursor.getInt(0));
-        ob.setClient_id(cursor.getInt(1));
-        ob.setName(cursor.getString(2));
-        ob.setDescription(cursor.getString(3));
-        ob.setCreated_by(cursor.getInt(4));
-        ob.setUpdated_by(cursor.getInt(5));
-        ob.setCreated_at(cursor.getString(6));
-        ob.setUpdated_at(cursor.getString(7));
-        ob.setDeleted_at(cursor.getString(8));
-        Pivot pivot = new Gson().fromJson(cursor.getString(9), Pivot.class);
-        ob.setPivot(pivot);
+        ob.setContent_id(cursor.getInt(1));
+        ob.setQuiz_id(cursor.getInt(2));
+        ob.setCreated_by(cursor.getInt(3));
+        ob.setUpdated_by(cursor.getInt(4));
+        ob.setCreated_at(cursor.getString(5));
+        ob.setUpdated_at(cursor.getString(6));
+        ob.setDeleted_at(cursor.getString(7));
     }
 
     //insert Content Quiz
-    public boolean insertContentQuizEntity(ContentQuizData ob) {
+    public boolean insertContentQuizEntity(Data ob) {
 
         ContentValues values = new ContentValues();
         populateContentQuizValues(values, ob);
@@ -2356,23 +2367,20 @@ public class DbHelper extends SQLiteOpenHelper {
         return i > 0;
     }
 
-    private void populateContentQuizValues(ContentValues values, ContentQuizData ob) {
+    //id , content_id , quiz_id,created_by,updated_by,created_at,updated_at,deleted_at
+    private void populateContentQuizValues(ContentValues values, Data ob) {
         values.put("id", ob.getId());
-        values.put("client_id", ob.getClient_id());
-        values.put("name", ob.getName());
-        values.put("description", ob.getDescription());
+        values.put("content_id", ob.getContent_id());
+        values.put("quiz_id", ob.getQuiz_id());
         values.put("created_by", ob.getCreated_by());
         values.put("updated_by", ob.getUpdated_by());
         values.put("created_at", ob.getCreated_at());
         values.put("updated_at", ob.getUpdated_at());
         values.put("deleted_at", ob.getDeleted_at());
-        String pivotString = new Gson().toJson(ob.getPivot());
-        values.put("pivot", pivotString);
     }
 
-    //id , client_id , name, description,created_by,updated_by,created_at,updated_at,deleted_at,pivot     ContentQuizEntity
     //update Content Quiz
-    public boolean updateContentQuizEntity(ContentQuizData ob) {
+    public boolean updateContentQuizEntity(Data ob) {
 
         ContentValues values = new ContentValues();
         populateContentQuizValues(values, ob);
@@ -2392,7 +2400,7 @@ public class DbHelper extends SQLiteOpenHelper {
         boolean done = false;
         QuizAnswer data = null;
         if (ob.getQuizId() != 0) {
-            data = getQuizAnswerEntityById(ob.getQuizId(), ob.getQuestionId());
+            data = getQuizAnswerEntityById(ob.getQuizId(), ob.getQuestionId(), ob.getContentId());
             if (data == null) {
                 done = insertQuizAnswerEntity(ob);
             } else {
@@ -2402,8 +2410,8 @@ public class DbHelper extends SQLiteOpenHelper {
         return done;
     }
 
-    public QuizAnswer getQuizAnswerEntityById(int quizId, int questionId) {
-        String query = "Select * FROM QuizAnswerEntity WHERE quiz_id = '" + quizId + "' and question_id='" + questionId + "' ";
+    public QuizAnswer getQuizAnswerEntityById(int quizId, int questionId, int contentId) {
+        String query = "Select * FROM QuizAnswerEntity WHERE quiz_id = '" + quizId + "' and question_id='" + questionId + "' and contentId='" + contentId + "' ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -2424,8 +2432,8 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     //get all Quiz Answer Entity data_item
-    public List<QuizAnswer> getAllQuizAnswerEntity(int quizId) {
-        String query = "Select * FROM QuizAnswerEntity WHERE quiz_id = '" + quizId + "' and answer='" + 1 + "' ";
+    public List<QuizAnswer> getAllQuizAnswerEntity(int quizId, int contentId) {
+        String query = "Select * FROM QuizAnswerEntity WHERE quiz_id = '" + quizId + "' and contentId='" + contentId + "' and answer='" + 1 + "' ";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -2451,6 +2459,7 @@ public class DbHelper extends SQLiteOpenHelper {
         ob.setQuestionId(cursor.getInt(2));
         ob.setOptionId(cursor.getInt(3));
         ob.setAnswer(cursor.getInt(4));
+        ob.setContentId(cursor.getInt(5));
     }
 
     //insert Quiz Answer Entity
@@ -2471,6 +2480,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("question_id", ob.getQuestionId());
         values.put("option_id", ob.getOptionId());
         values.put("answer", ob.getAnswer());
+        values.put("contentId", ob.getContentId());
     }
 
     //quiz_id , question_id , option_id ,answer  QuizAnswerEntity
@@ -2483,7 +2493,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         long i = 0;
         if (ob.getQuizId() != 0) {
-            i = db.update("QuizAnswerEntity", values, " quiz_id = '" + ob.getQuizId() + "' and question_id='" + ob.getQuestionId() + "' ", null);
+            i = db.update("QuizAnswerEntity", values, " quiz_id = '" + ob.getQuizId() + "' and contentId='" + ob.getContentId() + "' and question_id='" + ob.getQuestionId() + "' ", null);
         }
 
         db.close();

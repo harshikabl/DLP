@@ -411,7 +411,7 @@ public class Data {
 
 
     private int question_id;
-    private Boolean is_correct;
+    private int is_correct;
 
     public int getQuestion_id() {
         return question_id;
@@ -421,22 +421,42 @@ public class Data {
         this.question_id = question_id;
     }
 
-    public Boolean getIs_correct() {
+    public int getIs_correct() {
         return is_correct;
     }
 
-    public void setIs_correct(Boolean is_correct) {
+    public void setIs_correct(int is_correct) {
         this.is_correct = is_correct;
     }
 
-
     private int quiz_id;
+
     public int getQuiz_id() {
         return quiz_id;
     }
 
     public void setQuiz_id(int quiz_id) {
         this.quiz_id = quiz_id;
+    }
+
+    private int content_id;
+
+    public int getContent_id() {
+        return content_id;
+    }
+
+    public void setContent_id(int content_id) {
+        this.content_id = content_id;
+    }
+
+    private Boolean isQuizAvailable = false;
+
+    public Boolean getQuizAvailable() {
+        return isQuizAvailable;
+    }
+
+    public void setQuizAvailable(Boolean quizAvailable) {
+        isQuizAvailable = quizAvailable;
     }
 
     @Override

@@ -49,6 +49,7 @@ public class CardReaderHelper {
     public void readMetaDataJson(String folderLocation) {
 
         FileDataReaderHelper fileReaderHelper = new FileDataReaderHelper(context);
+
         String fileContent = fileReaderHelper.ReadFileContentsFromFolder("metadata.json", folderLocation);
         // determine of the date of zip is recent than the latest service calls stored in database
         if (fileContent != null && fileContent != "") {

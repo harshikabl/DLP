@@ -10,6 +10,7 @@ public class QuizAnswer {
     private int questionId;
     private int optionId;
     private int answer;
+    private int contentId;
 
     public int getQuizId() {
         return quizId;
@@ -49,5 +50,13 @@ public class QuizAnswer {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(int contentId) {
+        this.contentId = contentId;
     }
 }

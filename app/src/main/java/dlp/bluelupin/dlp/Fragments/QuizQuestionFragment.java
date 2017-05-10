@@ -1,6 +1,7 @@
 package dlp.bluelupin.dlp.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
@@ -11,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +19,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
 import dlp.bluelupin.dlp.Adapters.QuizQuestionAdapter;
-import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.QuizAnswer;
@@ -39,8 +40,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private int quizId;
-    private String mParam2;
+    private int quizId, contentId;
     List<Data> question_list;
     private static RecyclerView recyclerView;
 
@@ -53,15 +53,14 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param2 Parameter 2.
      * @return A new instance of fragment QuizQuestionFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static QuizQuestionFragment newInstance(int quizId, String param2) {
+    public static QuizQuestionFragment newInstance(int quizId, int contentId) {
         QuizQuestionFragment fragment = new QuizQuestionFragment();
         Bundle args = new Bundle();
         args.putInt("QuizId", quizId);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt("contentId", contentId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,16 +69,18 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     private TextView totalQuestion, listen_text, listen_icon, question_title, select, submit_text, submit_Icon;
     private Context context;
     Typeface materialdesignicons_font, VodafoneRg;
-    private int questionNo = 1;
+    private int questionNo = 0;
     private int questionId;
     private List<Data> questionList;
+    private Data media;
+    private Data answerMedia;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             quizId = getArguments().getInt("QuizId");
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            contentId = getArguments().getInt("contentId");
         }
     }
 
@@ -142,6 +143,8 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         recyclerView = (RecyclerView) view.findViewById(R.id.quizRecyclerView);
         LinearLayout submitLayout = (LinearLayout) view.findViewById(R.id.submitLayout);
         submitLayout.setOnClickListener(this);
+        LinearLayout listenLayout = (LinearLayout) view.findViewById(R.id.listenLayout);
+        listenLayout.setOnClickListener(this);
         DbHelper dbHelper = new DbHelper(context);
         Data quizData = dbHelper.getQuizzesDataEntityById(quizId);
         if (quizData != null) {
@@ -164,23 +167,60 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         OptionAtoZList.add("H");
 
         DbHelper dbHelper = new DbHelper(context);
-        question_no.setText(String.valueOf(questionNo));
-        Data questionData = dbHelper.getQuestionDetailsData(quizId, questionNo);
-        if (questionData != null) {
-            questionId = questionData.getId();
-            question_title.setText(questionData.getLang_resource_description());
-            List<Data> optionList = dbHelper.getAllQuestionsOptionsDataEntity(questionData.getId());
-            if (optionList != null) {
-                // recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-                recyclerView.setLayoutManager(linearLayoutManager);
-                QuizQuestionAdapter adapter = new QuizQuestionAdapter(getActivity(), optionList, OptionAtoZList, quizId, questionData.getId());
-                recyclerView.setAdapter(adapter);// set adapter on recyclerview
-                adapter.notifyDataSetChanged();// Notify the adapter
+        question_no.setText(String.valueOf(questionNo + 1));
+        if (questionList != null) {
+
+            Data questionData = dbHelper.getQuestionDetailsData(quizId, questionList.get(questionNo).getId());
+            if (questionData != null) {
+                if (questionData.getAudio_media_id() != 0) {//get question media
+                    media = dbHelper.getMediaEntityByIdAndLaunguageId(questionData.getAudio_media_id(),
+                            Utility.getLanguageIdFromSharedPreferences(context));
+                }
+                if (questionData.getAnswer_audio_media_id() != 0) {//get answer media
+                    answerMedia = dbHelper.getMediaEntityByIdAndLaunguageId(questionData.getAnswer_audio_media_id(),
+                            Utility.getLanguageIdFromSharedPreferences(context));
+                }
+                String title = "";
+                questionId = questionData.getId();
+                Data descriptionResource = dbHelper.getResourceEntityByName(questionData.getLang_resource_description(),
+                        Utility.getLanguageIdFromSharedPreferences(context));
+                if (descriptionResource != null) {
+                    question_title.setText(Html.fromHtml(descriptionResource.getContent()));
+                    title = descriptionResource.getContent();
+                }
+                List<Data> optionList = dbHelper.getAllQuestionsOptionsDataEntity(questionData.getId());
+                if (optionList != null) {
+                    // recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                    recyclerView.setLayoutManager(linearLayoutManager);
+                    QuizQuestionAdapter adapter = new QuizQuestionAdapter(getActivity(), optionList, OptionAtoZList, questionNo, title, questionList.size(), answerMedia);
+                    recyclerView.setAdapter(adapter);// set adapter on recyclerview
+                    adapter.notifyDataSetChanged();// Notify the adapter
+                }
             }
         }
     }
 
+    private void playOfflineAudio() {
+        String url;
+        url = media.getLocalFilePath();
+        Intent intent = new Intent();
+        intent.setAction(android.content.Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.parse(url), "audio/*");
+        startActivity(intent);
+    }
+
+    private void playOnlineAudio() {
+        String url;
+        if (Utility.isOnline(context)) {
+            url = media.getUrl();
+            if (url != null && !url.equals("")) {
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(url), "audio/*");
+                startActivity(intent);
+            }
+        }
+    }
 
     @Override
     public void onClick(View v) {
@@ -192,9 +232,9 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                     selectCheck = prefs.getBoolean("selectCheck", false);
                 }
                 if (selectCheck) {
-                    if (questionList.size() == questionNo) {
+                    if (questionList.size() == questionNo + 1) {//check all question done or not
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        QuizResultFragment fragment = QuizResultFragment.newInstance(quizId, questionList.size());
+                        QuizResultFragment fragment = QuizResultFragment.newInstance(quizId, questionList.size(), contentId);
                         fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right)
                                 .replace(R.id.container, fragment)
                                 //.addToBackStack(null)
@@ -205,11 +245,11 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                         QuizAnswer answer = new QuizAnswer();
                         answer.setQuizId(quizId);
                         answer.setQuestionId(questionId);
-                        if (prefs != null) {
-                            int optionId = prefs.getInt("optionId", 0);
-                            answer.setOptionId(optionId);
-                        }
-                        answer.setAnswer(1);
+                        int optionId = prefs.getInt("optionId", 0);
+                        answer.setOptionId(optionId);
+                        int correctAns = prefs.getInt("correctAns", 0);
+                        answer.setAnswer(correctAns);
+                        answer.setContentId(contentId);
                         boolean flage = dbhelper.upsertQuizAnswerEntity(answer);
                         if (flage) {
                             prefs.edit().clear().commit();//clear select OptionPreferences
@@ -227,10 +267,27 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
             case R.id.quit_text:
                 alertForOuitMessage();
                 break;
+            case R.id.listenLayout:
+                listenQuestionAudio();
+                break;
         }
     }
 
+    //lesten question Audio
+    private void listenQuestionAudio() {
+        if (media != null) {
+            if (media.getType().equals("Audio")) {
+                String url = media.getLocalFilePath();
+                if (url != null && !url.equals("")) {
+                    playOfflineAudio();
+                } else {
+                    playOnlineAudio();
+                }
+            }
+        }
+    }
     //alert for Ouit message
+
     public void alertForOuitMessage() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final AlertDialog alert = builder.create();

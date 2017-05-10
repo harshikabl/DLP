@@ -9,7 +9,6 @@ import dlp.bluelupin.dlp.Models.AccountData;
 import dlp.bluelupin.dlp.Models.AccountServiceRequest;
 import dlp.bluelupin.dlp.Models.CacheServiceCallData;
 import dlp.bluelupin.dlp.Models.ContentData;
-import dlp.bluelupin.dlp.Models.ContentQuizData;
 import dlp.bluelupin.dlp.Models.ContentServiceRequest;
 import dlp.bluelupin.dlp.Models.OtpData;
 import dlp.bluelupin.dlp.Models.OtpVerificationServiceRequest;
@@ -198,7 +197,7 @@ public class ServiceCaller {
                         Log.d(Consts.LOG_TAG, "Recursively calling next Quizzes content page: " + result.getCurrent_page());
                         final ContentServiceRequest nextRequest = new ContentServiceRequest();
                         nextRequest.setPage(result.getCurrent_page() + 1);
-                        getAllMedialanguageLatestContent(nextRequest, new IAsyncWorkCompletedCallback() {
+                        getAllQuizzes(nextRequest, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {
                                 if (nextRequest.getPage() > result.getLast_page()) {
@@ -237,7 +236,7 @@ public class ServiceCaller {
                         Log.d(Consts.LOG_TAG, "Recursively calling next Quizzes Questions content page: " + result.getCurrent_page());
                         final ContentServiceRequest nextRequest = new ContentServiceRequest();
                         nextRequest.setPage(result.getCurrent_page() + 1);
-                        getAllMedialanguageLatestContent(nextRequest, new IAsyncWorkCompletedCallback() {
+                        getAllQuizzesQuestions(nextRequest, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {
                                 if (nextRequest.getPage() > result.getLast_page()) {
@@ -276,7 +275,7 @@ public class ServiceCaller {
                         Log.d(Consts.LOG_TAG, "Recursively calling next Quizzes Options content page: " + result.getCurrent_page());
                         final ContentServiceRequest nextRequest = new ContentServiceRequest();
                         nextRequest.setPage(result.getCurrent_page() + 1);
-                        getAllMedialanguageLatestContent(nextRequest, new IAsyncWorkCompletedCallback() {
+                        getAllQuizzesQuestionsOptions(nextRequest, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {
                                 if (nextRequest.getPage() > result.getLast_page()) {
@@ -294,6 +293,43 @@ public class ServiceCaller {
                         // Log.d(Consts.LOG_TAG, "Content Parsed successfully till page: " + result.getCurrent_page());
                         success = true;
                         workCompletedCallback.onDone("getAllQuizzesQuestionsOptions", success);
+                    }
+
+                } else {
+                    success = false;
+                }
+            }
+        });
+    }
+
+    //call Content Quiz service
+    public void ContentQuiz(final ContentServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final ServiceHelper sh = new ServiceHelper(context);
+        sh.callContentQuizService(request, new IServiceSuccessCallback<ContentData>() {
+            @Override
+            public void onDone(final String callerUrl, final ContentData result, String error) {
+                Boolean success = false;
+                if (result != null) {
+                    if (request.getPage() <= result.getLast_page()) {
+                        Log.d(Consts.LOG_TAG, "Recursively calling next Content Quiz content page: " + result.getCurrent_page());
+                        final ContentServiceRequest nextRequest = new ContentServiceRequest();
+                        nextRequest.setPage(result.getCurrent_page() + 1);
+                        ContentQuiz(nextRequest, new IAsyncWorkCompletedCallback() {
+                            @Override
+                            public void onDone(String workName, boolean isComplete) {
+                                if (nextRequest.getPage() > result.getLast_page()) {
+                                    Log.d(Consts.LOG_TAG, "ContentQuiz Parsed successfully till page: " + result.getCurrent_page());
+                                    workCompletedCallback.onDone("ContentQuiz", true);
+                                } else {
+                                    // all parsed successfully; recursion complete
+                                    workCompletedCallback.onDone("ContentQuiz", true);
+                                }
+                            }
+                        });
+
+                    } else {
+                        success = true;
+                        workCompletedCallback.onDone("ContentQuiz", success);
                     }
 
                 } else {
@@ -401,22 +437,6 @@ public class ServiceCaller {
         });
     }
 
-    //call Content Quiz service
-    public void ContentQuiz(final ContentServiceRequest request, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        final ServiceHelper sh = new ServiceHelper(context);
-        sh.callContentQuizService(request, new IServiceSuccessCallback<ContentQuizData>() {
-            @Override
-            public void onDone(final String callerUrl, final ContentQuizData result, String error) {
-                Boolean success = false;
-                if (result != null) {
-                    success = true;
-                    workCompletedCallback.onDone("ContentQuizData", success);
 
-                } else {
-                    success = false;
-                    workCompletedCallback.onDone("ContentQuiz no data", success);
-                }
-            }
-        });
-    }
+
 }

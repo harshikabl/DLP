@@ -28,10 +28,13 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder {
     public TextView chapterTitle, chapterDescription, favorite, download, downloadIcon;
     public android.support.v7.widget.CardView cardView;
     public ScaleImageView chapterImage;
-    public TextView starIcon;
+    public TextView starIcon, quiz,quiz_Icon,arrowIcon,start_quiz_Icon;
     public RelativeLayout starIconlayout, downloadIconlayout;
     public LinearLayout download_layout, favoriteLayout;
     public ProgressBar progressBar;
+    public LinearLayout quizStartLayout,quizLayout,titleLayout,buttonLayout;
+    public View divView;
+
 
     public ChaptersViewHolder(View itemView) {
         super(itemView);
@@ -51,6 +54,16 @@ public class ChaptersViewHolder extends RecyclerView.ViewHolder {
         starIconlayout = (RelativeLayout) itemView.findViewById(R.id.starIconlayout);
         downloadIconlayout = (RelativeLayout) itemView.findViewById(R.id.downloadIconlayout);
         progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
+        quiz = (TextView) itemView.findViewById(R.id.quiz);
+        quiz_Icon = (TextView) itemView.findViewById(R.id.quiz_Icon);
+        start_quiz_Icon = (TextView) itemView.findViewById(R.id.start_quiz_Icon);
+        arrowIcon = (TextView) itemView.findViewById(R.id.arrowIcon);
+        divView = (View) itemView.findViewById(R.id.divView);
+        quizStartLayout = (LinearLayout) itemView.findViewById(R.id.quizStartLayout);
+        quizLayout = (LinearLayout) itemView.findViewById(R.id.quizLayout);
+        titleLayout = (LinearLayout) itemView.findViewById(R.id.titleLayout);
+        buttonLayout = (LinearLayout) itemView.findViewById(R.id.buttonLayout);
+
     }
 
 

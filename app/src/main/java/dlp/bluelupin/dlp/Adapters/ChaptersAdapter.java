@@ -1,22 +1,17 @@
 package dlp.bluelupin.dlp.Adapters;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -24,15 +19,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Consts;
@@ -40,6 +32,7 @@ import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Fragments.ChaptersFragment;
 import dlp.bluelupin.dlp.Fragments.ContentFragment;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
+import dlp.bluelupin.dlp.Fragments.QuizQuestionFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.R;
@@ -62,6 +55,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
     private String contentTitle;
     private CustomProgressDialog customProgressDialog;
     LogAnalyticsHelper analyticsHelper = null;
+    private List<Data> quizList;
 
     public ChaptersAdapter(Context context, List<Data> itemList, String type) {
         this.itemList = itemList;
@@ -87,6 +81,13 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         holder.favorite.setTypeface(VodafoneRg);
         holder.download.setTypeface(VodafoneRg);
         holder.cardView.setCardBackgroundColor(Color.parseColor("#EEEEEE"));
+        holder.quiz.setTypeface(VodafoneExB);
+        holder.quiz_Icon.setTypeface(materialdesignicons_font);
+        holder.quiz_Icon.setText(Html.fromHtml("&#xf186;"));
+        holder.start_quiz_Icon.setTypeface(materialdesignicons_font);
+        holder.start_quiz_Icon.setText(Html.fromHtml("&#xf186;"));
+        holder.arrowIcon.setTypeface(materialdesignicons_font);
+        holder.arrowIcon.setText(Html.fromHtml("&#xf054;"));
 
         // holder.downloadIcon.setImageResource(R.drawable.downloadupdate);
 
@@ -179,7 +180,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
 
             @Override
             protected List<Data> doInBackground(String... params) {
-                 final List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId(), Utility.getLanguageIdFromSharedPreferences(context));
+                final List<Data> resourcesToDownloadList = dbhelper.getResourcesToDownload(data.getId(), Utility.getLanguageIdFromSharedPreferences(context));
                 if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "Number of  downloads for chapter: " + data.getId() + " is: " + resourcesToDownloadList.size());
                 }
@@ -252,7 +253,58 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             }
         }.execute();
 
+        if (type.equalsIgnoreCase("Topic")) {//Quiz show only in Topic
+            quizList = dbhelper.getDataEntityByParentIdAndType(data.getId(), "Quiz");
+            if (data.getQuizAvailable()) {
+                holder.chapterImage.setVisibility(View.GONE);
+                holder.titleLayout.setVisibility(View.GONE);
+                holder.buttonLayout.setVisibility(View.GONE);
+                holder.divView.setVisibility(View.GONE);
+                holder.quizStartLayout.setVisibility(View.VISIBLE);
+            } else {
+                holder.quizStartLayout.setVisibility(View.GONE);
+                holder.chapterImage.setVisibility(View.VISIBLE);
+                holder.titleLayout.setVisibility(View.VISIBLE);
+                holder.buttonLayout.setVisibility(View.VISIBLE);
+                holder.divView.setVisibility(View.VISIBLE);
+            }
+           /* int contentId=itemList.get(position).getId();
+            List<Data> contentQuiz=dbHelper.getAllContentQuizEntity();
+            for(int i=0;i<contentQuiz.size();i++){
+                Pivot pivot=contentQuiz.get(i).getPivot();
+                if(pivot.getContent_id()==contentId){
+                    int QuizId=pivot.getQuiz_id();
+                    holder.quizStartLayout.setVisibility(View.VISIBLE);
 
+                }else{
+                    holder.quizStartLayout.setVisibility(View.GONE);
+                }
+
+            }*/
+        }
+        //for chapter show Quiz icon
+        if (type.equalsIgnoreCase("Chapter")) {
+            Data contentData = dbHelper.getContentQuizEntityByContentId(data.getId());
+            if (contentData != null) {
+                holder.quizLayout.setVisibility(View.VISIBLE);
+                holder.quizLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (data.getQuiz_id() != 0) {
+                            FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
+                            QuizQuestionFragment fragment = QuizQuestionFragment.newInstance(data.getQuiz_id(), data.getContent_id());
+                            fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right)
+                                    .replace(R.id.container, fragment)
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                    }
+                });
+
+            } else {
+                holder.quizLayout.setVisibility(View.GONE);
+            }
+        }
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -305,6 +357,21 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                 setFavoritesAfterClick(data);
                 v.startAnimation(AnimationUtils.loadAnimation(context, R.anim.click_animation));//onclick animation
 
+            }
+        });
+
+        holder.quizStartLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Data contentData = dbHelper.getContentQuizEntityByContentId(data.getId());
+                if (data.getQuiz_id() != 0) {
+                    FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
+                    QuizQuestionFragment fragment = QuizQuestionFragment.newInstance(data.getQuiz_id(), data.getContent_id());
+                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right)
+                            .replace(R.id.container, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
             }
         });
     }

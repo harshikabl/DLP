@@ -113,7 +113,6 @@ public class ContentData {
     }
 
 
-    private Pivot pivot;
 
     @Override
     public String toString()
