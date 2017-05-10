@@ -2343,6 +2343,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return list;
     }
 
+
     private void populateContentQuizEntity(Cursor cursor, Data ob) {
         ob.setId(cursor.getInt(0));
         ob.setContent_id(cursor.getInt(1));
