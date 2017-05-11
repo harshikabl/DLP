@@ -122,6 +122,8 @@ public class QuizResultFragment extends Fragment implements View.OnClickListener
         restart_icon.setText(Html.fromHtml("&#xf459;"));
         LinearLayout restart_layout = (LinearLayout) view.findViewById(R.id.restart_layout);
         restart_layout.setOnClickListener(this);
+        LinearLayout exitLayout = (LinearLayout) view.findViewById(R.id.exitLayout);
+        exitLayout.setOnClickListener(this);
         DbHelper dbhelper = new DbHelper(context);
         correctAnsList = dbhelper.getAllQuizAnswerEntity(quizId, contentId);
 
@@ -165,15 +167,17 @@ public class QuizResultFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         switch (v.getId()) {
             case R.id.restart_layout:
-
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 QuizQuestionFragment fragment = QuizQuestionFragment.newInstance(quizId, contentId);
                 fragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right).replace(R.id.container, fragment)
                         //.addToBackStack(null)
                         .commitAllowingStateLoss();
+                break;
+            case R.id.exitLayout:
+                fragmentManager.popBackStack();
                 break;
         }
     }

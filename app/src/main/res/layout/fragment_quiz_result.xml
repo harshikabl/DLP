@@ -118,7 +118,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <LinearLayout android:id="@+id/exitLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -134,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="RESUME"
+                    android:text="Exit"
                     android:textColor="#fff"
                     android:textSize="@dimen/dimTextSize_18" />
 

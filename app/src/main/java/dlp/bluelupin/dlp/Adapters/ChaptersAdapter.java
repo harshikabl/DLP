@@ -284,15 +284,15 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         }
         //for chapter show Quiz icon
         if (type.equalsIgnoreCase("Chapter")) {
-            Data contentData = dbHelper.getContentQuizEntityByContentId(data.getId());
+            final Data contentData = dbHelper.getContentQuizEntityByContentId(data.getId());
             if (contentData != null) {
                 holder.quizLayout.setVisibility(View.VISIBLE);
                 holder.quizLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (data.getQuiz_id() != 0) {
+                        if (contentData.getQuiz_id() != 0) {
                             FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
-                            QuizQuestionFragment fragment = QuizQuestionFragment.newInstance(data.getQuiz_id(), data.getContent_id());
+                            QuizQuestionFragment fragment = QuizQuestionFragment.newInstance(contentData.getQuiz_id(), data.getId());
                             fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right)
                                     .replace(R.id.container, fragment)
                                     .addToBackStack(null)
