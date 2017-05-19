@@ -20,6 +20,7 @@ import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.FavoritesData;
 import dlp.bluelupin.dlp.Models.LanguageData;
 import dlp.bluelupin.dlp.Models.QuizAnswer;
+import dlp.bluelupin.dlp.Models.SimulatorData;
 import dlp.bluelupin.dlp.Utilities.Utility;
 //import org.apache.commons.io.FilenameUtils;
 
@@ -55,6 +56,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS QuestionsOptionsEntity");
         db.execSQL("DROP TABLE IF EXISTS ContentQuizEntity");
         db.execSQL("DROP TABLE IF EXISTS QuizAnswerEntity");
+        db.execSQL("DROP TABLE IF EXISTS SimulatorEntity");
 
         onCreate(db);
     }
@@ -131,6 +133,10 @@ public class DbHelper extends SQLiteOpenHelper {
         String CREATE_QuizAnswerEntity_TABLE = "CREATE TABLE QuizAnswerEntity(id INTEGER PRIMARY KEY, quiz_id INTEGER, question_id INTEGER, option_id INTEGER, answer INTEGER, contentId INTEGER)";
         //id,quiz_id , question_id , option_id ,answer,contentId
         db.execSQL(CREATE_QuizAnswerEntity_TABLE);
+
+        String CREATE_SimulatorDataEntity_TABLE = "CREATE TABLE SimulatorEntity(id INTEGER PRIMARY KEY, content_id INTEGER, url TEXT,  download_url TEXT, localPathUrl TEXT,language_id INTEGER,isDeleted INTEGER)";
+        //id , content_id , url, download_url,localPathUrl,language_id,isDeleted   SimulatorEntity
+        db.execSQL(CREATE_SimulatorDataEntity_TABLE);
     }
 
     private Boolean tableAlreadyExists(SQLiteDatabase db, String tableName) {
@@ -2495,6 +2501,114 @@ public class DbHelper extends SQLiteOpenHelper {
         long i = 0;
         if (ob.getQuizId() != 0) {
             i = db.update("QuizAnswerEntity", values, " quiz_id = '" + ob.getQuizId() + "' and contentId='" + ob.getContentId() + "' and question_id='" + ob.getQuestionId() + "' ", null);
+        }
+
+        db.close();
+        return i > 0;
+    }
+
+    //-----------------SimulatorData Entity--------------------
+    public boolean upsertSimulatorEntity(SimulatorData ob) {
+        boolean done = false;
+        SimulatorData data = null;
+        if (ob.getId() != 0) {
+            data = getSimulatorEntityById(ob.getId());
+            if (data == null) {
+                done = insertSimulatorEntity(ob);
+            } else {
+                done = updateSimulatorEntity(ob);
+            }
+        }
+        return done;
+    }
+
+    public SimulatorData getSimulatorEntityById(int id) {
+        String query = "Select * FROM SimulatorEntity WHERE id = '" + id + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        SimulatorData ob = new SimulatorData();
+
+        if (cursor.moveToFirst()) {
+            cursor.moveToFirst();
+            populateSimulatorEntity(cursor, ob);
+
+            cursor.close();
+        } else {
+            ob = null;
+        }
+        db.close();
+        return ob;
+    }
+
+    //get all SimulatorData Entity data_item
+    public List<SimulatorData> getAllSimulatorEntity(int parentId) {
+        String query = "Select * FROM SimulatorEntity WHERE content_id = '" + parentId + "'";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        List<SimulatorData> list = new ArrayList<SimulatorData>();
+
+        if (cursor.moveToFirst()) {
+            while (cursor.isAfterLast() == false) {
+                SimulatorData ob = new SimulatorData();
+                populateSimulatorEntity(cursor, ob);
+                list.add(ob);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return list;
+    }
+
+    private void populateSimulatorEntity(Cursor cursor, SimulatorData ob) {
+        ob.setId(cursor.getInt(0));
+        ob.setParentId(cursor.getInt(1));
+        ob.setUrl(cursor.getString(2));
+        ob.setDownloadUrl(cursor.getString(3));
+        ob.setLocalPathUrl(cursor.getString(4));
+        ob.setLanguageId(cursor.getInt(5));
+        ob.setIsDeleted(cursor.getInt(6));
+    }
+
+    //insert SimulatorData Entity
+    public boolean insertSimulatorEntity(SimulatorData ob) {
+
+        ContentValues values = new ContentValues();
+        populateSimulatorEntityValues(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        long i = db.insert("SimulatorEntity", null, values);
+        db.close();
+        return i > 0;
+    }
+
+    private void populateSimulatorEntityValues(ContentValues values, SimulatorData ob) {
+        values.put("id", ob.getId());
+        values.put("content_id", ob.getParentId());
+        values.put("url", ob.getUrl());
+        values.put("download_url", ob.getDownloadUrl());
+        values.put("localPathUrl", ob.getLocalPathUrl());
+        values.put("language_id", ob.getLanguageId());
+        values.put("isDeleted", ob.getIsDeleted());
+    }
+
+    //id , content_id , url, download_url,localPathUrl,language_id,isDeleted   SimulatorEntity
+    //update SimulatorData Entity
+    public boolean updateSimulatorEntity(SimulatorData ob) {
+
+        ContentValues values = new ContentValues();
+        populateSimulatorEntityValues(values, ob);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        long i = 0;
+        if (ob.getId() != 0) {
+            i = db.update("SimulatorEntity", values, " id = '" + ob.getId() + "' ", null);
         }
 
         db.close();

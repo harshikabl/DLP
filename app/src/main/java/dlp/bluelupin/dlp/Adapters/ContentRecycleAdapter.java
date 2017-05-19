@@ -2,13 +2,11 @@ package dlp.bluelupin.dlp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -20,28 +18,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
-import dlp.bluelupin.dlp.Fragments.AboutUsFragment;
-import dlp.bluelupin.dlp.Fragments.ContentFragment;
 import dlp.bluelupin.dlp.Fragments.WebFragment;
-import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.Data;
+import dlp.bluelupin.dlp.Models.SimulatorData;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
+import dlp.bluelupin.dlp.Utilities.DecompressZipFile;
+import dlp.bluelupin.dlp.Utilities.DownloadFileAsync;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.LogAnalyticsHelper;
@@ -143,6 +142,10 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         if (data.getType().equalsIgnoreCase("Url")) {
             addDynamicUrl(holder, resource);
         }
+
+        if (data.getType().equalsIgnoreCase("Simulator")) {
+            addSimulator(holder, data, resource);
+        }
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,6 +153,8 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     playVideoOnSelect(data);
                 } else if (data.getType().equalsIgnoreCase("Url")) {
                     openUrlOnSelect(data);
+                } else if (data.getType().equalsIgnoreCase("Simulator")) {
+                    openSimulatorFile(data);
                 }
             }
         });
@@ -491,6 +496,175 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         frameLayout.addView(linearLayout);
         frameLayout.addView(backgroundLayer);
         return frameLayout;
+    }
+
+    //show SimulatorData
+    private void addSimulator(ContentViewHolder holder, Data data, Data resource) {
+
+        if (data.getMedia_id() != 0) {
+            final DbHelper dbHelper = new DbHelper(context);
+            Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getMedia_id(),
+                    Utility.getLanguageIdFromSharedPreferences(context));
+            if (media != null) {
+                if (Consts.IS_DEBUG_LOG) {
+                    //  Log.d(Consts.LOG_TAG, "Media id " + media.getId() + " Image Url: " + media.getUrl());
+                }
+                String titleText = null;
+                if (resource != null) {
+                    titleText = resource.getContent();
+                }
+                TextView dynamicTextView = new TextView(context);
+                dynamicTextView.setTextSize(22);
+                dynamicTextView.setTypeface(VodafoneRg, Typeface.BOLD);
+
+                dynamicTextView.setText(Html.fromHtml("SimulatorData"));
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                layoutParams.setMargins(10, 10, 10, 10);
+                dynamicTextView.setLayoutParams(layoutParams);
+
+                if (dynamicTextView != null) {
+                    holder.contentContainer.addView(dynamicTextView);
+                }
+                populateSimulatorFile(media);
+            }
+        }
+    }
+
+    //extrac SimulatorData zipFile
+    private void extracSimulatorzipFile(final String zipLocalPath, final Data media) {
+        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
+        customProgressDialog.show();
+        new AsyncTask<Void, Void, String>() {
+
+            @Override
+            protected String doInBackground(Void... params) {
+                final DbHelper dbHelper = new DbHelper(context);
+                final SimulatorData simulatorData = new SimulatorData();
+                simulatorData.setId(media.getId());
+                simulatorData.setParentId(media.getParent_id());
+                simulatorData.setDownloadUrl(media.getDownload_url());
+                simulatorData.setLanguageId(Utility.getLanguageIdFromSharedPreferences(context));
+                simulatorData.setUrl(media.getUrl());
+
+                // Determine if output path exists
+                String strUnzipLocation = Consts.outputDirectoryLocation + "samvaadSimulator/" + media.getLocalFileName() + "/";
+                File unzipLocation = new File(strUnzipLocation);
+                if (!unzipLocation.exists()) {
+                    unzipLocation.mkdirs();
+                }
+                DecompressZipFile decompressZipFile = new DecompressZipFile(context);
+                String localFilePath = decompressZipFile.unzipSimulator(zipLocalPath, strUnzipLocation);
+                simulatorData.setLocalPathUrl(strUnzipLocation);
+                dbHelper.upsertSimulatorEntity(simulatorData);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                customProgressDialog.dismiss();
+            }
+        }.execute();
+    }
+
+    //downloading Simulator zipFile
+    private void downloadSimulatorzipFile(final Data media) {
+        final CustomProgressDialog customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
+        if (Utility.isOnline(context)) {
+            customProgressDialog.show();
+            DownloadFileAsync task = new DownloadFileAsync(context, media) {
+                @Override
+                public void receiveData(String result) {
+                    if (!result.equals("")) {
+                        extracSimulatorzipFile(result, media);
+                    }
+                    customProgressDialog.dismiss();
+                }
+            };
+            task.execute();
+        }
+    }
+
+    // populate Simulator File
+    private void populateSimulatorFile(Data media) {
+        DbHelper dbHelper = new DbHelper(context);
+        if (media != null && media.getDownload_url() != null) {
+            SimulatorData simulatorData = dbHelper.getSimulatorEntityById(media.getId());
+            if (simulatorData == null) {
+                downloadSimulatorzipFile(media);
+            }
+            //downloadZipFile(media.getDownload_url(), media.getUrl(), "abc");
+              /*  new AsyncTask<Void, Void, Boolean>() {
+                    @Override
+                    protected Boolean doInBackground(Void... voids) {
+                        Boolean flag = false;
+                        //DownloadFileAsync fileAsync = new DownloadFileAsync(context, media.getDownload_url(), media.getFile_path());
+                       // fileAsync.initDownload();
+
+                        return flag;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Boolean flag) {
+                        super.onPostExecute(flag);
+
+                    }
+                }.execute();*/
+        }
+    }
+
+    //open Simulator
+    private void openSimulatorFile(Data data) {
+        if (data.getMedia_id() != 0) {
+            final DbHelper dbHelper = new DbHelper(context);
+            Data media = dbHelper.getMediaEntityByIdAndLaunguageId(data.getMedia_id(),
+                    Utility.getLanguageIdFromSharedPreferences(context));
+            if (media != null) {
+                SimulatorData simulatorData = dbHelper.getSimulatorEntityById(media.getId());
+                if (simulatorData != null) {
+                    if (simulatorData.getLocalPathUrl() != null && !simulatorData.getLocalPathUrl().equals("")) {
+                        String simulaterUrl = simulatorData.getLocalPathUrl() + "Calc.html";
+                        File htmlFile = new File(simulaterUrl);
+                        if (htmlFile.exists()) {
+                            String f = htmlFile.getAbsolutePath();
+
+                        }
+                        String file = getDataFromDataBase(simulaterUrl);
+                        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+                        WebFragment fragment = WebFragment.newInstance(file, simulatorData.getLocalPathUrl());
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+                        transaction.replace(R.id.container, fragment)
+                                .addToBackStack(null)
+                                .commit();
+                    } else {
+                        populateSimulatorFile(media);
+                    }
+                }
+            }
+        }
+    }
+
+    //get file as string from local
+    public String getDataFromDataBase(String filePath) {
+        StringBuilder text = new StringBuilder();
+        File file = new File(filePath);
+        //Read text from file
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+            }
+            br.close();
+        } catch (IOException e) {
+            //You'll need to add proper error handling here
+        }
+        return text.toString();
     }
 
     @Override

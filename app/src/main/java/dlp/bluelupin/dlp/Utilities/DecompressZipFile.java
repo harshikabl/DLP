@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -205,6 +206,72 @@ public class DecompressZipFile {
             }
         }
         return path;
+    }
+
+    //unzip SimulatorData
+    public String unzipSimulator(String zipFile, String strExtractLocation) {
+        String localFilePath = "";
+        try {
+            File f = new File(zipFile);
+
+            if (!f.exists()) {
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "zip file NOT located at: " + zipFile);
+                }
+            }
+            File extractLocation = new File(strExtractLocation);
+
+            if (!extractLocation.exists()) {
+                extractLocation.mkdirs();
+            }
+            FileInputStream fin = new FileInputStream(f.getPath());
+            ZipInputStream zin = new ZipInputStream(fin);
+            ZipEntry ze = null;
+
+            while ((ze = zin.getNextEntry()) != null) {
+                //byte[] buffer = new byte[1024];
+                if (ze.isDirectory()) {
+
+                    _dirChecker(extractLocation.getPath(), ze.getName() + "/");
+                } else {
+
+                    String fileName = ze.getName();
+                    localFilePath = addTrailingSlash(extractLocation.getPath()) + fileName;
+                    /*if (fileName.contains(".json")) {
+                        localFilePath = addTrailingSlash(extractLocation.getPath()) + fileName;
+                    } else {
+                        String[] file = fileName.split("/");
+
+                        localFilePath = addTrailingSlash(extractLocation.getPath()) + file[1];
+                    }*/
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "Unzipping " + ze.getName() + " to " + localFilePath);
+                    }
+                    FileOutputStream fout = new FileOutputStream(localFilePath);
+                    if (fout != null) {
+                        for (int c = zin.read(); c != -1; c = zin.read()) {
+                            fout.write(c);
+                        }
+                    }
+                    zin.closeEntry();
+                    fout.close();
+                    if (Consts.IS_DEBUG_LOG) {
+                        Log.d(Consts.LOG_TAG, "file unzipped at " + localFilePath);
+                    }
+                }
+                if (Consts.IS_DEBUG_LOG) {
+                    Log.d(Consts.LOG_TAG, "Zip file extracted successfully: " + ze.getName());
+                }
+            }
+            zin.close();
+            //copyZipDataIntoDatabase();
+        } catch (Exception e) {
+            Log.e("Decompress", "unzip", e);
+            if (Consts.IS_DEBUG_LOG) {
+                Log.d(Consts.LOG_TAG, "DecompressZipFile: unzip " + e);
+            }
+        }
+        return localFilePath;
     }
 
 }

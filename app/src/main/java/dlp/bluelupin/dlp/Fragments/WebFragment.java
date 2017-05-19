@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,8 +89,9 @@ public class WebFragment extends Fragment {
 
     private void init(View view) {
         MainActivity rootActivity = (MainActivity) getActivity();
-        rootActivity.setScreenTitle(mParam2);
-
+        if (mParam2 != null && !mParam2.equals("")) {
+            rootActivity.setScreenTitle(mParam2);
+        }
 
         webView = (WebView) view.findViewById(R.id.webView);
 
@@ -97,12 +100,12 @@ public class WebFragment extends Fragment {
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.getSettings().setJavaScriptEnabled(true);
         //webView.addJavascriptInterface(myJavaScriptInterface, "INTERFACE");
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.getSettings().setSupportZoom(true);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setUseWideViewPort(true);
+        // webView.getSettings().setBuiltInZoomControls(true);
+        // webView.getSettings().setSupportZoom(true);
+        // webView.getSettings().setLoadWithOverviewMode(true);
+        //webView.getSettings().setUseWideViewPort(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
-        webView.setBackgroundColor(Color.parseColor("#000000"));
+        //webView.setBackgroundColor(Color.parseColor("#000000"));
         //webView.getSettings().setDomStorageEnabled(true);
         final CustomProgressDialog customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
         webView.setHorizontalScrollBarEnabled(false);
@@ -115,7 +118,9 @@ public class WebFragment extends Fragment {
                         customProgressDialog.dismiss();
                     }
                 });*/
-                webView.loadUrl(mParam1);
+                //webView.loadUrl(mParam1);
+                webView.loadDataWithBaseURL("", mParam1, "text/html", "UTF-8", "");
+                // webView.loadData(mParam1, "text/html", "utf8");
             }
         } else {
             if (customProgressDialog.isShowing()) {
