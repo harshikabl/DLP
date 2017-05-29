@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -78,7 +81,6 @@ public class QuizResultFragment extends Fragment implements View.OnClickListener
         }
     }
 
-
     View view;
     private List<QuizAnswer> correctAnsList;
 
@@ -135,8 +137,10 @@ public class QuizResultFragment extends Fragment implements View.OnClickListener
         mProgress.setMax(totalQuestion); // Maximum Progress
         mProgress.setProgressDrawable(drawable);
         out = (TextView) view.findViewById(R.id.out);
+        mProgress.setProgress(correctAnsList.size());
+        out.setText(correctAnsList.size() + " OUT OF " + totalQuestion);
 
-        new Thread(new Runnable() {
+       /* new Thread(new Runnable() {
 
             @Override
             public void run() {
@@ -155,13 +159,15 @@ public class QuizResultFragment extends Fragment implements View.OnClickListener
                     try {
                         // Sleep for 200 milliseconds.
                         // Just to display the progress slowly
-                        Thread.sleep(16); //thread will take approx 3 seconds to finish
+                        Thread.sleep(20); //thread will take approx 3 seconds to finish
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }).start();
+*/
+
     }
 
 

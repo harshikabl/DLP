@@ -291,6 +291,8 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                     @Override
                     public void onClick(View v) {
                         if (contentData.getQuiz_id() != 0) {
+                            DbHelper dbhelper = new DbHelper(context);
+                            dbhelper.deleteQuizAnswerEntityById(contentData.getQuiz_id(), data.getId());//delete old data
                             FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
                             QuizQuestionFragment fragment = QuizQuestionFragment.newInstance(contentData.getQuiz_id(), data.getId());
                             fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right)
@@ -365,6 +367,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             public void onClick(View v) {
                 //Data contentData = dbHelper.getContentQuizEntityByContentId(data.getId());
                 if (data.getQuiz_id() != 0) {
+                    dbhelper.deleteQuizAnswerEntityById(data.getQuiz_id(), data.getId());//delete old data
                     FragmentManager fragmentManager = ((FragmentActivity) v.getContext()).getSupportFragmentManager();
                     QuizQuestionFragment fragment = QuizQuestionFragment.newInstance(data.getQuiz_id(), data.getContent_id());
                     fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right)

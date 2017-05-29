@@ -24,6 +24,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.1"
                 android:checked="false"
+                android:clickable="false"
                 android:gravity="left|center" />
 
             <TextView

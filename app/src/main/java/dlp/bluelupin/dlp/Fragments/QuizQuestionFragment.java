@@ -233,36 +233,20 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                 }
                 if (selectCheck) {
                     if (questionList.size() == questionNo + 1) {//check all question done or not
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        QuizResultFragment fragment = QuizResultFragment.newInstance(quizId, questionList.size(), contentId);
-                        fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right)
-                                .replace(R.id.container, fragment)
-                                //.addToBackStack(null)
-                                .commit();
+                        setAnswerForLastQuestion();
                     } else {
-                        questionNo = questionNo + 1;
-                        DbHelper dbhelper = new DbHelper(context);
-                        QuizAnswer answer = new QuizAnswer();
-                        answer.setQuizId(quizId);
-                        answer.setQuestionId(questionId);
-                        int optionId = prefs.getInt("optionId", 0);
-                        answer.setOptionId(optionId);
-                        int correctAns = prefs.getInt("correctAns", 0);
-                        answer.setAnswer(correctAns);
-                        answer.setContentId(contentId);
-                        boolean flage = dbhelper.upsertQuizAnswerEntity(answer);
-                        if (flage) {
-                            prefs.edit().clear().commit();//clear select OptionPreferences
-                            setValue();
-                        }
+                        setAnswer();
                     }
                 } else {
                     Utility.alertForErrorMessage("Please select option", context);
                 }
                 break;
             case R.id.skip_text:
-                questionNo = questionNo + 1;
-                setValue();
+                if (questionList.size() == questionNo + 1) {//check all question done or not
+                    setAnswerForLastQuestion();
+                } else {
+                    setAnswer();
+                }
                 break;
             case R.id.quit_text:
                 alertForOuitMessage();
@@ -270,6 +254,51 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
             case R.id.listenLayout:
                 listenQuestionAudio();
                 break;
+        }
+    }
+
+    //set answer into data base
+    private void setAnswer() {
+        SharedPreferences shareprefs = context.getSharedPreferences("OptionPreferences", Context.MODE_PRIVATE);
+        DbHelper dbhelper = new DbHelper(context);
+        questionNo = questionNo + 1;
+        QuizAnswer answer = new QuizAnswer();
+        answer.setQuizId(quizId);
+        answer.setQuestionId(questionId);
+        int optionId = shareprefs.getInt("optionId", 0);
+        answer.setOptionId(optionId);
+        int correctAns = shareprefs.getInt("correctAns", 0);
+        answer.setAnswer(correctAns);
+        answer.setContentId(contentId);
+        boolean flage = dbhelper.upsertQuizAnswerEntity(answer);
+        if (flage) {
+            shareprefs.edit().clear().commit();//clear select OptionPreferences
+            setValue();
+        }
+    }
+
+    //set answer into data base for last question
+    private void setAnswerForLastQuestion() {
+        SharedPreferences shareprefs = context.getSharedPreferences("OptionPreferences", Context.MODE_PRIVATE);
+        DbHelper dbhelper = new DbHelper(context);
+        questionNo = questionNo + 1;
+        QuizAnswer answer = new QuizAnswer();
+        answer.setQuizId(quizId);
+        answer.setQuestionId(questionId);
+        int optionId = shareprefs.getInt("optionId", 0);
+        answer.setOptionId(optionId);
+        int correctAns = shareprefs.getInt("correctAns", 0);
+        answer.setAnswer(correctAns);
+        answer.setContentId(contentId);
+        boolean flage = dbhelper.upsertQuizAnswerEntity(answer);
+        if (flage) {
+            shareprefs.edit().clear().commit();//clear select OptionPreferences
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            QuizResultFragment fragment = QuizResultFragment.newInstance(quizId, questionList.size(), contentId);
+            fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right)
+                    .replace(R.id.container, fragment)
+                    //.addToBackStack(null)
+                    .commit();
         }
     }
 

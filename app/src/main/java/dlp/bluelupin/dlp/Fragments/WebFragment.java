@@ -120,10 +120,9 @@ public class WebFragment extends Fragment {
                 });*/
 
                 //webView.loadUrl(context.getAssets().open("/NeerajDemo-1-1495000689/Calc.html"));
-               // webView.loadUrl("file:///sdcard/dlpUnzipped/samvaadSimulator/NeerajDemo-1-1495000689/Calc.html");
+                // webView.loadUrl("file:///sdcard/dlpUnzipped/samvaadSimulator/NeerajDemo-1-1495000689/Calc.html");
                 //webView.loadUrl("file:///storage/emulated/0/dlpUnzipped/samvaadSimulator/NeerajDemo-1-1495000689/Calc.html");
-                webView.loadUrl("file:///" + mParam2 + "index.html");
-                //mParam1);
+                webView.loadUrl("file:///" + mParam1 + "Calc.html");
                 //webView.loadDataWithBaseURL("", mParam1, "text/html", "UTF-8", "");
                 // webView.loadData(mParam1, "text/html", "utf8");
             }

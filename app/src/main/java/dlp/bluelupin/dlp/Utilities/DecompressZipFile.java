@@ -237,13 +237,6 @@ public class DecompressZipFile {
 
                     String fileName = ze.getName();
                     localFilePath = addTrailingSlash(extractLocation.getPath()) + fileName;
-                    /*if (fileName.contains(".json")) {
-                        localFilePath = addTrailingSlash(extractLocation.getPath()) + fileName;
-                    } else {
-                        String[] file = fileName.split("/");
-
-                        localFilePath = addTrailingSlash(extractLocation.getPath()) + file[1];
-                    }*/
                     if (Consts.IS_DEBUG_LOG) {
                         Log.d(Consts.LOG_TAG, "Unzipping " + ze.getName() + " to " + localFilePath);
                     }
@@ -264,7 +257,6 @@ public class DecompressZipFile {
                 }
             }
             zin.close();
-            //copyZipDataIntoDatabase();
         } catch (Exception e) {
             Log.e("Decompress", "unzip", e);
             if (Consts.IS_DEBUG_LOG) {

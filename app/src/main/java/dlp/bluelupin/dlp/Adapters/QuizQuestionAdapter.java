@@ -89,7 +89,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
                 holder.optionLayout.setBackgroundColor(Color.parseColor("#ADFF2F"));
             }
         }
-        holder.radio.setOnClickListener(new View.OnClickListener() {
+        holder.optionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPreferences prefs = context.getSharedPreferences("OptionPreferences", Context.MODE_PRIVATE);

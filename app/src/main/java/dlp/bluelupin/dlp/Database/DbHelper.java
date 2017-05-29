@@ -2507,6 +2507,16 @@ public class DbHelper extends SQLiteOpenHelper {
         return i > 0;
     }
 
+    // delete QuizAnswerEntity Data ById
+    public boolean deleteQuizAnswerEntityById(int quizId, int contentId) {
+        boolean result = false;
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "quiz_id = '" + quizId + "' and contentId='" + contentId + "'";
+        db.delete("QuizAnswerEntity", query, null);
+        db.close();
+        return result;
+    }
+
     //-----------------SimulatorData Entity--------------------
     public boolean upsertSimulatorEntity(SimulatorData ob) {
         boolean done = false;

@@ -513,19 +513,49 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 if (resource != null) {
                     titleText = resource.getContent();
                 }
+                LinearLayout mainLayout = new LinearLayout(context);
+                mainLayout.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                mainLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+                LinearLayout iconLayout = new LinearLayout(context);
+                iconLayout.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                iconLayout.setLayoutParams(iconParams);
+                iconParams.width = 0;
+                iconParams.weight = 2;
+                TextView iconTextView = new TextView(context);
+                iconTextView.setTextSize(25);
+                iconTextView.setTypeface(materialdesignicons_font);
+                iconTextView.setGravity(Gravity.CENTER);
+                iconTextView.setText(Html.fromHtml("&#xf054;"));
+                iconTextView.setBackgroundColor(Color.parseColor("#ac0000"));
+                iconTextView.setTextColor(Color.parseColor("#ffffff"));
+                iconTextView.setPadding(0, 16, 0, 16);
+                iconLayout.addView(iconTextView);
+                // LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                //iconTextView.setLayoutParams(iconParams);
+
+                LinearLayout textLayout = new LinearLayout(context);
+                textLayout.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                textLayout.setLayoutParams(textParams);
+                textParams.width = 0;
+                textParams.weight = 8;
                 TextView dynamicTextView = new TextView(context);
                 dynamicTextView.setTextSize(22);
                 dynamicTextView.setTypeface(VodafoneRg, Typeface.BOLD);
+                dynamicTextView.setGravity(Gravity.CENTER);
+                dynamicTextView.setText(Html.fromHtml("Simulator"));
+                dynamicTextView.setBackgroundColor(Color.parseColor("#e60000"));
+                dynamicTextView.setTextColor(Color.parseColor("#ffffff"));
+                dynamicTextView.setPadding(0, 16, 0, 16);
+                textLayout.addView(dynamicTextView);
 
-                dynamicTextView.setText(Html.fromHtml("SimulatorData"));
+                mainLayout.addView(textLayout);
+                mainLayout.addView(iconLayout);
 
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                layoutParams.setMargins(10, 10, 10, 10);
-                dynamicTextView.setLayoutParams(layoutParams);
-
-                if (dynamicTextView != null) {
-                    holder.contentContainer.addView(dynamicTextView);
+                if (mainLayout != null) {
+                    holder.contentContainer.addView(mainLayout);
                 }
                 populateSimulatorFile(media);
             }
@@ -595,23 +625,6 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
             if (simulatorData == null) {
                 downloadSimulatorzipFile(media);
             }
-            //downloadZipFile(media.getDownload_url(), media.getUrl(), "abc");
-              /*  new AsyncTask<Void, Void, Boolean>() {
-                    @Override
-                    protected Boolean doInBackground(Void... voids) {
-                        Boolean flag = false;
-                        //DownloadFileAsync fileAsync = new DownloadFileAsync(context, media.getDownload_url(), media.getFile_path());
-                       // fileAsync.initDownload();
-
-                        return flag;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Boolean flag) {
-                        super.onPostExecute(flag);
-
-                    }
-                }.execute();*/
         }
     }
 
@@ -626,14 +639,10 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 if (simulatorData != null) {
                     if (simulatorData.getLocalPathUrl() != null && !simulatorData.getLocalPathUrl().equals("")) {
                         String simulaterUrl = simulatorData.getLocalPathUrl() + "Calc.html";
-                        File htmlFile = new File(simulaterUrl);
-                        if (htmlFile.exists()) {
-                            String f = htmlFile.getAbsolutePath();
 
-                        }
-                        String file = getDataFromDataBase(simulaterUrl);
+                        String htmlFile = getDataFromDataBase(simulaterUrl);
                         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                        WebFragment fragment = WebFragment.newInstance(file, simulatorData.getLocalPathUrl());
+                        WebFragment fragment = WebFragment.newInstance(simulatorData.getLocalPathUrl(), "Simulator");
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                         transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
                         transaction.replace(R.id.container, fragment)
