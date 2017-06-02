@@ -517,9 +517,11 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 mainLayout.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
                 mainLayout.setOrientation(LinearLayout.HORIZONTAL);
 
+
+
                 LinearLayout iconLayout = new LinearLayout(context);
                 iconLayout.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 iconLayout.setLayoutParams(iconParams);
                 iconParams.width = 0;
                 iconParams.weight = 2;
@@ -528,27 +530,27 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 iconTextView.setTypeface(materialdesignicons_font);
                 iconTextView.setGravity(Gravity.CENTER);
                 iconTextView.setText(Html.fromHtml("&#xf054;"));
-                iconTextView.setBackgroundColor(Color.parseColor("#ac0000"));
+                iconTextView.setBackgroundColor(Color.parseColor("#e60000"));
                 iconTextView.setTextColor(Color.parseColor("#ffffff"));
-                iconTextView.setPadding(0, 16, 0, 16);
+                iconTextView.setPadding(30, 30, 30, 30);
                 iconLayout.addView(iconTextView);
                 // LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 //iconTextView.setLayoutParams(iconParams);
 
                 LinearLayout textLayout = new LinearLayout(context);
                 textLayout.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 textLayout.setLayoutParams(textParams);
                 textParams.width = 0;
                 textParams.weight = 8;
                 TextView dynamicTextView = new TextView(context);
-                dynamicTextView.setTextSize(22);
+                dynamicTextView.setTextSize(25);
                 dynamicTextView.setTypeface(VodafoneRg, Typeface.BOLD);
-                dynamicTextView.setGravity(Gravity.CENTER);
-                dynamicTextView.setText(Html.fromHtml("Simulator"));
+                dynamicTextView.setGravity(Gravity.LEFT);
+                dynamicTextView.setText(Html.fromHtml(" Run Simulator"));
                 dynamicTextView.setBackgroundColor(Color.parseColor("#e60000"));
                 dynamicTextView.setTextColor(Color.parseColor("#ffffff"));
-                dynamicTextView.setPadding(0, 16, 0, 16);
+                dynamicTextView.setPadding(28, 28, 28, 28);
                 textLayout.addView(dynamicTextView);
 
                 mainLayout.addView(textLayout);
