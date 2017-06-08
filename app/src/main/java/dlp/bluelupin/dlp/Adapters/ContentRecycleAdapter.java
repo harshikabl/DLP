@@ -530,7 +530,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 rightIconTextView.setText(Html.fromHtml("&#xf186;"));
                 rightIconTextView.setBackgroundColor(Color.parseColor("#ac0000"));
                 rightIconTextView.setTextColor(Color.parseColor("#ffffff"));
-                rightIconTextView.setPadding(0, 16, 0, 16);
+                rightIconTextView.setPadding(0, 20, 0, 20);
                 rightIconLayout.addView(rightIconTextView);
 
 
@@ -547,7 +547,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 iconTextView.setText(Html.fromHtml("&#xf054;"));
                 iconTextView.setBackgroundColor(Color.parseColor("#ac0000"));
                 iconTextView.setTextColor(Color.parseColor("#ffffff"));
-                iconTextView.setPadding(0, 16, 0, 16);
+                iconTextView.setPadding(0, 20, 0, 20);
                 iconLayout.addView(iconTextView);
                 // LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 //iconTextView.setLayoutParams(iconParams);
@@ -561,11 +561,11 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 TextView dynamicTextView = new TextView(context);
                 dynamicTextView.setTextSize(22);
                 dynamicTextView.setTypeface(VodafoneRg, Typeface.BOLD);
-                dynamicTextView.setGravity(Gravity.CENTER);
-                dynamicTextView.setText(Html.fromHtml("Start Simulator"));
+                dynamicTextView.setGravity(Gravity.LEFT);
+                dynamicTextView.setText(Html.fromHtml("Run Simulator"));
                 dynamicTextView.setBackgroundColor(Color.parseColor("#e60000"));
                 dynamicTextView.setTextColor(Color.parseColor("#ffffff"));
-                dynamicTextView.setPadding(0, 16, 0, 16);
+                dynamicTextView.setPadding(16, 20, 0, 20);
                 textLayout.addView(dynamicTextView);
 
                 mainLayout.addView(rightIconLayout);
@@ -656,7 +656,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 SimulatorData simulatorData = dbHelper.getSimulatorEntityById(media.getId());
                 if (simulatorData != null) {
                     if (simulatorData.getLocalPathUrl() != null && !simulatorData.getLocalPathUrl().equals("")) {
-                        String simulaterUrl = simulatorData.getLocalPathUrl() + "Calc.html";
+                        String simulaterUrl = simulatorData.getLocalPathUrl() + "index.html";
 
                         String htmlFile = getDataFromDataBase(simulaterUrl);
                         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
