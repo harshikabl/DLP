@@ -517,6 +517,23 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 mainLayout.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
                 mainLayout.setOrientation(LinearLayout.HORIZONTAL);
 
+                LinearLayout rightIconLayout = new LinearLayout(context);
+                rightIconLayout.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout.LayoutParams rightIconParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                rightIconLayout.setLayoutParams(rightIconParams);
+                rightIconParams.width = 0;
+                rightIconParams.weight = 2;
+                TextView rightIconTextView = new TextView(context);
+                rightIconTextView.setTextSize(25);
+                rightIconTextView.setTypeface(materialdesignicons_font);
+                rightIconTextView.setGravity(Gravity.CENTER);
+                rightIconTextView.setText(Html.fromHtml("&#xf186;"));
+                rightIconTextView.setBackgroundColor(Color.parseColor("#ac0000"));
+                rightIconTextView.setTextColor(Color.parseColor("#ffffff"));
+                rightIconTextView.setPadding(0, 16, 0, 16);
+                rightIconLayout.addView(rightIconTextView);
+
+
                 LinearLayout iconLayout = new LinearLayout(context);
                 iconLayout.setOrientation(LinearLayout.VERTICAL);
                 LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -540,17 +557,18 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 textLayout.setLayoutParams(textParams);
                 textParams.width = 0;
-                textParams.weight = 8;
+                textParams.weight = 6;
                 TextView dynamicTextView = new TextView(context);
                 dynamicTextView.setTextSize(22);
                 dynamicTextView.setTypeface(VodafoneRg, Typeface.BOLD);
                 dynamicTextView.setGravity(Gravity.CENTER);
-                dynamicTextView.setText(Html.fromHtml("Simulator"));
+                dynamicTextView.setText(Html.fromHtml("Start Simulator"));
                 dynamicTextView.setBackgroundColor(Color.parseColor("#e60000"));
                 dynamicTextView.setTextColor(Color.parseColor("#ffffff"));
                 dynamicTextView.setPadding(0, 16, 0, 16);
                 textLayout.addView(dynamicTextView);
 
+                mainLayout.addView(rightIconLayout);
                 mainLayout.addView(textLayout);
                 mainLayout.addView(iconLayout);
 
