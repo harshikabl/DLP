@@ -36,6 +36,7 @@ import dlp.bluelupin.dlp.Fragments.AboutUsFragment;
 import dlp.bluelupin.dlp.Fragments.CourseFragment;
 import dlp.bluelupin.dlp.Fragments.DownloadingFragment;
 import dlp.bluelupin.dlp.Fragments.FavoritesFragment;
+import dlp.bluelupin.dlp.Fragments.QuizResultFragment;
 import dlp.bluelupin.dlp.Fragments.SelectLocationFragment;
 import dlp.bluelupin.dlp.Fragments.ShowDownloadedMediaFileFragment;
 import dlp.bluelupin.dlp.Fragments.TermsOfUseFragment;
