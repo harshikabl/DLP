@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/dimValue_10">
+    >
 
     <LinearLayout
         android:id="@+id/optionLayout"
@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <LinearLayout android:id="@+id/rowLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -25,7 +25,7 @@
                 android:layout_weight="0.1"
                 android:checked="false"
                 android:clickable="false"
-                android:gravity="left|center" />
+                android:gravity="center" />
 
             <TextView
                 android:id="@+id/option"
@@ -33,20 +33,71 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.1"
                 android:gravity="center"
-                android:text="A)"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/dimTextSize_16" />
-
-            <TextView
-                android:id="@+id/answer"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.8"
-                android:gravity="left|center"
                 android:text=""
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/dimTextSize_16" />
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/viewLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/viewIcon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="left|center"
+                            android:text=""
+                            android:textColor="@color/colorRad"
+                            android:textSize="@dimen/dimTextSize_16" />
+
+                        <TextView
+                            android:id="@+id/view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="left|center"
+                            android:padding="@dimen/dimValue_5"
+                            android:text="@string/View"
+                            android:textColor="@color/colorRad"
+                            android:textSize="@dimen/dimTextSize_16" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/image"
+                            android:layout_width="@dimen/size_70px"
+                            android:layout_height="@dimen/size_70px"
+                            android:layout_marginRight="@dimen/dimValue_5"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/answer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="left|center"
+                            android:text=""
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/dimTextSize_16" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

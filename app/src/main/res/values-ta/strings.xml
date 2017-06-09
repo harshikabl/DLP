@@ -88,5 +88,26 @@
     <string name="Take_Offline">ஆஃப்லைனாக்கலாம்</string>
     <string name="import_data">இறக்குமதி தரவு</string>
     <string name="import_data_from">இருந்து தரவு இறக்குமதி</string>
+    <string name="Quiz">வினாடி வினா</string>
+    <string name="Start_Quiz_Now">இப்போது வினாவைத் தொடங்குங்கள்</string>
+    <string name="Close">நெருக்கமான</string>
 
+    <string name="QUIT">விட்டுவிட</string>
+    <string name="SKIP">தவிர்</string>
+    <string name="Multiple_choice">பல தேர்வு வகை கேள்வி</string>
+    <string name="Question">கேள்வி</string>
+    <string name="Listen">கேளுங்கள்</string>
+    <string name="Select_any">பின்வரும் விருப்பங்களிலிருந்து எந்த 1 பதிலும் தேர்ந்தெடுக்கவும்</string>
+    <string name="View">காண்க</string>
+    <string name="Submit">சமர்ப்பி</string>
+    <string name="Your_Score">உங்கள் மதிப்பு!!</string>
+    <string name="OUT">அவுட்</string>
+    <string name="OF">எண்ணிக்கை</string>
+    <string name="RESTART">மறுதொடக்கம்</string>
+    <string name="Run_Simulator">இயக்க சிமுலேட்டர்</string>
+    <string name="Simulator">சிமுலேட்டர்</string>
+    <string name="EXIT">வெளியேறு</string>
+    <string name="Description">விளக்கம்-</string>
+    <string name="This_is_correct">இது சரி</string>
+    <string name="Correct_Answer">சரியான பதில்-</string>
 </resources>

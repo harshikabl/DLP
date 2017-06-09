@@ -157,14 +157,14 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     //set value
     private void setValue() {
         List<String> OptionAtoZList = new ArrayList<String>();
-        OptionAtoZList.add("A");
-        OptionAtoZList.add("B");
-        OptionAtoZList.add("C");
-        OptionAtoZList.add("D");
-        OptionAtoZList.add("E");
-        OptionAtoZList.add("F");
-        OptionAtoZList.add("G");
-        OptionAtoZList.add("H");
+        OptionAtoZList.add("1");
+        OptionAtoZList.add("2");
+        OptionAtoZList.add("3");
+        OptionAtoZList.add("4");
+        OptionAtoZList.add("5");
+        OptionAtoZList.add("6");
+        OptionAtoZList.add("7");
+        OptionAtoZList.add("8");
 
         DbHelper dbHelper = new DbHelper(context);
         question_no.setText(String.valueOf(questionNo + 1));

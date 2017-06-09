@@ -29,7 +29,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Question"
+                    android:text="@string/Question"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/dimTextSize_16" />
 
@@ -73,7 +73,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="right|center"
-                        android:text="Listen"
+                        android:text="@string/Listen"
                         android:textColor="@color/colorRad"
                         android:textSize="@dimen/dimTextSize_16" />
 
@@ -95,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimValue_10"
-            android:text="dsfsfs"
+            android:text=""
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/dimTextSize_18" />
 
@@ -110,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="icon"
+                android:text=""
                 android:textColor="#32CD32"
                 android:textSize="@dimen/dimTextSize_16" />
 
@@ -120,7 +120,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dimValue_10"
                 android:gravity="left|center"
-                android:text="Correct Answer-"
+                android:text="@string/Correct_Answer"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/dimTextSize_16" />
         </LinearLayout>
@@ -146,7 +146,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dimValue_10"
                 android:gravity="left|center"
-                android:text="This is correct"
+                android:text="@string/This_is_correct"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/dimTextSize_16" />
         </LinearLayout>
@@ -170,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="right|center"
-                android:text="icon"
+                android:text=""
                 android:textColor="#32CD32"
                 android:textSize="@dimen/dimTextSize_16" />
 
@@ -180,7 +180,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dimValue_10"
                 android:gravity="right|center"
-                android:text="Description-"
+                android:text="@string/Description"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/dimTextSize_16" />
         </LinearLayout>
@@ -190,7 +190,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimValue_10"
-            android:text="descriptionDetails"
+            android:text=""
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/dimTextSize_16" />
 
@@ -216,7 +216,7 @@
                     android:background="@color/colorRad"
                     android:gravity="center"
                     android:padding="@dimen/dimValue_6"
-                    android:text="Close"
+                    android:text="@string/Close"
                     android:textColor="#fff"
                     android:textSize="@dimen/dimTextSize_18" />
 
@@ -228,7 +228,7 @@
                     android:background="@color/colorDrakRed"
                     android:gravity="center"
                     android:padding="@dimen/dimValue_6"
-                    android:text="OK"
+                    android:text=""
                     android:textColor="#fff"
                     android:textSize="@dimen/dimTextSize_18" />
             </LinearLayout>

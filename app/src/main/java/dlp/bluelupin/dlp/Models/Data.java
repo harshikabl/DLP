@@ -383,6 +383,7 @@ public class Data {
     private int audio_media_id;
     private int answer_audio_media_id;
     private String lang_resource_correct_answer;
+    private String lang_resource_correct_answer_description;
 
 
     public int getAudio_media_id() {
@@ -409,6 +410,13 @@ public class Data {
         this.lang_resource_correct_answer = lang_resource_correct_answer;
     }
 
+    public String getLang_resource_correct_answer_description() {
+        return lang_resource_correct_answer_description;
+    }
+
+    public void setLang_resource_correct_answer_description(String lang_resource_correct_answer_description) {
+        this.lang_resource_correct_answer_description = lang_resource_correct_answer_description;
+    }
 
     private int question_id;
     private int is_correct;

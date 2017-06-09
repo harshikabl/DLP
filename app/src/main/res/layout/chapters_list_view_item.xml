@@ -65,7 +65,7 @@
                         android:layout_gravity="center"
                         android:gravity="left"
                         android:padding="@dimen/dimValue_10"
-                        android:text="Quiz"
+                        android:text="@string/Quiz"
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/dimTextSize_16" />
 
@@ -117,7 +117,8 @@
         </LinearLayout>
 
 
-        <View android:id="@+id/divView"
+        <View
+            android:id="@+id/divView"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/dimValue_10"
@@ -284,7 +285,7 @@
                 android:layout_weight="0.6"
                 android:gravity="left|center"
                 android:padding="@dimen/dimValue_10"
-                android:text="Start Quiz Now"
+                android:text="@string/Start_Quiz_Now"
                 android:textColor="#fff"
                 android:textSize="@dimen/dimTextSize_20" />
 
@@ -299,7 +300,7 @@
                 android:paddingTop="@dimen/dimValue_20"
                 android:text=""
                 android:textColor="@color/colorWhite"
-                android:textSize="@dimen/dimTextSize_16" />
+                android:textSize="@dimen/dimTextSize_18" />
 
         </LinearLayout>
     </LinearLayout>

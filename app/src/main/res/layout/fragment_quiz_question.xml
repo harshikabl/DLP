@@ -28,7 +28,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="QUIT"
+                    android:text="@string/QUIT"
                     android:textColor="@color/colorRad"
                     android:textSize="@dimen/dimTextSize_16" />
 
@@ -57,7 +57,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dimValue_10"
                     android:gravity="center"
-                    android:text="SKIP"
+                    android:text="@string/SKIP"
                     android:textColor="@color/colorRad"
                     android:textSize="@dimen/dimTextSize_16" />
 
@@ -77,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.2"
-                android:text="Multiple Choice type questions!"
+                android:text="@string/Multiple_choice"
                 android:textColor="@color/colorLightGrey"
                 android:textSize="@dimen/dimTextSize_24" />
 
@@ -99,7 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="Question"
+                        android:text="@string/Question"
                         android:textColor="@color/colorBlack"
                         android:textSize="@dimen/dimTextSize_16" />
 
@@ -132,7 +132,8 @@
                     android:gravity="right"
                     android:orientation="horizontal">
 
-                    <LinearLayout android:id="@+id/listenLayout"
+                    <LinearLayout
+                        android:id="@+id/listenLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="right"
@@ -143,7 +144,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="right|center"
-                            android:text="Listen"
+                            android:text="@string/Listen"
                             android:textColor="@color/colorRad"
                             android:textSize="@dimen/dimTextSize_16" />
 
@@ -153,7 +154,7 @@
                             android:layout_height="match_parent"
                             android:layout_marginLeft="@dimen/dimValue_10"
                             android:gravity="right|center"
-                            android:text="OK"
+                            android:text=""
                             android:textColor="@color/colorRad"
                             android:textSize="@dimen/dimTextSize_16" />
                     </LinearLayout>
@@ -165,7 +166,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.2"
-                android:text="dsfsfs"
+                android:text=""
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/dimTextSize_18" />
 
@@ -174,7 +175,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.2"
-                android:text="Select any 1 answer from following options"
+                android:text="@string/Select_any"
                 android:textColor="@color/colorLightGrey"
                 android:textSize="@dimen/dimTextSize_16" />
         </LinearLayout>
@@ -207,7 +208,7 @@
                     android:layout_weight="0.8"
                     android:gravity="left"
                     android:padding="@dimen/dimValue_10"
-                    android:text="SUBMIT"
+                    android:text="@string/Submit"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/dimTextSize_22" />
 
@@ -224,7 +225,7 @@
                         android:layout_height="match_parent"
                         android:background="@color/colorDrakRed"
                         android:gravity="center"
-                        android:text="icon"
+                        android:text=""
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/dimTextSize_24" />
                 </LinearLayout>

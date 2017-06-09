@@ -104,5 +104,25 @@
 
     <string name="import_data">डेटा आयात हो रहा है</string>
     <string name="import_data_from">डेटा याहान से आयात हो रहा है</string>
-
+    <string name="Quiz">प्रश्नोत्तरी</string>
+    <string name="Start_Quiz_Now">अब प्रश्नोत्तरी शुरू करें</string>
+    <string name="Close">बंद करे</string>
+    <string name="QUIT">छोड़ना</string>
+    <string name="SKIP">छोड़ें</string>
+    <string name="Multiple_choice">एकाधिक चयन प्रकार प्रश्न</string>
+    <string name="Question">प्रश्न</string>
+    <string name="Listen">सुनो</string>
+    <string name="Select_any">निम्न विकल्पों में से कोई भी 1 का चयन करें</string>
+    <string name="View">राय</string>
+    <string name="Submit">जमा करें</string>
+    <string name="Your_Score">अपने स्कोर!!</string>
+    <string name="OUT">बाहर</string>
+    <string name="OF">का</string>
+    <string name="RESTART">पुनः आरंभ करें</string>
+    <string name="Run_Simulator">रन सिम्युलेटर</string>
+        <string name="Simulator">सिम्युलेटर</string>
+    <string name="EXIT">बाहर जाएं</string>
+    <string name="Description">विवरण-</string>
+    <string name="This_is_correct">यह सही है</string>
+    <string name="Correct_Answer">सही उत्तर-</string>
 </resources>

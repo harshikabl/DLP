@@ -107,8 +107,27 @@
 
     <string name="import_data">Importing data</string>
     <string name="import_data_from">Importing data from</string>
+    <string name="Quiz">Quiz</string>
+    <string name="Start_Quiz_Now">Start Quiz Now</string>
+    <string name="Close">CLOSE</string>
 
-
-
+    <string name="QUIT">QUIT</string>
+    <string name="SKIP">SKIP</string>
+    <string name="Multiple_choice">Multiple choice type question</string>
+    <string name="Question">Question</string>
+    <string name="Listen">Listen</string>
+    <string name="Select_any">Select any 1 answer from following options</string>
+    <string name="View">View</string>
+    <string name="Submit">Submit</string>
+    <string name="Your_Score">Your Score!!</string>
+    <string name="OUT">OUT</string>
+    <string name="OF">OF</string>
+    <string name="RESTART">RESTART</string>
+    <string name="Run_Simulator">Run Simulator</string>
+    <string name="Simulator">Simulator</string>
+    <string name="EXIT">EXIT</string>
+    <string name="Description">Description-</string>
+    <string name="This_is_correct">This is correct</string>
+    <string name="Correct_Answer">Correct Answer-</string>
 
 </resources>

@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -18,12 +20,21 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
 import java.util.List;
 
+import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.Fragments.ShowImageFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.QuizAnswer;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Services.DownloadService1;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
+import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -33,7 +44,7 @@ import dlp.bluelupin.dlp.Utilities.Utility;
 
 public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapter.ViewHolder> {
     private List<Data> optionList;
-    Typeface VodafoneRg;
+    Typeface VodafoneRg, VodafoneRgBd;
     Typeface materialdesignicons_font;
     private Context context;
     private List<String> OptionAtoZList;
@@ -43,6 +54,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     private int totalNo;
     private Boolean correctAnsFlage = false;
     private Data answerMedia;
+    private CustomProgressDialog customProgressDialog;
 
     public QuizQuestionAdapter(Context context, List<Data> optionList, List<String> OptionAtoZList, int questionNo, String questionTitle, int totalNo, Data answerMedia) {
         this.optionList = optionList;
@@ -54,6 +66,8 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         this.answerMedia = answerMedia;
         VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
         materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
+        VodafoneRgBd = FontManager.getFontTypeface(context, "fonts/VodafoneRgBd.ttf");
+        customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
     }
 
 
@@ -82,6 +96,54 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         } else {
             holder.radio.setChecked(false);
         }
+
+        //set image
+        final Data media = dbHelper.getMediaEntityByIdAndLaunguageId(optionList.get(position).getMedia_id(),
+                Utility.getLanguageIdFromSharedPreferences(context));
+        if (media != null && media.getDownload_url() != null) {
+            holder.viewIcon.setText(Html.fromHtml("&#xf616;"));
+            holder.viewLayout.setVisibility(View.VISIBLE);
+            holder.image.setVisibility(View.VISIBLE);
+            holder.mainlayout.setPadding(5, 0, 5, 0);
+            holder.rowLayout.setPadding(0, 0, 0, 0);
+            if (media.getLocalFilePath() == null) {
+                if (Utility.isOnline(context)) {
+                    Gson gson = new Gson();
+                    Intent intent = new Intent(context, DownloadService1.class);
+                    String strJsonmedia = gson.toJson(media);
+                    intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
+                    intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
+                    context.startService(intent);
+                    new DownloadImageTask(holder.image, customProgressDialog)
+                            .execute(media.getDownload_url());
+                    holder.viewLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ShowImageFragment fragment = ShowImageFragment.newInstance(media.getDownload_url(), "");
+                            navigateToFragment(fragment);
+                        }
+                    });
+                }
+            } else {
+                Uri uri = Uri.fromFile(new File(media.getLocalFilePath()));
+                if (uri != null) {
+                    Picasso.with(context).load(uri).into(holder.image);
+                }
+                holder.viewLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShowImageFragment fragment = ShowImageFragment.newInstance(media.getLocalFilePath(), "");
+                        navigateToFragment(fragment);
+                    }
+                });
+            }
+        } else {
+            holder.viewLayout.setVisibility(View.GONE);
+            holder.image.setVisibility(View.GONE);
+            holder.mainlayout.setPadding(5, 10, 5, 10);
+            holder.rowLayout.setPadding(0, 16, 0, 16);
+        }
+
         //for correct ans highlite
         holder.optionLayout.setBackgroundColor(Color.parseColor("#ffffff"));
         if (optionList.get(position).getIs_correct() == 1) {
@@ -103,14 +165,16 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
                     correctAnsFlage = true;
                     editor.putInt("correctAns", 0);
                     String correctTitle = "";
+                    String correctAnsDescription = "";
                     int correctPosition = 0;
                     for (int i = 0; i < optionList.size(); i++) {
                         if (optionList.get(i).getIs_correct() == 1) {
-                            correctTitle = optionList.get(position).getLang_resource_name();
+                            correctTitle = optionList.get(i).getLang_resource_name();
+                            correctAnsDescription = optionList.get(i).getLang_resource_correct_answer_description();
                             correctPosition = i;
                         }
                     }
-                    alertForWrongANS(correctTitle, correctPosition);
+                    alertForWrongANS(correctTitle, correctPosition, correctAnsDescription);
                 }
                 editor.commit();
                 selectedItemPosition = position;
@@ -127,7 +191,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     }
 
     //alert for Ouit message
-    public void alertForWrongANS(String correctTitle, int correctPosition) {
+    public void alertForWrongANS(String correctTitle, int correctPosition, String correctAnsDescription) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final AlertDialog alert = builder.create();
         alert.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
@@ -176,6 +240,12 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
                 Utility.getLanguageIdFromSharedPreferences(context));
         if (titleResource != null) {
             optionDetails.setText(Html.fromHtml(titleResource.getContent()));
+        }
+
+        Data correctAnsDescriptionResource = dbHelper.getResourceEntityByName(correctAnsDescription,
+                Utility.getLanguageIdFromSharedPreferences(context));
+        if (correctAnsDescriptionResource != null) {
+            descriptionDetails.setText(Html.fromHtml(correctAnsDescriptionResource.getContent()));
         }
         option.setText(OptionAtoZList.get(correctPosition).toString() + ")");
         LinearLayout quit_layout = (LinearLayout) view.findViewById(R.id.quit_layout);
@@ -231,20 +301,37 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         }
     }
 
+    public void navigateToFragment(Fragment fragment) {
+        android.support.v4.app.FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
+        transaction.replace(R.id.container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView option, answer;
+        public TextView option, answer, viewIcon, view;
         public RadioButton radio;
-        public LinearLayout mainlayout, optionLayout;
+        public LinearLayout mainlayout, optionLayout, viewLayout, rowLayout;
+        public ImageView image;
 
         public ViewHolder(View itemView) {
             super(itemView);
             option = (TextView) itemView.findViewById(R.id.option);
             answer = (TextView) itemView.findViewById(R.id.answer);
             radio = (RadioButton) itemView.findViewById(R.id.radio);
+            viewIcon = (TextView) itemView.findViewById(R.id.viewIcon);
+            view = (TextView) itemView.findViewById(R.id.view);
             option.setTypeface(VodafoneRg);
             answer.setTypeface(VodafoneRg);
+            viewIcon.setTypeface(materialdesignicons_font);
+            view.setTypeface(VodafoneRgBd);
             mainlayout = (LinearLayout) itemView.findViewById(R.id.mainlayout);
+            rowLayout = (LinearLayout) itemView.findViewById(R.id.rowLayout);
             optionLayout = (LinearLayout) itemView.findViewById(R.id.optionLayout);
+            image = (ImageView) itemView.findViewById(R.id.image);
+            viewLayout = (LinearLayout) itemView.findViewById(R.id.viewLayout);
         }
     }
 

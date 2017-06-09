@@ -530,7 +530,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 rightIconTextView.setText(Html.fromHtml("&#xf186;"));
                 rightIconTextView.setBackgroundColor(Color.parseColor("#ac0000"));
                 rightIconTextView.setTextColor(Color.parseColor("#ffffff"));
-                rightIconTextView.setPadding(0, 20, 0, 20);
+                rightIconTextView.setPadding(0, 30, 0, 30);
                 rightIconLayout.addView(rightIconTextView);
 
 
@@ -547,7 +547,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 iconTextView.setText(Html.fromHtml("&#xf054;"));
                 iconTextView.setBackgroundColor(Color.parseColor("#ac0000"));
                 iconTextView.setTextColor(Color.parseColor("#ffffff"));
-                iconTextView.setPadding(0, 20, 0, 20);
+                iconTextView.setPadding(0, 30, 0, 30);
                 iconLayout.addView(iconTextView);
                 // LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                 //iconTextView.setLayoutParams(iconParams);
@@ -560,12 +560,12 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 textParams.weight = 6;
                 TextView dynamicTextView = new TextView(context);
                 dynamicTextView.setTextSize(22);
-                dynamicTextView.setTypeface(VodafoneRg, Typeface.BOLD);
+                dynamicTextView.setTypeface(VodafoneRg);
                 dynamicTextView.setGravity(Gravity.LEFT);
-                dynamicTextView.setText(Html.fromHtml("Run Simulator"));
+                dynamicTextView.setText(Html.fromHtml(context.getString(R.string.Run_Simulator)));
                 dynamicTextView.setBackgroundColor(Color.parseColor("#e60000"));
                 dynamicTextView.setTextColor(Color.parseColor("#ffffff"));
-                dynamicTextView.setPadding(16, 20, 0, 20);
+                dynamicTextView.setPadding(16, 30, 0, 30);
                 textLayout.addView(dynamicTextView);
 
                 mainLayout.addView(rightIconLayout);
@@ -660,7 +660,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 
                         String htmlFile = getDataFromDataBase(simulaterUrl);
                         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                        WebFragment fragment = WebFragment.newInstance(simulatorData.getLocalPathUrl(), "Simulator");
+                        WebFragment fragment = WebFragment.newInstance(simulatorData.getLocalPathUrl(), context.getString(R.string.Simulator));
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                         transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
                         transaction.replace(R.id.container, fragment)

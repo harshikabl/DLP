@@ -41,7 +41,7 @@
             android:layout_below="@id/trophy_layout"
             android:layout_marginTop="@dimen/dimValue_20"
             android:gravity="center"
-            android:text="Your Score!!"
+            android:text="@string/Your_Score"
             android:textSize="@dimen/dimTextSize_40" />
 
         <ProgressBar
@@ -99,7 +99,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:paddingLeft="@dimen/dimValue_6"
-                    android:text="OK"
+                    android:text=""
                     android:textColor="#fff"
                     android:textSize="@dimen/dimTextSize_18" />
 
@@ -111,7 +111,7 @@
                     android:paddingBottom="@dimen/dimValue_10"
                     android:paddingRight="@dimen/dimValue_6"
                     android:paddingTop="@dimen/dimValue_10"
-                    android:text="RESTART"
+                    android:text="@string/RESTART"
                     android:textColor="#fff"
                     android:textSize="@dimen/dimTextSize_18" />
 
@@ -134,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Exit"
+                    android:text="@string/EXIT"
                     android:textColor="#fff"
                     android:textSize="@dimen/dimTextSize_18" />
 
