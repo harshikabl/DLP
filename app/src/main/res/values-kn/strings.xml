@@ -110,4 +110,6 @@
     <string name="Description">ವಿವರಣೆ-</string>
     <string name="This_is_correct">ಇದು ಸರಿಯಾಗಿದೆ</string>
     <string name="Correct_Answer">ಸರಿಯಾದ ಉತ್ತರ-</string>
+    <string name="simulator_s">ಸಿಮ್ಯುಲೇಟರ್ ನ</string>
+    <string name="Next">ಮುಂದೆ</string>
 </resources>

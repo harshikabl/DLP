@@ -125,4 +125,6 @@
     <string name="Description">विवरण-</string>
     <string name="This_is_correct">यह सही है</string>
     <string name="Correct_Answer">सही उत्तर-</string>
+    <string name="simulator_s">सिम्युलेटर के</string>
+    <string name="Next">आगामी</string>
 </resources>

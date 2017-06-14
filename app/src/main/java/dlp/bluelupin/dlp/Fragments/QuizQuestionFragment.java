@@ -26,6 +26,7 @@ import java.util.List;
 import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
 import dlp.bluelupin.dlp.Adapters.QuizQuestionAdapter;
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.QuizAnswer;
 import dlp.bluelupin.dlp.R;
@@ -102,6 +103,9 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     }
 
     private void init() {
+        MainActivity rootActivity = (MainActivity) getActivity();
+        rootActivity.setScreenTitle(context.getString(R.string.Quiz));
+
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
         VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
@@ -156,6 +160,12 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
 
     //set value
     private void setValue() {
+        if (questionList.size() == questionNo + 1) {
+            submit_text.setText(context.getString(R.string.Submit));
+        } else {
+            submit_text.setText(context.getString(R.string.Next));
+        }
+
         List<String> OptionAtoZList = new ArrayList<String>();
         OptionAtoZList.add("1");
         OptionAtoZList.add("2");

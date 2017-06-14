@@ -225,7 +225,8 @@
                         android:layout_height="match_parent"
                         android:background="@color/colorDrakRed"
                         android:gravity="center"
-                        android:text=""
+                        android:text="
+."
                         android:textColor="@color/colorWhite"
                         android:textSize="@dimen/dimTextSize_24" />
                 </LinearLayout>

@@ -95,7 +95,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         holder.contentContainer.removeAllViews();
 
         if (Consts.IS_DEBUG_LOG)
-            Log.d(Consts.LOG_TAG, " data_item id: " + data.getId() + " type: " + data.getType());
+            Log.d(Consts.LOG_TAG, " data_item  id: " + data.getId() + " type: " + data.getType());
         Data resource = null;
         if (data.getLang_resource_name() != null) {
             resource = dbHelper.getResourceEntityByName(data.getLang_resource_name(),
@@ -562,7 +562,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 dynamicTextView.setTextSize(22);
                 dynamicTextView.setTypeface(VodafoneRg);
                 dynamicTextView.setGravity(Gravity.LEFT);
-                dynamicTextView.setText(Html.fromHtml(context.getString(R.string.Run_Simulator)));
+                dynamicTextView.setText(Html.fromHtml(context.getString(R.string.simulator_s)));
                 dynamicTextView.setBackgroundColor(Color.parseColor("#e60000"));
                 dynamicTextView.setTextColor(Color.parseColor("#ffffff"));
                 dynamicTextView.setPadding(16, 30, 0, 30);
