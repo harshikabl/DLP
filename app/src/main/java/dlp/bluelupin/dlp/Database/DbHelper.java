@@ -445,7 +445,7 @@ public class DbHelper extends SQLiteOpenHelper {
             }
         }
         cursor.close();
-        db.close();
+       // db.close();
         return list;
     }
 

@@ -129,7 +129,7 @@
     <string name="Description">Description-</string>
     <string name="This_is_correct">This is correct</string>
     <string name="Correct_Answer">Correct Answer-</string>
-    <string name="simulator_s">Simulator’s</string>
+    <string name="simulator_s"> Run Simulator</string>
     <string name="Next">Next</string>
 
 </resources>
