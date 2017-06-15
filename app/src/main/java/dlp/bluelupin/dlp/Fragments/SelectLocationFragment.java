@@ -107,7 +107,7 @@ public class SelectLocationFragment extends Fragment {
     private void init(View view) {
         MainActivity rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(getString(R.string.select_location));
-
+        rootActivity.setShowQuestionIconOption(false);
         Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
         Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
         TextView defaultText = (TextView) view.findViewById(R.id.defaultText);

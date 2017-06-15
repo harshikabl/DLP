@@ -104,7 +104,7 @@ public class CourseFragment extends Fragment {
         String msg = getString(R.string.app_name);
         rootActivity.setScreenTitle(msg);
         //rootActivity.hideSplashImage(true);
-
+        rootActivity.setShowQuestionIconOption(false);
         Typeface custom_fontawesome = FontManager.getFontTypeface(context, "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");

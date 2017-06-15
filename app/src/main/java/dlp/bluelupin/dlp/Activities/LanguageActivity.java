@@ -59,6 +59,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
     private LinearLayout doneLayout;
     List<LanguageData> data;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +104,7 @@ public class LanguageActivity extends AppCompatActivity implements View.OnClickL
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
-
+       // rootActivity.setShowQuestionIconOption(false);
 
         Typeface custom_fontawesome = FontManager.getFontTypefaceMaterialDesignIcons(this, "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(this, "fonts/materialdesignicons-webfont.otf");

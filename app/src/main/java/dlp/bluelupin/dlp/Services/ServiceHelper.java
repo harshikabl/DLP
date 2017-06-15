@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
@@ -32,6 +33,7 @@ import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.IServiceManager;
 import dlp.bluelupin.dlp.Services.IServiceSuccessCallback;
 import dlp.bluelupin.dlp.Utilities.Utility;
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -157,6 +159,7 @@ public class ServiceHelper {
         request.setApi_token(Consts.API_KEY);
 
         final Call<ContentData> cd = service.latestMedia(request);
+        Log.d(Consts.LOG_TAG, "payload***" + request);
         final DbHelper dbhelper = new DbHelper(context);
         cd.enqueue(new Callback<ContentData>() {
             @Override
@@ -170,6 +173,7 @@ public class ServiceHelper {
                             if (dbhelper.upsertMediaEntity(d)) {
                                 // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
                                 // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
+
                                 Data data = dbhelper.getMediaEntityByIdAndLaunguageId(d.getId(),
                                         Utility.getLanguageIdFromSharedPreferences(context));
                                 if (data != null) {

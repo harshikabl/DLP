@@ -92,7 +92,7 @@ public class WebFragment extends Fragment {
         if (mParam2 != null && !mParam2.equals("")) {
             rootActivity.setScreenTitle(mParam2);
         }
-
+        rootActivity.setShowQuestionIconOption(false);
         webView = (WebView) view.findViewById(R.id.webView);
 
         // webView.setInitialScale(50);

@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
+import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.FontManager;
 
@@ -37,7 +38,7 @@ public class ShowImageFragment extends Fragment {
     private String imageUrl;
     private String mParam2;
 
-
+    MainActivity rootActivity;
     public ShowImageFragment() {
         // Required empty public constructor
     }
@@ -85,6 +86,7 @@ public class ShowImageFragment extends Fragment {
     private void init() {
         Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
+        rootActivity.setShowQuestionIconOption(false);
         TextView closeIcon = (TextView) view.findViewById(R.id.closeIcon);
         closeIcon.setTypeface(materialdesignicons_font);
         closeIcon.setText(Html.fromHtml("&#xf156;"));

@@ -45,6 +45,7 @@ public class VerificationActivity extends AppCompatActivity implements View.OnCl
     private EditText oneNo, twoNo, threeNo, fourNo, fiveNo, sixNo;
     private String one_string, two_string, three_string, four_string, five_string, six_string;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

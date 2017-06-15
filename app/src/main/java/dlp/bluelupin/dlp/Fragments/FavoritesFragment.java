@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import dlp.bluelupin.dlp.Adapters.FavoritesPagerAdapter;
 import dlp.bluelupin.dlp.Consts;
+import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -68,7 +69,7 @@ public class FavoritesFragment extends Fragment {
 
     private Context context;
     private ViewPager viewPager;
-
+    MainActivity rootActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -93,7 +94,7 @@ public class FavoritesFragment extends Fragment {
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
+         rootActivity.setShowQuestionIconOption(false);
         //Add tabs icon with setIcon() or simple text with .setText()
         //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.checkbox).setText(context.getString(R.string.chapters)));
         // tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.hihlogo).setText(context.getString(R.string.topic)));

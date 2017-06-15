@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.R;
 
 /**
@@ -27,7 +28,7 @@ public class TopicFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    MainActivity rootActivity;
     private OnFragmentInteractionListener mListener;
 
     public TopicFragment() {
@@ -59,6 +60,7 @@ public class TopicFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        rootActivity.setShowQuestionIconOption(false);
     }
 
     @Override

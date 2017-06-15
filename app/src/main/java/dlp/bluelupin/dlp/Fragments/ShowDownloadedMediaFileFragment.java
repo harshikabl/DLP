@@ -107,7 +107,7 @@ public class ShowDownloadedMediaFileFragment extends Fragment {
     private void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(getString(R.string.app_name));
-
+        rootActivity.setShowQuestionIconOption(false);
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
 

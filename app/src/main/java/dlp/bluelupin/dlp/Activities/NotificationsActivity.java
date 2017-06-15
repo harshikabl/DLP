@@ -48,6 +48,7 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
     Typeface materialdesignicons_font;
     Typeface VodafoneExB;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

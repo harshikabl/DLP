@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.QuizAnswer;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Utilities.FontManager;
@@ -70,7 +71,7 @@ public class QuizResultFragment extends Fragment implements View.OnClickListener
     Typeface materialdesignicons_font;
     private Handler handler = new Handler();
     TextView out;
-
+    MainActivity rootActivity;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +106,8 @@ public class QuizResultFragment extends Fragment implements View.OnClickListener
         Typeface VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
         Typeface VodafoneRgBd = FontManager.getFontTypeface(context, "fonts/VodafoneRgBd.ttf");
         Typeface VodafoneLt = FontManager.getFontTypeface(context, "fonts/VodafoneLt.ttf");
+        rootActivity = (MainActivity) getActivity();
+        rootActivity.setShowQuestionIconOption(false);
         trophyIcon = (TextView) view.findViewById(R.id.trophyIcon);
         score_text = (TextView) view.findViewById(R.id.score_text);
         out = (TextView) view.findViewById(R.id.out);

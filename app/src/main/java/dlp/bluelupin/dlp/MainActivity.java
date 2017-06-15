@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     private Toolbar toolbar;
-    private TextView title;
+    public TextView title,question,question_no,totalQuestion;
     public FrameLayout downloadContainer;
     private static MainActivity mainActivity;
     private CustomProgressDialog customProgressDialog;
@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity
     private TextView name, email;
     AlertDialog alert;
     public ImageView splashImage;
+    private LinearLayout ques_layout;
 
 
     @Override
@@ -79,6 +80,13 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         title = (TextView) toolbar.findViewById(R.id.title);
         title.setTypeface(VodafoneExB);
+        question = (TextView) toolbar.findViewById(R.id.question);
+        question_no = (TextView) toolbar.findViewById(R.id.question_no);
+        totalQuestion = (TextView) toolbar.findViewById(R.id.totalQuestion);
+        ques_layout=(LinearLayout)toolbar.findViewById(R.id.question_layout);
+        question_no.setTypeface(VodafoneExB);
+        question.setTypeface(VodafoneExB);
+        totalQuestion.setTypeface(VodafoneExB);
         customProgressDialog = new CustomProgressDialog(this, R.mipmap.syc);
         if (Utility.isTablet(this)) {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -387,6 +395,13 @@ public class MainActivity extends AppCompatActivity
         title.setText(Html.fromHtml(heading));
     }
 
+    public void setShowQuestionIconOption(boolean on) {
+        if (on) {
+            ques_layout.setVisibility(View.VISIBLE);
+        } else {
+            ques_layout.setVisibility(View.GONE);
+        }
+    }
     public void hideSplashImage(Boolean flag) {
         if (flag) {
             splashImage.setVisibility(View.GONE);

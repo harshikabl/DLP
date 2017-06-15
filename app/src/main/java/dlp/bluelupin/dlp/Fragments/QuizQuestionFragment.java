@@ -67,7 +67,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     }
 
     private TextView quit_text, quit_icon, skip_text, skip_icon, multiple_text, question, question_no;
-    private TextView totalQuestion, listen_text, listen_icon, question_title, select, submit_text, submit_Icon;
+    private TextView  listen_text, listen_icon, question_title, select, submit_text, submit_Icon;
     private Context context;
     Typeface materialdesignicons_font, VodafoneRg;
     private int questionNo = 0;
@@ -75,6 +75,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     private List<Data> questionList;
     private Data media;
     private Data answerMedia;
+    MainActivity rootActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,9 +104,17 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     }
 
     private void init() {
-        MainActivity rootActivity = (MainActivity) getActivity();
+         rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(context.getString(R.string.Quiz));
+        rootActivity.setShowQuestionIconOption(true);
+        DbHelper dbHelper = new DbHelper(context);
+        Data quizData = dbHelper.getQuizzesDataEntityById(quizId);
+        if (quizData != null) {
+            questionList = dbHelper.getAllQuizzesQuestionsDataEntity(quizData.getId());
+            rootActivity.totalQuestion.setText("/" + String.valueOf(questionList.size()));
 
+
+        }
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
         VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
@@ -115,10 +124,10 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         quit_text.setOnClickListener(this);
         skip_text = (TextView) view.findViewById(R.id.skip_text);
         skip_text.setOnClickListener(this);
-        multiple_text = (TextView) view.findViewById(R.id.multiple_text);
+
         question = (TextView) view.findViewById(R.id.question);
         question_no = (TextView) view.findViewById(R.id.question_no);
-        totalQuestion = (TextView) view.findViewById(R.id.totalQuestion);
+
         listen_text = (TextView) view.findViewById(R.id.listen_text);
         listen_icon = (TextView) view.findViewById(R.id.listen_icon);
         question_title = (TextView) view.findViewById(R.id.question_title);
@@ -127,11 +136,11 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         submit_Icon = (TextView) view.findViewById(R.id.submit_Icon);
         quit_text.setTypeface(VodafoneExB);
         skip_text.setTypeface(VodafoneExB);
-        multiple_text.setTypeface(VodafoneLt);
+
         question.setTypeface(VodafoneRg);
-        totalQuestion.setTypeface(VodafoneRg);
+
         question_no.setTypeface(VodafoneRgBd);
-        listen_text.setTypeface(VodafoneRg);
+        listen_text.setTypeface(VodafoneExB);
         question_title.setTypeface(VodafoneRgBd);
         select.setTypeface(VodafoneRg);
         quit_icon = (TextView) view.findViewById(R.id.quit_icon);
@@ -149,12 +158,9 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         submitLayout.setOnClickListener(this);
         LinearLayout listenLayout = (LinearLayout) view.findViewById(R.id.listenLayout);
         listenLayout.setOnClickListener(this);
-        DbHelper dbHelper = new DbHelper(context);
-        Data quizData = dbHelper.getQuizzesDataEntityById(quizId);
-        if (quizData != null) {
-            questionList = dbHelper.getAllQuizzesQuestionsDataEntity(quizData.getId());
-            totalQuestion.setText("/" + String.valueOf(questionList.size()));
-        }
+
+
+
         setValue();
     }
 
@@ -178,6 +184,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
 
         DbHelper dbHelper = new DbHelper(context);
         question_no.setText(String.valueOf(questionNo + 1));
+        rootActivity.question_no.setText(String.valueOf(questionNo + 1));
         if (questionList != null) {
 
             Data questionData = dbHelper.getQuestionDetailsData(quizId, questionList.get(questionNo).getId());

@@ -91,7 +91,7 @@ public class FavoritesListFragment extends Fragment {
     public void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(context.getString(R.string.Favorites));
-
+        rootActivity.setShowQuestionIconOption(false);
         Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
 
         DbHelper dbHelper = new DbHelper(context);

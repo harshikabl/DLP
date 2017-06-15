@@ -123,13 +123,13 @@
     <string name="OUT">OUT</string>
     <string name="OF">OF</string>
     <string name="RESTART">RESTART</string>
-    <string name="Run_Simulator">Run Simulator</string>
-    <string name="Simulator">Simulator</string>
+    <string name="Run_Simulator">Try it yourself</string>
+    <string name="Simulator">Try it yourself</string>
     <string name="EXIT">EXIT</string>
     <string name="Description">Description-</string>
     <string name="This_is_correct">This is correct</string>
     <string name="Correct_Answer">Correct Answer-</string>
-    <string name="simulator_s"> Run Simulator</string>
+    <string name="simulator_s"> Try it yourself</string>
     <string name="Next">Next</string>
 
 </resources>

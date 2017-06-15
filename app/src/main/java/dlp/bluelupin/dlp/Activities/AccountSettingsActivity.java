@@ -63,6 +63,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
     private Boolean checkFlag = false;
     private ImageView autoPlay;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

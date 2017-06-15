@@ -95,7 +95,7 @@ public class TermsOfUseFragment extends Fragment {
         MainActivity rootActivity = (MainActivity) getActivity();
         String msg = getString(R.string.terms_of);
         rootActivity.setScreenTitle(msg);
-
+        rootActivity.setShowQuestionIconOption(false);
         webView = (WebView) view.findViewById(R.id.webView);
 
         // webView.setInitialScale(50);

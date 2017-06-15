@@ -103,6 +103,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
                         context.startService(intent);
                         new DownloadImageTask(holder.courseImage, customProgressDialog)
                                 .execute(media.getUrl());
+                      customProgressDialog.dismiss();
                     }
                 } else {
                  /*   File imgFile = new File(media.getLocalFilePath());
@@ -123,6 +124,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseViewHolder> {
                             context.startService(intent);
                             new DownloadImageTask(holder.courseImage, customProgressDialog)
                                     .execute(media.getUrl());
+                            customProgressDialog.dismiss();
                         }
                     }
                 }

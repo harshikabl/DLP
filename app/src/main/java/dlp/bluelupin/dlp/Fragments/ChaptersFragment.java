@@ -104,7 +104,7 @@ public class ChaptersFragment extends Fragment implements View.OnClickListener {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void init() {
         MainActivity rootActivity = (MainActivity) getActivity();
-
+        rootActivity.setShowQuestionIconOption(false);
         Typeface custom_fontawesome = FontManager.getFontTypeface(context, "fonts/fontawesome-webfont.ttf");
         Typeface materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");

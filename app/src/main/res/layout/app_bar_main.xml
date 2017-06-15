@@ -31,12 +31,51 @@
 
                     <TextView
                         android:id="@+id/title"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="0.5"
                         android:gravity="left|center"
                         android:text=""
                         android:textColor="#fff"
                         android:textSize="@dimen/dimTextSize_22" />
+                    <LinearLayout
+                        android:id="@+id/question_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:gravity="right"
+                        android:layout_marginRight="@dimen/dimValue_20"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/question"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="@string/Question"
+                            android:textColor="#fff"
+                            android:textSize="@dimen/dimTextSize_16" />
+
+                        <TextView
+                            android:id="@+id/question_no"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/dimValue_10"
+                            android:gravity="center"
+                            android:text="1"
+                            android:textColor="#fff"
+                            android:textSize="@dimen/dimTextSize_16" />
+
+                        <TextView
+                            android:id="@+id/totalQuestion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="/50"
+                            android:textColor="#fff"
+                            android:textSize="@dimen/dimTextSize_16"
+                            android:textStyle="italic" />
+                    </LinearLayout>
                 </LinearLayout>
 
 

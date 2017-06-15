@@ -196,19 +196,6 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         final AlertDialog alert = builder.create();
         alert.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
         View view = alert.getLayoutInflater().inflate(R.layout.quiz_wrong_ans_alert, null);
-        TextView question = (TextView) view.findViewById(R.id.question);
-        question.setTypeface(VodafoneRg);
-        TextView question_no = (TextView) view.findViewById(R.id.question_no);
-        question_no.setTypeface(VodafoneRg);
-        TextView totalQuestion = (TextView) view.findViewById(R.id.totalQuestion);
-        totalQuestion.setTypeface(VodafoneRg);
-
-        TextView listen_text = (TextView) view.findViewById(R.id.listen_text);
-        listen_text.setTypeface(VodafoneRg);
-        TextView listen_icon = (TextView) view.findViewById(R.id.listen_icon);
-        listen_icon.setTypeface(materialdesignicons_font);
-        TextView question_title = (TextView) view.findViewById(R.id.question_title);
-        question_title.setTypeface(VodafoneRg);
         TextView correctIcon = (TextView) view.findViewById(R.id.correctIcon);
         correctIcon.setTypeface(materialdesignicons_font);
         TextView correctAns = (TextView) view.findViewById(R.id.correctAns);
@@ -217,35 +204,23 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         option.setTypeface(VodafoneRg);
         TextView optionDetails = (TextView) view.findViewById(R.id.optionDetails);
         optionDetails.setTypeface(VodafoneRg);
-        TextView desIcon = (TextView) view.findViewById(R.id.desIcon);
-        desIcon.setTypeface(materialdesignicons_font);
-        TextView description = (TextView) view.findViewById(R.id.description);
-        description.setTypeface(VodafoneRg);
-        TextView descriptionDetails = (TextView) view.findViewById(R.id.descriptionDetails);
-        descriptionDetails.setTypeface(VodafoneRg);
+
+
         TextView close_text = (TextView) view.findViewById(R.id.close_text);
         close_text.setTypeface(VodafoneRg);
         TextView quit_icon = (TextView) view.findViewById(R.id.quit_icon);
         quit_icon.setTypeface(materialdesignicons_font);
-        LinearLayout listenlayout = (LinearLayout) view.findViewById(R.id.listenlayout);
+
         quit_icon.setText(Html.fromHtml("&#xf156;"));
         correctIcon.setText(Html.fromHtml("&#xf134;"));
-        listen_icon.setText(Html.fromHtml("&#xf57e;"));
-        desIcon.setText(Html.fromHtml("&#xf2fd;"));
-        question_title.setText(questionTitle);
-        totalQuestion.setText("/" + String.valueOf(totalNo));
-        question_no.setText(String.valueOf(questionNo + 1));
+
+
+
         DbHelper dbHelper = new DbHelper(context);
         Data titleResource = dbHelper.getResourceEntityByName(correctTitle,
                 Utility.getLanguageIdFromSharedPreferences(context));
         if (titleResource != null) {
             optionDetails.setText(Html.fromHtml(titleResource.getContent()));
-        }
-
-        Data correctAnsDescriptionResource = dbHelper.getResourceEntityByName(correctAnsDescription,
-                Utility.getLanguageIdFromSharedPreferences(context));
-        if (correctAnsDescriptionResource != null) {
-            descriptionDetails.setText(Html.fromHtml(correctAnsDescriptionResource.getContent()));
         }
         option.setText(OptionAtoZList.get(correctPosition).toString() + ")");
         LinearLayout quit_layout = (LinearLayout) view.findViewById(R.id.quit_layout);
@@ -259,47 +234,10 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
             }
         });
         alert.show();
-        listenlayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listenAnsAudio();
-            }
-        });
+
     }
 
-    private void listenAnsAudio() {
-        if (answerMedia != null) {
-            if (answerMedia.getType().equals("Audio")) {
-                String url = answerMedia.getLocalFilePath();
-                if (url != null && !url.equals("")) {
-                    playOfflineAudio();
-                } else {
-                    playOnlineAudio();
-                }
-            }
-        }
-    }
 
-    private void playOfflineAudio() {
-        String url;
-        url = answerMedia.getLocalFilePath();
-        Intent intent = new Intent();
-        intent.setAction(android.content.Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse(url), "audio/*");
-        context.startActivity(intent);
-    }
-
-    private void playOnlineAudio() {
-        String url;
-        if (Utility.isOnline(context)) {
-            url = answerMedia.getUrl();
-            if (url != null && !url.equals("")) {
-                Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse(url), "audio/*");
-                context.startActivity(intent);
-            }
-        }
-    }
 
     public void navigateToFragment(Fragment fragment) {
         android.support.v4.app.FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();

@@ -328,6 +328,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     context.startService(intent);
                     new DownloadImageTask(dynamicImageView, customProgressDialog)
                             .execute(media.getDownload_url());
+                    customProgressDialog.dismiss();
                 }
             } else {
                 /*File imgFile = new File(media.getLocalFilePath());
@@ -453,6 +454,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     context.startService(intent);
                     new DownloadImageTask(dynamicImageView, customProgressDialog)
                             .execute(media.getThumbnail_url());
+                    customProgressDialog.dismiss();
                 }
             } else {
                /* File imgFile = new File(media.getThumbnail_url_Local_file_path());
@@ -622,6 +624,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         final CustomProgressDialog customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
         if (Utility.isOnline(context)) {
             customProgressDialog.show();
+
             DownloadFileAsync task = new DownloadFileAsync(context, media) {
                 @Override
                 public void receiveData(String result) {

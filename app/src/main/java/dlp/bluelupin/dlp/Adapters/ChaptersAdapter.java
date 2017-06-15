@@ -474,7 +474,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         }
     }
 
-    private class LoadImageFromDataBase extends AsyncTask<String, Void, Bitmap> {
+ /*   private class LoadImageFromDataBase extends AsyncTask<String, Void, Bitmap> {
         ScaleImageView bmImage;
         ProgressBar progressBar;
 
@@ -501,11 +501,11 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                 bmImage.setImageBitmap(result);
             }
             progressBar.setVisibility(View.GONE);
-           /* if (customProgressDialog != null) {
+           *//* if (customProgressDialog != null) {
                 if (customProgressDialog.isShowing()) {
                     customProgressDialog.dismiss();
                 }
-            }*/
+            }*//*
 
         }
 
@@ -516,7 +516,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         }
 
 
-    }
+    }*/
 
 
 }
