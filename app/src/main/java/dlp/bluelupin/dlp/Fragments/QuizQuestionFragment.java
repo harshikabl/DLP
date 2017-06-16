@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     List<Data> question_list;
     private static RecyclerView recyclerView;
 
+    private boolean play;
 
     public QuizQuestionFragment() {
         // Required empty public constructor
@@ -67,7 +70,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     }
 
     private TextView quit_text, quit_icon, skip_text, skip_icon, multiple_text, question, question_no;
-    private TextView  listen_text, listen_icon, question_title, select, submit_text, submit_Icon;
+    private TextView listen_text, listen_icon, question_title, select, submit_text, submit_Icon;
     private Context context;
     Typeface materialdesignicons_font, VodafoneRg;
     private int questionNo = 0;
@@ -76,6 +79,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     private Data media;
     private Data answerMedia;
     MainActivity rootActivity;
+    private MediaPlayer mediaPlayer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,7 +108,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     }
 
     private void init() {
-         rootActivity = (MainActivity) getActivity();
+        rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(context.getString(R.string.Quiz));
         rootActivity.setShowQuestionIconOption(true);
         DbHelper dbHelper = new DbHelper(context);
@@ -158,7 +162,6 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         submitLayout.setOnClickListener(this);
         LinearLayout listenLayout = (LinearLayout) view.findViewById(R.id.listenLayout);
         listenLayout.setOnClickListener(this);
-
 
 
         setValue();
@@ -221,10 +224,34 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     private void playOfflineAudio() {
         String url;
         url = media.getLocalFilePath();
-        Intent intent = new Intent();
+       /* Intent intent = new Intent();
         intent.setAction(android.content.Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse(url), "audio/*");
-        startActivity(intent);
+        intent.setDataAndType(Uri.parse(url), "audio*//*");
+        startActivity(intent);*/
+        try {
+
+            Uri myUri = Uri.parse(url);
+            mediaPlayer = MediaPlayer.create(context, myUri);
+            if(mediaPlayer==null) {
+                mediaPlayer = MediaPlayer.create(context, myUri);
+            }
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+                listen_icon.setTypeface(materialdesignicons_font);
+                listen_icon.setText(Html.fromHtml("&#xf3e4;"));
+                listen_text.setText("Pause");
+
+            } else {
+                mediaPlayer.start();
+                listen_icon.setTypeface(materialdesignicons_font);
+                listen_icon.setText(Html.fromHtml("&#xf57e;"));
+                listen_text.setText("Listen");
+            }
+
+
+
+        } catch (Exception e) {
+        }
     }
 
     private void playOnlineAudio() {
@@ -232,9 +259,33 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         if (Utility.isOnline(context)) {
             url = media.getUrl();
             if (url != null && !url.equals("")) {
-                Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse(url), "audio/*");
-                startActivity(intent);
+               /* Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(url), "audio*//*");
+                startActivity(intent);*/
+                try {
+
+                    Uri myUri = Uri.parse(url);
+                    if(mediaPlayer==null) {
+                        mediaPlayer = MediaPlayer.create(context, myUri);
+                    }
+                    if (mediaPlayer.isPlaying()) {
+                        mediaPlayer.pause();
+                        listen_icon.setTypeface(materialdesignicons_font);
+                       listen_icon.setText(Html.fromHtml("&#xf3e4;"));
+                        listen_text.setText("Pause");
+
+                    } else {
+                        mediaPlayer.start();
+                        listen_icon.setTypeface(materialdesignicons_font);
+                        listen_icon.setText(Html.fromHtml("&#xf57e;"));
+                        listen_text.setText("Listen");
+                    }
+
+
+
+                } catch (Exception e) {
+                }
+
             }
         }
     }
@@ -328,6 +379,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                     playOfflineAudio();
                 } else {
                     playOnlineAudio();
+
                 }
             }
         }
@@ -359,6 +411,15 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
             }
         });
         alert.show();
+    }
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+
+        }
     }
 
 }

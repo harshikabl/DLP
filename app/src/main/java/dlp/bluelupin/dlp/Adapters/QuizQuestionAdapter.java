@@ -55,6 +55,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     private Boolean correctAnsFlage = false;
     private Data answerMedia;
     private CustomProgressDialog customProgressDialog;
+    private LinearLayout optionLayout;
 
     public QuizQuestionAdapter(Context context, List<Data> optionList, List<String> OptionAtoZList, int questionNo, String questionTitle, int totalNo, Data answerMedia) {
         this.optionList = optionList;
@@ -144,13 +145,13 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
             holder.rowLayout.setPadding(0, 16, 0, 16);
         }
 
-        //for correct ans highlite
+       /* //for correct ans highlite
         holder.optionLayout.setBackgroundColor(Color.parseColor("#ffffff"));
         if (optionList.get(position).getIs_correct() == 1) {
             if (correctAnsFlage) {
                 holder.optionLayout.setBackgroundColor(Color.parseColor("#ADFF2F"));
             }
-        }
+        }*/
         holder.optionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,7 +175,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
                             correctPosition = i;
                         }
                     }
-                    alertForWrongANS(correctTitle, correctPosition, correctAnsDescription);
+                    alertForWrongANS(correctTitle, correctPosition, correctAnsDescription, holder.optionLayout, holder.radio);
                 }
                 editor.commit();
                 selectedItemPosition = position;
@@ -191,7 +192,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     }
 
     //alert for Ouit message
-    public void alertForWrongANS(String correctTitle, int correctPosition, String correctAnsDescription) {
+    public void alertForWrongANS(String correctTitle, int correctPosition, String correctAnsDescription, final LinearLayout optionLayout, final RadioButton radio) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final AlertDialog alert = builder.create();
         alert.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
@@ -200,27 +201,16 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         correctIcon.setTypeface(materialdesignicons_font);
         TextView correctAns = (TextView) view.findViewById(R.id.correctAns);
         correctAns.setTypeface(VodafoneRg);
-        TextView option = (TextView) view.findViewById(R.id.option);
+        final TextView option = (TextView) view.findViewById(R.id.option);
         option.setTypeface(VodafoneRg);
         TextView optionDetails = (TextView) view.findViewById(R.id.optionDetails);
         optionDetails.setTypeface(VodafoneRg);
-
-
         TextView close_text = (TextView) view.findViewById(R.id.close_text);
         close_text.setTypeface(VodafoneRg);
         TextView quit_icon = (TextView) view.findViewById(R.id.quit_icon);
         quit_icon.setTypeface(materialdesignicons_font);
-
         quit_icon.setText(Html.fromHtml("&#xf156;"));
         correctIcon.setText(Html.fromHtml("&#xf134;"));
-
-        final TextView next_text = (TextView) view.findViewById(R.id.next_text);
-        next_text.setTypeface(VodafoneRg);
-        TextView next_icon = (TextView) view.findViewById(R.id.next_icon);
-        next_icon.setTypeface(materialdesignicons_font);
-        next_icon.setText(Html.fromHtml("&#xf054;"));
-
-
         DbHelper dbHelper = new DbHelper(context);
         Data titleResource = dbHelper.getResourceEntityByName(correctTitle,
                 Utility.getLanguageIdFromSharedPreferences(context));
@@ -228,28 +218,24 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
             optionDetails.setText(Html.fromHtml(titleResource.getContent()));
         }
         option.setText(OptionAtoZList.get(correctPosition).toString() + ")");
-        LinearLayout next_layout = (LinearLayout) view.findViewById(R.id.next_layout);
+
         LinearLayout quit_layout = (LinearLayout) view.findViewById(R.id.quit_layout);
         alert.setCustomTitle(view);
 
         quit_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                optionLayout.setClickable(false);
+                radio.setClickable(false);
                 alert.dismiss();
 
             }
-        });
-        next_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-
-            }
         });
+
         alert.show();
 
     }
-
 
 
     public void navigateToFragment(Fragment fragment) {
