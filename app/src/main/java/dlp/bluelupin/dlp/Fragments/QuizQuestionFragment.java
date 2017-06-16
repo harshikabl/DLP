@@ -223,55 +223,20 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
 
     private void playOfflineAudio() {
         String url;
-        url = media.getLocalFilePath();
-       /* Intent intent = new Intent();
-        intent.setAction(android.content.Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse(url), "audio*//*");
-        startActivity(intent);*/
-        try {
+        if (media != null) {
 
-            Uri myUri = Uri.parse(url);
-            mediaPlayer = MediaPlayer.create(context, myUri);
-            if(mediaPlayer==null) {
-                mediaPlayer = MediaPlayer.create(context, myUri);
-            }
-            if (mediaPlayer.isPlaying()) {
-                mediaPlayer.pause();
-                listen_icon.setTypeface(materialdesignicons_font);
-                listen_icon.setText(Html.fromHtml("&#xf3e4;"));
-                listen_text.setText("Pause");
-
-            } else {
-                mediaPlayer.start();
-                listen_icon.setTypeface(materialdesignicons_font);
-                listen_icon.setText(Html.fromHtml("&#xf57e;"));
-                listen_text.setText("Listen");
-            }
-
-
-
-        } catch (Exception e) {
-        }
-    }
-
-    private void playOnlineAudio() {
-        String url;
-        if (Utility.isOnline(context)) {
-            url = media.getUrl();
+            url = media.getLocalFilePath();
             if (url != null && !url.equals("")) {
-               /* Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse(url), "audio*//*");
-                startActivity(intent);*/
                 try {
-
                     Uri myUri = Uri.parse(url);
-                    if(mediaPlayer==null) {
+                    mediaPlayer = MediaPlayer.create(context, myUri);
+                    if (mediaPlayer == null) {
                         mediaPlayer = MediaPlayer.create(context, myUri);
                     }
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.pause();
                         listen_icon.setTypeface(materialdesignicons_font);
-                       listen_icon.setText(Html.fromHtml("&#xf3e4;"));
+                        listen_icon.setText(Html.fromHtml("&#xf3e4;"));
                         listen_text.setText("Pause");
 
                     } else {
@@ -281,11 +246,41 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                         listen_text.setText("Listen");
                     }
 
-
-
                 } catch (Exception e) {
                 }
+            }
+        }
+    }
 
+    private void playOnlineAudio() {
+        String url;
+        if (Utility.isOnline(context)) {
+            if (media != null) {
+                url = media.getUrl();
+                if (url != null && !url.equals("")) {
+               /* Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(url), "audio*//*");
+                startActivity(intent);*/
+                    try {
+                        Uri myUri = Uri.parse(url);
+                        if (mediaPlayer == null) {
+                            mediaPlayer = MediaPlayer.create(context, myUri);
+                        }
+                        if (mediaPlayer.isPlaying()) {
+                            mediaPlayer.pause();
+                            listen_icon.setTypeface(materialdesignicons_font);
+                            listen_icon.setText(Html.fromHtml("&#xf3e4;"));
+                            listen_text.setText("Pause");
+
+                        } else {
+                            mediaPlayer.start();
+                            listen_icon.setTypeface(materialdesignicons_font);
+                            listen_icon.setText(Html.fromHtml("&#xf57e;"));
+                            listen_text.setText("Listen");
+                        }
+                    } catch (Exception e) {
+                    }
+                }
             }
         }
     }
@@ -379,7 +374,6 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                     playOfflineAudio();
                 } else {
                     playOnlineAudio();
-
                 }
             }
         }
@@ -412,9 +406,9 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         });
         alert.show();
     }
+
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
         if (mediaPlayer != null) {
             mediaPlayer.stop();

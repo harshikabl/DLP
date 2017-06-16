@@ -55,7 +55,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     private Boolean correctAnsFlage = false;
     private Data answerMedia;
     private CustomProgressDialog customProgressDialog;
-    private LinearLayout optionLayout;
+    private Boolean onTimeClick = false;
 
     public QuizQuestionAdapter(Context context, List<Data> optionList, List<String> OptionAtoZList, int questionNo, String questionTitle, int totalNo, Data answerMedia) {
         this.optionList = optionList;
@@ -152,6 +152,15 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
                 holder.optionLayout.setBackgroundColor(Color.parseColor("#ADFF2F"));
             }
         }*/
+        //after one time click layout disable
+        if (onTimeClick) {
+            holder.optionLayout.setEnabled(false);
+            if (selectedItemPosition == position) {//only select option view not disable
+                holder.viewLayout.setEnabled(true);
+            } else {
+                holder.viewLayout.setEnabled(false);
+            }
+        }
         holder.optionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,9 +184,10 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
                             correctPosition = i;
                         }
                     }
-                    alertForWrongANS(correctTitle, correctPosition, correctAnsDescription, holder.optionLayout, holder.radio);
+                    alertForWrongANS(correctTitle, correctPosition, correctAnsDescription);
                 }
                 editor.commit();
+                onTimeClick = true;
                 selectedItemPosition = position;
                 notifyDataSetChanged();
             }
@@ -192,7 +202,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     }
 
     //alert for Ouit message
-    public void alertForWrongANS(String correctTitle, int correctPosition, String correctAnsDescription, final LinearLayout optionLayout, final RadioButton radio) {
+    public void alertForWrongANS(String correctTitle, int correctPosition, String correctAnsDescription) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final AlertDialog alert = builder.create();
         alert.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
@@ -225,8 +235,6 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         quit_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                optionLayout.setClickable(false);
-                radio.setClickable(false);
                 alert.dismiss();
 
             }
