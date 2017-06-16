@@ -18,7 +18,6 @@
             android:orientation="horizontal">
 
 
-
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -30,7 +29,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
 
 
         <LinearLayout
@@ -94,20 +92,18 @@
             android:background="#929495" />
 
 
-
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimValue_20"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/quit_layout"
                 android:layout_width="@dimen/size_120px"
                 android:layout_height="@dimen/size_35px"
+                android:layout_marginLeft="@dimen/dimValue_10"
                 android:background="@color/colorRad"
                 android:orientation="horizontal">
 
@@ -125,6 +121,38 @@
 
                 <TextView
                     android:id="@+id/quit_icon"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.2"
+                    android:background="@color/colorDrakRed"
+                    android:gravity="center"
+                    android:padding="@dimen/dimValue_6"
+                    android:text=""
+                    android:textColor="#fff"
+                    android:textSize="@dimen/dimTextSize_18" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/next_layout"
+                android:layout_width="@dimen/size_120px"
+                android:layout_height="@dimen/size_35px"
+                android:layout_marginLeft="@dimen/dimValue_20"
+                android:background="@color/colorRad"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/next_text"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.8"
+                    android:background="@color/colorRad"
+                    android:gravity="center"
+                    android:padding="@dimen/dimValue_6"
+                    android:text="@string/Next"
+                    android:textColor="#fff"
+                    android:textSize="@dimen/dimTextSize_18" />
+
+                <TextView
+                    android:id="@+id/next_icon"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.2"

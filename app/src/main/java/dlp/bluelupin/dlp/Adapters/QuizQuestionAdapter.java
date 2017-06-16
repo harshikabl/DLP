@@ -214,6 +214,11 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         quit_icon.setText(Html.fromHtml("&#xf156;"));
         correctIcon.setText(Html.fromHtml("&#xf134;"));
 
+        final TextView next_text = (TextView) view.findViewById(R.id.next_text);
+        next_text.setTypeface(VodafoneRg);
+        TextView next_icon = (TextView) view.findViewById(R.id.next_icon);
+        next_icon.setTypeface(materialdesignicons_font);
+        next_icon.setText(Html.fromHtml("&#xf054;"));
 
 
         DbHelper dbHelper = new DbHelper(context);
@@ -223,6 +228,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
             optionDetails.setText(Html.fromHtml(titleResource.getContent()));
         }
         option.setText(OptionAtoZList.get(correctPosition).toString() + ")");
+        LinearLayout next_layout = (LinearLayout) view.findViewById(R.id.next_layout);
         LinearLayout quit_layout = (LinearLayout) view.findViewById(R.id.quit_layout);
         alert.setCustomTitle(view);
 
@@ -230,6 +236,13 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
             @Override
             public void onClick(View v) {
                 alert.dismiss();
+
+            }
+        });
+        next_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
 
             }
         });
