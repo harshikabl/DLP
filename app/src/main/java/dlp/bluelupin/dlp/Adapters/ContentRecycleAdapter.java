@@ -564,7 +564,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 dynamicTextView.setTextSize(22);
                 dynamicTextView.setTypeface(VodafoneRg);
                 dynamicTextView.setGravity(Gravity.LEFT);
-                dynamicTextView.setText(Html.fromHtml(context.getString(R.string.simulator_s)));
+                dynamicTextView.setText(Html.fromHtml(context.getString(R.string.Run_Simulator)));
                 dynamicTextView.setBackgroundColor(Color.parseColor("#e60000"));
                 dynamicTextView.setTextColor(Color.parseColor("#ffffff"));
                 dynamicTextView.setPadding(16, 30, 0, 30);
