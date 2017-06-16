@@ -159,8 +159,12 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                         bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                         holder.chapterImage.setImageBitmap(bitmap);
                     }*/
-                    LoadImageFromDataBase imageFromDataBase = new LoadImageFromDataBase(holder.chapterImage, holder.progressBar);
-                    imageFromDataBase.execute(media.getLocalFilePath());
+                    Uri uri = Uri.fromFile(new File(media.getLocalFilePath()));
+                    if (uri != null) {
+                        Picasso.with(context).load(uri).placeholder(R.drawable.imageplaceholder).into(holder.chapterImage);
+                    }
+                    /*LoadImageFromDataBase imageFromDataBase = new LoadImageFromDataBase(holder.chapterImage, holder.progressBar);
+                    imageFromDataBase.execute(media.getLocalFilePath());*/
                 }
 
             }
@@ -469,7 +473,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         }
     }
 
-    private class LoadImageFromDataBase extends AsyncTask<String, Void, Uri> {
+    /*private class LoadImageFromDataBase extends AsyncTask<String, Void, Uri> {
         ScaleImageView bmImage;
         ProgressBar progressBar;
 
@@ -495,11 +499,11 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                 Picasso.with(context).load(result).placeholder(R.drawable.imageplaceholder).into(bmImage);
             }
             progressBar.setVisibility(View.GONE);
-           /* if (customProgressDialog != null) {
+           *//* if (customProgressDialog != null) {
                 if (customProgressDialog.isShowing()) {
                     customProgressDialog.dismiss();
                 }
-            }*/
+            }*//*
 
         }
 
@@ -508,9 +512,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
             //customProgressDialog.show();
             progressBar.setVisibility(View.VISIBLE);
         }
-
-
     }
-
+*/
 
 }

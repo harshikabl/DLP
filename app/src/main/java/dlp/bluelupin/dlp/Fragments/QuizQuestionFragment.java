@@ -91,6 +91,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     }
 
     View view;
+    private SharedPreferences shareprefs;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -116,8 +117,6 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         if (quizData != null) {
             questionList = dbHelper.getAllQuizzesQuestionsDataEntity(quizData.getId());
             rootActivity.totalQuestion.setText("/" + String.valueOf(questionList.size()));
-
-
         }
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
         Typeface VodafoneExB = FontManager.getFontTypeface(context, "fonts/VodafoneExB.TTF");
@@ -163,7 +162,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         LinearLayout listenLayout = (LinearLayout) view.findViewById(R.id.listenLayout);
         listenLayout.setOnClickListener(this);
 
-
+        shareprefs = context.getSharedPreferences("OptionPreferences", Context.MODE_PRIVATE);
         setValue();
     }
 
@@ -289,16 +288,18 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submitLayout:
-                SharedPreferences prefs = context.getSharedPreferences("OptionPreferences", Context.MODE_PRIVATE);
                 Boolean selectCheck = false;
-                if (prefs != null) {
-                    selectCheck = prefs.getBoolean("selectCheck", false);
+                if (shareprefs != null) {
+                    selectCheck = shareprefs.getBoolean("selectCheck", false);
                 }
                 if (selectCheck) {
                     if (questionList.size() == questionNo + 1) {//check all question done or not
                         setAnswerForLastQuestion();
                     } else {
                         setAnswer();
+                    }
+                    if (mediaPlayer != null) {
+                        mediaPlayer.stop();
                     }
                 } else {
                     Utility.alertForErrorMessage("Please select option", context);
@@ -322,7 +323,6 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
 
     //set answer into data base
     private void setAnswer() {
-        SharedPreferences shareprefs = context.getSharedPreferences("OptionPreferences", Context.MODE_PRIVATE);
         DbHelper dbhelper = new DbHelper(context);
         questionNo = questionNo + 1;
         QuizAnswer answer = new QuizAnswer();
@@ -342,7 +342,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
 
     //set answer into data base for last question
     private void setAnswerForLastQuestion() {
-        SharedPreferences shareprefs = context.getSharedPreferences("OptionPreferences", Context.MODE_PRIVATE);
+
         DbHelper dbhelper = new DbHelper(context);
         questionNo = questionNo + 1;
         QuizAnswer answer = new QuizAnswer();
@@ -412,7 +412,9 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         super.onDestroy();
         if (mediaPlayer != null) {
             mediaPlayer.stop();
-
+        }
+        if (shareprefs != null) {
+            shareprefs.edit().clear().commit();//clear select OptionPreferences
         }
     }
 
