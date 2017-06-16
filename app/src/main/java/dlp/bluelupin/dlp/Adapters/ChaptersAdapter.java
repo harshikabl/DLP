@@ -148,7 +148,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                         intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                         intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
                         context.startService(intent);
-                        new DownloadImageTask(holder.chapterImage, customProgressDialog)
+                        new DownloadImageTask(holder.chapterImage)
                                 .execute(media.getDownload_url());
                     }
                 } else {
@@ -159,13 +159,8 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                         bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                         holder.chapterImage.setImageBitmap(bitmap);
                     }*/
-                    Uri uri = Uri.fromFile(new File(media.getLocalFilePath()));
-                    if (uri != null) {
-                        Picasso.with(context).load(uri).placeholder(R.drawable.imageplaceholder).into(holder.chapterImage);
-                    }
-//
-                    //                   LoadImageFromDataBase imageFromDataBase = new LoadImageFromDataBase(holder.chapterImage, holder.progressBar);
-                    //                 imageFromDataBase.execute(media.getLocalFilePath());
+                    LoadImageFromDataBase imageFromDataBase = new LoadImageFromDataBase(holder.chapterImage, holder.progressBar);
+                    imageFromDataBase.execute(media.getLocalFilePath());
                 }
 
             }
@@ -474,7 +469,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         }
     }
 
- /*   private class LoadImageFromDataBase extends AsyncTask<String, Void, Bitmap> {
+    private class LoadImageFromDataBase extends AsyncTask<String, Void, Uri> {
         ScaleImageView bmImage;
         ProgressBar progressBar;
 
@@ -484,28 +479,27 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         }
 
         @Override
-        protected Bitmap doInBackground(String... params) {
+        protected Uri doInBackground(String... params) {
 
             String localFilePath = params[0];
-            File imgFile = new File(localFilePath);
-            Bitmap bitmap = null;
-            if (imgFile.exists()) {
-                bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            Uri uri = null;
+            if (localFilePath != null) {
+                uri = Uri.fromFile(new File(localFilePath));
             }
-            return bitmap;
+            return uri;
         }
 
         @Override
-        protected void onPostExecute(Bitmap result) {
+        protected void onPostExecute(Uri result) {
             if (result != null) {
-                bmImage.setImageBitmap(result);
+                Picasso.with(context).load(result).placeholder(R.drawable.imageplaceholder).into(bmImage);
             }
             progressBar.setVisibility(View.GONE);
-           *//* if (customProgressDialog != null) {
+           /* if (customProgressDialog != null) {
                 if (customProgressDialog.isShowing()) {
                     customProgressDialog.dismiss();
                 }
-            }*//*
+            }*/
 
         }
 
@@ -516,7 +510,7 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         }
 
 
-    }*/
+    }
 
 
 }

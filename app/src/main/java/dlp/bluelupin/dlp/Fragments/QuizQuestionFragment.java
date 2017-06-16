@@ -67,7 +67,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     }
 
     private TextView quit_text, quit_icon, skip_text, skip_icon, multiple_text, question, question_no;
-    private TextView  listen_text, listen_icon, question_title, select, submit_text, submit_Icon;
+    private TextView listen_text, listen_icon, question_title, select, submit_text, submit_Icon;
     private Context context;
     Typeface materialdesignicons_font, VodafoneRg;
     private int questionNo = 0;
@@ -104,7 +104,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     }
 
     private void init() {
-         rootActivity = (MainActivity) getActivity();
+        rootActivity = (MainActivity) getActivity();
         rootActivity.setScreenTitle(context.getString(R.string.Quiz));
         rootActivity.setShowQuestionIconOption(true);
         DbHelper dbHelper = new DbHelper(context);
@@ -158,8 +158,6 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         submitLayout.setOnClickListener(this);
         LinearLayout listenLayout = (LinearLayout) view.findViewById(R.id.listenLayout);
         listenLayout.setOnClickListener(this);
-
-
 
         setValue();
     }

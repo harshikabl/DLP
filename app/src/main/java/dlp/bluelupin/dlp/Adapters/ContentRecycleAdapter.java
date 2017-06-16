@@ -54,9 +54,9 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
     private List<Data> itemList;
     private Context context;
     private Boolean favFlage = false;
-    Typeface VodafoneExB;// = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
-    Typeface VodafoneRg;// = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
-    Typeface materialdesignicons_font;// = Typeface.createFromAsset(context.getAssets(), "fonts/materialdesignicons-webfont.otf");
+    Typeface VodafoneExB;
+    Typeface VodafoneRg;
+    Typeface materialdesignicons_font;
     private CustomProgressDialog customProgressDialog;
     private String contentTitle;
     LogAnalyticsHelper analyticsHelper = null;
@@ -312,11 +312,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         //ImageView dynamicImageView = new ImageView(context);
         ScaleImageView dynamicImageView = new ScaleImageView(context);
         dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        // dynamicImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        if (url != null) {
-//            new DownloadImageTask(dynamicImageView)
-//                    .execute(url);
-//        }
+        dynamicImageView.setImageResource(R.drawable.imageplaceholder);//default image
         if (media != null && media.getDownload_url() != null) {
             if (media.getLocalFilePath() == null) {
                 if (Utility.isOnline(context)) {
@@ -326,19 +322,20 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                     intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.DOWNLOAD_URL);
                     context.startService(intent);
-                    new DownloadImageTask(dynamicImageView, customProgressDialog)
+                    new DownloadImageTask(dynamicImageView)
                             .execute(media.getDownload_url());
-                    customProgressDialog.dismiss();
+                    //customProgressDialog.dismiss();
                 }
             } else {
-                /*File imgFile = new File(media.getLocalFilePath());
+                /*File imgFile = new File(media.get
+                LocalFilePath());
                 if (imgFile.exists()) {
                     Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                     dynamicImageView.setImageBitmap(bitmap);
                 }*/
                 Uri uri = Uri.fromFile(new File(media.getLocalFilePath()));
                 if (uri != null) {
-                    Picasso.with(context).load(uri).into(dynamicImageView);
+                    Picasso.with(context).load(uri).placeholder(R.drawable.imageplaceholder).into(dynamicImageView);
                 }
             }
         }
@@ -430,12 +427,9 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
         frameLayout.setLayoutParams(layoutParams);
         //ImageView dynamicImageView = new ImageView(context);
         ScaleImageView dynamicImageView = new ScaleImageView(context);
+        dynamicImageView.setImageResource(R.drawable.imageplaceholder);//default image
         dynamicImageView.setLayoutParams(new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        //dynamicImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        if (url != null) {
-//            new DownloadImageTask(dynamicImageView)
-//                    .execute(url);
-//        }
+
 
         if (media != null && media.getThumbnail_url() != null) {
             if (media.getThumbnail_url_Local_file_path() == null) {
@@ -452,9 +446,9 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                     intent.putExtra(Consts.EXTRA_MEDIA, strJsonmedia);
                     intent.putExtra(Consts.EXTRA_URLPropertyForDownload, Consts.THUMBNAIL_URL);
                     context.startService(intent);
-                    new DownloadImageTask(dynamicImageView, customProgressDialog)
+                    new DownloadImageTask(dynamicImageView)
                             .execute(media.getThumbnail_url());
-                    customProgressDialog.dismiss();
+                    //customProgressDialog.dismiss();
                 }
             } else {
                /* File imgFile = new File(media.getThumbnail_url_Local_file_path());
@@ -464,7 +458,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
                 }*/
                 Uri uri = Uri.fromFile(new File(media.getThumbnail_url_Local_file_path()));
                 if (uri != null) {
-                    Picasso.with(context).load(uri).into(dynamicImageView);
+                    Picasso.with(context).load(uri).placeholder(R.drawable.imageplaceholder).into(dynamicImageView);
                 }
             }
         }
