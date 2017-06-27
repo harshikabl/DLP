@@ -11,8 +11,13 @@ public class Consts {
     public static final Boolean IS_DEBUG_LOG = true;
     public final static boolean PROD = false; //false;
     public final static String API_KEY = "XsMwq2updd3L5MZAtgwx7PAA0wKaylFnCejD0ei9WjSuwQVmXMQxGg3ZiH5X";
+/*
+            1. Production point to : https://cms.samvaad.me
+            2. Staging pointing to: https://cms2.samvaad.me
+            3. QA pointing to: http://dlp-qa.bluelup.in/
+            4. Dev pointing to: https://dlpdev.bluelup.in*/
 
-    public static String BASE_URL = "http://dlp-qa.bluelup.in/api/v1/";//"https://cms.samvaad.me/api/v1/";//https://dlpdev.bluelup.in/api/v1/"; // http://dlp-qa.bluelup.in/api/v1/ //"http://180.151.10.60:8080/classkonnect/api/";
+    public static String BASE_URL = "http://dlp-qa.bluelup.in/api/v1/";//"https://cms.samvaad.me/api/v1/";//https://dlpdev.bluelup.in/api/v1/"; // http://dlp-qa.bluelup.in/api/v1/;//https://cms2.samvaad.me/api/v1/;//"http://180.151.10.60:8080/classkonnect/api/";
 
     public static String getBaseUrl() {
         if (PROD) {

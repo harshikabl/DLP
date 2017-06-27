@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     private Toolbar toolbar;
-    public TextView title,question,question_no,totalQuestion;
+    public TextView title, question, question_no, totalQuestion;
     public FrameLayout downloadContainer;
     private static MainActivity mainActivity;
     private CustomProgressDialog customProgressDialog;
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         question = (TextView) toolbar.findViewById(R.id.question);
         question_no = (TextView) toolbar.findViewById(R.id.question_no);
         totalQuestion = (TextView) toolbar.findViewById(R.id.totalQuestion);
-        ques_layout=(LinearLayout)toolbar.findViewById(R.id.question_layout);
+        ques_layout = (LinearLayout) toolbar.findViewById(R.id.question_layout);
         question_no.setTypeface(VodafoneExB);
         question.setTypeface(VodafoneExB);
         totalQuestion.setTypeface(VodafoneExB);
@@ -213,7 +213,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                customProgressDialog.show();
+                if (customProgressDialog != null) {
+                    customProgressDialog.show();
+                }
                 //alert.show();
             }
 
@@ -232,6 +234,16 @@ public class MainActivity extends AppCompatActivity
             }
         }.execute(null, null, null);
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (customProgressDialog != null) {
+            if (customProgressDialog.isShowing()) {
+                customProgressDialog.dismiss();
+            }
+        }
     }
 
     //set slider item value
@@ -402,6 +414,7 @@ public class MainActivity extends AppCompatActivity
             ques_layout.setVisibility(View.GONE);
         }
     }
+
     public void hideSplashImage(Boolean flag) {
         if (flag) {
             splashImage.setVisibility(View.GONE);

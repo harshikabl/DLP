@@ -234,13 +234,11 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                     }
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.pause();
-                        listen_icon.setTypeface(materialdesignicons_font);
                         listen_icon.setText(Html.fromHtml("&#xf3e4;"));
                         listen_text.setText("Pause");
 
                     } else {
                         mediaPlayer.start();
-                        listen_icon.setTypeface(materialdesignicons_font);
                         listen_icon.setText(Html.fromHtml("&#xf57e;"));
                         listen_text.setText("Listen");
                     }
@@ -267,13 +265,11 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                         }
                         if (mediaPlayer.isPlaying()) {
                             mediaPlayer.pause();
-                            listen_icon.setTypeface(materialdesignicons_font);
                             listen_icon.setText(Html.fromHtml("&#xf3e4;"));
                             listen_text.setText("Pause");
 
                         } else {
                             mediaPlayer.start();
-                            listen_icon.setTypeface(materialdesignicons_font);
                             listen_icon.setText(Html.fromHtml("&#xf57e;"));
                             listen_text.setText("Listen");
                         }
@@ -298,9 +294,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                     } else {
                         setAnswer();
                     }
-                    if (mediaPlayer != null) {
-                        mediaPlayer.stop();
-                    }
+                    resetMediaPlayer();
                 } else {
                     Utility.alertForErrorMessage("Please select option", context);
                 }
@@ -311,6 +305,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                 } else {
                     setAnswer();
                 }
+                resetMediaPlayer();
                 break;
             case R.id.quit_text:
                 alertForOuitMessage();
@@ -318,6 +313,18 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
             case R.id.listenLayout:
                 listenQuestionAudio();
                 break;
+        }
+    }
+
+    //reset MediaPlayer after select new question or skip question
+    private void resetMediaPlayer() {
+        if (mediaPlayer != null) {
+            //mediaPlayer.stop();
+            mediaPlayer.reset();
+            mediaPlayer.release();
+            mediaPlayer = null;
+            listen_icon.setText(Html.fromHtml("&#xf57e;"));
+            listen_text.setText("Listen");
         }
     }
 

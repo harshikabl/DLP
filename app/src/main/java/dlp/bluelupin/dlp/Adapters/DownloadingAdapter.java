@@ -166,8 +166,8 @@ public class DownloadingAdapter extends RecyclerView.Adapter<DownloadingViewHold
                     Log.d(Consts.LOG_TAG, "**** setting DownloadService1.shouldContinue: " + DownloadService1.shouldContinue);
                 }
 
-                List<Data> dlResourceToBeCancelled =  dataWithParent.getStrJsonResourcesToDownloadList();
-                for (Data data: dlResourceToBeCancelled) {
+                List<Data> dlResourceToBeCancelled = dataWithParent.getStrJsonResourcesToDownloadList();
+                for (Data data : dlResourceToBeCancelled) {
                     dbHelper.deleteFileDownloadedByMediaId(data.getMediaId());
 
                 }
