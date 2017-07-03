@@ -403,8 +403,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setScreenTitle(String heading) {
+        if(heading!=null){
         this.setTitle(Html.fromHtml(heading));
         title.setText(Html.fromHtml(heading));
+        }
     }
 
     public void setShowQuestionIconOption(boolean on) {

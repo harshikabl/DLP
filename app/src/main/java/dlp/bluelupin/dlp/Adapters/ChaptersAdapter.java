@@ -332,10 +332,12 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
                                 Utility.getLanguageIdFromSharedPreferences(context));
                         if (titleResource != null) {
                             contentTitle = titleResource.getContent();
+
+                            //logAnalytics(type, data);
+
+                            analyticsHelper.logEvent(titleResource.getContent(), null);
+                            analyticsHelper.logEvent(titleResource.getContent() + "_" + Utility.getLanguageIdFromSharedPreferences(context), null);
                         }
-                        //logAnalytics(type, data);
-                        analyticsHelper.logEvent(titleResource.getContent(), null);
-                        analyticsHelper.logEvent(titleResource.getContent() + "_" + Utility.getLanguageIdFromSharedPreferences(context), null);
                     }
 
 
