@@ -1,6 +1,7 @@
 package dlp.bluelupin.dlp.Adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -207,6 +209,8 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     public void alertForWrongANS(String correctTitle, int correctPosition, String correctAnsDescription) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final AlertDialog alert = builder.create();
+        alert.setCancelable(false);
+        alert.setCanceledOnTouchOutside(false);
         alert.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
         View view = alert.getLayoutInflater().inflate(R.layout.quiz_wrong_ans_alert, null);
         TextView correctIcon = (TextView) view.findViewById(R.id.correctIcon);
@@ -252,6 +256,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
                 listenCorrectAnsAudio(listen_text, listen_icon);
             }
         });
+
         alert.show();
 
     }
