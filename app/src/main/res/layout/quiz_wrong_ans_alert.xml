@@ -26,6 +26,35 @@
                 android:gravity="right"
                 android:orientation="horizontal">
 
+                <LinearLayout
+                    android:id="@+id/listenLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/dimValue_10"
+                    android:paddingTop="@dimen/dimValue_10">
+
+                    <TextView
+                        android:id="@+id/listen_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="right|center"
+                        android:text="@string/Listen"
+                        android:textColor="@color/colorRad"
+                        android:textSize="@dimen/dimTextSize_16" />
+
+                    <TextView
+                        android:id="@+id/listen_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/dimValue_10"
+                        android:layout_marginTop="@dimen/dimValue_3"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/colorRad"
+                        android:textSize="@dimen/dimTextSize_16" />
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>

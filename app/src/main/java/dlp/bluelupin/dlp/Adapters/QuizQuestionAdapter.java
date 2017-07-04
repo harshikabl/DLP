@@ -209,6 +209,8 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         View view = alert.getLayoutInflater().inflate(R.layout.quiz_wrong_ans_alert, null);
         TextView correctIcon = (TextView) view.findViewById(R.id.correctIcon);
         correctIcon.setTypeface(materialdesignicons_font);
+        TextView listen_icon = (TextView) view.findViewById(R.id.listen_icon);
+        listen_icon.setTypeface(materialdesignicons_font);
         TextView correctAns = (TextView) view.findViewById(R.id.correctAns);
         correctAns.setTypeface(VodafoneRg);
         final TextView option = (TextView) view.findViewById(R.id.option);
@@ -221,6 +223,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         quit_icon.setTypeface(materialdesignicons_font);
         quit_icon.setText(Html.fromHtml("&#xf156;"));
         correctIcon.setText(Html.fromHtml("&#xf134;"));
+        listen_icon.setText(Html.fromHtml("&#xf57e;"));
         DbHelper dbHelper = new DbHelper(context);
         Data titleResource = dbHelper.getResourceEntityByName(correctTitle,
                 Utility.getLanguageIdFromSharedPreferences(context));
