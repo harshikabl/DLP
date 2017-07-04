@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -56,6 +57,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     private Data answerMedia;
     private CustomProgressDialog customProgressDialog;
     private Boolean onTimeClick = false;
+    private MediaPlayer mediaPlayer;
 
     public QuizQuestionAdapter(Context context, List<Data> optionList, List<String> OptionAtoZList, int questionNo, String questionTitle, int totalNo, Data answerMedia) {
         this.optionList = optionList;
@@ -209,7 +211,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         View view = alert.getLayoutInflater().inflate(R.layout.quiz_wrong_ans_alert, null);
         TextView correctIcon = (TextView) view.findViewById(R.id.correctIcon);
         correctIcon.setTypeface(materialdesignicons_font);
-        TextView listen_icon = (TextView) view.findViewById(R.id.listen_icon);
+        final TextView listen_icon = (TextView) view.findViewById(R.id.listen_icon);
         listen_icon.setTypeface(materialdesignicons_font);
         TextView correctAns = (TextView) view.findViewById(R.id.correctAns);
         correctAns.setTypeface(VodafoneRg);
@@ -220,6 +222,8 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         TextView close_text = (TextView) view.findViewById(R.id.close_text);
         close_text.setTypeface(VodafoneRg);
         TextView quit_icon = (TextView) view.findViewById(R.id.quit_icon);
+        LinearLayout listenLayout = (LinearLayout) view.findViewById(R.id.listenLayout);
+        final TextView listen_text = (TextView) view.findViewById(R.id.listen_text);
         quit_icon.setTypeface(materialdesignicons_font);
         quit_icon.setText(Html.fromHtml("&#xf156;"));
         correctIcon.setText(Html.fromHtml("&#xf134;"));
@@ -234,20 +238,109 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
 
         LinearLayout quit_layout = (LinearLayout) view.findViewById(R.id.quit_layout);
         alert.setCustomTitle(view);
-
+        resetMediaPlayer(listen_text, listen_icon);//reset media player
         quit_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alert.dismiss();
-
+                resetMediaPlayer(listen_text, listen_icon);//reset media player
             }
-
         });
-
+        listenLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCorrectAnsAudio(listen_text, listen_icon);
+            }
+        });
         alert.show();
 
     }
 
+    //lesten ans Audio
+    private void listenCorrectAnsAudio(TextView listen_text, TextView listen_icon) {
+        if (answerMedia != null) {
+            if (answerMedia.getType().equals("Audio")) {
+                String url = answerMedia.getLocalFilePath();
+                if (url != null && !url.equals("")) {
+                    playOfflineAudio(listen_text, listen_icon);
+                } else {
+                    playOnlineAudio(listen_text, listen_icon);
+                }
+            }
+        }
+    }
+
+    private void playOfflineAudio(TextView listen_text, TextView listen_icon) {
+        String url;
+        if (answerMedia != null) {
+
+            url = answerMedia.getLocalFilePath();
+            if (url != null && !url.equals("")) {
+                try {
+                    Uri myUri = Uri.parse(url);
+                    mediaPlayer = MediaPlayer.create(context, myUri);
+                    if (mediaPlayer == null) {
+                        mediaPlayer = MediaPlayer.create(context, myUri);
+                    }
+                    if (mediaPlayer.isPlaying()) {
+                        mediaPlayer.pause();
+                        listen_icon.setText(Html.fromHtml("&#xf3e4;"));
+                        listen_text.setText("Pause");
+
+                    } else {
+                        mediaPlayer.start();
+                        listen_icon.setText(Html.fromHtml("&#xf57e;"));
+                        listen_text.setText("Listen");
+                    }
+
+                } catch (Exception e) {
+                }
+            }
+        }
+    }
+
+    //reset MediaPlayer after select new question or skip question
+    private void resetMediaPlayer(TextView listen_text, TextView listen_icon) {
+        if (mediaPlayer != null) {
+            //mediaPlayer.stop();
+            mediaPlayer.reset();
+            mediaPlayer.release();
+            mediaPlayer = null;
+            listen_icon.setText(Html.fromHtml("&#xf57e;"));
+            listen_text.setText("Listen");
+        }
+    }
+
+    private void playOnlineAudio(TextView listen_text, TextView listen_icon) {
+        String url;
+        if (Utility.isOnline(context)) {
+            if (answerMedia != null) {
+                url = answerMedia.getUrl();
+                if (url != null && !url.equals("")) {
+               /* Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.parse(url), "audio*//*");
+                startActivity(intent);*/
+                    try {
+                        Uri myUri = Uri.parse(url);
+                        if (mediaPlayer == null) {
+                            mediaPlayer = MediaPlayer.create(context, myUri);
+                        }
+                        if (mediaPlayer.isPlaying()) {
+                            mediaPlayer.pause();
+                            listen_icon.setText(Html.fromHtml("&#xf3e4;"));
+                            listen_text.setText("Pause");
+
+                        } else {
+                            mediaPlayer.start();
+                            listen_icon.setText(Html.fromHtml("&#xf57e;"));
+                            listen_text.setText("Listen");
+                        }
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        }
+    }
 
     public void navigateToFragment(Fragment fragment) {
         android.support.v4.app.FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
@@ -280,6 +373,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
             optionLayout = (LinearLayout) itemView.findViewById(R.id.optionLayout);
             image = (ImageView) itemView.findViewById(R.id.image);
             viewLayout = (LinearLayout) itemView.findViewById(R.id.viewLayout);
+
         }
     }
 
