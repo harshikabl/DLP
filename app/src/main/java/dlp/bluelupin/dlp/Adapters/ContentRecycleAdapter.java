@@ -33,6 +33,7 @@ import java.util.List;
 import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
 import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
+import dlp.bluelupin.dlp.Fragments.SimulatorWebFragment;
 import dlp.bluelupin.dlp.Fragments.WebFragment;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.SimulatorData;
@@ -657,7 +658,7 @@ public class ContentRecycleAdapter extends RecyclerView.Adapter<ContentViewHolde
 
                         String htmlFile = getDataFromDataBase(simulaterUrl);
                         FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-                        WebFragment fragment = WebFragment.newInstance(simulatorData.getLocalPathUrl(), context.getString(R.string.Simulator));
+                        SimulatorWebFragment fragment = SimulatorWebFragment.newInstance(simulatorData.getLocalPathUrl(), context.getString(R.string.Simulator));
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                         transaction.setCustomAnimations(R.anim.in_from_right, R.anim.out_to_right);
                         transaction.replace(R.id.container, fragment)

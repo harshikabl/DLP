@@ -25,7 +25,7 @@ import dlp.bluelupin.dlp.Utilities.Utility;
  * Use the {@link WebFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WebFragment extends Fragment {
+public class SimulatorWebFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,7 +36,7 @@ public class WebFragment extends Fragment {
     private String mParam2;
 
 
-    public WebFragment() {
+    public SimulatorWebFragment() {
         // Required empty public constructor
     }
 
@@ -49,8 +49,8 @@ public class WebFragment extends Fragment {
      * @return A new instance of fragment WebFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WebFragment newInstance(String param1, String param2) {
-        WebFragment fragment = new WebFragment();
+    public static SimulatorWebFragment newInstance(String param1, String param2) {
+        SimulatorWebFragment fragment = new SimulatorWebFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -109,7 +109,7 @@ public class WebFragment extends Fragment {
         //webView.getSettings().setDomStorageEnabled(true);
         final CustomProgressDialog customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
         webView.setHorizontalScrollBarEnabled(false);
-        if (Utility.isOnline(context)) {
+       // if (Utility.isOnline(context)) {
             if (webView != null) {
                 /*customProgressDialog.show();
                 webView.setWebViewClient(new WebViewClient() {
@@ -122,16 +122,15 @@ public class WebFragment extends Fragment {
                 //webView.loadUrl(context.getAssets().open("/NeerajDemo-1-1495000689/Calc.html"));
                 // webView.loadUrl("file:///sdcard/dlpUnzipped/samvaadSimulator/NeerajDemo-1-1495000689/Calc.html");
                 //webView.loadUrl("file:///storage/emulated/0/dlpUnzipped/samvaadSimulator/NeerajDemo-1-1495000689/Calc.html");
-               // webView.loadUrl("file:///" + mParam1 + "index.html");
-               // webView.loadDataWithBaseURL("", mParam1, "text/html", "UTF-8", "");
-               //  webView.loadData(mParam1, "text/html", "utf8");
-                webView.loadUrl(mParam1);
+                webView.loadUrl("file:///" + mParam1 + "index.html");
+                //webView.loadDataWithBaseURL("", mParam1, "text/html", "UTF-8", "");
+                // webView.loadData(mParam1, "text/html", "utf8");
             }
-        } else {
+        /*} else {
             if (customProgressDialog.isShowing()) {
                 // customProgressDialog.dismiss();
             }
             Utility.alertForErrorMessage(getString(R.string.online_msg), context);
-        }
+        }*/
     }
 }
