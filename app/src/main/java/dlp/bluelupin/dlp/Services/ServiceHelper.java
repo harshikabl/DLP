@@ -122,6 +122,7 @@ public class ServiceHelper {
                         //Log.d(Consts.LOG_TAG, cd.toString());
 
                         for (Data d : cd.getData()) {
+                            Log.d(Consts.LOG_TAG,"*******: updated "+ d.getName()+d.getContent());
                             if (dbhelper.upsertResourceEntity(d)) {
                                 // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
                                 //Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
@@ -130,7 +131,7 @@ public class ServiceHelper {
                             }
                         }
                         String lastCalled = response.headers().get("last_request_date");
-                        Log.d(Consts.LOG_TAG, "response last_request_date: " + lastCalled);
+                        Log.d(Consts.LOG_TAG, "******: response last_request_date: " + lastCalled);
                         if (lastCalled != null) {
                             DbHelper dbhelper = new DbHelper(context);
                             CacheServiceCallData ob = new CacheServiceCallData();
@@ -237,9 +238,10 @@ public class ServiceHelper {
                         //Log.d(Consts.LOG_TAG, cd.toString());
                         if (response.body() != null) {
                             for (Data d : response.body().getData()) {
+
                                 if (dbhelper.upsertMedialanguageLatestDataEntity(d)) {
                                     // publishProgress(cd.getCurrent_page() * cd.getPer_page() / cd.getTotal());
-                                    // Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
+                                   //  Log.d(Consts.LOG_TAG,"successfully adding Data for page: "+ cd.getCurrent_page());
                                 } else {
                                     Log.d(Consts.LOG_TAG, "failure adding Data for page: " + cd.getCurrent_page());
                                 }

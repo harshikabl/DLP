@@ -35,6 +35,7 @@ public class ServiceCaller {
                         Log.d(Consts.LOG_TAG, "Recursively calling next content page: " + result.getCurrent_page());
                         final ContentServiceRequest nextRequest = new ContentServiceRequest();
                         nextRequest.setPage(result.getCurrent_page() + 1);
+                        nextRequest.setStart_date(request.getStart_date());
                         getAllContent(nextRequest, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {
@@ -75,11 +76,13 @@ public class ServiceCaller {
                         Log.d(Consts.LOG_TAG, "Recursively calling next resource page: " + result.getCurrent_page());
                         final ContentServiceRequest nextRequest = new ContentServiceRequest();
                         nextRequest.setPage(result.getCurrent_page() + 1);
+                        nextRequest.setStart_date(request.getStart_date());
                         getAllResource(nextRequest, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {
 
                                 if (nextRequest.getPage() > result.getLast_page()) {
+
                                     Log.d(Consts.LOG_TAG, "resource Parsed successfully till page: " + result.getCurrent_page());
                                     workCompletedCallback.onDone("getAllResource", true);
 
@@ -115,6 +118,7 @@ public class ServiceCaller {
                         Log.d(Consts.LOG_TAG, "Recursively calling next Media page: " + result.getCurrent_page());
                         final ContentServiceRequest nextRequest = new ContentServiceRequest();
                         nextRequest.setPage(result.getCurrent_page() + 1);
+                        nextRequest.setStart_date(request.getStart_date());
                         getAllMedia(nextRequest, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {
@@ -156,6 +160,7 @@ public class ServiceCaller {
                         Log.d(Consts.LOG_TAG, "Recursively calling next content page: " + result.getCurrent_page());
                         final ContentServiceRequest nextRequest = new ContentServiceRequest();
                         nextRequest.setPage(result.getCurrent_page() + 1);
+                        nextRequest.setStart_date(request.getStart_date());
                         getAllMedialanguageLatestContent(nextRequest, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {
@@ -197,6 +202,7 @@ public class ServiceCaller {
                         Log.d(Consts.LOG_TAG, "Recursively calling next Quizzes content page: " + result.getCurrent_page());
                         final ContentServiceRequest nextRequest = new ContentServiceRequest();
                         nextRequest.setPage(result.getCurrent_page() + 1);
+                        nextRequest.setStart_date(request.getStart_date());
                         getAllQuizzes(nextRequest, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {
@@ -236,6 +242,7 @@ public class ServiceCaller {
                         Log.d(Consts.LOG_TAG, "Recursively calling next Quizzes Questions content page: " + result.getCurrent_page());
                         final ContentServiceRequest nextRequest = new ContentServiceRequest();
                         nextRequest.setPage(result.getCurrent_page() + 1);
+                        nextRequest.setStart_date(request.getStart_date());
                         getAllQuizzesQuestions(nextRequest, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {
@@ -275,6 +282,7 @@ public class ServiceCaller {
                         Log.d(Consts.LOG_TAG, "Recursively calling next Quizzes Options content page: " + result.getCurrent_page());
                         final ContentServiceRequest nextRequest = new ContentServiceRequest();
                         nextRequest.setPage(result.getCurrent_page() + 1);
+                        nextRequest.setStart_date(request.getStart_date());
                         getAllQuizzesQuestionsOptions(nextRequest, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {
@@ -314,6 +322,7 @@ public class ServiceCaller {
                         Log.d(Consts.LOG_TAG, "Recursively calling next Content Quiz content page: " + result.getCurrent_page());
                         final ContentServiceRequest nextRequest = new ContentServiceRequest();
                         nextRequest.setPage(result.getCurrent_page() + 1);
+                        nextRequest.setStart_date(request.getStart_date());
                         ContentQuiz(nextRequest, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {

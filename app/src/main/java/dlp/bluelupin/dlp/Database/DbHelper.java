@@ -217,8 +217,8 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         db.close();
         if (ob != null) {
-            Log.d(Consts.BASE_URL, "getCacheServiceCallByDataIdentifier called with" + "url = '" + ob.getUrl() + "' and dataIdentifier = '" +
-                    ob.getDataIdentifier() + " " + ob.getLastCalled());
+            /*Log.d(Consts.BASE_URL, "getCacheServiceCall" + "url = '" + ob.getUrl() + "'  dataIdentifier = '" +
+                    ob.getDataIdentifier() + " " + ob.getLastCalled());*/
         }
         return ob;
     }
@@ -243,6 +243,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
             Log.d(Consts.LOG_TAG, "updateCacheServiceCall called with" + "url = '" + ob.getUrl() + "' and dataIdentifier = '" +
                     ob.getDataIdentifier() + " " + ob.getLastCalled());
+        }
+        if(i>0){
+
+            Log.d(Consts.LOG_TAG,"*******: updateCacheServiceCall: "+ ob.getUrl());
         }
         db.close();
         return i > 0;
