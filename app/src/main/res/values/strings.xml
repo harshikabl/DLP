@@ -131,5 +131,7 @@
     <string name="Correct_Answer">Correct Answer-</string>
     <string name="simulator_s"> Try it yourself</string>
     <string name="Next">Next</string>
+    <string name="Pause">PAUSE</string>
+    <string name="Buffering">BUFFERING</string>
 
 </resources>

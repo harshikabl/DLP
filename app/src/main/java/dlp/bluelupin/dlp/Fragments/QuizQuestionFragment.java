@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +29,14 @@ import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
 import dlp.bluelupin.dlp.Adapters.QuizQuestionAdapter;
+import dlp.bluelupin.dlp.Consts;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.MainActivity;
 import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Models.QuizAnswer;
 import dlp.bluelupin.dlp.R;
+import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
+import dlp.bluelupin.dlp.Utilities.DownloadFileAsync;
 import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
 
@@ -80,6 +85,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     private Data answerMedia;
     MainActivity rootActivity;
     private MediaPlayer mediaPlayer;
+    CustomProgressDialog customProgressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -164,6 +170,8 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
 
         shareprefs = context.getSharedPreferences("OptionPreferences", Context.MODE_PRIVATE);
         setValue();
+        customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
+
     }
 
     //set value
@@ -220,66 +228,83 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    private void playOfflineAudio() {
-        String url;
-        if (media != null) {
 
-            url = media.getLocalFilePath();
-            if (url != null && !url.equals("")) {
-                try {
+    private void playAudioAsync(final String url) {
+        final String listenText = (String) listen_text.getText();
+
+        listen_text.setText(context.getString(R.string.Buffering));
+        new AsyncTask<String, Void, MediaPlayer>() {
+
+            @Override
+            protected MediaPlayer doInBackground(String... params) {
+                if (mediaPlayer == null) {
                     Uri myUri = Uri.parse(url);
-                    mediaPlayer = MediaPlayer.create(context, myUri);
-                    if (mediaPlayer == null) {
-                        mediaPlayer = MediaPlayer.create(context, myUri);
-                    }
-                    if (mediaPlayer.isPlaying()) {
-                        mediaPlayer.pause();
-                        listen_icon.setText(Html.fromHtml("&#xf3e4;"));
-                        listen_text.setText("Pause");
-
-                    } else {
-                        mediaPlayer.start();
-                        listen_icon.setText(Html.fromHtml("&#xf57e;"));
-                        listen_text.setText("Listen");
-                    }
-
-                } catch (Exception e) {
+                    mediaPlayer = MediaPlayer.create(getActivity(), myUri);
                 }
+                return mediaPlayer;
             }
-        }
-    }
 
-    private void playOnlineAudio() {
-        String url;
-        if (Utility.isOnline(context)) {
-            if (media != null) {
-                url = media.getUrl();
+            @Override
+            protected void onPostExecute(MediaPlayer mediaplayer) {
+                super.onPostExecute(mediaplayer);
                 if (url != null && !url.equals("")) {
-               /* Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.parse(url), "audio*//*");
-                startActivity(intent);*/
+
                     try {
                         Uri myUri = Uri.parse(url);
+
                         if (mediaPlayer == null) {
+
                             mediaPlayer = MediaPlayer.create(context, myUri);
+
                         }
-                        if (mediaPlayer.isPlaying()) {
+                        listen_text.setText(listenText);
+                        if (mediaPlayer.isPlaying()   ){//listen_text.getText() == "PAUSE") {
+                            listen_icon.setText(Html.fromHtml("&#xf57e;"));
+                            listen_text.setText(context.getString(R.string.Listen));//"LISTEN");
                             mediaPlayer.pause();
-                            listen_icon.setText(Html.fromHtml("&#xf3e4;"));
-                            listen_text.setText("Pause");
 
                         } else {
+
+
+                            listen_icon.setText(Html.fromHtml("&#xf3e4;"));
+                            listen_text.setText(context.getString(R.string.Pause));
                             mediaPlayer.start();
-                            listen_icon.setText(Html.fromHtml("&#xf57e;"));
-                            listen_text.setText("Listen");
+
+
                         }
                     } catch (Exception e) {
+                        Log.d(Consts.LOG_TAG, "**************: play audio " + e.getMessage());
                     }
                 }
             }
-        }
+        }.execute(url);
     }
 
+
+    //downloading Audio File File
+    private void downloadAudioFile(final Data mediaData) {
+       // final CustomProgressDialog customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
+        if (Utility.isOnline(context)) {
+            //customProgressDialog.show();
+
+            DownloadFileAsync task = new DownloadFileAsync(context, mediaData) {
+                @Override
+                public void receiveData(String result) {
+                    if (!result.equals("")) {
+                        DbHelper dbHelper = new DbHelper(context);
+                        mediaData.setLocalFilePath(result);
+                        if (dbHelper.updateMediaLanguageLocalFilePathEntity(mediaData)) {
+                            if (Consts.IS_DEBUG_LOG) {
+                                Log.d(Consts.LOG_TAG, "successfully downloaded and local file updated: media Id:" + media.getId() + " downloading Url: " + media.getDownload_url() + " at " + result);
+                            }
+                        }
+                    }
+                   // customProgressDialog.dismiss();
+                }
+            };
+            task.execute();
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -312,6 +337,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.listenLayout:
                 listenQuestionAudio();
+
                 break;
         }
     }
@@ -374,17 +400,28 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
 
     //lesten question Audio
     private void listenQuestionAudio() {
+
         if (media != null) {
+
             if (media.getType().equals("Audio")) {
                 String url = media.getLocalFilePath();
                 if (url != null && !url.equals("")) {
-                    playOfflineAudio();
+                    playAudioAsync(url);
                 } else {
-                    playOnlineAudio();
+                    if (Utility.isOnline(context)) {
+                        downloadAudioFile(media);
+                        url = media.getUrl();
+                        playAudioAsync(url);
+                    } else {
+                        // "you are offline"
+                    }
                 }
             }
+
         }
     }
+
+
     //alert for Ouit message
 
     public void alertForOuitMessage() {

@@ -112,4 +112,6 @@
     <string name="Correct_Answer">சரியான பதில்-</string>
     <string name="simulator_s">சிமுலேட்டர் ன்</string>
     <string name="Next">அடுத்த</string>
+    <string name="Pause">PAUSE</string>
+    <string name="Buffering">BUFFERING</string>
 </resources>

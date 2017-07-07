@@ -112,4 +112,6 @@
     <string name="Correct_Answer">ಸರಿಯಾದ ಉತ್ತರ-</string>
     <string name="simulator_s">ಸಿಮ್ಯುಲೇಟರ್ ನ</string>
     <string name="Next">ಮುಂದೆ</string>
+    <string name="Pause">PAUSE</string>
+    <string name="Buffering">BUFFERING</string>
 </resources>

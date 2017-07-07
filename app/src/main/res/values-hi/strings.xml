@@ -127,4 +127,6 @@
     <string name="Correct_Answer">सही उत्तर-</string>
     <string name="simulator_s">सिम्युलेटर के</string>
     <string name="Next">आगामी</string>
+    <string name="Pause">PAUSE</string>
+    <string name="Buffering">बफरिंग</string>
 </resources>
