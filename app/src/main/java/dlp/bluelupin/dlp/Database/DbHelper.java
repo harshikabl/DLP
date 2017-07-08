@@ -29,7 +29,7 @@ import dlp.bluelupin.dlp.Utilities.Utility;
  */
 public class DbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = Consts.dataBaseName;// Consts.outputDirectoryLocation +  "dlp_db.db"; //Consts.dataBaseName; //
 
     public DbHelper(Context context) {
@@ -1942,7 +1942,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //get all Quizzes data_item
     public List<Data> getAllQuizzesDataEntity(int languageId) {
-        String query = "Select * FROM QuizzesEntity where language_id = '" + languageId + "'";
+        String query = "Select * FROM QuizzesEntity where language_id = '" + languageId + "' and deleted_at IS  NULL";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -2055,7 +2055,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //get all Quizzes Questions data_item
     public List<Data> getAllQuizzesQuestionsDataEntity(int quizId) {
-        String query = "Select * FROM QuizzesQuestionsEntity where quiz_id = '" + quizId + "'";
+        String query = "Select * FROM QuizzesQuestionsEntity where quiz_id = '" + quizId + "' and deleted_at IS  NULL";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -2077,7 +2077,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //get Question details with quizId and questionid
     public Data getQuestionDetailsData(int quizId, int questionId) {
-        String query = "Select * FROM QuizzesQuestionsEntity where quiz_id = '" + quizId + "' and id = '" + questionId + "'";
+        String query = "Select * FROM QuizzesQuestionsEntity where quiz_id = '" + quizId + "' and id = '" + questionId + "' and deleted_at IS  NULL";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -2197,7 +2197,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //get all Quizzes Questions Options data_item
     public List<Data> getAllQuestionsOptionsDataEntity(int id) {
-        String query = "Select * FROM QuestionsOptionsEntity where question_id = '" + id + "'";
+        String query = "Select * FROM QuestionsOptionsEntity where question_id = '" + id + "' and deleted_at IS  NULL";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -2311,7 +2311,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public Data getContentQuizEntityByContentId(int contentId) {
-        String query = "Select * FROM ContentQuizEntity WHERE content_id = '" + contentId + "' ";
+        String query = "Select * FROM ContentQuizEntity WHERE content_id = '" + contentId + "' and deleted_at IS  NULL";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -2333,7 +2333,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //get all Content Quiz data_item
     public List<Data> getAllContentQuizEntity() {
-        String query = "Select * FROM ContentQuizEntity";
+        String query = "Select * FROM ContentQuizEntity WHERE deleted_at IS  NULL";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -2559,7 +2559,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     //get all SimulatorData Entity data_item
     public List<SimulatorData> getAllSimulatorEntity(int parentId) {
-        String query = "Select * FROM SimulatorEntity WHERE content_id = '" + parentId + "'";
+        String query = "Select * FROM SimulatorEntity WHERE content_id = '" + parentId + "' WHERE deleted_at IS  NULL";
 
         SQLiteDatabase db = this.getReadableDatabase();
 

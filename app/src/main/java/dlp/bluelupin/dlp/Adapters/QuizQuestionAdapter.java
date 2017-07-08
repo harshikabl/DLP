@@ -8,12 +8,14 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,7 @@ import dlp.bluelupin.dlp.Models.QuizAnswer;
 import dlp.bluelupin.dlp.R;
 import dlp.bluelupin.dlp.Services.DownloadService1;
 import dlp.bluelupin.dlp.Utilities.CustomProgressDialog;
+import dlp.bluelupin.dlp.Utilities.DownloadFileAsync;
 import dlp.bluelupin.dlp.Utilities.DownloadImageTask;
 import dlp.bluelupin.dlp.Utilities.FontManager;
 import dlp.bluelupin.dlp.Utilities.Utility;
@@ -253,7 +256,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         listenLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listenCorrectAnsAudio(listen_text, listen_icon);
+                listenCorrectAnsAudio( listen_icon,listen_text);
             }
         });
 
@@ -262,16 +265,101 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     }
 
     //lesten ans Audio
-    private void listenCorrectAnsAudio(TextView listen_text, TextView listen_icon) {
+    private void listenCorrectAnsAudio(TextView listen_icon,TextView listen_text) {
         if (answerMedia != null) {
+
             if (answerMedia.getType().equals("Audio")) {
                 String url = answerMedia.getLocalFilePath();
                 if (url != null && !url.equals("")) {
-                    playOfflineAudio(listen_text, listen_icon);
+                    playAudioAsync(url,listen_icon, listen_text);
                 } else {
-                    playOnlineAudio(listen_text, listen_icon);
+                    if (Utility.isOnline(context)) {
+                        downloadAudioFile(answerMedia);
+                        url = answerMedia.getUrl();
+                        playAudioAsync(url, listen_icon, listen_text);
+                    } else {
+                        // "you are offline"
+                    }
                 }
             }
+
+        }}
+    private void playAudioAsync(final String url, final TextView listen_icon, final TextView listen_text) {
+
+        final String listenText = (String) listen_text.getText();
+
+        listen_text.setText(context.getString(R.string.Buffering));
+        new AsyncTask<String, Void, MediaPlayer>() {
+
+            @Override
+            protected MediaPlayer doInBackground(String... params) {
+                if (mediaPlayer == null) {
+                    Uri myUri = Uri.parse(url);
+                    mediaPlayer = MediaPlayer.create(context, myUri);
+                }
+                return mediaPlayer;
+            }
+
+            @Override
+            protected void onPostExecute(MediaPlayer mediaplayer) {
+
+                super.onPostExecute(mediaplayer);
+                if (url != null && !url.equals("")) {
+
+                    try {
+                        Uri myUri = Uri.parse(url);
+
+                        if (mediaPlayer == null) {
+
+                            mediaPlayer = MediaPlayer.create(context, myUri);
+
+                        }
+                      listen_text.setText(listenText);
+                        if (mediaPlayer.isPlaying()   ){//listen_text.getText() == "PAUSE") {
+                            listen_icon.setText(Html.fromHtml("&#xf57e;"));
+                            listen_text.setText(context.getString(R.string.Listen));//"LISTEN");
+                            mediaPlayer.pause();
+
+                        } else {
+
+
+                            listen_icon.setText(Html.fromHtml("&#xf3e4;"));
+                            listen_text.setText(context.getString(R.string.Pause));
+                            mediaPlayer.start();
+
+
+                        }
+                    } catch (Exception e) {
+                        Log.d(Consts.LOG_TAG, "**************: play audio " + e.getMessage());
+                    }
+                }
+            }
+        }.execute(url);
+    }
+
+
+    //downloading Audio File File
+    private void downloadAudioFile(final Data mediaData) {
+        // final CustomProgressDialog customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
+        if (Utility.isOnline(context)) {
+            //customProgressDialog.show();
+
+            DownloadFileAsync task = new DownloadFileAsync(context, mediaData) {
+                @Override
+                public void receiveData(String result) {
+                    if (!result.equals("")) {
+                        DbHelper dbHelper = new DbHelper(context);
+                        mediaData.setLocalFilePath(result);
+                        if (dbHelper.updateMediaLanguageLocalFilePathEntity(mediaData)) {
+                            if (Consts.IS_DEBUG_LOG) {
+                                Log.d(Consts.LOG_TAG, "successfully downloaded and local file updated: media Id:" + answerMedia.getId() + " downloading Url: " + answerMedia.getDownload_url() + " at " + result);
+                            }
+                        }
+                    }
+                    // customProgressDialog.dismiss();
+                }
+            };
+            task.execute();
         }
     }
 

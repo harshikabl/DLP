@@ -38,7 +38,7 @@
     <string name="enter_valid_otp">ಮಾನ್ಯ OTP ನಮೂದಿಸಿ.</string>
     <string name="registered">ನೀವು ಯಶಸ್ವಿಯಾಗಿ ನೋಂದಣಿ.</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="title_activity_notifications">NotificationsActivity</string>
+    <string name="title_activity_notifications">ಅಧಿಸೂಚನೆಯ ಚಟುವಟಿಕೆ</string>
     <!-- notification screen text-->
     <string name="notification">ಅಧಿಸೂಚನೆ</string>
     <!-- language screen text-->
@@ -112,6 +112,6 @@
     <string name="Correct_Answer">ಸರಿಯಾದ ಉತ್ತರ-</string>
     <string name="simulator_s">ಸಿಮ್ಯುಲೇಟರ್ ನ</string>
     <string name="Next">ಮುಂದೆ</string>
-    <string name="Pause">PAUSE</string>
-    <string name="Buffering">BUFFERING</string>
+    <string name="Pause">ವಿರಾಮ</string>
+    <string name="Buffering">ಬಫರಿಂಗ್</string>
 </resources>
