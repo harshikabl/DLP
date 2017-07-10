@@ -1998,7 +1998,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("updated_by", ob.getUpdated_by());
         values.put("created_at", ob.getCreated_at());
         values.put("updated_at", ob.getUpdated_at());
-        values.put("deleted_at", ob.getUpdated_at());
+        values.put("deleted_at", ob.getDeleted_at());
     }
 
     //update Quizzes

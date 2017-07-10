@@ -309,7 +309,15 @@ public class ChaptersAdapter extends RecyclerView.Adapter<ChaptersViewHolder> {
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String type = dbHelper.getTypeOfChildren(data.getId());
+                //ToDo code review
+                String type = Consts.CHAPTER;
+                if(data.getType().equalsIgnoreCase(Consts.CHAPTER))
+                {
+                    type = Consts.TOPIC;
+                }
+                else {
+                    type = dbHelper.getTypeOfChildren(data.getId());
+                }
                 if (Consts.IS_DEBUG_LOG) {
                     Log.d(Consts.LOG_TAG, "Navigating to  data_item id: " + data.getId() + " type: " + type);
                 }
