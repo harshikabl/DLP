@@ -94,7 +94,7 @@ public class FavoritesFragment extends Fragment {
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-         rootActivity.setShowQuestionIconOption(false);
+//         rootActivity.setShowQuestionIconOption(false);
         //Add tabs icon with setIcon() or simple text with .setText()
         //tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.checkbox).setText(context.getString(R.string.chapters)));
         // tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.hihlogo).setText(context.getString(R.string.topic)));

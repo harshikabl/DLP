@@ -1205,7 +1205,14 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
         return list;
     }
-
+    public boolean deleteFavoriteData() {
+        boolean result = false;
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("FavoritesEntity", null, null);
+        db.close();
+        result = true;
+        return result;
+    }
     //download MediaEntity
     public boolean upsertDownloadMediaEntity(Data ob) {
         boolean done = false;
