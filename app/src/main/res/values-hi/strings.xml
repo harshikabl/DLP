@@ -120,7 +120,7 @@
     <string name="OF">का</string>
     <string name="RESTART">पुनः आरंभ करें</string>
     <string name="Run_Simulator">रन सिम्युलेटर</string>
-        <string name="Simulator">सिम्युलेटर</string>
+    <string name="Simulator">सिम्युलेटर</string>
     <string name="EXIT">बाहर जाएं</string>
     <string name="Description">विवरण-</string>
     <string name="This_is_correct">यह सही है</string>
@@ -129,4 +129,6 @@
     <string name="Next">आगामी</string>
     <string name="Pause">ठहराव</string>
     <string name="Buffering">बफरिंग</string>
+    <string name="quiz_quit_are">क्या आप वाकई छोड़ना चाहते हैं?</string>
+    <string name="quiz_quit_progress">अपनी प्रगति को सहेजा नहीं जाएगा !!</string>
 </resources>

@@ -133,5 +133,7 @@
     <string name="Next">Next</string>
     <string name="Pause">PAUSE</string>
     <string name="Buffering">BUFFERING</string>
+    <string name="quiz_quit_are">Are you sure you want to quit?</string>
+    <string name="quiz_quit_progress">your progress won\'t be saved!!</string>
 
 </resources>

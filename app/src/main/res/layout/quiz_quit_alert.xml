@@ -18,7 +18,7 @@
             android:layout_marginBottom="@dimen/dimValue_10"
             android:layout_marginTop="@dimen/dimValue_16"
             android:gravity="center"
-            android:text="Are you sure you want to quit?"
+            android:text=""
             android:textColor="#4a4d4e"
             android:textSize="@dimen/dimTextSize_22" />
 
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dimValue_16"
             android:gravity="center"
-            android:text="your progress won't be saved!!"
+            android:text=""
             android:textColor="#4a4d4e"
             android:textSize="@dimen/dimTextSize_18" />
 

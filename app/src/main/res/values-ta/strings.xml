@@ -114,4 +114,6 @@
     <string name="Next">அடுத்த</string>
     <string name="Pause">இடைநிறுத்தம்</string>
     <string name="Buffering">தாங்கல்</string>
+    <string name="quiz_quit_are">ஏய் யூ சர்ரே வெளியேற விரும்புகிறீர்களா?</string>
+    <string name="quiz_quit_progress">தங்களது முன்னேற்றம் வென்றது \ 'டி விரிகுடா சேமிக்கப்படும் !!</string>
 </resources>

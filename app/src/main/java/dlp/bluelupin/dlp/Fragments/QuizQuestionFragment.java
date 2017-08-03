@@ -430,8 +430,10 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         alert.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
         View view = alert.getLayoutInflater().inflate(R.layout.quiz_quit_alert, null);
         TextView title1 = (TextView) view.findViewById(R.id.title1);
+        title1.setText(context.getString(R.string.quiz_quit_are));
         title1.setTypeface(VodafoneRg);
         TextView title2 = (TextView) view.findViewById(R.id.title2);
+        title2.setText(context.getString(R.string.quiz_quit_progress));
         title2.setTypeface(VodafoneRg);
         TextView quiz_text = (TextView) view.findViewById(R.id.quit_text);
         quiz_text.setTypeface(VodafoneRg);
