@@ -63,8 +63,8 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     private CustomProgressDialog customProgressDialog;
     private Boolean onTimeClick = false;
     private MediaPlayer mediaPlayer;
-
-    public QuizQuestionAdapter(Context context, List<Data> optionList, List<String> OptionAtoZList, int questionNo, String questionTitle, int totalNo, Data answerMedia) {
+private String correct_answer_description;
+    public QuizQuestionAdapter(Context context, List<Data> optionList, List<String> OptionAtoZList, int questionNo, String questionTitle, int totalNo, Data answerMedia ,String correct_answer_description) {
         this.optionList = optionList;
         this.OptionAtoZList = OptionAtoZList;
         this.context = context;
@@ -72,6 +72,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         this.questionTitle = questionTitle;
         this.totalNo = totalNo;
         this.answerMedia = answerMedia;
+        this.correct_answer_description=correct_answer_description;
         VodafoneRg = FontManager.getFontTypeface(context, "fonts/VodafoneRg.ttf");
         materialdesignicons_font = FontManager.getFontTypeface(context, "fonts/materialdesignicons-webfont.otf");
         VodafoneRgBd = FontManager.getFontTypeface(context, "fonts/VodafoneRgBd.ttf");
@@ -187,11 +188,11 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
                     for (int i = 0; i < optionList.size(); i++) {
                         if (optionList.get(i).getIs_correct() == 1) {
                             correctTitle = optionList.get(i).getLang_resource_name();
-                            correctAnsDescription = optionList.get(i).getLang_resource_correct_answer_description();
+                            //correctAnsDescription = optionList.get(i).getLang_resource_correct_answer_description();
                             correctPosition = i;
                         }
                     }
-                    alertForWrongANS(correctTitle, correctPosition, correctAnsDescription);
+                    alertForWrongANS(correctTitle, correctPosition);
                 }
                 editor.commit();
                 onTimeClick = true;
@@ -209,7 +210,7 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
     }
 
     //alert for Ouit message
-    public void alertForWrongANS(String correctTitle, int correctPosition, String correctAnsDescription) {
+    public void alertForWrongANS(String correctTitle, int correctPosition) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final AlertDialog alert = builder.create();
         alert.setCancelable(false);
@@ -218,6 +219,12 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         View view = alert.getLayoutInflater().inflate(R.layout.quiz_wrong_ans_alert, null);
         TextView correctIcon = (TextView) view.findViewById(R.id.correctIcon);
         correctIcon.setTypeface(materialdesignicons_font);
+        TextView description = (TextView) view.findViewById(R.id.description);
+        description.setTypeface(VodafoneRg);
+        TextView descriptionDetails = (TextView) view.findViewById(R.id.descriptionDetails);
+        descriptionDetails.setTypeface(VodafoneRg);
+        TextView desIcon = (TextView) view.findViewById(R.id.desIcon);
+        desIcon.setTypeface(materialdesignicons_font);
         final TextView listen_icon = (TextView) view.findViewById(R.id.listen_icon);
         listen_icon.setTypeface(materialdesignicons_font);
         TextView correctAns = (TextView) view.findViewById(R.id.correctAns);
@@ -235,12 +242,17 @@ public class QuizQuestionAdapter extends RecyclerView.Adapter<QuizQuestionAdapte
         quit_icon.setText(Html.fromHtml("&#xf156;"));
         correctIcon.setText(Html.fromHtml("&#xf134;"));
         listen_icon.setText(Html.fromHtml("&#xf57e;"));
+        desIcon.setText(Html.fromHtml("&#xf2fd;"));
         DbHelper dbHelper = new DbHelper(context);
         Data titleResource = dbHelper.getResourceEntityByName(correctTitle,
                 Utility.getLanguageIdFromSharedPreferences(context));
         if (titleResource != null) {
             optionDetails.setText(Html.fromHtml(titleResource.getContent()));
         }
+        if (correct_answer_description != null) {
+            descriptionDetails.setText(Html.fromHtml(correct_answer_description));
+        }
+
         option.setText(OptionAtoZList.get(correctPosition).toString() + ")");
 
         LinearLayout quit_layout = (LinearLayout) view.findViewById(R.id.quit_layout);

@@ -118,7 +118,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //id , client_id , name, description, created_by,updated_by,created_at,updated_at,deleted_at
         db.execSQL(CREATE_QuizzesDataEntity_TABLE);
 
-        String CREATE_QuizzesQuestionsDataEntity_TABLE = "CREATE TABLE QuizzesQuestionsEntity(id INTEGER PRIMARY KEY, quiz_id INTEGER, sequence INTEGER, lang_resource_description TEXT, media_id INTEGER, audio_media_id INTEGER,answer_audio_media_id INTEGER,type TEXT,lang_resource_correct_answer TEXT, created_by INTEGER, updated_by INTEGER, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME)";
+        String CREATE_QuizzesQuestionsDataEntity_TABLE = "CREATE TABLE QuizzesQuestionsEntity(id INTEGER PRIMARY KEY, quiz_id INTEGER, sequence INTEGER, lang_resource_description TEXT, media_id INTEGER, audio_media_id INTEGER,answer_audio_media_id INTEGER,type TEXT,lang_resource_correct_answer TEXT, created_by INTEGER, updated_by INTEGER, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME,lang_resource_correct_answer_description TEXT)";
         //id , quiz_id , sequence, lang_resource_description,media_id,audio_media_id,answer_audio_media_id,type,lang_resource_correct_answer, created_by,updated_by,created_at,updated_at,deleted_at
         db.execSQL(CREATE_QuizzesQuestionsDataEntity_TABLE);
 
@@ -2118,6 +2118,7 @@ public class DbHelper extends SQLiteOpenHelper {
         ob.setCreated_at(cursor.getString(11));
         ob.setUpdated_at(cursor.getString(12));
         ob.setDeleted_at(cursor.getString(13));
+        ob.setLang_resource_correct_answer_description((cursor.getString(14)));
     }
 
     //insert Quizzes Questions
@@ -2148,6 +2149,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("created_at", ob.getCreated_at());
         values.put("updated_at", ob.getUpdated_at());
         values.put("deleted_at", ob.getDeleted_at());
+        values.put("lang_resource_correct_answer_description",ob.getLang_resource_correct_answer_description());
     }
 
     //update Quizzes Questions
@@ -2197,13 +2199,16 @@ public class DbHelper extends SQLiteOpenHelper {
             cursor.close();
         } else {
             ob = null;
+
+
         }
         db.close();
         return ob;
     }
 
     //get all Quizzes Questions Options data_item
-    public List<Data> getAllQuestionsOptionsDataEntity(int id) {
+    public List<Data>
+    getAllQuestionsOptionsDataEntity(int id) {
         String query = "Select * FROM QuestionsOptionsEntity where question_id = '" + id + "' and deleted_at IS  NULL";
 
         SQLiteDatabase db = this.getReadableDatabase();

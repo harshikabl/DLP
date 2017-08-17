@@ -215,12 +215,18 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                     question_title.setText(Html.fromHtml(descriptionResource.getContent()));
                     title = descriptionResource.getContent();
                 }
+                Data correct_answer_descriptionResource = dbHelper.getResourceEntityByName(questionData.getLang_resource_correct_answer_description(),
+                        Utility.getLanguageIdFromSharedPreferences(context));
+                String correct_answer_description = null;
+                if (correct_answer_descriptionResource!=null){
+                    correct_answer_description=correct_answer_descriptionResource.getContent();
+                }
                 List<Data> optionList = dbHelper.getAllQuestionsOptionsDataEntity(questionData.getId());
                 if (optionList != null) {
                     // recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
                     recyclerView.setLayoutManager(linearLayoutManager);
-                    QuizQuestionAdapter adapter = new QuizQuestionAdapter(getActivity(), optionList, OptionAtoZList, questionNo, title, questionList.size(), answerMedia);
+                    QuizQuestionAdapter adapter = new QuizQuestionAdapter(getActivity(), optionList, OptionAtoZList, questionNo, title, questionList.size(), answerMedia,correct_answer_description);
                     recyclerView.setAdapter(adapter);// set adapter on recyclerview
                     adapter.notifyDataSetChanged();// Notify the adapter
                 }
