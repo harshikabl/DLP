@@ -251,6 +251,8 @@ private String correct_answer_description;
         }
         if (correct_answer_description != null) {
             descriptionDetails.setText(Html.fromHtml(correct_answer_description));
+        }else {
+            descriptionDetails.setText("Description Not Available");
         }
 
         option.setText(OptionAtoZList.get(correctPosition).toString() + ")");
