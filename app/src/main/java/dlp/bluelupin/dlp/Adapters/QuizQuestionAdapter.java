@@ -252,7 +252,7 @@ private String correct_answer_description;
         if (correct_answer_description != null) {
             descriptionDetails.setText(Html.fromHtml(correct_answer_description));
         }else {
-            descriptionDetails.setText("Description Not Available");
+            descriptionDetails.setText(context.getString(R.string.description_available));
         }
 
         option.setText(OptionAtoZList.get(correctPosition).toString() + ")");

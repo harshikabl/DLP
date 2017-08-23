@@ -131,4 +131,6 @@
     <string name="Buffering">बफरिंग</string>
     <string name="quiz_quit_are">क्या आप वाकई छोड़ना चाहते हैं?</string>
     <string name="quiz_quit_progress">अपनी प्रगति को सहेजा नहीं जाएगा !!</string>
+    <string name="description_available">सियग्रिट का नोड नीचे है</string>
+
 </resources>

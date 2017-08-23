@@ -116,4 +116,6 @@
     <string name="Buffering">ಬಫರಿಂಗ್</string>
     <string name="quiz_quit_are">ಹೇ ಯು ಸರ್ರೆ ಕ್ವಿಟ್ ಬಯಸುತ್ತೀರಾ?</string>
     <string name="quiz_quit_progress">ನಿಮ್ಮ ಪ್ರಗತಿಯನ್ನು ಗೆದ್ದಿದ್ದುಟಿ ಬೇ ಉಳಿಸಿದ !!</string>
+    <string name="description_available">ಸೀಗರಿಟ್ಟೆಯ ನೋಡ್ ಕೆಳಭಾಗದಲ್ಲಿದೆ</string>
+
 </resources>
