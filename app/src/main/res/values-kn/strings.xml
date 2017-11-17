@@ -118,4 +118,10 @@
     <string name="quiz_quit_progress">ನಿಮ್ಮ ಪ್ರಗತಿಯನ್ನು ಗೆದ್ದಿದ್ದುಟಿ ಬೇ ಉಳಿಸಿದ !!</string>
     <string name="description_available">ಸೀಗರಿಟ್ಟೆಯ ನೋಡ್ ಕೆಳಭಾಗದಲ್ಲಿದೆ</string>
 
+    <!-- update alert string popup-->
+    <string name="update_text">ಈಗ ನವೀಕರಿಸಿ</string>
+    <string name="remind_me_later">ನಂತರ ನನಗೆ ಜ್ಞಾಪಿಸು</string>
+    <string name="Update_heading">ನವೀಕರಣ ಲಭ್ಯವಿದೆ</string>
+    <string name="update2">ಅಪ್ಲಿಕೇಶನ್ನ ನವೀಕರಿಸಲಾದ ಆವೃತ್ತಿ ಇದೀಗ ಲಭ್ಯವಿದೆ</string>
+
 </resources>

@@ -134,5 +134,9 @@
     <string name="quiz_quit_are">Are you sure you want to quit?</string>
     <string name="quiz_quit_progress">your progress won\'t be saved!!</string>
     <string name="description_available">Description Not Available</string>
-
+    <!-- update alert string popup-->
+    <string name="update_text">Update Now</string>
+    <string name="remind_me_later">Remind me Later</string>
+    <string name="Update_heading">Update Available</string>
+    <string name="update2">An updated version of the app is now available.</string>
 </resources>

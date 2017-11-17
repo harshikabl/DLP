@@ -195,8 +195,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         DbHelper dbHelper = new DbHelper(context);
         question_no.setText(String.valueOf(questionNo + 1));
         rootActivity.question_no.setText(String.valueOf(questionNo + 1));
-        if (questionList != null) {
-
+        if (questionList != null && questionList.size()>0) {
             Data questionData = dbHelper.getQuestionDetailsData(quizId, questionList.get(questionNo).getId());
             if (questionData != null) {
                 if (questionData.getAudio_media_id() != 0) {//get question media

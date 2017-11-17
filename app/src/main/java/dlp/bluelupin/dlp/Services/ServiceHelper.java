@@ -48,7 +48,6 @@ public class ServiceHelper {
 
     IServiceManager service;
     Context context;
-
     public ServiceHelper(Context context) {
         this.context = context;
         Retrofit retrofit = new Retrofit.Builder()
@@ -58,7 +57,6 @@ public class ServiceHelper {
 
         service = retrofit.create(IServiceManager.class);
     }
-
     public void callContentService(ContentServiceRequest request, final IServiceSuccessCallback<ContentData> callback) {
         request.setApi_token(Consts.API_KEY);
 
@@ -819,6 +817,4 @@ public class ServiceHelper {
 
         });
     }
-
-
 }

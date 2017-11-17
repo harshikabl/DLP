@@ -270,6 +270,8 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
             return false;
         }
 
+
+
         return true;
 
     }

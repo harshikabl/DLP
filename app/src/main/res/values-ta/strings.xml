@@ -118,4 +118,10 @@
     <string name="quiz_quit_progress">தங்களது முன்னேற்றம் வென்றது டி விரிகுடா சேமிக்கப்படும் !!</string>
     <string name="description_available">விளக்கம் கிடைக்கவில்லை</string>
 
+    <!-- update alert string popup-->
+    <string name="update_text">இப்போது புதுப்பிக்கவும்</string>
+    <string name="remind_me_later">பின்னர் என்னை நினைவூட்டு</string>
+    <string name="Update_heading">புதுப்பிக்கவும்</string>
+    <string name="update2">பயன்பாட்டின் புதுப்பிக்கப்பட்ட பதிப்பு இப்போது கிடைக்கிறது</string>
+
 </resources>

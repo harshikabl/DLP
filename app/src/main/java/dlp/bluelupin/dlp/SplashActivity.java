@@ -5,12 +5,15 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,9 +22,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,16 +39,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.LanguageActivity;
 import dlp.bluelupin.dlp.Database.DbHelper;
 import dlp.bluelupin.dlp.Models.AccountData;
-import dlp.bluelupin.dlp.Models.LanguageData;
+import dlp.bluelupin.dlp.Models.Data;
 import dlp.bluelupin.dlp.Services.BackgroundSyncService;
 import dlp.bluelupin.dlp.Services.IServiceSuccessCallback;
 import dlp.bluelupin.dlp.Services.ServiceHelper;
 import dlp.bluelupin.dlp.Utilities.Utility;
+
+import static dlp.bluelupin.dlp.Utilities.EnumLanguage.en;
 
 /**
  * Created by Neeraj on 7/22/2016.
@@ -75,6 +85,15 @@ public class SplashActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+        if (Utility.isOnline(context)) {
+            checkForceUpdate();
+        } else {
+            MoveNextScreen();
+        }
+    }
+
+
+    public void MoveNextScreen() {
         if (Consts.IS_DEBUG_LOG) {
             Log.d(Consts.LOG_TAG, "calling start ");
         }
@@ -89,7 +108,6 @@ public class SplashActivity extends Activity {
         } //determineFirstTimeLaunch
         callGetAllLanguage();
     }
-
 
     private Boolean determineFirstTimeLaunch() {
         SharedPreferences prefs = context.getSharedPreferences("appState", Context.MODE_PRIVATE);
@@ -287,6 +305,89 @@ public class SplashActivity extends Activity {
             @Override
             public void onClick(View v) {
                 alert.dismiss();
+            }
+        });
+        alert.show();
+    }
+
+
+
+
+
+    public void checkForceUpdate() {
+
+
+        new AsyncTask<Void, String, String>() {
+            @Override
+            protected String doInBackground(Void... voids) {
+
+                String newVersion = null;
+                try {
+                    newVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + SplashActivity.this.getPackageName() + "&hl=it")
+                            .timeout(30000)
+                            .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                            .referrer("http://www.google.com")
+                            .get()
+                            .select("div[itemprop=softwareVersion]")
+                            .first()
+                            .ownText();
+                    return newVersion;
+                } catch (Exception e) {
+                    return newVersion;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String onlineVersion) {
+                super.onPostExecute(onlineVersion);
+                if (onlineVersion != null && !onlineVersion.isEmpty()) {
+                    if (Float.valueOf(Utility.getAppVersionName(context)) < Float.valueOf(onlineVersion)) {
+                        //show dialog
+                        showUpdateDialog(context);
+                    } else {
+                        MoveNextScreen();
+                    }
+                }
+
+                Log.d("update", "Current version " + Utility.getAppVersionName(context) + "playstore version " + onlineVersion);
+            }
+        }.execute();
+    }
+
+    private void showUpdateDialog(final Context context) {
+        //alert for error message
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        Typeface VodafoneExB = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneExB.TTF");
+        Typeface VodafoneRg = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRg.ttf");
+        Typeface VodafoneRgBd = Typeface.createFromAsset(context.getAssets(), "fonts/VodafoneRgBd.ttf");
+        final AlertDialog alert = builder.create();
+        alert.getWindow().getAttributes().windowAnimations = R.style.alertAnimation;
+        View view = alert.getLayoutInflater().inflate(R.layout.custom_update_alert, null);
+        TextView title = (TextView) view.findViewById(R.id.textMessage);
+        TextView title2 = (TextView) view.findViewById(R.id.textMessage2);
+        title.setTypeface(VodafoneRgBd);
+        title2.setTypeface(VodafoneRg);
+        Button ok = (Button) view.findViewById(R.id.buttonUpdate);
+        Button buttonCancel = (Button) view.findViewById(R.id.buttonCancel);
+        ok.setTypeface(VodafoneExB);
+        buttonCancel.setTypeface(VodafoneExB);
+        alert.setCustomTitle(view);
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + "dlp.bluelupin.dlp" + "&hl=en"));
+                context.startActivity(intent);
+                alert.dismiss();
+            }
+        });
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+                MoveNextScreen();
             }
         });
         alert.show();
