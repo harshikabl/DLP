@@ -123,7 +123,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         DbHelper dbHelper = new DbHelper(context);
         Data quizData = dbHelper.getQuizzesDataEntityById(quizId);
         if (quizData != null) {
-            question_list=getQuestionList();
+            question_list=getQuestionList(quizData.getId());
             //questionList = dbHelper.getAllQuizzesQuestionsDataEntity(quizData.getId());
             rootActivity.totalQuestion.setText("/" + String.valueOf(questionList.size()));
         }
@@ -474,18 +474,16 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     }
 
 
-    private List<Data> getQuestionList() {
+    private List<Data> getQuestionList(int quizId) {
         DbHelper dbHelper = new DbHelper(context);
-        Data quizData = dbHelper.getQuizzesDataEntityById(quizId);
-        if (quizData != null) {
-            questionList = dbHelper.getAllQuizzesQuestionsDataEntity(quizData.getId());
-        }
-        Collections.sort(questionList, new Comparator<Data>() {
+        questionList = dbHelper.getAllQuizzesQuestionsDataEntity(quizId);
+        if (questionList != null && questionList.size() > 0) {
+            Collections.sort(questionList, new Comparator<Data>() {
             @Override
             public int compare(Data data1, Data data2) {
                 return Integer.valueOf(data1.getSequence()).compareTo(Integer.valueOf(data2.getSequence()));
             }
-        });
+        });}
         return questionList;
     }
 }
