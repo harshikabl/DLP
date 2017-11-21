@@ -14,10 +14,10 @@ public class Consts {
 /*
             1. Production point to : https://cms.samvaad.me
             2. Staging pointing to: https://cms2.samvaad.me
-            3. QA pointing to: http://dlp-qa.bluelup.in/
+            3. QA pointing to: http://qa.samvaad.me/
             4. Dev pointing to: https://dlpdev.bluelup.in*/
 
-    public static String BASE_URL = "http://dlp-qa.bluelup.in/api/v1/";//"https://cms.samvaad.me/api/v1/";//https://dlpdev.bluelup.in/api/v1/"; // http://dlp-qa.bluelup.in/api/v1/;//https://cms2.samvaad.me/api/v1/;//"http://180.151.10.60:8080/classkonnect/api/";
+    public static String BASE_URL = "http://qa.samvaad.me/api/v1/";//"https://cms.samvaad.me/api/v1/";//https://dlpdev.bluelup.in/api/v1/"; // http://dlp-qa.bluelup.in/api/v1/;//https://cms2.samvaad.me/api/v1/;//"http://180.151.10.60:8080/classkonnect/api/";
 
     public static String getBaseUrl() {
         if (PROD) {
@@ -58,7 +58,7 @@ public class Consts {
     public static final String QuizzesOptions = "quizzes/options";
     public static final String ContentQuiz = "content/quiz";
 
-    public static final String SENDER = "HP-MOBKNT";
+    public static final String SENDER = "MOBKNT";
     public static String inputDirectoryLocation = "/dlp/";
 
 

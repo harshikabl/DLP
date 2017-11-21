@@ -25,6 +25,8 @@ import android.widget.TextView;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import dlp.bluelupin.dlp.Activities.VideoPlayerActivity;
@@ -121,7 +123,8 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         DbHelper dbHelper = new DbHelper(context);
         Data quizData = dbHelper.getQuizzesDataEntityById(quizId);
         if (quizData != null) {
-            questionList = dbHelper.getAllQuizzesQuestionsDataEntity(quizData.getId());
+            question_list=getQuestionList();
+            //questionList = dbHelper.getAllQuizzesQuestionsDataEntity(quizData.getId());
             rootActivity.totalQuestion.setText("/" + String.valueOf(questionList.size()));
         }
         materialdesignicons_font = FontManager.getFontTypefaceMaterialDesignIcons(context, "fonts/materialdesignicons-webfont.otf");
@@ -195,7 +198,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         DbHelper dbHelper = new DbHelper(context);
         question_no.setText(String.valueOf(questionNo + 1));
         rootActivity.question_no.setText(String.valueOf(questionNo + 1));
-        if (questionList != null && questionList.size()>0) {
+        if (questionList != null && questionList.size() > 0) {
             Data questionData = dbHelper.getQuestionDetailsData(quizId, questionList.get(questionNo).getId());
             if (questionData != null) {
                 if (questionData.getAudio_media_id() != 0) {//get question media
@@ -217,15 +220,15 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                 Data correct_answer_descriptionResource = dbHelper.getResourceEntityByName(questionData.getLang_resource_correct_answer_description(),
                         Utility.getLanguageIdFromSharedPreferences(context));
                 String correct_answer_description = null;
-                if (correct_answer_descriptionResource!=null){
-                    correct_answer_description=correct_answer_descriptionResource.getContent();
+                if (correct_answer_descriptionResource != null) {
+                    correct_answer_description = correct_answer_descriptionResource.getContent();
                 }
                 List<Data> optionList = dbHelper.getAllQuestionsOptionsDataEntity(questionData.getId());
                 if (optionList != null) {
                     // recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
                     recyclerView.setLayoutManager(linearLayoutManager);
-                    QuizQuestionAdapter adapter = new QuizQuestionAdapter(getActivity(), optionList, OptionAtoZList, questionNo, title, questionList.size(), answerMedia,correct_answer_description);
+                    QuizQuestionAdapter adapter = new QuizQuestionAdapter(getActivity(), optionList, OptionAtoZList, questionNo, title, questionList.size(), answerMedia, correct_answer_description);
                     recyclerView.setAdapter(adapter);// set adapter on recyclerview
                     adapter.notifyDataSetChanged();// Notify the adapter
                 }
@@ -263,7 +266,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
 
                         }
                         listen_text.setText(listenText);
-                        if (mediaPlayer.isPlaying()   ){//listen_text.getText() == "PAUSE") {
+                        if (mediaPlayer.isPlaying()) {//listen_text.getText() == "PAUSE") {
                             listen_icon.setText(Html.fromHtml("&#xf57e;"));
                             listen_text.setText(context.getString(R.string.Listen));//"LISTEN");
                             mediaPlayer.pause();
@@ -288,7 +291,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
 
     //downloading Audio File File
     private void downloadAudioFile(final Data mediaData) {
-       // final CustomProgressDialog customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
+        // final CustomProgressDialog customProgressDialog = new CustomProgressDialog(context, R.mipmap.syc);
         if (Utility.isOnline(context)) {
             //customProgressDialog.show();
 
@@ -304,12 +307,13 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                             }
                         }
                     }
-                   // customProgressDialog.dismiss();
+                    // customProgressDialog.dismiss();
                 }
             };
             task.execute();
         }
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -469,4 +473,19 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
         }
     }
 
+
+    private List<Data> getQuestionList() {
+        DbHelper dbHelper = new DbHelper(context);
+        Data quizData = dbHelper.getQuizzesDataEntityById(quizId);
+        if (quizData != null) {
+            questionList = dbHelper.getAllQuizzesQuestionsDataEntity(quizData.getId());
+        }
+        Collections.sort(questionList, new Comparator<Data>() {
+            @Override
+            public int compare(Data data1, Data data2) {
+                return Integer.valueOf(data1.getSequence()).compareTo(Integer.valueOf(data2.getSequence()));
+            }
+        });
+        return questionList;
+    }
 }
