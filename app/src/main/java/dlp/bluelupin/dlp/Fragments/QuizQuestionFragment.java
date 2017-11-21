@@ -88,7 +88,7 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
     MainActivity rootActivity;
     private MediaPlayer mediaPlayer;
     CustomProgressDialog customProgressDialog;
-
+    List<Data> optionList;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -223,7 +223,8 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
                 if (correct_answer_descriptionResource != null) {
                     correct_answer_description = correct_answer_descriptionResource.getContent();
                 }
-                List<Data> optionList = dbHelper.getAllQuestionsOptionsDataEntity(questionData.getId());
+                optionList=getQuestionOptionList(questionData.getId());
+                //optionList = dbHelper.getAllQuestionsOptionsDataEntity(questionData.getId());
                 if (optionList != null) {
                     // recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -485,5 +486,18 @@ public class QuizQuestionFragment extends Fragment implements View.OnClickListen
             }
         });}
         return questionList;
+    }
+
+    private List<Data> getQuestionOptionList(int questionId) {
+        DbHelper dbHelper = new DbHelper(context);
+        optionList = dbHelper.getAllQuestionsOptionsDataEntity(questionId);
+        if (optionList != null && optionList.size() > 0) {
+            Collections.sort(optionList, new Comparator<Data>() {
+                @Override
+                public int compare(Data data1, Data data2) {
+                    return Integer.valueOf(data1.getSequence()).compareTo(Integer.valueOf(data2.getSequence()));
+                }
+            });}
+        return optionList;
     }
 }
